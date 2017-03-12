@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">More Phone</string>
+
+    <string name="message_progress_dialog">Please wait…</string>
+    <string name="message_error_lost_internet">Please check internet!</string>
+
+    <!-- Fragment Authentication -->
+    <string name="authentication_text_welcome">Welcome to More Phone.</string>
+    <string name="authentication_text_options">More Options</string>
+
+    <string name="authentication_button_facebook">Continue with Facebook</string>
+    <string name="authentication_button_google">Sign In</string>
+    <string name="authentication_button_create_account">Create Account</string>
+
+    <string name="authentication_menu_login">Log in</string>
+
+    <string name="authentication_text_term_service">By using this app, you are agree to our <b>Terms and Conditions</b></string>
+
+
+    <!-- Fragment Message Conversation -->
+    <string name="action_search">Search</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Fragment Message List -->
+    <string name="box_sms_edit_text_hint">Write a message</string>
+
+    <string name="title_dialog_message">Message Options</string>
+    <string name="text_button_cancel_dialog_message">Cancel</string>
+
+    <!-- Fragment Message Compose-->
+    <string name="message_compose_label">Compose</string>
+    <string name="message_compose_hint_contacts">Enter recipients</string>
+
+    <!-- Fragment Register Name -->
+    <string name="text_register_name_title">What\'s your name?</string>
+    <string name="text_register_first_name">FIRST NAME</string>
+    <string name="text_register_last_name">LAST NAME</string>
+
+    <!-- Fragment Register Email -->
+    <string name="text_register_email_title">And, your email?</string>
+    <string name="text_register_email_address">EMAIL ADDRESS</string>
+
+    <!-- Fragment Register Password -->
+    <string name="text_register_password_title">Create a password</string>
+    <string name="text_register_password_description">Your password must include at least one symbol and be 8 or more character long.</string>
+    <string name="text_register_password">PASSWORD</string>
+    <string name="text_register_password_show">Show</string>
+    <string name="text_register_password_hide">Hide</string>
+    <string name="register_password_snack_bar">CHANGE EMAIL</string>
+
+    <string name="message_create_user_fail">You already have an account with this email or This email is fake. Try logging in, instead.</string>
+    <string name="message_create_user_fail_password">Your password must at least 6 character.</string>
+
+    <!-- Fragment Register Total -->
+    <string name="text_register_total_title">Create account</string>
+    <string name="text_register_total_description">Make sure your information is correct before continuing.</string>
+
+    <!-- Fragment Forgot Password -->
+    <string name="text_forgot_password_title">Forgot your password?</string>
+    <string name="text_forgot_password_description">Enter you email to find your account.</string>
+    <string name="text_forgot_password_email_address">EMAIL ADDRESS</string>
+
+    <string name="message_reset_success">Please check your email for the password reset email!</string>
+    <string name="message_reset_fail">Failed to send reset email!</string>
+
+    <!-- Fragment Login-->
+    <string name="text_login_title">Log In</string>
+    <string name="text_login_email">EMAIL</string>
+    <string name="text_login_password">PASSWORD</string>
+
+    <string name="menu_login_forgot_password">Forgot password</string>
+
+</resources>

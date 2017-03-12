@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundBlue"
+    android:orientation="vertical">
+    <include
+        layout="@layout/tool_bar_blue"/>
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_register_name_title"
+        style="@style/TextAuthenticationTitle"
+        android:layout_below="@+id/tool_bar"
+        android:text="@string/text_register_name_title"/>
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_register_first_name"
+        style="@style/TextAuthenticationField"
+        android:layout_below="@+id/text_register_name_title"
+        android:layout_marginTop="@dimen/text_authentication_field_margin_top"
+        android:text="@string/text_register_first_name"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_first_name"
+        style="@style/EditTextAuthentication"
+        android:layout_below="@+id/text_register_first_name"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_register_last_name"
+        style="@style/TextAuthenticationField"
+        android:layout_below="@+id/edit_text_first_name"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/text_register_last_name"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_last_name"
+        style="@style/EditTextAuthentication"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/text_register_last_name"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_next_step"
+        style="@style/ViewCommon"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        app:backgroundTint="@color/colorMainDark"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:src="@drawable/ic_arrow_right_green"/>
+
+</RelativeLayout>

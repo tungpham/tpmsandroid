@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <bitmap
+            android:antialias="true"
+            android:gravity="center"
+            android:src="@drawable/ab_clear" />
+    </item>
+
+    <item>
+        <shape android:shape="rectangle" >
+            <size android:width="@dimen/ab_home_margin" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</layer-list>

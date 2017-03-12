@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundBlue"
+    android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorBackgroundBlue"
+        android:fitsSystemWindows="true"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ToolBarStyle" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_authentication_title"
+        style="@style/TextDisplay"
+        android:layout_below="@+id/tool_bar"
+        android:text="@string/authentication_text_welcome" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_authentication_facebook"
+        style="@style/ButtonWhite"
+        android:layout_below="@+id/text_authentication_title"
+        android:layout_marginTop="@dimen/text_message_margin_top"
+        android:text="@string/authentication_button_facebook" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_authentication_create_account"
+        style="@style/ButtonBlue"
+        android:layout_below="@+id/button_authentication_facebook"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/authentication_button_create_account" />
+
+    <com.ethan.morephone.widget.MyTextView
+        style="@style/TextMoreOption"
+        android:layout_below="@+id/button_authentication_create_account"
+        android:layout_marginTop="@dimen/text_more_option_margin_top"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="@string/authentication_text_options" />
+
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_terms_services"
+        style="@style/TextTermsServices"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:text="@string/authentication_text_term_service" />
+</RelativeLayout>

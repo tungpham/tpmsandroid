@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="titles">
+        <item>Message</item>
+        <item>Voice</item>
+    </string-array>
+
+    <string-array name="message_options">
+        <item>Copy text</item>
+        <item>Delete</item>
+    </string-array>
+
+</resources>

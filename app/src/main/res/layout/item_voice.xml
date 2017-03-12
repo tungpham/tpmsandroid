@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative_item_sms"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+    <ImageView
+        android:id="@+id/image_icon_sms"
+        android:layout_width="@dimen/item_icon_sms_width_height"
+        android:layout_height="@dimen/item_icon_sms_width_height"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/item_sms_margin_left" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_outgoing"
+        style="@style/TextSmsTitle"
+        android:layout_toRightOf="@+id/image_icon_sms" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_incoming"
+        style="@style/TextSmsDescription"
+        android:layout_below="@+id/text_outgoing"
+        android:layout_marginTop="@dimen/item_sms_margin_top"
+        android:layout_toRightOf="@+id/image_icon_sms" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_sms_time"
+        style="@style/TextSmsTime"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/activity_vertical_margin"/>
+
+</RelativeLayout>

@@ -1,0 +1,133 @@
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+ext {
+    //Android
+    androidApplicationId = "com.android.morephone"
+    androidBuildToolsVersion = "25.0.1"
+    androidMinSdkVersion = 16
+    androidTargetSdkVersion = 25
+    androidCompileSdkVersion = 25
+    androidVersionCode = 1
+    androidVersionName = "1.0.0"
+
+    //Google Libraries
+    supportVersion = '25.0.1'
+    servicesVersion = '10.0.1'
+    firebaseVersion = '10.0.1'
+    mapVersion = '10.0.1'
+    guavaVersion = '18.0'
+    multidexVersion = '1.0.0'
+    gsonVersion = '2.7'
+
+    //Other Libraries
+    retrofitVersion = '2.1.0'
+    retrofitLoggingVersion = '3.3.1'
+    glideVersion = '3.7.0'
+    glideTransformationsVersion = '2.0.0'
+    facebookSDKVersion = '4.+'
+    nineoldVersion = '2.4.0'
+    tabTripVersion = '1.0.1'
+    circleIndicatorVerstion = '1.2.1@aar'
+    libtorrentVersion = '1.2.0.4'
+    commonApacheVersion = '2.5'
+
+    //Debug Libraries
+    stethoVersion = '1.3.1'
+    leakCanaryVersion = '1.3.1'
+    crashlyticsVersion = '2.6.0@aar'
+
+    //Test Libraries
+    junitVersion = '4.12'
+
+    //Data
+    dataDependencies = [
+            //Google
+            guava               : "com.google.guava:guava:${guavaVersion}",
+            appcompat           : "com.android.support:appcompat-v7:${supportVersion}",
+            annotations         : "com.android.support:support-annotations:${supportVersion}",
+            firebaseDatabase    : "com.google.firebase:firebase-database:${firebaseVersion}",
+
+            //Libraries
+            retrofit            : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            converterGson       : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            retrofitLogging     : "com.squareup.okhttp3:logging-interceptor:${retrofitLoggingVersion}",
+
+            //Development
+            stetho         : "com.facebook.stetho:stetho:${stethoVersion}",
+            stethoOkhttp   : "com.facebook.stetho:stetho-okhttp3:${stethoVersion}",
+    ]
+
+    dataTestDependencies = [
+            junit: "junit:junit:${junitVersion}"
+    ]
+
+    //Domain
+    domainDependencies = [
+
+    ]
+
+    domainTestDependencies = [
+            junit: "junit:junit:${junitVersion}"
+    ]
+
+    //Presentation
+    presentationDependencies = [
+            //Google
+            appcompat           : "com.android.support:appcompat-v7:${supportVersion}",
+            cardview            : "com.android.support:cardview-v7:${supportVersion}",
+            design              : "com.android.support:design:${supportVersion}",
+            supportV4           : "com.android.support:support-v4:${supportVersion}",
+            supportV13          : "com.android.support:support-v13:${supportVersion}",
+            firebaseAuth        : "com.google.firebase:firebase-auth:${firebaseVersion}",
+            firebaseCore        : "com.google.firebase:firebase-core:${firebaseVersion}",
+            firebaseDatabase    : "com.google.firebase:firebase-database:${firebaseVersion}",
+            firebaseCrash       : "com.google.firebase:firebase-crash:${firebaseVersion}",
+            firebaseAds         : "com.google.firebase:firebase-ads:${firebaseVersion}",
+            firebaseConfig      : "com.google.firebase:firebase-config:${firebaseVersion}",
+            servicesAuth        : "com.google.android.gms:play-services-auth:${servicesVersion}",
+            servicesGcm         : "com.google.android.gms:play-services-gcm:${servicesVersion}",
+            servicesLocation    : "com.google.android.gms:play-services-location:${servicesVersion}",
+            servicesAnalytics   : "com.google.android.gms:play-services-analytics:${servicesVersion}",
+            map                 : "com.google.android.gms:play-services-maps:${mapVersion}",
+            location            : "com.google.android.gms:play-services-places:${mapVersion}",
+            analytic            : "com.google.android.gms:play-services-analytics:${mapVersion}",
+            multidex            : "com.android.support:multidex:${multidexVersion}",
+            guava               : "com.google.guava:guava:${guavaVersion}",
+            gson                : "com.google.code.gson:gson:${gsonVersion}",
+
+            //Libraries
+            glide               : "com.github.bumptech.glide:glide:${glideVersion}",
+            glideTransfor       : "jp.wasabeef:glide-transformations:${glideTransformationsVersion}",
+            nineold             : "com.nineoldandroids:library:${nineoldVersion}",
+            pagerSlidingTabStrip: "com.astuetz:pagerslidingtabstrip:${tabTripVersion}",
+            oneSignal           : "com.onesignal:OneSignal:3.+@aar",
+            ioBranch            : "io.branch.sdk.android:library:2.+",
+            stetho              : "com.facebook.stetho:stetho:${stethoVersion}",
+            stethoOkhttp        : "com.facebook.stetho:stetho-okhttp3:${stethoVersion}",
+            circleIndicator     : "me.relex:circleindicator:${circleIndicatorVerstion}"
+
+    ]
+
+    presentationTestDependencies = [
+            junit: "junit:junit:${junitVersion}"
+    ]
+
+    //Other module
+    otherModuleDependencies = [
+            appcompat           : "com.android.support:appcompat-v7:${supportVersion}",
+            annotations         : "com.android.support:support-annotations:${supportVersion}",
+            supportV4           : "com.android.support:support-v4:${supportVersion}",
+            gridlayout          : "com.android.support:gridlayout-v7:${supportVersion}",
+            jlibtorrent         : "com.frostwire:jlibtorrent:${libtorrentVersion}",
+            jlibtorrentArm      : "com.frostwire:jlibtorrent-android-arm:${libtorrentVersion}",
+            jlibtorrentArm64    : "com.frostwire:jlibtorrent-android-arm64:${libtorrentVersion}",
+            jlibtorrentX86      : "com.frostwire:jlibtorrent-android-x86:${libtorrentVersion}",
+            jlibtorrentX8664    : "com.frostwire:jlibtorrent-android-x86_64:${libtorrentVersion}",
+            commonApache        : "commons-io:commons-io:${commonApacheVersion}"
+    ]
+
+}

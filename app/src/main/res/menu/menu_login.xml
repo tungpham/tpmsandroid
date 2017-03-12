@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appcompat="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_forgot_password"
+        android:title="@string/menu_login_forgot_password"
+        appcompat:showAsAction="always" />
+</menu>

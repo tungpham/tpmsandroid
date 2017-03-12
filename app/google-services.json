@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "25395780229",
+    "project_id": "firebase-morephone"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25395780229:android:a77b53172f0906f9",
+        "android_client_info": {
+          "package_name": "com.android.morephone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABlvU0WECBuJ5IN-gCjU6tXz9TRZ3a4MY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

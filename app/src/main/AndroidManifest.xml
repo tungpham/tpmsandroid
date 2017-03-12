@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ethan.morephone">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- USE_CREDENTIALS is necessary for Google+ login -->
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <!-- GET_ACCOUNTS is necessary to display email address of logged in user. This permission is optional -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.twilio.voice.quickstart.permission.C2D_MESSAGE" />
+    <permission android:name="com.twilio.voice.quickstart.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+
+    <application
+        android:name=".MyApplication"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".presentation.authentication.AuthenticationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".presentation.main.MainActivity"/>
+        <activity android:name=".presentation.message.list.MessageListActivity"/>
+        <activity android:name=".presentation.message.compose.ComposeActivity"/>
+
+        <activity android:name=".presentation.authentication.register.name.RegisterNameActivity"/>
+        <activity android:name=".presentation.authentication.register.email.RegisterEmailActivity"/>
+        <activity android:name=".presentation.authentication.register.password.RegisterPasswordActivity"/>
+
+        <activity android:name=".presentation.authentication.login.LoginActivity"/>
+        <activity android:name=".presentation.authentication.login.forgot.ForgotPasswordActivity"/>
+
+        <!--<activity android:name=".presentation.voice.VoiceActivity"/>-->
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.twilio.voice.quickstart" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".gcm.VoiceGCMListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".gcm.VoiceInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".gcm.GCMRegistrationService"
+            android:exported="false"></service>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+    </application>
+
+</manifest>
