@@ -1,3 +1,14 @@
+How to open project?
+=========================
+
+Step 1: Download Android Studio and install
+https://developer.android.com/studio/index.html
+
+Step 2: Open Android Studio -> click File -> click Open -> choose folder MorePhone -> click OK.
+
+Step 3: Open Sdk Manager -> click API 25 -> click tap Sdk Tool -> choose version 25.0.1 -> click OK
+
+
 Android Clean Architecture
 =========================
 
