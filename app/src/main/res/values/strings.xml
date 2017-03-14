@@ -92,4 +92,14 @@
     <string name="select_language">Select input languages</string>
     <string name="general_category">General</string>
 
+    <string name="client_name">client name</string>
+    <string name="phone_number">phone number</string>
+
+    <string-array name="types">
+        <item>Client</item>
+        <item>Phone Number</item>
+    </string-array>
+
+    <string name="twiml_apps">APbdbf05382a556d66bc8419f36e51a6d6</string>
+    <string name="update_capability">Update Capability</string>
 </resources>

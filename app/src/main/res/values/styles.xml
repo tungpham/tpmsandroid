@@ -149,4 +149,29 @@
         <item name="android:layout_marginRight">@dimen/activity_main_margin</item>
         <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
     </style>
+
+    <style name="DialtactsDigitsTextAppearance">
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:textSize">@dimen/dialpad_digits_text_size</item>
+        <item name="android:freezesText">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:editable">true</item>
+        <item name="android:cursorVisible">false</item>
+        <item name="android:layout_weight">0</item>
+    </style>
+
+    <style name="DialtactsDialpadButtonStyle">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:soundEffectsEnabled">false</item>
+    </style>
+
+    <style name="DialpadHorizontalSeparator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dialpad_vertical_margin</item>
+        <item name="android:background">#66000000</item>
+    </style>
 </resources>

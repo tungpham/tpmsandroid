@@ -12,10 +12,19 @@
     <!-- GET_ACCOUNTS is necessary to display email address of logged in user. This permission is optional -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
+    <!-- needed to enable/disable the speakerphone -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
+    <!-- needed to receive audio from microphone during a call -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.twilio.voice.quickstart.permission.C2D_MESSAGE" />
-    <permission android:name="com.twilio.voice.quickstart.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+
+    <permission
+        android:name="com.twilio.voice.quickstart.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
     <application
         android:name=".MyApplication"
@@ -23,7 +32,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".presentation.dial.DialActivity">
+        <activity android:name=".presentation.call.CallActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,18 +41,20 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.main.MainActivity"/>
-        <activity android:name=".presentation.message.list.MessageListActivity"/>
-        <activity android:name=".presentation.message.compose.ComposeActivity"/>
+        <activity android:name=".presentation.main.MainActivity" />
+        <activity android:name=".presentation.message.list.MessageListActivity" />
+        <activity android:name=".presentation.message.compose.ComposeActivity" />
 
-        <activity android:name=".presentation.authentication.register.name.RegisterNameActivity"/>
-        <activity android:name=".presentation.authentication.register.email.RegisterEmailActivity"/>
-        <activity android:name=".presentation.authentication.register.password.RegisterPasswordActivity"/>
+        <activity android:name=".presentation.authentication.register.name.RegisterNameActivity" />
+        <activity android:name=".presentation.authentication.register.email.RegisterEmailActivity" />
+        <activity android:name=".presentation.authentication.register.password.RegisterPasswordActivity" />
 
-        <activity android:name=".presentation.authentication.login.LoginActivity"/>
-        <activity android:name=".presentation.authentication.login.forgot.ForgotPasswordActivity"/>
+        <activity android:name=".presentation.authentication.login.LoginActivity" />
+        <activity android:name=".presentation.authentication.login.forgot.ForgotPasswordActivity" />
 
         <!--<activity android:name=".presentation.voice.VoiceActivity"/>-->
+
+        <service android:name="com.twilio.client.TwilioClientService" android:exported="false" android:stopWithTask="true"/>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

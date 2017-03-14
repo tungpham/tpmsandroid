@@ -29,4 +29,18 @@
     <dimen name="key_height">50dip</dimen>
     <dimen name="candidate_font_height">16sp</dimen>
     <dimen name="candidate_vertical_padding">6sp</dimen>
+
+    <!-- Height of edit text in dialpad fragment -->
+    <dimen name="dialpad_horizontal_margin">0dip</dimen>
+    <dimen name="dialpad_vertical_margin">2dip</dimen>
+    <dimen name="dialpad_digits_text_size">35sp</dimen>
+
+    <integer name="dialpad_layout_weight_digits">20</integer>
+    <integer name="dialpad_layout_weight_dialpad">65</integer>
+    <integer name="dialpad_layout_weight_additional_buttons">15</integer>
+
+    <!--  Smart Dial -->
+    <dimen name="smartdial_suggestions_padding">4dp</dimen>
+    <dimen name="smartdial_suggestions_extra_padding">2dp</dimen>
+    <dimen name="smartdial_confidence_hint_text_size">27dp</dimen>
 </resources>
