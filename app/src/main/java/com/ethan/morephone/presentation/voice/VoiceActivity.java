@@ -26,6 +26,7 @@ import android.widget.Chronometer;
 import com.ethan.morephone.R;
 import com.ethan.morephone.gcm.GCMRegistrationService;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.call.CallActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.twilio.voice.Call;
@@ -48,7 +49,7 @@ public class VoiceActivity extends BaseActivity {
     /*
      * You must provide a Twilio Access Token to connect to the Voice service
      */
-    private static final String TWILIO_ACCESS_TOKEN = "eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCIsICJjdHkiOiAidHdpbGlvLWZwYTt2PTEifQ.eyJpc3MiOiAiU0s5YWJhMjc1ZTk0ODllNjM5NWJiZmM1NGY0YTM5OTZlMyIsICJqdGkiOiAiU0s5YWJhMjc1ZTk0ODllNjM5NWJiZmM1NGY0YTM5OTZlMy0xNDg5MTE2OTg1IiwgInN1YiI6ICJBQ2ViZDdkM2E3OGUyZmRkYTllNTEyMzliYWQ2YjA5Zjk3IiwgImV4cCI6IDE0ODkxMjA1ODUsICJncmFudHMiOiB7InZvaWNlIjogeyJwdXNoX2NyZWRlbnRpYWxfc2lkIjogIkNSNDQ1OTljNjkzODkyNzcwYjg2ZTU4M2NjZDVjM2UzNTAiLCAib3V0Z29pbmciOiB7ImFwcGxpY2F0aW9uX3NpZCI6ICJBUGJkYmYwNTM4MmE1NTZkNjZiYzg0MTlmMzZlNTFhNmQ2In19LCAiaWRlbnRpdHkiOiAidm9pY2VfdGVzdCJ9fQ.Zd_W66-4_hnnstbsDgaJkLFJ2iDLPdxAKrchNZ-441U";
+    private static final String TWILIO_ACCESS_TOKEN = "eyJ0eXAiOiAiSldUIiwgImFsZyI6ICJIUzI1NiIsICJjdHkiOiAidHdpbGlvLWZwYTt2PTEifQ.eyJpc3MiOiAiU0s5YWJhMjc1ZTk0ODllNjM5NWJiZmM1NGY0YTM5OTZlMyIsICJncmFudHMiOiB7ImlkZW50aXR5IjogInZvaWNlX3Rlc3QiLCAidm9pY2UiOiB7InB1c2hfY3JlZGVudGlhbF9zaWQiOiAiQ1I0NDU5OWM2OTM4OTI3NzBiODZlNTgzY2NkNWMzZTM1MCIsICJvdXRnb2luZyI6IHsiYXBwbGljYXRpb25fc2lkIjogIkFQYmRiZjA1MzgyYTU1NmQ2NmJjODQxOWYzNmU1MWE2ZDYifX19LCAianRpIjogIlNLOWFiYTI3NWU5NDg5ZTYzOTViYmZjNTRmNGEzOTk2ZTMtMTQ4OTU2OTYzMyIsICJleHAiOiAxNDg5NTczMjMzLCAic3ViIjogIkFDZWJkN2QzYTc4ZTJmZGRhOWU1MTIzOWJhZDZiMDlmOTcifQ.VkkMxQ1EsmV_b3duOXcJZykQeI2Att9Mz-h177VBJ9w";
 
     private static final int MIC_PERMISSION_REQUEST_CODE = 1;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -131,6 +132,13 @@ public class VoiceActivity extends BaseActivity {
         } else {
             startGCMRegistration();
         }
+
+        findViewById(R.id.button_next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(VoiceActivity.this, CallActivity.class));
+            }
+        });
     }
 
     @Override

@@ -53,7 +53,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
      * You must provide a publicly accessible server to generate a Capability Token to connect to the Client service
      * Refer to website documentation for additional details: https://www.twilio.com/docs/quickstart/php/android-client
      */
-    private static final String TOKEN_SERVICE_URL = "https://morecall.herokuapp.com/token";
+    private static final String TOKEN_SERVICE_URL = "https://testcallphone.herokuapp.com/token";
     /*
     * A Device is the primary entry point to Twilio Services
     */
@@ -132,7 +132,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
         /*
          * Create a default profile (name=jenny, allowOutgoing=true, allowIncoming=true)
          */
-        clientProfile = new ClientProfile("jenny", true, true);
+        clientProfile = new ClientProfile("Phone 1", true, true);
 
         /*
          * Needed for setting/abandoning audio focus during call
@@ -155,6 +155,13 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
          * Set the initial state of the UI
          */
         setCallAction();
+
+        findViewById(R.id.button_register).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateClientProfileDialog();
+            }
+        });
     }
 
     /*
@@ -394,7 +401,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
      * Creates an update token UI dialog
      */
     private void updateClientProfileDialog() {
-        alertDialog = Dialog.createRegisterDialog(updateTokenClickListener(), cancelCallClickListener(), clientProfile, this);
+        alertDialog = CallDialog.createRegisterDialog(updateTokenClickListener(), cancelCallClickListener(), clientProfile, this);
         alertDialog.show();
     }
 
@@ -402,7 +409,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
      * Create an outgoing call UI dialog
      */
     private void showCallDialog() {
-        alertDialog = Dialog.createCallDialog(callClickListener(), cancelCallClickListener(), this);
+        alertDialog = CallDialog.createCallDialog(callClickListener(), cancelCallClickListener(), this);
         alertDialog.show();
     }
 
@@ -410,7 +417,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
      * Creates an incoming call UI dialog
      */
     private void showIncomingDialog() {
-        alertDialog = Dialog.createIncomingCallDialog(answerCallClickListener(), cancelCallClickListener(), this);
+        alertDialog = CallDialog.createIncomingCallDialog(answerCallClickListener(), cancelCallClickListener(), this);
         alertDialog.show();
     }
 
@@ -442,6 +449,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
 
                 // Create an outgoing connection
                 connect(contact.getText().toString(), isPhoneNumber);
+                DebugTool.logD("CONTACT: " + contact.getText().toString());
                 alertDialog.dismiss();
             }
         };

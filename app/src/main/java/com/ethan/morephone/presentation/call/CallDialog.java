@@ -18,7 +18,7 @@ import com.ethan.morephone.R;
 /**
  * Created by tconnors on 3/4/16.
  */
-public class Dialog {
+public class CallDialog {
 
     public static AlertDialog createRegisterDialog(DialogInterface.OnClickListener updateTokenClickListener, DialogInterface.OnClickListener cancelClickListener,
                                                    CallActivity.ClientProfile clientProfile, Context context){

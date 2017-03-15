@@ -32,7 +32,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".presentation.call.CallActivity"
+        <activity android:name=".presentation.voice.VoiceActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,7 @@
         <activity android:name=".presentation.authentication.login.LoginActivity" />
         <activity android:name=".presentation.authentication.login.forgot.ForgotPasswordActivity" />
 
-        <!--<activity android:name=".presentation.voice.VoiceActivity"/>-->
+        <activity android:name=".presentation.call.CallActivity"/>
 
         <service android:name="com.twilio.client.TwilioClientService" android:exported="false" android:stopWithTask="true"/>
 
