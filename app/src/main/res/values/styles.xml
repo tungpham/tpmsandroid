@@ -174,4 +174,27 @@
         <item name="android:layout_height">@dimen/dialpad_vertical_margin</item>
         <item name="android:background">#66000000</item>
     </style>
+
+    <style name="Divider" parent="ViewMatch">
+        <item name="android:layout_marginLeft">@dimen/text_numbers_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/activity_main_margin</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/colorDivider</item>
+    </style>
+
+    <style name="TextNumber" parent="ViewMatch">
+        <item name="android:paddingLeft">@dimen/text_numbers_margin_left</item>
+        <item name="android:paddingRight">@dimen/activity_main_margin</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextNumberItem" parent="TextNumber">
+        <item name="android:layout_height">72dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+
 </resources>
