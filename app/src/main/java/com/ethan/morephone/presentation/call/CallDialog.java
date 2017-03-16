@@ -75,7 +75,7 @@ public class CallDialog {
                 } else {
                     contact.setInputType(InputType.TYPE_CLASS_PHONE);
                     contact.setHint(R.string.phone_number);
-                    contact.setText("+17606215500");
+                    contact.setText("+18008066453");
                 }
             }
 

@@ -82,7 +82,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_authentication_facebook:
-                startActivity(new Intent(getActivity(), com.ethan.morephone.presentation.main.MainActivity.class));
+                startActivity(new Intent(getActivity(), MainActivity.class));
                 break;
 
             case R.id.button_authentication_create_account:
@@ -99,7 +99,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_LOGIN || requestCode == REQUEST_REGISTER){
             if(resultCode == Activity.RESULT_OK){
-                startActivity(new Intent(getActivity(), ConversationsActivity.class));
+                startActivity(new Intent(getActivity(), MainActivity.class));
             }
         }
     }

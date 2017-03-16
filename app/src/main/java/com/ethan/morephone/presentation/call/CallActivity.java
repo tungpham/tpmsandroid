@@ -53,7 +53,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
      * You must provide a publicly accessible server to generate a Capability Token to connect to the Client service
      * Refer to website documentation for additional details: https://www.twilio.com/docs/quickstart/php/android-client
      */
-    private static final String TOKEN_SERVICE_URL = "https://testcallphone.herokuapp.com/token";
+    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
     /*
     * A Device is the primary entry point to Twilio Services
     */
@@ -132,7 +132,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
         /*
          * Create a default profile (name=jenny, allowOutgoing=true, allowIncoming=true)
          */
-        clientProfile = new ClientProfile("Phone 1", true, true);
+        clientProfile = new ClientProfile("Number Phone 1", true, true);
 
         /*
          * Needed for setting/abandoning audio focus during call
