@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="?attr/actionBarSize"
+    android:layout_marginLeft="@dimen/activity_vertical_margin"
+    android:layout_marginRight="@dimen/activity_vertical_margin"
+    android:background="@android:color/white"
+    android:gravity="center_vertical">
 
     <com.ethan.morephone.widget.MyTextView
         android:id="@+id/text_number"
         style="@style/TextNumberItem" />
 
+    <ImageView
+        android:id="@+id/image_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/activity_main_margin"
+        android:src="@drawable/message" />
+
     <View
-        android:id="@+id/view_divider"
-        style="@style/Divider"
-        android:layout_below="@+id/text_number" />
+        android:id="@+id/view"
+        android:layout_width="0.5dp"
+        android:layout_height="24dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_toLeftOf="@+id/image_message"
+        android:background="@color/colorGray" />
+
+    <ImageView
+        android:id="@+id/image_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_toLeftOf="@+id/view"
+        android:src="@drawable/phone" />
 
 </RelativeLayout>

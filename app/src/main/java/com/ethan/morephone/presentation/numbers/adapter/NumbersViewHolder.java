@@ -18,6 +18,5 @@ public class NumbersViewHolder extends RecyclerView.ViewHolder {
     public NumbersViewHolder(View itemView) {
         super(itemView);
         textNumber = (TextView) itemView.findViewById(R.id.text_number);
-        viewDivider = itemView.findViewById(R.id.view_divider);
     }
 }
