@@ -69,6 +69,7 @@ public class MainActivity extends BaseActivity implements
         setUpNavigation();
         setUpViewPager();
         setUpSpinnerToolbar();
+
     }
 
     private void setUpViewPager() {

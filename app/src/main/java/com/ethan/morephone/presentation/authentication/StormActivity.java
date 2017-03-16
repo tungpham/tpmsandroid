@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ethan.morephone.R;
+import com.google.firebase.crash.FirebaseCrash;
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.Account;
@@ -17,7 +18,7 @@ import com.stormpath.sdk.models.StormpathError;
  * Created by Ethan on 2/23/17.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class StormActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(StormpathError error) {
-                Toast.makeText(MainActivity.this, error.message(), Toast.LENGTH_LONG).show();
+                Toast.makeText(StormActivity.this, error.message(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
 
         findViewById(R.id.button_refresh_token).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.authentication.MainActivity;
+import com.ethan.morephone.presentation.authentication.StormActivity;
 import com.ethan.morephone.presentation.authentication.register.RegisterActivity;
 import com.stormpath.sdk.Provider;
 import com.stormpath.sdk.Stormpath;
@@ -136,7 +136,7 @@ public class LoginStormActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void navigateToHome() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, StormActivity.class));
         finish();
     }
 }

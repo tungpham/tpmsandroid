@@ -17,7 +17,7 @@ import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.presentation.authentication.register.name.RegisterNameActivity;
-import com.ethan.morephone.presentation.message.conversation.ConversationsActivity;
+import com.ethan.morephone.presentation.main.MainActivity;
 
 
 /**
