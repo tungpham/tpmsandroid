@@ -13,28 +13,22 @@
 
     <ImageView
         android:id="@+id/image_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/ImageAction"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/activity_main_margin"
+        android:paddingRight="@dimen/activity_main_margin"
+        android:paddingLeft="@dimen/activity_vertical_margin"
         android:src="@drawable/message" />
 
     <View
         android:id="@+id/view"
-        android:layout_width="0.5dp"
-        android:layout_height="24dp"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
-        android:layout_toLeftOf="@+id/image_message"
-        android:background="@color/colorGray" />
+        style="@style/ViewDivider"
+        android:layout_toLeftOf="@+id/image_message" />
 
     <ImageView
         android:id="@+id/image_call"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
+        style="@style/ImageAction"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_vertical_margin"
         android:layout_toLeftOf="@+id/view"
         android:src="@drawable/phone" />
 

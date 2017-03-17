@@ -50,6 +50,14 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display1</item>
     </style>
 
+    <style name="TextEmail" parent="ViewCommon">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_marginLeft">@dimen/activity_main_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_main_margin</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
     <style name="TextMoreOption" parent="ViewCommon">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textStyle">bold</item>
@@ -68,7 +76,9 @@
 
     <style name="TextSmsTitle" parent="TextSmsBase">
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:textAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle</item>
+        <item name="android:textAppearance">
+            @style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle
+        </item>
     </style>
 
     <style name="TextSmsDescription" parent="TextSmsBase">
@@ -208,5 +218,19 @@
         <item name="android:layout_width">0dp</item>
     </style>
 
+    <style name="ViewDivider">
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_width">0.5dp</item>
+        <item name="android:background">@color/colorGray</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="ImageAction">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
 
 </resources>

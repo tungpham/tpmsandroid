@@ -49,4 +49,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_numbers_margin_left">48dp</dimen>
     <dimen name="item_number_space">8dp</dimen>
+    <dimen name="image_avatar_default_width_height">96dp</dimen>
 </resources>

@@ -33,7 +33,7 @@ import de.greenrobot.event.EventBus;
 public class ConversationsFragment extends BaseFragment implements
         ConversationListAdapter.OnItemConversationClickListener,
         View.OnClickListener,
-        ConversationsContract.View{
+        ConversationsContract.View {
 
     public static ConversationsFragment getInstance() {
         return new ConversationsFragment();
@@ -74,14 +74,11 @@ public class ConversationsFragment extends BaseFragment implements
         return view;
     }
 
-    public void loadData(){
+    public void loadData() {
         String phoneNumber = MyPreference.getPhoneNumber(getContext());
-        if(!TextUtils.isEmpty(phoneNumber)){
-            if(MyPreference.getInbox(getContext())){
-                mPresenter.loadMessagesIncoming(phoneNumber);
-            }else{
-                mPresenter.loadMessageOutgoing(phoneNumber);
-            }
+        if (!TextUtils.isEmpty(phoneNumber)) {
+            mPresenter.loadMessagesIncoming(phoneNumber);
+            mPresenter.loadMessageOutgoing(phoneNumber);
         }
     }
 
@@ -117,7 +114,7 @@ public class ConversationsFragment extends BaseFragment implements
 
     @Override
     public void showLoading(boolean isActive) {
-        if(isActive) showProgress();
+        if (isActive) showProgress();
         else hideProgress();
     }
 
@@ -140,7 +137,7 @@ public class ConversationsFragment extends BaseFragment implements
     }
 
     // This method will be called when a HelloWorldEvent is posted
-    public void onEvent(UpdateEvent event){
-        if(event.isUpdate()) loadData();
+    public void onEvent(UpdateEvent event) {
+        if (event.isUpdate()) loadData();
     }
 }

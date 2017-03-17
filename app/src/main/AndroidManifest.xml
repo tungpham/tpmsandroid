@@ -42,6 +42,7 @@
         </activity>
 
         <activity android:name=".presentation.main.MainActivity" />
+        <activity android:name=".presentation.message.conversation.ConversationsActivity" />
         <activity android:name=".presentation.message.list.MessageListActivity" />
         <activity android:name=".presentation.message.compose.ComposeActivity" />
 
@@ -53,6 +54,7 @@
         <activity android:name=".presentation.authentication.login.forgot.ForgotPasswordActivity" />
 
         <activity android:name=".presentation.call.CallActivity"/>
+        <activity android:name=".presentation.dial.DialActivity"/>
 
         <service android:name="com.twilio.client.TwilioClientService" android:exported="false" android:stopWithTask="true"/>
 

@@ -44,6 +44,31 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersViewHolder> {
     public void onBindViewHolder(NumbersViewHolder holder, final int position) {
         final NumberEntity numberEntity = mNumberEntities.get(position);
         holder.textNumber.setText(numberEntity.phoneNumber);
+
+        holder.textNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnItemNumberClickListener != null)
+                    mOnItemNumberClickListener.onItemClick(position);
+            }
+        });
+
+        holder.imageCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnItemNumberClickListener != null)
+                    mOnItemNumberClickListener.onItemCall(position);
+            }
+        });
+
+        holder.imageMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnItemNumberClickListener != null)
+                    mOnItemNumberClickListener.onItemMessage(position);
+            }
+        });
+
     }
 
     @Override
@@ -53,5 +78,9 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersViewHolder> {
 
     public interface OnItemNumberClickListener {
         void onItemClick(int pos);
+
+        void onItemCall(int pos);
+
+        void onItemMessage(int pos);
     }
 }

@@ -2,6 +2,7 @@ package com.ethan.morephone.presentation.numbers.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ethan.morephone.R;
@@ -13,10 +14,13 @@ import com.ethan.morephone.R;
 public class NumbersViewHolder extends RecyclerView.ViewHolder {
 
     public TextView textNumber;
-    public View viewDivider;
+    public ImageView imageCall;
+    public ImageView imageMessage;
 
     public NumbersViewHolder(View itemView) {
         super(itemView);
         textNumber = (TextView) itemView.findViewById(R.id.text_number);
+        imageCall = (ImageView) itemView.findViewById(R.id.image_call);
+        imageMessage = (ImageView) itemView.findViewById(R.id.image_message);
     }
 }
