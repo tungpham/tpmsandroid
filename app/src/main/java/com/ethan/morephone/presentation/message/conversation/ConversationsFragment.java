@@ -3,22 +3,28 @@ package com.ethan.morephone.presentation.message.conversation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.MessageItem;
-import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.event.UpdateEvent;
+import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.ConversationListAdapter;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
 import com.ethan.morephone.presentation.message.list.MessageListFragment;
+import com.ethan.morephone.presentation.numbers.NumbersFragment;
 import com.ethan.morephone.utils.Injection;
 
 import java.util.ArrayList;
@@ -33,10 +39,13 @@ import de.greenrobot.event.EventBus;
 public class ConversationsFragment extends BaseFragment implements
         ConversationListAdapter.OnItemConversationClickListener,
         View.OnClickListener,
-        ConversationsContract.View {
+        ConversationsContract.View,
+        SearchView.OnQueryTextListener {
 
-    public static ConversationsFragment getInstance() {
-        return new ConversationsFragment();
+    public static ConversationsFragment getInstance(Bundle bundle) {
+        ConversationsFragment conversationsFragment = new ConversationsFragment();
+        conversationsFragment.setArguments(bundle);
+        return conversationsFragment;
     }
 
     private ConversationListAdapter mConversationListAdapter;
@@ -44,6 +53,10 @@ public class ConversationsFragment extends BaseFragment implements
     private List<MessageItem> mConversationEntities;
 
     private ConversationsContract.Presenter mPresenter;
+
+    private Toolbar mToolbar;
+
+    private String mPhoneNumber;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +73,12 @@ public class ConversationsFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_conversations, container, false);
 
+        mPhoneNumber = getArguments().getString(NumbersFragment.BUNDLE_PHONE_NUMBER);
+
+        mToolbar = (Toolbar) view.findViewById(R.id.tool_bar);
+        BaseActivity baseActivity = (BaseActivity) getActivity();
+        baseActivity.setTitleActionBar(mToolbar, mPhoneNumber);
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -71,17 +90,76 @@ public class ConversationsFragment extends BaseFragment implements
 
         loadData();
 
+        setHasOptionsMenu(true);
+
         return view;
     }
 
     public void loadData() {
-        String phoneNumber = MyPreference.getPhoneNumber(getContext());
-        if (!TextUtils.isEmpty(phoneNumber)) {
-            mPresenter.loadMessagesIncoming(phoneNumber);
-            mPresenter.loadMessageOutgoing(phoneNumber);
-        }
+        mPresenter.loadMessagesIncoming(mPhoneNumber);
+        mPresenter.loadMessageOutgoing(mPhoneNumber);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                getActivity().finish();
+                break;
+
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_conversation, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        // Do something when collapsed
+//                        mConversationListAdapter.setFilter(mConversationEntities);
+                        return true; // Return true to collapse action view
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        // Do something when expanded
+                        return true; // Return true to expand action view
+                    }
+                });
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    private List<MessageItem> filter(List<MessageItem> models, String query) {
+        query = query.toLowerCase();
+        final List<MessageItem> filteredModelList = new ArrayList<>();
+        for (MessageItem model : models) {
+            final String text = model.body.toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
+    }
 
     @Override
     public void onDestroy() {

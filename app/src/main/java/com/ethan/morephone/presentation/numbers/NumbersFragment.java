@@ -28,6 +28,8 @@ import java.util.List;
 
 public class NumbersFragment extends BaseFragment implements NumbersAdapter.OnItemNumberClickListener{
 
+    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+
     public static NumbersFragment getInstance() {
         return new NumbersFragment();
     }
@@ -73,7 +75,11 @@ public class NumbersFragment extends BaseFragment implements NumbersAdapter.OnIt
 
     @Override
     public void onItemMessage(int pos) {
+        NumberEntity numberEntity = mNumbersAdapter.getData().get(pos);
         Intent intent = new Intent(getActivity(), ConversationsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }
