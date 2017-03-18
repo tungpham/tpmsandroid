@@ -68,7 +68,7 @@ dependencies {
     compile 'com.stormpath.sdk:stormpath-sdk-android:2.0'
     compile 'com.twilio:voice-android:2.0.0-beta4'
     compile 'com.twilio:client-android:1.2.19'
-    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.koushikdutta.ion:ion:2.1.8'
     compile project(':domain')
 }

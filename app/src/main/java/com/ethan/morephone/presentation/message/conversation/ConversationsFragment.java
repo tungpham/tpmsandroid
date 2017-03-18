@@ -18,19 +18,19 @@ import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
-import com.ethan.morephone.event.UpdateEvent;
+import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.ConversationListAdapter;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
-import com.ethan.morephone.presentation.message.list.MessageListFragment;
 import com.ethan.morephone.presentation.numbers.NumbersFragment;
 import com.ethan.morephone.utils.Injection;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by Ethan on 2/16/17.
@@ -49,8 +49,6 @@ public class ConversationsFragment extends BaseFragment implements
     }
 
     private ConversationListAdapter mConversationListAdapter;
-
-    private List<MessageItem> mConversationEntities;
 
     private ConversationsContract.Presenter mPresenter;
 
@@ -84,8 +82,7 @@ public class ConversationsFragment extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mConversationEntities = new ArrayList<>();
-        mConversationListAdapter = new ConversationListAdapter(getContext(), mConversationEntities, this);
+        mConversationListAdapter = new ConversationListAdapter(getContext(), new ArrayList<ConversationModel>(), this);
         recyclerView.setAdapter(mConversationListAdapter);
 
         loadData();
@@ -168,12 +165,9 @@ public class ConversationsFragment extends BaseFragment implements
     }
 
     @Override
-    public void onItemClick(MessageItem conversationEntity) {
-        Bundle bundle = new Bundle();
-        bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER_TO, conversationEntity.to);
-        bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER_FROM, conversationEntity.from);
+    public void onItemClick(ConversationModel conversationModel) {
+        EventBus.getDefault().postSticky(conversationModel);
         Intent intent = new Intent(getActivity(), MessageListActivity.class);
-        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -186,8 +180,8 @@ public class ConversationsFragment extends BaseFragment implements
     }
 
     @Override
-    public void showListMessage(List<MessageItem> smsEntities) {
-        mConversationListAdapter.replaceData(smsEntities);
+    public void showListMessage(List<ConversationModel> conversationModels) {
+        mConversationListAdapter.replaceData(conversationModels);
     }
 
     @Override
@@ -201,21 +195,4 @@ public class ConversationsFragment extends BaseFragment implements
         mPresenter = presenter;
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        EventBus.getDefault().unregister(this);
-        super.onPause();
-    }
-
-    // This method will be called when a HelloWorldEvent is posted
-    public void onEvent(UpdateEvent event) {
-        if (event.isUpdate()) loadData();
-    }
 }

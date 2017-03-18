@@ -19,10 +19,11 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
 import com.ethan.morephone.utils.Injection;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by Ethan on 3/6/17.

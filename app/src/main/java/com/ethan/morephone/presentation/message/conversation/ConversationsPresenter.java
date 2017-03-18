@@ -1,6 +1,7 @@
 package com.ethan.morephone.presentation.message.conversation;
 
 import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.log.DebugTool;
@@ -9,8 +10,11 @@ import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.message.GetAllMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
+import com.ethan.morephone.model.ConversationModel;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ethan on 2/17/17.
@@ -24,6 +28,10 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     private final GetMessagesIncoming mGetMessagesIncoming;
     private final GetMessagesOutgoing mGetMessagesOutgoing;
 
+    private List<MessageItem> mMessageItems;
+    private List<ConversationModel> mConversationModels;
+    private ArrayMap<String, List<MessageItem>> mArrayMap;
+
     public ConversationsPresenter(@NonNull ConversationsContract.View view,
                                   @NonNull UseCaseHandler useCaseHandler,
                                   @NonNull GetAllMessages getAllMessages,
@@ -34,6 +42,10 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         mGetAllMessages = getAllMessages;
         mGetMessagesIncoming = getMessagesIncoming;
         mGetMessagesOutgoing = getMessagesOutgoing;
+
+        mMessageItems = new ArrayList<>();
+        mConversationModels = new ArrayList<>();
+        mArrayMap = new ArrayMap<>();
 
         mView.setPresenter(this);
     }
@@ -51,10 +63,10 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
             @Override
             public void onSuccess(GetAllMessages.ResponseValue response) {
                 List<MessageItem> messageItems = response.getMessageItems();
-                for(MessageItem messageItem : messageItems) {
+                for (MessageItem messageItem : messageItems) {
                     DebugTool.logD("BODY: " + messageItem.body);
                 }
-                mView.showListMessage(messageItems);
+//                mView.showListMessage(messageItems);
                 mView.showLoading(false);
             }
 
@@ -73,7 +85,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         mUseCaseHandler.execute(mGetMessagesIncoming, requestValue, new UseCase.UseCaseCallback<GetMessagesIncoming.ResponseValue>() {
             @Override
             public void onSuccess(GetMessagesIncoming.ResponseValue response) {
-                mView.showListMessage(response.getMessageItems());
+                executeData(response.getMessageItems(), true);
                 mView.showLoading(false);
             }
 
@@ -91,7 +103,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         mUseCaseHandler.execute(mGetMessagesOutgoing, requestValue, new UseCase.UseCaseCallback<GetMessagesOutgoing.ResponseValue>() {
             @Override
             public void onSuccess(GetMessagesOutgoing.ResponseValue response) {
-                mView.showListMessage(response.getMessageItems());
+                executeData(response.getMessageItems(), false);
                 mView.showLoading(false);
             }
 
@@ -100,5 +112,35 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
                 mView.showLoading(false);
             }
         });
+    }
+
+    private void executeData(List<MessageItem> messageItems, boolean isComing) {
+        if (isComing) {
+            for (MessageItem messageItem : messageItems) {
+                DebugTool.logD("STATUS: " + messageItem.status);
+                if (mArrayMap.containsKey(messageItem.from)) {
+                    mArrayMap.get(messageItem.from).add(messageItem);
+                } else {
+                    List<MessageItem> items = new ArrayList<>();
+                    items.add(messageItem);
+                    mArrayMap.put(messageItem.from, items);
+                }
+            }
+        } else {
+            for (MessageItem messageItem : messageItems) {
+                if (mArrayMap.containsKey(messageItem.to)) {
+                    mArrayMap.get(messageItem.to).add(messageItem);
+                } else {
+                    List<MessageItem> items = new ArrayList<>();
+                    items.add(messageItem);
+                    mArrayMap.put(messageItem.to, items);
+                }
+            }
+        }
+        mConversationModels.clear();
+        for (Map.Entry entry : mArrayMap.entrySet()) {
+            mConversationModels.add(new ConversationModel(entry.getKey().toString(), mArrayMap.get(entry.getKey())));
+        }
+        mView.showListMessage(mConversationModels);
     }
 }

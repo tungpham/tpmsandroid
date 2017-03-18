@@ -114,6 +114,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         // This method shouldn't be called if our cursor is null, since the framework should know
         // that there aren't any items to look at in that case
         MessageItem item = mMessageItems.get(position);
+        if(item == null) return INCOMING_ITEM;
         String isSent = item.status;
 
         if (isSent.equals("received")) {

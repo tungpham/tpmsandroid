@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
+import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
@@ -24,8 +26,13 @@ import com.ethan.morephone.presentation.message.list.adapter.MessageListAdapter;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by Ethan on 2/17/17.
@@ -53,8 +60,8 @@ public class MessageListFragment extends BaseFragment implements
 
     private MessageListContract.Presenter mPresenter;
 
-    private String mPhoneNumberTo;
-    private String mPhoneNumberFrom;
+//    private String mPhoneNumberTo;
+//    private String mPhoneNumberFrom;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,12 +81,10 @@ public class MessageListFragment extends BaseFragment implements
         setHasOptionsMenu(true);
 
         Bundle bundle = getArguments();
-        mPhoneNumberTo = bundle.getString(BUNDLE_PHONE_NUMBER_TO);
-        mPhoneNumberFrom = bundle.getString(BUNDLE_PHONE_NUMBER_FROM);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setTitleActionBar(toolbar, mPhoneNumberTo);
+        baseActivity.setTitleActionBar(toolbar, "");
 
         view.findViewById(R.id.image_send).setOnClickListener(this);
 
@@ -93,10 +98,10 @@ public class MessageListFragment extends BaseFragment implements
         DividerSpacingItemDecoration mDividerSpacingItemDecoration = new DividerSpacingItemDecoration(Utils.dipToPixels(getContext(), 8));
 //        recyclerView.addItemDecoration(mDividerSpacingItemDecoration);
 
-        mMessageListAdapter = new MessageListAdapter(getContext(), new ArrayList<MessageItem>(), mPhoneNumberTo, this);
+        mMessageListAdapter = new MessageListAdapter(getContext(), new ArrayList<MessageItem>(), "+123", this);
         recyclerView.setAdapter(mMessageListAdapter);
 
-        mPresenter.loadMessages(mPhoneNumberTo, mPhoneNumberFrom);
+//        mPresenter.loadMessages(mPhoneNumberTo, mPhoneNumberFrom);
         return view;
     }
 
@@ -127,7 +132,7 @@ public class MessageListFragment extends BaseFragment implements
             case R.id.image_send:
                 String body =  mEditTextMessage.getText().toString();
                 mEditTextMessage.setText("");
-                mPresenter.createMessage(mPhoneNumberTo, mPhoneNumberFrom, body);
+//                mPresenter.createMessage(mPhoneNumberTo, mPhoneNumberFrom, body);
                 break;
             default:
                 break;
@@ -172,5 +177,23 @@ public class MessageListFragment extends BaseFragment implements
         mPresenter.deleteMessage(mMessageListAdapter.getData().get(pos).sid);
         mMessageListAdapter.getData().remove(pos);
         mMessageListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(ConversationModel conversationModel) {
+        DebugTool.logD("EVENT: " + conversationModel.getPhoneNumber());
+        showMessages(conversationModel.getMessageItems());
     }
 }

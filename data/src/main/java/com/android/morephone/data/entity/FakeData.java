@@ -21,13 +21,15 @@ public class FakeData {
         public String to;
         public String from;
         public String date_created;
+        public String status;
         public String body;
 
-        public Message(String sid, String to, String from, String date_created, String body) {
+        public Message(String sid, String to, String from, String date_created, String status, String body) {
             this.sid = sid;
             this.to = to;
             this.from = from;
             this.date_created = date_created;
+            this.status = status;
             this.body = body;
         }
     }

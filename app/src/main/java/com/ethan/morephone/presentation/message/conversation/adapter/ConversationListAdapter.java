@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
+import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.widget.TextDrawable;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,20 +21,20 @@ import java.util.List;
 
 public class ConversationListAdapter extends RecyclerView.Adapter<ConversationListViewHolder> {
 
-    private List<MessageItem> mMessageItems;
+    private List<ConversationModel> mConversationModels;
     private OnItemConversationClickListener mOnItemConversationClickListener;
     private TextDrawable.IBuilder mDrawableBuilder;
     private Context mContext;
 
-    public ConversationListAdapter(Context context, List<MessageItem> conversationEntities, OnItemConversationClickListener onItemConversationClickListener) {
+    public ConversationListAdapter(Context context, List<ConversationModel> conversationModels, OnItemConversationClickListener onItemConversationClickListener) {
         mContext = context;
-        mMessageItems = conversationEntities;
+        mConversationModels = conversationModels;
         mOnItemConversationClickListener = onItemConversationClickListener;
         mDrawableBuilder = TextDrawable.builder().round();
     }
 
-    public void replaceData(List<MessageItem> messageItems){
-        mMessageItems =messageItems;
+    public void replaceData(List<ConversationModel> conversationModels){
+        mConversationModels =conversationModels;
         notifyDataSetChanged();
     }
 
@@ -46,32 +47,35 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
 
     @Override
     public void onBindViewHolder(ConversationListViewHolder holder, int position) {
-        final MessageItem conversationEntity = mMessageItems.get(position);
+        final ConversationModel conversationModel = mConversationModels.get(position);
+        List<MessageItem> messageItems = conversationModel.getMessageItems();
+        Collections.sort(messageItems);
+        MessageItem messageItem = messageItems.get(0);
 
-        holder.textSmsTitle.setText(conversationEntity.to);
-        holder.textSmsDescription.setText(conversationEntity.body);
-        holder.textSmsTime.setText(com.ethan.morephone.utils.Utils.formatDate(conversationEntity.dateSent));
+        holder.textSmsTitle.setText(conversationModel.getPhoneNumber());
+        holder.textSmsDescription.setText(messageItem.body);
+        holder.textSmsTime.setText(com.ethan.morephone.utils.Utils.formatDate(messageItem.dateSent));
         holder.relativeItemSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemConversationClickListener.onItemClick(conversationEntity);
+                mOnItemConversationClickListener.onItemClick(conversationModel);
             }
         });
-        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(conversationEntity.to.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
+        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(conversationModel.getPhoneNumber().charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
     }
 
     @Override
     public int getItemCount() {
-        return mMessageItems.size();
+        return mConversationModels.size();
     }
 
-    public void setFilter(List<MessageItem> smsEntities) {
-        mMessageItems = new ArrayList<>();
-        mMessageItems.addAll(smsEntities);
-        notifyDataSetChanged();
-    }
+//    public void setFilter(List<MessageItem> smsEntities) {
+//        mMessageItems = new ArrayList<>();
+//        mMessageItems.addAll(smsEntities);
+//        notifyDataSetChanged();
+//    }
 
     public interface OnItemConversationClickListener {
-        void onItemClick(MessageItem messageEntity);
+        void onItemClick(ConversationModel conversationModel);
     }
 }

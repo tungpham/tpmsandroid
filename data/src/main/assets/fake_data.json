@@ -23,6 +23,7 @@
           "to":"+18052284394",
           "from":"+17606215500",
           "date_created": "Fri, 10 Mar 2017 03:04:33 +0000",
+          "status":"sent",
           "body":"Hello"
         },
         {
@@ -30,6 +31,7 @@
           "to":"+17606215500",
           "from":"+18052284394",
           "date_created": "Fri, 10 Mar 2017 03:05:33 +0000",
+          "status":"received",
           "body":"Hi. I guess we don't know each other"
         },
         {
@@ -37,6 +39,7 @@
           "to":"+18052284394",
           "from":"+17606215500",
           "date_created": "Fri, 10 Mar 2017 03:06:33 +0000",
+          "status":"sent",
           "body":"Yes. But I think you are adorable, so I wanna talk with u"
         },
         {
@@ -44,20 +47,15 @@
           "to":"+17606215500",
           "from":"+18052284394",
           "date_created": "Fri, 10 Mar 2017 03:06:33 +0000",
+          "status":"received",
           "body":"Oh, Srr boy. I'm so sleepy"
-        },
-        {
-          "sid": "5",
-          "to":"+17606215500",
-          "from":"+18052284394",
-          "date_created": "Fri, 10 Mar 2017 03:07:33 +0000",
-          "body":"Oh, Srr boy. I'm so sleepy. Let me alone"
         },
         {
           "sid": "6",
           "to":"+1766880099",
           "from":"+17606215500",
           "date_created": "Fri, 10 Mar 2017 03:08:33 +0000",
+          "status":"sent",
           "body":"Hangout right now?"
         },
         {
@@ -65,6 +63,7 @@
           "to":"+17606215500",
           "from":"+1766880099",
           "date_created": "Fri, 10 Mar 2017 03:08:33 +0000",
+          "status":"received",
           "body":"OK"
         }
         ,
@@ -73,6 +72,7 @@
           "to":"+1777889933",
           "from":"+1766880099",
           "date_created": "Fri, 10 Mar 2017 03:08:33 +0000",
+          "status":"sent",
           "body":"Are your hungry?"
         }
         ,
@@ -81,6 +81,7 @@
           "to":"+1766880099",
           "from":"+1777889933",
           "date_created": "Fri, 10 Mar 2017 03:08:33 +0000",
+          "status":"received",
           "body":"A little bit"
         }
         
