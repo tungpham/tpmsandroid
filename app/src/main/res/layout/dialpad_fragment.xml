@@ -17,7 +17,7 @@
         android:background="@drawable/dialpad_background"
         android:gravity="center">
 
-        <com.ethan.morephone.presentation.dial.view.DigitsEditText
+        <com.ethan.morephone.presentation.phone.dial.view.DigitsEditText
             android:id="@+id/digits"
             android:layout_width="0dip"
             android:layout_height="match_parent"

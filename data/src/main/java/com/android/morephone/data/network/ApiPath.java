@@ -1,6 +1,7 @@
 package com.android.morephone.data.network;
 
 
+import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
@@ -19,6 +20,12 @@ import retrofit2.http.Query;
  * Created by AnPEthan on 8/11/2016.
  */
 interface ApiPath {
+
+
+    /*-----------------------------------------FAKE DATA-----------------------------------------*/
+    @GET("master/fake_data.json")
+    Call<FakeData> getFakeDAta();
+
 
 
     /*-----------------------------------------MESSAGE-----------------------------------------*/

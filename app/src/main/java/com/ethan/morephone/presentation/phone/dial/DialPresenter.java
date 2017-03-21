@@ -1,4 +1,4 @@
-package com.ethan.morephone.presentation.dial;
+package com.ethan.morephone.presentation.phone.dial;
 
 import android.support.annotation.NonNull;
 

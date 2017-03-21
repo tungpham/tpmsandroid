@@ -3,6 +3,7 @@ package com.ethan.morephone.presentation.message.conversation;
 import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 
+import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.domain.UseCase;
@@ -114,10 +115,18 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         });
     }
 
+    @Override
+    public void parseFakeData(FakeData fakeData, String phoneNumber) {
+        mArrayMap.clear();
+        List<MessageItem> messageItemsIncoming = parseMessageIncoming(fakeData, phoneNumber);
+        List<MessageItem> messageItemsOutgoing = parseMessageOutgoing(fakeData, phoneNumber);
+        executeData(messageItemsIncoming, true);
+        executeData(messageItemsOutgoing, false);
+    }
+
     private void executeData(List<MessageItem> messageItems, boolean isComing) {
         if (isComing) {
             for (MessageItem messageItem : messageItems) {
-                DebugTool.logD("STATUS: " + messageItem.status);
                 if (mArrayMap.containsKey(messageItem.from)) {
                     mArrayMap.get(messageItem.from).add(messageItem);
                 } else {
@@ -142,5 +151,85 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
             mConversationModels.add(new ConversationModel(entry.getKey().toString(), mArrayMap.get(entry.getKey())));
         }
         mView.showListMessage(mConversationModels);
+    }
+
+//    public String loadJSONFromAsset() {
+//        String json;
+//        try {
+//            InputStream is = mContext.getAssets().open("fake_data.json");
+//            int size = is.available();
+//            byte[] buffer = new byte[size];
+//            is.read(buffer);
+//            is.close();
+//            json = new String(buffer, "UTF-8");
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
+//        return json;
+//    }
+
+    public List<MessageItem> parseMessageIncoming(FakeData mFakeData, String phoneNumberIncoming) {
+        List<MessageItem> messageItems = new ArrayList<>();
+        if (mFakeData != null) {
+            for (FakeData.Message message : mFakeData.message) {
+                if (message.to.equals(phoneNumberIncoming)) {
+                    messageItems.add(new MessageItem(
+                            message.sid,
+                            message.date_created,
+                            message.date_created,
+                            message.date_created,
+                            null,
+                            message.to,
+                            message.from,
+                            null,
+                            message.body,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            null));
+                }
+            }
+        }
+        return messageItems;
+    }
+
+    public List<MessageItem> parseMessageOutgoing(FakeData mFakeData, String phoneNumberOutgoind) {
+        List<MessageItem> messageItems = new ArrayList<>();
+        if (mFakeData != null) {
+            for (FakeData.Message message : mFakeData.message) {
+                if (message.from.equals(phoneNumberOutgoind)) {
+                    messageItems.add(new MessageItem(
+                            message.sid,
+                            message.date_created,
+                            message.date_created,
+                            message.date_created,
+                            null,
+                            message.to,
+                            message.from,
+                            null,
+                            message.body,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            message.status,
+                            null));
+                }
+            }
+        }
+        return messageItems;
     }
 }

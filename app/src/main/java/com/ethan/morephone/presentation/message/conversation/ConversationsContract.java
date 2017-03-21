@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.message.conversation;
 
+import com.android.morephone.data.entity.FakeData;
 import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
@@ -27,6 +28,8 @@ public interface ConversationsContract {
         void loadMessagesIncoming(String phoneNumberIncoming);
 
         void loadMessageOutgoing(String phoneNumberOutgoing);
+
+        void parseFakeData(FakeData fakeData, String phoneNumber);
 
     }
 }

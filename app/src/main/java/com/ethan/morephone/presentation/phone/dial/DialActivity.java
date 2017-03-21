@@ -1,4 +1,4 @@
-package com.ethan.morephone.presentation.dial;
+package com.ethan.morephone.presentation.phone.dial;
 
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.dial.keyboard.LatinKeyboardView;
+import com.ethan.morephone.presentation.phone.dial.keyboard.LatinKeyboardView;
 import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
 import com.ethan.morephone.utils.ActivityUtils;
 
@@ -29,7 +29,7 @@ public class DialActivity extends BaseActivity implements KeyboardView.OnKeyboar
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        DialFragment browserFragment = DialFragment.getInstance();
+        DialFragment browserFragment = DialFragment.getInstance("");
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 browserFragment,

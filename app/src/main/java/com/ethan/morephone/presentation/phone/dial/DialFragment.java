@@ -1,4 +1,4 @@
-package com.ethan.morephone.presentation.dial;
+package com.ethan.morephone.presentation.phone.dial;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -18,8 +18,8 @@ import android.widget.EditText;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.dial.view.DialpadImageButton;
-import com.ethan.morephone.presentation.dial.view.UnicodeDialerKeyListener;
+import com.ethan.morephone.presentation.phone.dial.view.DialpadImageButton;
+import com.ethan.morephone.presentation.phone.dial.view.UnicodeDialerKeyListener;
 
 
 /**
@@ -33,9 +33,16 @@ public class DialFragment extends BaseFragment implements
         View.OnKeyListener,
         DialpadImageButton.OnPressedListener {
 
-    public static DialFragment getInstance() {
-        return new DialFragment();
+    private static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+
+    public static DialFragment getInstance(String phoneNumber){
+        DialFragment dialFragment = new DialFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
+        dialFragment.setArguments(bundle);
+        return dialFragment;
     }
+
 
     private static final int TONE_LENGTH_INFINITE = -1;
     private static final int TONE_LENGTH_MS = 150;
@@ -56,10 +63,14 @@ public class DialFragment extends BaseFragment implements
     private final Object mToneGeneratorLock = new Object();
 //    private final HapticFeedback mHaptic = new HapticFeedback();
 
+    private String mPhoneNumber;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialpad_fragment, container, false);
+
+        mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
 
         mDigits = (EditText) view.findViewById(R.id.digits);
         mDigits.setKeyListener(UnicodeDialerKeyListener.INSTANCE);

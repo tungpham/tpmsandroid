@@ -10,14 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.NumberEntity;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.dial.DialActivity;
 import com.ethan.morephone.presentation.message.conversation.ConversationsActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.NumbersAdapter;
+import com.ethan.morephone.presentation.phone.PhoneActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,9 @@ import java.util.List;
  * Created by Ethan on 3/16/17.
  */
 
-public class NumbersFragment extends BaseFragment implements NumbersAdapter.OnItemNumberClickListener{
+public class NumbersFragment extends BaseFragment implements
+        NumbersAdapter.OnItemNumberClickListener,
+        NumbersContract.View {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
@@ -35,6 +40,14 @@ public class NumbersFragment extends BaseFragment implements NumbersAdapter.OnIt
     }
 
     private NumbersAdapter mNumbersAdapter;
+
+    private NumbersContract.Presenter mPresenter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        new NumbersPresenter(this);
+    }
 
     @Nullable
     @Override
@@ -50,14 +63,10 @@ public class NumbersFragment extends BaseFragment implements NumbersAdapter.OnIt
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
-        List<NumberEntity> numberEntities = new ArrayList<>();
-        numberEntities.add(new NumberEntity("1", "+17606215500"));
-        numberEntities.add(new NumberEntity("2", "+18052284394"));
-        numberEntities.add(new NumberEntity("3", "+1766880099"));
-        numberEntities.add(new NumberEntity("4", "+1777889933"));
-
-        mNumbersAdapter = new NumbersAdapter(numberEntities, this);
+        mNumbersAdapter = new NumbersAdapter(new ArrayList<NumberEntity>(), this);
         recyclerView.setAdapter(mNumbersAdapter);
+
+        mPresenter.getFakeData(getContext());
 
         return view;
     }
@@ -69,7 +78,9 @@ public class NumbersFragment extends BaseFragment implements NumbersAdapter.OnIt
 
     @Override
     public void onItemCall(int pos) {
-        Intent intent = new Intent(getActivity(), DialActivity.class);
+        NumberEntity numberEntity = mNumbersAdapter.getData().get(pos);
+        Intent intent = new Intent(getActivity(), PhoneActivity.class);
+        intent.putExtra(PhoneActivity.EXTRA_PHONE_NUMBER, numberEntity.phoneNumber);
         startActivity(intent);
     }
 
@@ -81,5 +92,26 @@ public class NumbersFragment extends BaseFragment implements NumbersAdapter.OnIt
         bundle.putString(BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void showLoading(boolean isActive) {
+        if (isActive) showProgress();
+        else hideProgress();
+    }
+
+    @Override
+    public void showPhoneNumbers(List<NumberEntity> numberEntities) {
+        mNumbersAdapter.replaceData(numberEntities);
+    }
+
+    @Override
+    public void showFakeData(FakeData fakeData) {
+        EventBus.getDefault().postSticky(fakeData);
+    }
+
+    @Override
+    public void setPresenter(NumbersContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }

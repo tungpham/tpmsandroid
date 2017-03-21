@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.MessageItem;
-import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseActivity;
@@ -80,11 +79,7 @@ public class MessageListFragment extends BaseFragment implements
         View view = inflater.inflate(R.layout.fragment_message_list, container, false);
         setHasOptionsMenu(true);
 
-        Bundle bundle = getArguments();
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
-        BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setTitleActionBar(toolbar, "");
 
         view.findViewById(R.id.image_send).setOnClickListener(this);
 
@@ -193,7 +188,10 @@ public class MessageListFragment extends BaseFragment implements
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(ConversationModel conversationModel) {
-        DebugTool.logD("EVENT: " + conversationModel.getPhoneNumber());
+        Toolbar toolbar = (Toolbar) getView().findViewById(R.id.tool_bar);
+        BaseActivity baseActivity = (BaseActivity) getActivity();
+        baseActivity.setTitleActionBar(toolbar, conversationModel.getPhoneNumber());
+
         showMessages(conversationModel.getMessageItems());
     }
 }

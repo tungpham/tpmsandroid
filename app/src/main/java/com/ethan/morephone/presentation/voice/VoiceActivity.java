@@ -26,7 +26,7 @@ import android.widget.Chronometer;
 import com.ethan.morephone.R;
 import com.ethan.morephone.gcm.GCMRegistrationService;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.call.CallActivity;
+import com.ethan.morephone.presentation.phone.CallActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.twilio.voice.Call;

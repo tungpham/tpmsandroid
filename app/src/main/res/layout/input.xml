@@ -17,7 +17,7 @@
 */
 -->
 
-<com.ethan.morephone.presentation.dial.keyboard.LatinKeyboardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ethan.morephone.presentation.phone.dial.keyboard.LatinKeyboardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/keyboard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

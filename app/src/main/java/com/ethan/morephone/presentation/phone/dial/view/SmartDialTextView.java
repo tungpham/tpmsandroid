@@ -1,5 +1,5 @@
 
-package com.ethan.morephone.presentation.dial.view;
+package com.ethan.morephone.presentation.phone.dial.view;
 
 import android.content.Context;
 import android.graphics.Paint;

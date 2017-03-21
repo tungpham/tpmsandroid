@@ -1,5 +1,5 @@
 
-package com.ethan.morephone.presentation.dial.keyboard;
+package com.ethan.morephone.presentation.phone.dial.keyboard;
 
 import android.app.Dialog;
 import android.inputmethodservice.InputMethodService;

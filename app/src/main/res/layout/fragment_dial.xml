@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.ethan.morephone.presentation.dial.keyboard.LatinKeyboardView
+    <com.ethan.morephone.presentation.phone.dial.keyboard.LatinKeyboardView
         android:id="@+id/keyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

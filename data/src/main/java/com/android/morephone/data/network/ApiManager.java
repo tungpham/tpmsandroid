@@ -2,6 +2,7 @@ package com.android.morephone.data.network;
 
 import android.content.Context;
 
+import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
@@ -27,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiManager {
 
-    private static final String BASE_URL = "https://api.twilio.com/2010-04-01/";
+    private static final String BASE_URL = "https://raw.githubusercontent.com/tungpham/tpmsservices/";
 
     private static ApiPath mApiPath;
 
@@ -205,6 +206,11 @@ public class ApiManager {
 
             }
         });
+    }
+
+    public static void fakeData(Context context, Callback<FakeData> callback) {
+        Call<FakeData> call = getApiPath(context).getFakeDAta();
+        call.enqueue(callback);
     }
 
 

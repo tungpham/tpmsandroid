@@ -8,12 +8,14 @@ import java.util.List;
 
 public class FakeData {
 
-    public List<ListNumber> list_number;
+    public List<NumberEntity> list_number;
     public List<Message> message;
+    public List<CallEntity> call_log;
 
-    public FakeData(List<ListNumber> list_number, List<Message> message) {
+    public FakeData(List<NumberEntity> list_number, List<Message> message, List<CallEntity> call_log) {
         this.list_number = list_number;
         this.message = message;
+        this.call_log = call_log;
     }
 
     public class Message {
@@ -31,17 +33,6 @@ public class FakeData {
             this.date_created = date_created;
             this.status = status;
             this.body = body;
-        }
-    }
-
-
-    public class ListNumber {
-        public String sid;
-        public String phone_number;
-
-        public ListNumber(String sid, String phone_number) {
-            this.sid = sid;
-            this.phone_number = phone_number;
         }
     }
 

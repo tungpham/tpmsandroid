@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.model.ConversationModel;
@@ -27,6 +28,8 @@ import com.ethan.morephone.presentation.numbers.NumbersFragment;
 import com.ethan.morephone.utils.Injection;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,8 +87,6 @@ public class ConversationsFragment extends BaseFragment implements
 
         mConversationListAdapter = new ConversationListAdapter(getContext(), new ArrayList<ConversationModel>(), this);
         recyclerView.setAdapter(mConversationListAdapter);
-
-        loadData();
 
         setHasOptionsMenu(true);
 
@@ -195,4 +196,20 @@ public class ConversationsFragment extends BaseFragment implements
         mPresenter = presenter;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(FakeData fakeData) {
+        mPresenter.parseFakeData(fakeData, mPhoneNumber);
+    }
 }
