@@ -46,7 +46,7 @@ public class Utils {
 
     public static String formatDate(String date){
         SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
-        SimpleDateFormat out = new SimpleDateFormat("dd-MM");
+        SimpleDateFormat out = new SimpleDateFormat("dd-MM HH:mm:ss");
 
         try {
             Date time = in.parse(date);

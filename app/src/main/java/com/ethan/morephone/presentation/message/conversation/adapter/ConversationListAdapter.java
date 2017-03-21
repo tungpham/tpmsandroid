@@ -50,7 +50,7 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
         final ConversationModel conversationModel = mConversationModels.get(position);
         List<MessageItem> messageItems = conversationModel.getMessageItems();
         Collections.sort(messageItems);
-        MessageItem messageItem = messageItems.get(0);
+        MessageItem messageItem = messageItems.get(messageItems.size() - 1);
 
         holder.textSmsTitle.setText(conversationModel.getPhoneNumber());
         holder.textSmsDescription.setText(messageItem.body);
