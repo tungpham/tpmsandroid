@@ -1,35 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relative_item_sms"
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin">
+    android:layout_marginLeft="@dimen/activity_vertical_margin"
+    android:layout_marginRight="@dimen/activity_vertical_margin">
 
-    <ImageView
-        android:id="@+id/image_icon_sms"
-        android:layout_width="@dimen/item_icon_sms_width_height"
-        android:layout_height="@dimen/item_icon_sms_width_height"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/item_sms_margin_left" />
+    <com.ethan.morephone.widget.ExpandableLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/expandable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingBottom="@dimen/item_voice_space"
+        android:paddingTop="@dimen/item_voice_space">
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_outgoing"
-        style="@style/TextSmsTitle"
-        android:layout_toRightOf="@+id/image_icon_sms" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_incoming"
-        style="@style/TextSmsDescription"
-        android:layout_below="@+id/text_outgoing"
-        android:layout_marginTop="@dimen/item_sms_margin_top"
-        android:layout_toRightOf="@+id/image_icon_sms" />
+            <ImageView
+                android:id="@+id/image_avatar"
+                android:layout_width="@dimen/item_icon_sms_width_height"
+                android:layout_height="@dimen/item_icon_sms_width_height"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_voice_space" />
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_sms_time"
-        style="@style/TextSmsTime"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/activity_vertical_margin"/>
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_phone_number"
+                style="@style/TextSmsTitle"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_toRightOf="@+id/image_avatar" />
 
-</RelativeLayout>
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_time"
+                style="@style/TextSmsTime"
+                android:layout_below="@+id/text_phone_number"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_toRightOf="@+id/image_avatar" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_expand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_time"
+            android:layout_marginTop="@dimen/activity_main_margin"
+            app:canExpand="true">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_duration"
+                style="@style/TextSmsTime"
+                android:layout_centerHorizontal="true" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/seek_bar"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_duration"
+                android:layout_centerHorizontal="true" />
+
+            <ImageView
+                android:id="@+id/image_volume"
+                style="@style/ImageActionCommon"
+                android:layout_below="@+id/seek_bar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/activity_main_margin"
+                android:src="@drawable/ic_volume_medium" />
+
+            <ImageView
+                android:id="@+id/image_pause"
+                style="@style/ImageActionCommon"
+                android:layout_below="@+id/seek_bar"
+                android:layout_marginLeft="@dimen/activity_main_margin"
+                android:layout_marginTop="@dimen/activity_main_margin"
+                android:src="@drawable/ic_pause" />
+
+            <ImageView
+                android:id="@+id/image_delete"
+                style="@style/ImageActionCommon"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/seek_bar"
+                android:layout_marginRight="@dimen/activity_main_margin"
+                android:layout_marginTop="@dimen/activity_main_margin"
+                android:src="@drawable/ic_delete" />
+
+            <View
+                android:id="@+id/view"
+                style="@style/DividerAction"
+                android:layout_below="@+id/image_delete"
+                android:layout_marginTop="@dimen/activity_main_margin" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_call"
+                style="@style/TextActionCommon"
+                android:layout_below="@+id/view"
+                android:drawableLeft="@drawable/ic_phone"
+                android:text="Call" />
+
+            <View
+                android:id="@+id/view_2"
+                style="@style/DividerAction"
+                android:layout_below="@+id/text_call" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_message"
+                style="@style/TextActionCommon"
+                android:layout_below="@+id/view_2"
+                android:drawableLeft="@drawable/ic_message_reply_text"
+                android:text="Send Message" />
+
+        </RelativeLayout>
+    </com.ethan.morephone.widget.ExpandableLayout>
+
+</android.support.v7.widget.CardView>

@@ -64,7 +64,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
             @Override
             public void onSuccess(GetAllVoices.ResponseValue response) {
                 List<VoiceItem> voiceItems = response.getVoiceItems();
-                mView.showVoices(voiceItems);
+//                mView.showVoices(voiceItems);
                 mView.showLoading(false);
             }
 
@@ -83,7 +83,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
             @Override
             public void onSuccess(GetVoicesOutgoing.ResponseValue response) {
                 List<VoiceItem> voiceItems = response.getVoiceItems();
-                mView.showVoices(voiceItems);
+//                mView.showVoices(voiceItems);
                 mView.showLoading(false);
             }
 
@@ -102,7 +102,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
             @Override
             public void onSuccess(GetVoicesIncoming.ResponseValue response) {
                 List<VoiceItem> voiceItems = response.getVoiceItems();
-                mView.showVoices(voiceItems);
+//                mView.showVoices(voiceItems);
                 mView.showLoading(false);
             }
 

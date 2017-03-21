@@ -1,6 +1,6 @@
 package com.ethan.morephone.presentation.voice;
 
-import com.android.morephone.data.entity.twilio.voice.VoiceItem;
+import com.android.morephone.data.entity.CallEntity;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 
@@ -14,7 +14,7 @@ public interface VoiceContract {
 
     interface View extends BaseView<Presenter> {
 
-        void showVoices(List<VoiceItem> voiceItems);
+        void showVoices(List<CallEntity> voiceItems);
 
         void showLoading(boolean isActive);
 

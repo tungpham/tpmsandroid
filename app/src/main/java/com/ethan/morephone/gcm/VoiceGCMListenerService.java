@@ -16,7 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.voice.VoiceActivity;
+import com.ethan.morephone.presentation.voice.TestVoiceActivity;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.twilio.voice.CallInvite;
 
@@ -72,10 +72,10 @@ public class VoiceGCMListenerService extends GcmListenerService {
              * Create a PendingIntent to specify the action when the notification is
              * selected in the notification drawer
              */
-            Intent intent = new Intent(this, VoiceActivity.class);
-            intent.setAction(VoiceActivity.ACTION_INCOMING_CALL);
-            intent.putExtra(VoiceActivity.INCOMING_CALL_INVITE, callInvite);
-            intent.putExtra(VoiceActivity.INCOMING_CALL_NOTIFICATION_ID, notificationId);
+            Intent intent = new Intent(this, TestVoiceActivity.class);
+            intent.setAction(TestVoiceActivity.ACTION_INCOMING_CALL);
+            intent.putExtra(TestVoiceActivity.INCOMING_CALL_INVITE, callInvite);
+            intent.putExtra(TestVoiceActivity.INCOMING_CALL_NOTIFICATION_ID, notificationId);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -135,12 +135,12 @@ public class VoiceGCMListenerService extends GcmListenerService {
     }
 
     /*
-     * Send the IncomingCallMessage to the VoiceActivity
+     * Send the IncomingCallMessage to the TestVoiceActivity
      */
     private void sendCallInviteToActivity(CallInvite incomingCallMessage, int notificationId) {
-        Intent intent = new Intent(VoiceActivity.ACTION_INCOMING_CALL);
-        intent.putExtra(VoiceActivity.INCOMING_CALL_INVITE, incomingCallMessage);
-        intent.putExtra(VoiceActivity.INCOMING_CALL_NOTIFICATION_ID, notificationId);
+        Intent intent = new Intent(TestVoiceActivity.ACTION_INCOMING_CALL);
+        intent.putExtra(TestVoiceActivity.INCOMING_CALL_INVITE, incomingCallMessage);
+        intent.putExtra(TestVoiceActivity.INCOMING_CALL_NOTIFICATION_ID, notificationId);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

@@ -9,13 +9,14 @@
 
     <com.ethan.morephone.widget.MyTextView
         android:id="@+id/text_number"
-        style="@style/TextNumberItem" />
+        style="@style/TextNumberItem"
+        android:paddingLeft="@dimen/activity_vertical_margin"/>
 
     <ImageView
         android:id="@+id/image_message"
         style="@style/ImageAction"
         android:layout_alignParentRight="true"
-        android:paddingRight="@dimen/activity_main_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
         android:src="@drawable/message" />
 
@@ -31,5 +32,18 @@
         android:paddingLeft="@dimen/activity_vertical_margin"
         android:layout_toLeftOf="@+id/view"
         android:src="@drawable/phone" />
+
+    <View
+        android:id="@+id/view_2"
+        style="@style/ViewDivider"
+        android:layout_toLeftOf="@+id/image_call" />
+
+    <ImageView
+        android:id="@+id/image_voice"
+        style="@style/ImageAction"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:layout_toLeftOf="@+id/view_2"
+        android:src="@drawable/ic_voice" />
 
 </RelativeLayout>

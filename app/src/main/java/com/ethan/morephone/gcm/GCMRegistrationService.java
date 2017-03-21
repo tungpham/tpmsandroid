@@ -6,7 +6,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.voice.VoiceActivity;
+import com.ethan.morephone.presentation.voice.TestVoiceActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
@@ -48,8 +48,8 @@ public class GCMRegistrationService extends IntentService {
      * @param gcmToken The new token.
      */
     private void sendGCMTokenToActivity(String gcmToken) {
-        Intent intent = new Intent(VoiceActivity.ACTION_SET_GCM_TOKEN);
-        intent.putExtra(VoiceActivity.KEY_GCM_TOKEN, gcmToken);
+        Intent intent = new Intent(TestVoiceActivity.ACTION_SET_GCM_TOKEN);
+        intent.putExtra(TestVoiceActivity.KEY_GCM_TOKEN, gcmToken);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

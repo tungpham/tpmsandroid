@@ -1,12 +1,13 @@
 package com.ethan.morephone.presentation.voice.adapter;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ethan.morephone.R;
+import com.ethan.morephone.widget.ExpandableLayout;
 
 /**
  * Created by Ethan on 2/16/17.
@@ -14,19 +15,19 @@ import com.ethan.morephone.R;
 
 public class VoicesViewHolder extends RecyclerView.ViewHolder {
 
-    public RelativeLayout relativeItemSms;
+    public CardView cardView;
     public ImageView imageIcon;
-    public TextView textFrom;
-    public TextView textTo;
-    public TextView textSmsTime;
+    public TextView textPhoneNumber;
+    public TextView textTime;
+    public ExpandableLayout expandableLayout;
 
     public VoicesViewHolder(View itemView) {
         super(itemView);
-        relativeItemSms = (RelativeLayout) itemView.findViewById(R.id.relative_item_sms);
-        imageIcon = (ImageView) itemView.findViewById(R.id.image_icon_sms);
-        textFrom = (TextView) itemView.findViewById(R.id.text_outgoing);
-        textTo = (TextView) itemView.findViewById(R.id.text_incoming);
-        textSmsTime = (TextView) itemView.findViewById(R.id.text_sms_time);
+        cardView = (CardView) itemView.findViewById(R.id.card_view);
+        imageIcon = (ImageView) itemView.findViewById(R.id.image_avatar);
+        textPhoneNumber = (TextView) itemView.findViewById(R.id.text_phone_number);
+        textTime = (TextView) itemView.findViewById(R.id.text_time);
+        expandableLayout = (ExpandableLayout) itemView.findViewById(R.id.expandable_layout);
     }
 
 }

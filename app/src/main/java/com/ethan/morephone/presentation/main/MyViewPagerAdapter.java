@@ -25,7 +25,7 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
                 return ConversationsFragment.getInstance(null);
             case 1:
 
-                return VoiceFragment.getInstance();
+                return VoiceFragment.getInstance("");
             default:
                 return null;
         }

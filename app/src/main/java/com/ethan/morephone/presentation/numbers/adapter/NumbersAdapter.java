@@ -69,6 +69,14 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersViewHolder> {
             }
         });
 
+        holder.imageVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnItemNumberClickListener != null)
+                    mOnItemNumberClickListener.onItemVoice(position);
+            }
+        });
+
     }
 
     @Override
@@ -82,5 +90,7 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersViewHolder> {
         void onItemCall(int pos);
 
         void onItemMessage(int pos);
+
+        void onItemVoice(int pos);
     }
 }

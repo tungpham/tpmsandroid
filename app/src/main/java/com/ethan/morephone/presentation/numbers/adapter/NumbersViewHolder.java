@@ -16,11 +16,13 @@ public class NumbersViewHolder extends RecyclerView.ViewHolder {
     public TextView textNumber;
     public ImageView imageCall;
     public ImageView imageMessage;
+    public ImageView imageVoice;
 
     public NumbersViewHolder(View itemView) {
         super(itemView);
         textNumber = (TextView) itemView.findViewById(R.id.text_number);
         imageCall = (ImageView) itemView.findViewById(R.id.image_call);
         imageMessage = (ImageView) itemView.findViewById(R.id.image_message);
+        imageVoice = (ImageView) itemView.findViewById(R.id.image_voice);
     }
 }

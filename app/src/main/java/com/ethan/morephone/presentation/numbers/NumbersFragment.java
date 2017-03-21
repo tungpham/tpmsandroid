@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +20,8 @@ import com.ethan.morephone.presentation.message.conversation.ConversationsActivi
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.NumbersAdapter;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
+import com.ethan.morephone.presentation.voice.VoiceActivity;
+import com.ethan.morephone.presentation.voice.VoiceFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -68,7 +71,23 @@ public class NumbersFragment extends BaseFragment implements
 
         mPresenter.getFakeData(getContext());
 
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                getActivity().finish();
+                break;
+
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -91,6 +110,14 @@ public class NumbersFragment extends BaseFragment implements
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
         intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemVoice(int pos) {
+        NumberEntity numberEntity = mNumbersAdapter.getData().get(pos);
+        Intent intent = new Intent(getActivity(), VoiceActivity.class);
+        intent.putExtra(VoiceFragment.BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
         startActivity(intent);
     }
 

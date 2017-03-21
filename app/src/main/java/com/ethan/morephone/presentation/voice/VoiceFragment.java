@@ -5,21 +5,28 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.entity.twilio.voice.VoiceItem;
-import com.ethan.morephone.Constant;
+import com.android.morephone.data.entity.CallEntity;
+import com.android.morephone.data.entity.FakeData;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
-import com.ethan.morephone.event.UpdateEvent;
+import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
+import com.ethan.morephone.presentation.voice.adapter.VoicesViewHolder;
 import com.ethan.morephone.utils.Injection;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +40,25 @@ public class VoiceFragment extends BaseFragment implements
         VoiceContract.View,
         VoicesAdapter.OnItemVoiceClickListener {
 
-    public static VoiceFragment getInstance() {
-        return new VoiceFragment();
+    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+
+    public static VoiceFragment getInstance(String phoneNumber){
+        VoiceFragment voiceFragment = new VoiceFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
+        voiceFragment.setArguments(bundle);
+        return voiceFragment;
     }
+
 
 
     private VoicesAdapter mVoicesAdapter;
 
     private VoiceContract.Presenter mPresenter;
+
+    private String mPhoneNumber;
+
+    private RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,17 +78,41 @@ public class VoiceFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_voice, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
+        BaseActivity baseActivity = (BaseActivity) getActivity();
+        baseActivity.setTitleActionBar(toolbar, mPhoneNumber);
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
-        mVoicesAdapter = new VoicesAdapter(getContext(), new ArrayList<VoiceItem>(), this);
-        recyclerView.setAdapter(mVoicesAdapter);
+        mVoicesAdapter = new VoicesAdapter(getContext(), mPhoneNumber, new ArrayList<CallEntity>(), this);
+        mRecyclerView.setAdapter(mVoicesAdapter);
+        mVoicesAdapter.setRecyclerView(mRecyclerView);
 
-        loadData();
+//        loadData();
+
+        setHasOptionsMenu(true);
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                getActivity().finish();
+                break;
+
+            default:
+                break;
+        }
+        return true;
     }
 
     public void loadData() {
@@ -85,7 +127,7 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void showVoices(List<VoiceItem> voiceItems) {
+    public void showVoices(List<CallEntity> voiceItems) {
         mVoicesAdapter.replaceData(voiceItems);
     }
 
@@ -100,28 +142,33 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onItemClick(int pos) {
+    public void onItemClick(View view, int pos) {
+        if (view.getTag() instanceof VoicesViewHolder) {
+            VoicesViewHolder holder = (VoicesViewHolder) view.getTag();
+            holder.expandableLayout.toggleExpansion();
+        }
 //        mPresenter.deleteVoice(mVoicesAdapter.getData().get(pos).sid);
 //        mVoicesAdapter.getData().remove(pos);
 //        mVoicesAdapter.notifyDataSetChanged();
-        VoiceItem voiceItem = mVoicesAdapter.getData().get(pos);
-        mPresenter.createVoice(voiceItem.to, voiceItem.from, Constant.APPLICATION_SID, Constant.VOICE_SID, Constant.VOICE_SECRET);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
-        super.onPause();
     }
 
-    // This method will be called when a HelloWorldEvent is posted
-    public void onEvent(UpdateEvent event) {
-        if (event.isUpdate()) loadData();
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(FakeData fakeData) {
+        showVoices(fakeData.call_log);
+        DebugTool.logD("COME: " + fakeData.call_log.size());
     }
+
+
 }
