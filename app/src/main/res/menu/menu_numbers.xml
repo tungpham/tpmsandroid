@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_license"
+        android:title="License" />
+    <item
+        android:id="@+id/action_review"
+        android:title="Review" />
+
+    <item
+        android:id="@+id/action_info"
+        android:title="Info" />
+
+</menu>

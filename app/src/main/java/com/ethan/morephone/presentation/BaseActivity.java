@@ -46,6 +46,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void setSubTitleActionBar(Toolbar toolbar, String title, String subTitle) {
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(title);
+            actionBar.setSubtitle(subTitle);
+        }
+    }
+
     private ProgressDialog mProgressDialog;
 
     public void showProgress() {

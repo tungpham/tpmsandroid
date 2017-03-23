@@ -18,11 +18,13 @@
         android:layout_alignParentRight="true"
         android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
+        android:visibility="gone"
         android:src="@drawable/message" />
 
     <View
         android:id="@+id/view"
         style="@style/ViewDivider"
+        android:visibility="gone"
         android:layout_toLeftOf="@+id/image_message" />
 
     <ImageView
@@ -30,12 +32,14 @@
         style="@style/ImageAction"
         android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
+        android:visibility="gone"
         android:layout_toLeftOf="@+id/view"
         android:src="@drawable/phone" />
 
     <View
         android:id="@+id/view_2"
         style="@style/ViewDivider"
+        android:visibility="gone"
         android:layout_toLeftOf="@+id/image_call" />
 
     <ImageView
@@ -44,6 +48,7 @@
         android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
         android:layout_toLeftOf="@+id/view_2"
+        android:visibility="gone"
         android:src="@drawable/ic_voice" />
 
 </RelativeLayout>

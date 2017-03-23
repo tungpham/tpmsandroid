@@ -2,9 +2,9 @@
     android:id="@+id/top"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:layoutDirection="ltr"
-    android:orientation="vertical"
-    android:background="@android:color/black">
+    android:orientation="vertical">
 
     <!-- Text field and possibly soft menu button above the keypad where
          the digits are displayed. -->
@@ -14,7 +14,6 @@
         android:layout_height="0px"
         android:layout_marginTop="@dimen/dialpad_vertical_margin"
         android:layout_weight="@integer/dialpad_layout_weight_digits"
-        android:background="@drawable/dialpad_background"
         android:gravity="center">
 
         <com.ethan.morephone.presentation.phone.dial.view.DigitsEditText
@@ -26,7 +25,7 @@
             android:gravity="center"
             android:nextFocusRight="@+id/overflow_menu"
             android:textAppearance="@style/DialtactsDigitsTextAppearance"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/colorText" />
 
         <ImageButton
             android:id="@+id/deleteButton"
@@ -53,15 +52,14 @@
         <View
             android:id="@+id/dialpad_smartdial_list_background"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/dialpad_background"></View>
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/dialpad_smartdial_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal" />
     </RelativeLayout>
 
     <!-- Keypad section -->
@@ -75,8 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="@integer/dialpad_layout_weight_additional_buttons"
-        android:background="@drawable/dialpad_background">
+        android:layout_weight="@integer/dialpad_layout_weight_additional_buttons">
 
         <ImageButton
             android:id="@+id/dialButton"

@@ -1,69 +1,47 @@
 package com.ethan.morephone.presentation.authentication.register;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.ethan.morephone.R;
-import com.stormpath.sdk.Stormpath;
-import com.stormpath.sdk.StormpathCallback;
-import com.stormpath.sdk.models.RegistrationForm;
-import com.stormpath.sdk.models.StormpathError;
+import com.ethan.morephone.presentation.BaseActivity;
 
 /**
  * Created by Ethan on 2/23/17.
  */
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button registerButton;
-    private EditText firstNameInput;
-    private EditText lastNameInput;
-    private EditText emailInput;
-    private EditText passwordInput;
+public class RegisterActivity extends BaseActivity implements View.OnClickListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_register);
 
-        registerButton = (Button) findViewById(R.id.button_register);
-        firstNameInput = (EditText) findViewById(R.id.input_firstName);
-        lastNameInput = (EditText) findViewById(R.id.input_lastName);
-        emailInput = (EditText) findViewById(R.id.input_email);
-        passwordInput = (EditText) findViewById(R.id.input_password);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        enableActionBar(toolbar, false);
 
-        registerButton.setOnClickListener(this);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                finish();
+                break;
+
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override
     public void onClick(View v) {
-        RegistrationForm registrationData = new RegistrationForm(emailInput.getText().toString(), passwordInput.getText().toString());
 
-        registrationData.setGivenName(firstNameInput.getText().toString())
-                .setSurname(lastNameInput.getText().toString());
-        Stormpath.register(registrationData, new StormpathCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                finish();
-            }
-
-            @Override
-            public void onFailure(StormpathError error) {
-                new AlertDialog.Builder(RegisterActivity.this)
-                        .setTitle("Error")
-                        .setMessage(error.message())
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .show();
-            }
-        });
     }
 }

@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.voice;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,6 +21,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
+import com.ethan.morephone.presentation.phone.dial.DialActivity;
 import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
 import com.ethan.morephone.presentation.voice.adapter.VoicesViewHolder;
 import com.ethan.morephone.utils.Injection;
@@ -38,18 +40,18 @@ import java.util.List;
 
 public class VoiceFragment extends BaseFragment implements
         VoiceContract.View,
-        VoicesAdapter.OnItemVoiceClickListener {
+        VoicesAdapter.OnItemVoiceClickListener,
+        View.OnClickListener {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
-    public static VoiceFragment getInstance(String phoneNumber){
+    public static VoiceFragment getInstance(String phoneNumber) {
         VoiceFragment voiceFragment = new VoiceFragment();
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
         voiceFragment.setArguments(bundle);
         return voiceFragment;
     }
-
 
 
     private VoicesAdapter mVoicesAdapter;
@@ -82,7 +84,8 @@ public class VoiceFragment extends BaseFragment implements
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setTitleActionBar(toolbar, mPhoneNumber);
+        baseActivity.setSubTitleActionBar(toolbar, getString(R.string.action_bar_title_voice_label), mPhoneNumber);
+        toolbar.setVisibility(View.GONE);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -93,6 +96,8 @@ public class VoiceFragment extends BaseFragment implements
         mVoicesAdapter = new VoicesAdapter(getContext(), mPhoneNumber, new ArrayList<CallEntity>(), this);
         mRecyclerView.setAdapter(mVoicesAdapter);
         mVoicesAdapter.setRecyclerView(mRecyclerView);
+
+        view.findViewById(R.id.button_dial).setOnClickListener(this);
 
 //        loadData();
 
@@ -171,4 +176,14 @@ public class VoiceFragment extends BaseFragment implements
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button_dial:
+                startActivity(new Intent(getActivity(), DialActivity.class));
+                break;
+            default:
+                break;
+        }
+    }
 }

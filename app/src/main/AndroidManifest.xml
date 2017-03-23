@@ -48,12 +48,15 @@
         <activity android:name=".presentation.voice.VoiceActivity" />
         <activity android:name=".presentation.voice.TestVoiceActivity" />
 
+        <activity android:name=".presentation.authentication.register.RegisterActivity" />
         <activity android:name=".presentation.authentication.register.name.RegisterNameActivity" />
         <activity android:name=".presentation.authentication.register.email.RegisterEmailActivity" />
         <activity android:name=".presentation.authentication.register.password.RegisterPasswordActivity" />
 
         <activity android:name=".presentation.authentication.login.LoginActivity" />
         <activity android:name=".presentation.authentication.login.forgot.ForgotPasswordActivity" />
+
+        <activity android:name=".presentation.dashboard.DashboardActivity" />
 
         <activity android:name=".presentation.phone.PhoneActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />

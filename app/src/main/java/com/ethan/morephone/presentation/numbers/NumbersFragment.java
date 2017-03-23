@@ -2,11 +2,17 @@ package com.ethan.morephone.presentation.numbers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +22,8 @@ import com.android.morephone.data.entity.NumberEntity;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.dashboard.DashboardActivity;
+import com.ethan.morephone.presentation.dashboard.DashboardFragment;
 import com.ethan.morephone.presentation.message.conversation.ConversationsActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.NumbersAdapter;
@@ -34,6 +42,7 @@ import java.util.List;
 
 public class NumbersFragment extends BaseFragment implements
         NumbersAdapter.OnItemNumberClickListener,
+        NavigationView.OnNavigationItemSelectedListener,
         NumbersContract.View {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
@@ -45,6 +54,8 @@ public class NumbersFragment extends BaseFragment implements
     private NumbersAdapter mNumbersAdapter;
 
     private NumbersContract.Presenter mPresenter;
+
+    private DrawerLayout mDrawerLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +72,14 @@ public class NumbersFragment extends BaseFragment implements
         BaseActivity baseActivity = (BaseActivity) getActivity();
         baseActivity.setTitleActionBar(toolbar, "");
 
+        mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+
+        setUpNavigation(view);
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -74,6 +93,16 @@ public class NumbersFragment extends BaseFragment implements
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    private void setUpNavigation(View view) {
+        NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.menu_numbers, menu);
     }
 
     @Override
@@ -92,7 +121,10 @@ public class NumbersFragment extends BaseFragment implements
 
     @Override
     public void onItemClick(int pos) {
-
+        NumberEntity numberEntity = mNumbersAdapter.getData().get(pos);
+        Intent intent = new Intent(getActivity(), DashboardActivity.class);
+        intent.putExtra(DashboardFragment.BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
+        startActivity(intent);
     }
 
     @Override
@@ -140,5 +172,11 @@ public class NumbersFragment extends BaseFragment implements
     @Override
     public void setPresenter(NumbersContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        mDrawerLayout.closeDrawers();
+        return false;
     }
 }

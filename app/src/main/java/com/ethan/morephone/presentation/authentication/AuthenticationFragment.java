@@ -16,7 +16,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.authentication.login.LoginActivity;
-import com.ethan.morephone.presentation.authentication.register.name.RegisterNameActivity;
+import com.ethan.morephone.presentation.authentication.register.RegisterActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
 
 
@@ -86,7 +86,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
                 break;
 
             case R.id.button_authentication_create_account:
-                startActivityForResult(new Intent(getActivity(), RegisterNameActivity.class), REQUEST_REGISTER);
+                startActivityForResult(new Intent(getActivity(), RegisterActivity.class), REQUEST_REGISTER);
                 break;
 
             default:

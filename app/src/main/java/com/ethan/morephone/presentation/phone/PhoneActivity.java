@@ -31,7 +31,7 @@ public class PhoneActivity extends BaseActivity {
         mPhoneNumber = getIntent().getStringExtra(EXTRA_PHONE_NUMBER);
 
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setTitleActionBar(mToolbar, mPhoneNumber);
+        setSubTitleActionBar(mToolbar, getString(R.string.action_bar_title_phone_label), mPhoneNumber);
 
         setUpViewPager();
 

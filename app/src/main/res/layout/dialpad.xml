@@ -21,7 +21,6 @@
     android:layout_gravity="center_horizontal"
     android:layout_marginTop="@dimen/dialpad_vertical_margin"
     android:layout_weight="@integer/dialpad_layout_weight_dialpad"
-    android:background="@drawable/dialpad_background"
     android:layoutDirection="ltr"
     android:paddingBottom="10dip"
     android:paddingEnd="5dip"

@@ -21,6 +21,7 @@
     <string name="action_search">Search</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_bar_title_conversation_label">Conversation</string>
 
     <!-- Fragment Message List -->
     <string name="box_sms_edit_text_hint">Write a message</string>
@@ -40,6 +41,9 @@
     <!-- Fragment Register Email -->
     <string name="text_register_email_title">And, your email?</string>
     <string name="text_register_email_address">EMAIL ADDRESS</string>
+
+    <!-- Fragment Register -->
+    <string name="text_register_title">Sign Up</string>
 
     <!-- Fragment Register Password -->
     <string name="text_register_password_title">Create a password</string>
@@ -102,4 +106,12 @@
 
     <string name="twiml_apps">APbdbf05382a556d66bc8419f36e51a6d6</string>
     <string name="update_capability">Update Capability</string>
+
+    <!-- Fragment Voice -->
+    <string name="action_bar_title_voice_label">Voice</string>
+
+    <!-- Phone -->
+    <string name="action_bar_title_phone_label">Phone</string>
+
+    <string name="action_bar_title_dial_label">Dialing from</string>
 </resources>

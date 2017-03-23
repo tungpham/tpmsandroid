@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin">
+    android:background="@color/colorBackgroundBlue"
+    android:orientation="vertical">
+    <include
+        layout="@layout/tool_bar_blue"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/input_firstName"
-        android:layout_gravity="center_horizontal"
-        android:hint="First Name" />
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_register_name_title"
+        style="@style/TextAuthenticationTitle"
+        android:layout_below="@+id/tool_bar"
+        android:text="@string/text_register_title"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/input_lastName"
-        android:layout_gravity="center_horizontal"
-        android:hint="Last Name" />
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_register_first_name"
+        style="@style/TextAuthenticationField"
+        android:layout_below="@+id/text_register_name_title"
+        android:layout_marginTop="@dimen/text_authentication_field_margin_top"
+        android:text="@string/text_register_email_address"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_email"
+        style="@style/EditTextAuthentication"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:id="@+id/input_email"
-        android:layout_gravity="center_horizontal"
-        android:hint="Email" />
+        android:layout_below="@+id/text_register_first_name"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_register_password"
+        style="@style/TextAuthenticationField"
+        android:layout_below="@+id/edit_text_email"
+        android:layout_marginTop="@dimen/text_authentication_field_margin_top"
+        android:text="@string/text_register_password" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_register_password_show"
+        style="@style/TextAuthenticationField"
+        android:layout_alignBottom="@+id/text_register_password"
+        android:layout_alignParentRight="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="@string/text_register_password_show"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_password"
+        style="@style/EditTextAuthentication"
+        android:layout_below="@+id/text_register_password"
         android:ems="10"
-        android:id="@+id/input_password"
-        android:layout_gravity="center_horizontal"
-        android:hint="Password" />
+        android:inputType="textPassword" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:id="@+id/button_register"
-        android:layout_gravity="center_horizontal" />
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/button_next_step"
+        style="@style/ViewCommon"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        app:backgroundTint="@color/colorMainDark"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:src="@drawable/ic_arrow_right_green"/>
+
+</RelativeLayout>
