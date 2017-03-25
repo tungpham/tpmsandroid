@@ -58,6 +58,8 @@
 
         <activity android:name=".presentation.dashboard.DashboardActivity" />
 
+        <activity android:name=".presentation.numbers.NumbersActivity" />
+
         <activity android:name=".presentation.phone.PhoneActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity

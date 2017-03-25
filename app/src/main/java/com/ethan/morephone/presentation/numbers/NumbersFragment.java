@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -70,15 +69,15 @@ public class NumbersFragment extends BaseFragment implements
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setTitleActionBar(toolbar, "");
-
-        mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
-
-        setUpNavigation(view);
+        baseActivity.setTitleActionBar(toolbar, "+17606215500");
+//
+//        mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                getActivity(), mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        mDrawerLayout.setDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        setUpNavigation(view);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -95,10 +94,10 @@ public class NumbersFragment extends BaseFragment implements
         return view;
     }
 
-    private void setUpNavigation(View view) {
-        NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
+//    private void setUpNavigation(View view) {
+//        NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
+//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

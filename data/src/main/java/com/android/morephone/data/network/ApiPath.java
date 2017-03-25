@@ -23,7 +23,7 @@ interface ApiPath {
 
 
     /*-----------------------------------------FAKE DATA-----------------------------------------*/
-    @GET("master/fake_data.json")
+    @GET("master/Design/fake_data.json")
     Call<FakeData> getFakeDAta();
 
 

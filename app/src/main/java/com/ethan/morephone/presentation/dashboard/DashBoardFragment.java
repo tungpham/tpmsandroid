@@ -3,14 +3,12 @@ package com.ethan.morephone.presentation.dashboard;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.dashboard.adapter.DashboardViewPagerAdapter;
 import com.ethan.morephone.widget.NavigationTabStrip;
@@ -39,10 +37,6 @@ public class DashboardFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
-
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
-        BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setTitleActionBar(toolbar, mPhoneNumber);
 
         setUpViewPager(view);
 

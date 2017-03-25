@@ -23,6 +23,7 @@ import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.ConversationListAdapter;
+import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
 import com.ethan.morephone.presentation.numbers.NumbersFragment;
 import com.ethan.morephone.utils.Injection;
@@ -86,6 +87,7 @@ public class ConversationsFragment extends BaseFragment implements
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
         mConversationListAdapter = new ConversationListAdapter(getContext(), new ArrayList<ConversationModel>(), this);
         recyclerView.setAdapter(mConversationListAdapter);

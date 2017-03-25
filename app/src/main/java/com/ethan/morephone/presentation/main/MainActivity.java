@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,9 +18,12 @@ import android.view.View;
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.dashboard.DashboardFragment;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
+import com.ethan.morephone.presentation.numbers.NumbersActivity;
 import com.ethan.morephone.presentation.numbers.NumbersFragment;
 import com.ethan.morephone.utils.ActivityUtils;
+import com.ethan.morephone.widget.NavigationTabStrip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,22 +44,22 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
+        setContentView(R.layout.activity_main);
 
-//        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-//        enableActionBar(mToolbar, getString(R.string.app_name));
-//
-//        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        mDrawerLayout.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        setUpNavigation();
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        enableActionBar(mToolbar, "+17606215500");
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+
+        setUpNavigation();
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof NumbersFragment) return;
-        NumbersFragment numbersFragment = NumbersFragment.getInstance();
+        DashboardFragment numbersFragment = DashboardFragment.getInstance("+17606215500");
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 numbersFragment,
@@ -62,14 +67,14 @@ public class MainActivity extends BaseActivity implements
                 NumbersFragment.class.getSimpleName());
     }
 
-//    private void setUpViewPager() {
-//        NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.tab_strip);
-//
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-//        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
-//        viewPager.setAdapter(myViewPagerAdapter);
-//        navigationTabStrip.setViewPager(viewPager, 0);
-//    }
+    private void setUpViewPager() {
+        NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.tab_strip);
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(myViewPagerAdapter);
+        navigationTabStrip.setViewPager(viewPager, 0);
+    }
 
     private void setUpNavigation() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -80,7 +85,13 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         mDrawerLayout.closeDrawers();
-
+        switch (item.getItemId()) {
+            case R.id.nav_numbers:
+                startActivity(new Intent(this, NumbersActivity.class));
+                break;
+            default:
+                break;
+        }
         return false;
     }
 

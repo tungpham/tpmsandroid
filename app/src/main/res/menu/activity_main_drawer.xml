@@ -4,6 +4,11 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/nav_numbers"
+            android:icon="@drawable/ic_settings_phone_black_24dp"
+            android:title="My numbers" />
+
+        <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_add_black_24dp"
             android:title="Buy a phone" />

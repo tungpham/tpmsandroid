@@ -8,6 +8,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -140,6 +142,9 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
     // Custom typeface
     private Typeface mTypeface;
 
+    private Bitmap mBitmapMessage;
+    private Bitmap mBitmapVoice;
+
     public NavigationTabStrip(final Context context) {
         this(context, null);
     }
@@ -232,6 +237,9 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
                     updateIndicatorPosition((Float) animation.getAnimatedValue());
                 }
             });
+
+            mBitmapMessage = BitmapFactory.decodeResource(getResources(), R.drawable.message);
+            mBitmapVoice = BitmapFactory.decodeResource(getResources(), R.drawable.ic_voice);
         } finally {
             typedArray.recycle();
         }
@@ -667,11 +675,21 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
                 else if (i == mIndex) updateLastTitle(lastInterpolation);
             }
 
-            canvas.drawText(
-                    title, leftTitleOffset,
-                    topTitleOffset + (mStripGravity == StripGravity.TOP ? mStripWeight : 0.0F),
-                    mTitlePaint
-            );
+            Bitmap bitmap = null;
+
+            if( i == 0 ){
+                bitmap = mBitmapMessage;
+            }else{
+                bitmap = mBitmapVoice;
+            }
+            canvas.drawBitmap(bitmap, leftTitleOffset - bitmap.getWidth()/2,
+                    topTitleOffset - bitmap.getHeight()/2, new Paint());
+
+//            canvas.drawText(
+//                    title, leftTitleOffset,
+//                    topTitleOffset + (mStripGravity == StripGravity.TOP ? mStripWeight : 0.0F),
+//                    mTitlePaint
+//            );
         }
     }
 
