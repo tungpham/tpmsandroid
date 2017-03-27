@@ -1,6 +1,7 @@
 package com.ethan.morephone.presentation.authentication;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,12 +13,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.morephone.data.entity.FakeData;
+import com.android.morephone.data.network.ApiManager;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.presentation.authentication.register.RegisterActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
+
+import org.greenrobot.eventbus.EventBus;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -45,6 +54,8 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
 
         view.findViewById(R.id.button_authentication_facebook).setOnClickListener(this);
         view.findViewById(R.id.button_authentication_create_account).setOnClickListener(this);
+
+        getFakeData(getContext());
         return view;
     }
 
@@ -102,5 +113,26 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
                 startActivity(new Intent(getActivity(), MainActivity.class));
             }
         }
+    }
+
+    public void getFakeData(Context context) {
+//        showLoading(true);
+        ApiManager.fakeData(context, new Callback<FakeData>() {
+            @Override
+            public void onResponse(Call<FakeData> call, Response<FakeData> response) {
+//                mView.showLoading(false);
+                if (response.isSuccessful()) {
+                    FakeData fakeData = response.body();
+                    EventBus.getDefault().postSticky(fakeData);
+//                    mView.showFakeData(fakeData);
+//                    mView.showPhoneNumbers(fakeData.list_number);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FakeData> call, Throwable t) {
+//                mView.showLoading(false);
+            }
+        });
     }
 }
