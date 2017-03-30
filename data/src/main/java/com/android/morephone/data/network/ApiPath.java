@@ -1,11 +1,14 @@
 package com.android.morephone.data.network;
 
 
+import com.android.morephone.data.entity.CountryCode;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceListResourceResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.DELETE;
@@ -26,7 +29,8 @@ interface ApiPath {
     @GET("master/Design/fake_data.json")
     Call<FakeData> getFakeDAta();
 
-
+    @GET("master/countrycode.json")
+    Call<List<CountryCode>> getCountryCode();
 
     /*-----------------------------------------MESSAGE-----------------------------------------*/
 

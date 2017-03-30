@@ -18,6 +18,7 @@ import android.view.View;
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.buy.BuyNumberActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFragment;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.numbers.NumbersActivity;
@@ -88,6 +89,9 @@ public class MainActivity extends BaseActivity implements
         switch (item.getItemId()) {
             case R.id.nav_numbers:
                 startActivity(new Intent(this, NumbersActivity.class));
+                break;
+            case R.id.nav_buy_number:
+                startActivity(new Intent(this, BuyNumberActivity.class));
                 break;
             default:
                 break;

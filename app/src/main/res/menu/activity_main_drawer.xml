@@ -9,7 +9,7 @@
             android:title="My numbers" />
 
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_buy_number"
             android:icon="@drawable/ic_add_black_24dp"
             android:title="Buy a phone" />
 

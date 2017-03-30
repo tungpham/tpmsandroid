@@ -114,4 +114,11 @@
     <string name="action_bar_title_phone_label">Phone</string>
 
     <string name="action_bar_title_dial_label">Dialing from</string>
+
+    <!-- Fragment Buy a number -->
+    <string name="buy_number_label">Buy a number</string>
+    <string name="buy_number_country">Country</string>
+    <string name="buy_number_number">Number</string>
+    <string name="buy_number_multiple_select">Multiple select</string>
+    <string name="buy_number_search">Search</string>
 </resources>

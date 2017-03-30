@@ -2,6 +2,7 @@ package com.android.morephone.data.network;
 
 import android.content.Context;
 
+import com.android.morephone.data.entity.CountryCode;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
@@ -9,6 +10,7 @@ import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceListResourceResponse;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Authenticator;
@@ -213,5 +215,8 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-
+    public static void getCountryCode(Context context, Callback<List<CountryCode>> callback) {
+        Call<List<CountryCode>> call = getApiPath(context).getCountryCode();
+        call.enqueue(callback);
+    }
 }

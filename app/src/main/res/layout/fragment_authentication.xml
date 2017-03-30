@@ -43,7 +43,6 @@
         android:background="?android:attr/selectableItemBackground"
         android:text="@string/authentication_text_options" />
 
-
     <com.ethan.morephone.widget.MyTextView
         android:id="@+id/text_terms_services"
         style="@style/TextTermsServices"
