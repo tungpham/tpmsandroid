@@ -2,4 +2,5 @@
 <com.ethan.morephone.widget.MyTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/text_country_name"
     style="@style/TextNumberItem"
+    android:minHeight="48dp"
     android:gravity="center_vertical" />

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.CountryCode;
 import com.android.morephone.data.entity.FakeData;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
@@ -143,6 +144,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
             public void onResponse(Call<List<CountryCode>> call, Response<List<CountryCode>> response) {
                 if(response.isSuccessful()){
                     List<CountryCode> countryCodes = response.body();
+                    DebugTool.logD("ABCD: " + countryCodes.size());
                     EventBus.getDefault().postSticky(countryCodes);
                 }
             }

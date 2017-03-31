@@ -60,6 +60,7 @@
 
         <activity android:name=".presentation.numbers.NumbersActivity" />
         <activity android:name=".presentation.buy.BuyNumberActivity" />
+        <activity android:name=".presentation.buy.result.ResultSearchNumberActivity" />
 
         <activity android:name=".presentation.phone.PhoneActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
