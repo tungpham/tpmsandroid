@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.android.morephone.data.entity.CountryCode;
+import com.android.morephone.data.entity.phonenumbers.CountryCode;
 import com.ethan.morephone.R;
 
 import java.util.List;
@@ -70,7 +70,7 @@ public class CountryAdapter extends BaseAdapter {
         }
 
         CountryCode countryCode = mCountryCodes.get(position);
-        viewHolder.mTextCountryName.setText(countryCode.name + " (+" + countryCode.number + ")");
+        viewHolder.mTextCountryName.setText(countryCode.country);
 
         return convertView;
     }

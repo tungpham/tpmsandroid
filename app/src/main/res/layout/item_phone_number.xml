@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative_item_sms"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground">
+
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_phone_number"
+        style="@style/TextSmsTitle"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_region"
+        style="@style/TextSmsTime"
+        android:layout_below="@+id/text_phone_number"
+        android:layout_marginLeft="@dimen/activity_vertical_margin" />
+
+
+</RelativeLayout>

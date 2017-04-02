@@ -7,8 +7,10 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
-import com.android.morephone.data.entity.CountryCode;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
+import com.android.morephone.data.entity.phonenumbers.CountryCode;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.adapter.CountryAdapter;
@@ -19,13 +21,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Ethan on 3/30/17.
  */
 
-public class BuyNumberFragment extends BaseFragment implements View.OnClickListener{
+public class BuyNumberFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
 
     private static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
@@ -50,6 +51,7 @@ public class BuyNumberFragment extends BaseFragment implements View.OnClickListe
         mSpinnerCountry = (AppCompatSpinner) view.findViewById(R.id.spinner_buy_number_country);
         mCountryAdapter = new CountryAdapter(getContext(), new ArrayList<CountryCode>(), R.layout.item_country_name);
         mSpinnerCountry.setAdapter(mCountryAdapter);
+        mSpinnerCountry.setOnItemSelectedListener(this);
         view.findViewById(R.id.button_buy_number_search).setOnClickListener(this);
         return view;
     }
@@ -67,8 +69,8 @@ public class BuyNumberFragment extends BaseFragment implements View.OnClickListe
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEvent(List<CountryCode> countryCodes) {
-        mCountryAdapter.replaceData(countryCodes);
+    public void onEvent(AvailableCountries availableCountries) {
+        mCountryAdapter.replaceData(availableCountries.countries);
     }
 
     @Override
@@ -80,5 +82,15 @@ public class BuyNumberFragment extends BaseFragment implements View.OnClickListe
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        mSpinnerCountry.setSelection(i);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

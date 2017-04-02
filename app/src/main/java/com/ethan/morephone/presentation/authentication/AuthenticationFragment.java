@@ -13,9 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.entity.CountryCode;
 import com.android.morephone.data.entity.FakeData;
-import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
 import com.android.morephone.data.network.ApiManager;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
@@ -25,8 +24,6 @@ import com.ethan.morephone.presentation.authentication.register.RegisterActivity
 import com.ethan.morephone.presentation.main.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -139,18 +136,17 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
             }
         });
 
-        ApiManager.getCountryCode(context, new Callback<List<CountryCode>>() {
+        ApiManager.getAvailableCountries(context, new Callback<AvailableCountries>() {
             @Override
-            public void onResponse(Call<List<CountryCode>> call, Response<List<CountryCode>> response) {
+            public void onResponse(Call<AvailableCountries> call, Response<AvailableCountries> response) {
                 if(response.isSuccessful()){
-                    List<CountryCode> countryCodes = response.body();
-                    DebugTool.logD("ABCD: " + countryCodes.size());
-                    EventBus.getDefault().postSticky(countryCodes);
+                    AvailableCountries availableCountries = response.body();
+                    EventBus.getDefault().postSticky(availableCountries);
                 }
             }
 
             @Override
-            public void onFailure(Call<List<CountryCode>> call, Throwable t) {
+            public void onFailure(Call<AvailableCountries> call, Throwable t) {
 
             }
         });

@@ -2,7 +2,9 @@ package com.android.morephone.data.network;
 
 import android.content.Context;
 
-import com.android.morephone.data.entity.CountryCode;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
+import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
+import com.android.morephone.data.entity.phonenumbers.CountryCode;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
@@ -30,7 +32,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiManager {
 
-    private static final String BASE_URL = "https://raw.githubusercontent.com/tungpham/tpmsservices/";
+//    private static final String BASE_URL = "https://raw.githubusercontent.com/tungpham/tpmsservices/";
+    private static final String BASE_URL = "https://api.twilio.com/2010-04-01/";
 
     private static ApiPath mApiPath;
 
@@ -217,6 +220,20 @@ public class ApiManager {
 
     public static void getCountryCode(Context context, Callback<List<CountryCode>> callback) {
         Call<List<CountryCode>> call = getApiPath(context).getCountryCode();
+        call.enqueue(callback);
+    }
+
+    public static void getAvailableCountries(Context context, Callback<AvailableCountries> callback) {
+        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
+        Call<AvailableCountries> call = getApiPath(context).getAvailableCountries(accountsid);
+        call.enqueue(callback);
+    }
+
+    public static void getAvailablePhoneNumbers(Context context,
+                                                String countryCode,
+                                                Callback<AvailablePhoneNumbers> callback) {
+        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
+        Call<AvailablePhoneNumbers> call = getApiPath(context).getAvailablePhoneNumbers(accountsid, countryCode);
         call.enqueue(callback);
     }
 }

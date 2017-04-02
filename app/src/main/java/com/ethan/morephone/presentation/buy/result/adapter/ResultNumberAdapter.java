@@ -1,62 +1,51 @@
 package com.ethan.morephone.presentation.buy.result.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
 
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.ethan.morephone.R;
+
+import java.util.List;
 
 /**
  * Created by Ethan on 3/31/17.
  */
 
-public class ResultNumberAdapter extends BaseAdapter {
+public class ResultNumberAdapter extends RecyclerView.Adapter<ResultNumberViewHolder> {
 
+    private List<PhoneNumber> mPhoneNumbers;
     private Context mContext;
-    private int mResource;
 
-    public ResultNumberAdapter(Context context){
+    public ResultNumberAdapter(Context context, List<PhoneNumber> phoneNumbers) {
         mContext = context;
+        mPhoneNumbers = phoneNumbers;
+    }
+
+    public void replaceData(List<PhoneNumber> phoneNumbers) {
+        mPhoneNumbers = phoneNumbers;
+        notifyDataSetChanged();
     }
 
     @Override
-    public int getCount() {
-        return 0;
+    public ResultNumberViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_phone_number, parent, false);
+        return new ResultNumberViewHolder(itemView);
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public void onBindViewHolder(ResultNumberViewHolder holder, int position) {
+        final PhoneNumber phoneNumber = mPhoneNumbers.get(position);
+        holder.textPhoneNumber.setText(phoneNumber.phoneNumber);
+        holder.textRegion.setText(phoneNumber.region);
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
+    public int getItemCount() {
+        return mPhoneNumbers.size();
     }
 
-    @Override
-    public View getView(int i, View convertView, ViewGroup viewGroup) {
-        final ViewHolder viewHolder;
-        if (convertView == null) {
-            viewHolder = new ViewHolder();
-
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(mResource, null, false);
-
-            viewHolder.mTextNumber = (TextView) convertView.findViewById(R.id.text_country_name);
-
-            convertView.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
-        return convertView;
-    }
-
-    static class ViewHolder {
-        public TextView mTextNumber;
-    }
 }

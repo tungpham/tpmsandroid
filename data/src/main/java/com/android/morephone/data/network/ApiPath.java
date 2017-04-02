@@ -1,7 +1,9 @@
 package com.android.morephone.data.network;
 
 
-import com.android.morephone.data.entity.CountryCode;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
+import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
+import com.android.morephone.data.entity.phonenumbers.CountryCode;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
@@ -31,6 +33,14 @@ interface ApiPath {
 
     @GET("master/countrycode.json")
     Call<List<CountryCode>> getCountryCode();
+
+    /*--------------------------------Available Phone Numbers----------------------------------*/
+
+    @GET("Accounts/{accountsid}/AvailableCountries.json")
+    Call<AvailableCountries> getAvailableCountries(@Path("accountsid") String accountsid);
+
+    @GET("Accounts/{accountsid}/AvailablePhoneNumbers/{countrycode}/Local.json")
+    Call<AvailablePhoneNumbers> getAvailablePhoneNumbers(@Path("accountsid") String accountsid, @Path("countrycode") String countryCode);
 
     /*-----------------------------------------MESSAGE-----------------------------------------*/
 
