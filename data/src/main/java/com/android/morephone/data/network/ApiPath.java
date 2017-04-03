@@ -3,9 +3,10 @@ package com.android.morephone.data.network;
 
 import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
 import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
-import com.android.morephone.data.entity.phonenumbers.CountryCode;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceListResourceResponse;
@@ -32,15 +33,24 @@ interface ApiPath {
     Call<FakeData> getFakeDAta();
 
     @GET("master/countrycode.json")
-    Call<List<CountryCode>> getCountryCode();
+    Call<List<AvailableCountry>> getCountryCode();
 
     /*--------------------------------Available Phone Numbers----------------------------------*/
 
-    @GET("Accounts/{accountsid}/AvailableCountries.json")
+    @GET("Accounts/{accountsid}/AvailablePhoneNumbers.json")
     Call<AvailableCountries> getAvailableCountries(@Path("accountsid") String accountsid);
 
     @GET("Accounts/{accountsid}/AvailablePhoneNumbers/{countrycode}/Local.json")
-    Call<AvailablePhoneNumbers> getAvailablePhoneNumbers(@Path("accountsid") String accountsid, @Path("countrycode") String countryCode);
+    Call<AvailablePhoneNumbers> getAvailablePhoneNumbers(@Path("accountsid") String accountsid,
+                                                         @Path("countrycode") String countryCode,
+                                                         @Query("Contains") String contains,
+                                                         @Query("SmsEnabled") boolean smsEnabled,
+                                                         @Query("MmsEnabled")  boolean mmsEnable,
+                                                         @Query("VoiceEnabled") boolean voiceEnabled);
+
+    /*--------------------------------Incoming Phone Numbers ----------------------------------*/
+    @GET("Accounts/{accountsid}/IncomingPhoneNumbers.json")
+    Call<IncomingPhoneNumbers> getIncomingPhoneNumbers(@Path("accountsid") String accountsid);
 
     /*-----------------------------------------MESSAGE-----------------------------------------*/
 

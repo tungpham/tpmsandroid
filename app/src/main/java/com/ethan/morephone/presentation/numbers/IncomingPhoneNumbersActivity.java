@@ -13,7 +13,7 @@ import com.ethan.morephone.utils.ActivityUtils;
  * Created by Ethan on 3/23/17.
  */
 
-public class NumbersActivity extends BaseActivity{
+public class IncomingPhoneNumbersActivity extends BaseActivity{
 
 
     @Override
@@ -23,12 +23,12 @@ public class NumbersActivity extends BaseActivity{
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        NumbersFragment voiceFragment = NumbersFragment.getInstance();
+        IncomingPhoneNumbersFragment voiceFragment = IncomingPhoneNumbersFragment.getInstance();
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 voiceFragment,
                 R.id.content_frame,
-                NumbersFragment.class.getSimpleName());
+                IncomingPhoneNumbersFragment.class.getSimpleName());
     }
 
 }

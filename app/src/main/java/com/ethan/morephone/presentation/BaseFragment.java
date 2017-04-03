@@ -22,7 +22,7 @@ public class BaseFragment extends Fragment {
     private ProgressDialog mProgressDialog;
 
     protected void showProgress() {
-        if (mProgressDialog == null) {
+        if (mProgressDialog == null && isAdded()) {
             mProgressDialog = new ProgressDialog(getActivity());
             mProgressDialog.setMessage(getString(R.string.message_progress_dialog));
             mProgressDialog.show();
@@ -30,7 +30,7 @@ public class BaseFragment extends Fragment {
     }
 
     protected void hideProgress() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+        if (mProgressDialog != null && mProgressDialog.isShowing() && isAdded()) {
             mProgressDialog.dismiss();
             mProgressDialog = null;
         }

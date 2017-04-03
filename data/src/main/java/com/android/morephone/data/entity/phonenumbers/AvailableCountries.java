@@ -8,5 +8,5 @@ import java.util.List;
 
 public class AvailableCountries {
     public String uri;
-    public List<CountryCode> countries;
+    public List<AvailableCountry> countries;
 }

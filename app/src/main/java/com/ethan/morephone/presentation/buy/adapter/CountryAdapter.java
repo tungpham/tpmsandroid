@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.android.morephone.data.entity.phonenumbers.CountryCode;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
 import com.ethan.morephone.R;
 
 import java.util.List;
@@ -17,33 +17,34 @@ import java.util.List;
  * Created by Ethan on 3/30/17.
  */
 
-public class CountryAdapter extends BaseAdapter {
+public class CountryAdapter extends ArrayAdapter<AvailableCountry> {
 
     private int mResource;
     private Context mContext;
 
-    private List<CountryCode> mCountryCodes;
+    private List<AvailableCountry> mAvailableCountries;
 
-    public CountryAdapter(Context context, List<CountryCode> countryCodes, int resource) {
+    public CountryAdapter(Context context, List<AvailableCountry> availableCountries, int resource) {
+        super(context, resource);
         mContext = context;
         mResource = resource;
-        replaceData(countryCodes);
+        replaceData(availableCountries);
     }
 
-    public void replaceData(List<CountryCode> countryCodes){
-        mCountryCodes = countryCodes;
+    public void replaceData(List<AvailableCountry> availableCountries){
+        mAvailableCountries = availableCountries;
         notifyDataSetChanged();
     }
 
 
     @Override
     public int getCount() {
-        return mCountryCodes.size();
+        return mAvailableCountries.size();
     }
 
     @Override
-    public CountryCode getItem(int i) {
-        return mCountryCodes.get(i);
+    public AvailableCountry getItem(int i) {
+        return mAvailableCountries.get(i);
     }
 
     @Override
@@ -69,8 +70,31 @@ public class CountryAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        CountryCode countryCode = mCountryCodes.get(position);
-        viewHolder.mTextCountryName.setText(countryCode.country);
+        AvailableCountry availableCountry = mAvailableCountries.get(position);
+        viewHolder.mTextCountryName.setText(availableCountry.country);
+
+        return convertView;
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        final ViewHolder viewHolder;
+        if (convertView == null) {
+            viewHolder = new ViewHolder();
+
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(mResource, null, false);
+
+            viewHolder.mTextCountryName = (TextView) convertView.findViewById(R.id.text_country_name);
+
+            convertView.setTag(viewHolder);
+
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        AvailableCountry availableCountry = mAvailableCountries.get(position);
+        viewHolder.mTextCountryName.setText(availableCountry.country);
 
         return convertView;
     }

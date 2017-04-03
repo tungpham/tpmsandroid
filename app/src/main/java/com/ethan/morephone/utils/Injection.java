@@ -14,6 +14,7 @@ import com.android.morephone.domain.usecase.message.GetAllMessages;
 import com.android.morephone.domain.usecase.message.GetMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
+import com.android.morephone.domain.usecase.number.GetAvailableCountries;
 import com.android.morephone.domain.usecase.voice.CreateVoice;
 import com.android.morephone.domain.usecase.voice.DeleteVoice;
 import com.android.morephone.domain.usecase.voice.GetAllVoices;
@@ -87,6 +88,12 @@ public class Injection {
 
     public static CreateVoice providerCreateVoice(@NonNull Context context) {
         return new CreateVoice(providerVoiceRepository(context));
+    }
+
+
+    /*--------------------------------Available Phone Numbers----------------------------------*/
+    public static GetAvailableCountries providerAvailableCountries(@NonNull Context context){
+        return new GetAvailableCountries(context);
     }
 
 }

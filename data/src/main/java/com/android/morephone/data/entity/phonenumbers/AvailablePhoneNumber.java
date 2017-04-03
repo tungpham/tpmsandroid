@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Ethan on 4/2/17.
  */
 
-public class PhoneNumber {
+public class AvailablePhoneNumber {
 
     @SerializedName("friendly_name")
     public String friendlyName;

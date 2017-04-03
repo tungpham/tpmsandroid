@@ -11,14 +11,14 @@ import com.ethan.morephone.R;
  * Created by Ethan on 3/16/17.
  */
 
-public class NumbersViewHolder extends RecyclerView.ViewHolder {
+public class IncomingPhoneNumbersViewHolder extends RecyclerView.ViewHolder {
 
     public TextView textNumber;
     public ImageView imageCall;
     public ImageView imageMessage;
     public ImageView imageVoice;
 
-    public NumbersViewHolder(View itemView) {
+    public IncomingPhoneNumbersViewHolder(View itemView) {
         super(itemView);
         textNumber = (TextView) itemView.findViewById(R.id.text_number);
         imageCall = (ImageView) itemView.findViewById(R.id.image_call);

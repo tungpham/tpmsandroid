@@ -18,11 +18,11 @@ import android.view.View;
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.buy.BuyNumberActivity;
+import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFragment;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
-import com.ethan.morephone.presentation.numbers.NumbersActivity;
-import com.ethan.morephone.presentation.numbers.NumbersFragment;
+import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersActivity;
+import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.utils.ActivityUtils;
 import com.ethan.morephone.widget.NavigationTabStrip;
 
@@ -59,13 +59,13 @@ public class MainActivity extends BaseActivity implements
         setUpNavigation();
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (fragment instanceof NumbersFragment) return;
+        if (fragment instanceof IncomingPhoneNumbersFragment) return;
         DashboardFragment numbersFragment = DashboardFragment.getInstance("+17606215500");
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 numbersFragment,
                 R.id.content_frame,
-                NumbersFragment.class.getSimpleName());
+                IncomingPhoneNumbersFragment.class.getSimpleName());
     }
 
     private void setUpViewPager() {
@@ -88,10 +88,10 @@ public class MainActivity extends BaseActivity implements
         mDrawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.nav_numbers:
-                startActivity(new Intent(this, NumbersActivity.class));
+                startActivity(new Intent(this, IncomingPhoneNumbersActivity.class));
                 break;
             case R.id.nav_buy_number:
-                startActivity(new Intent(this, BuyNumberActivity.class));
+                startActivity(new Intent(this, SearchPhoneNumberActivity.class));
                 break;
             default:
                 break;

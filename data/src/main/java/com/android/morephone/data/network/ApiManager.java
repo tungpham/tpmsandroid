@@ -4,9 +4,10 @@ import android.content.Context;
 
 import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
 import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
-import com.android.morephone.data.entity.phonenumbers.CountryCode;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceListResourceResponse;
@@ -218,8 +219,8 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-    public static void getCountryCode(Context context, Callback<List<CountryCode>> callback) {
-        Call<List<CountryCode>> call = getApiPath(context).getCountryCode();
+    public static void getCountryCode(Context context, Callback<List<AvailableCountry>> callback) {
+        Call<List<AvailableCountry>> call = getApiPath(context).getCountryCode();
         call.enqueue(callback);
     }
 
@@ -231,9 +232,20 @@ public class ApiManager {
 
     public static void getAvailablePhoneNumbers(Context context,
                                                 String countryCode,
+                                                String contains,
+                                                boolean smsEnabled,
+                                                boolean mmsEnabled,
+                                                boolean voiceEnabled,
                                                 Callback<AvailablePhoneNumbers> callback) {
         String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<AvailablePhoneNumbers> call = getApiPath(context).getAvailablePhoneNumbers(accountsid, countryCode);
+        Call<AvailablePhoneNumbers> call = getApiPath(context).getAvailablePhoneNumbers(accountsid, countryCode, contains, smsEnabled, mmsEnabled, voiceEnabled);
+        call.enqueue(callback);
+    }
+
+    public static void getIncomingPhoneNumbers(Context context,
+                                               Callback<IncomingPhoneNumbers> callback) {
+        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
+        Call<IncomingPhoneNumbers> call = getApiPath(context).getIncomingPhoneNumbers(accountsid);
         call.enqueue(callback);
     }
 }

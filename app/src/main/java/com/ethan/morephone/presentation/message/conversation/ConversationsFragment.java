@@ -25,7 +25,7 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.ConversationListAdapter;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
-import com.ethan.morephone.presentation.numbers.NumbersFragment;
+import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.utils.Injection;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,7 +75,7 @@ public class ConversationsFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_conversations, container, false);
 
-        mPhoneNumber = getArguments().getString(NumbersFragment.BUNDLE_PHONE_NUMBER);
+        mPhoneNumber = getArguments().getString(IncomingPhoneNumbersFragment.BUNDLE_PHONE_NUMBER);
 
         mToolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();

@@ -13,5 +13,5 @@ public class AvailablePhoneNumbers {
     public String uri;
 
     @SerializedName("available_phone_numbers")
-    public List<PhoneNumber> availablePhoneNumbers;
+    public List<AvailablePhoneNumber> availableAvailablePhoneNumbers;
 }

@@ -121,4 +121,7 @@
     <string name="buy_number_number">Number</string>
     <string name="buy_number_multiple_select">Multiple select</string>
     <string name="buy_number_search">Search</string>
+    <string name="buy_number_sms">SMS</string>
+    <string name="buy_number_mms">MMS</string>
+    <string name="buy_number_voice">VOICE</string>
 </resources>

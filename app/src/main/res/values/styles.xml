@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@android:color/black</item>
-        <item name="colorAccent">@android:color/darker_gray</item>
+        <item name="colorAccent">@color/colorPink</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -260,7 +260,7 @@
     </style>
 
     <style name="TextBuyANumberTitle" parent="ViewCommon">
-        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginLeft">@dimen/activity_main_margin</item>
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
     </style>

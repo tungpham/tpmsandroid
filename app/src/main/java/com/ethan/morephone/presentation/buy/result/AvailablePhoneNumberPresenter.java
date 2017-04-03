@@ -14,24 +14,30 @@ import retrofit2.Response;
  * Created by Ethan on 4/2/17.
  */
 
-public class ResultSearchNumberPresenter implements ResultSearchNumberContract.Presenter {
+public class AvailablePhoneNumberPresenter implements AvailablePhoneNumberContract.Presenter {
 
-    private ResultSearchNumberContract.View mView;
+    private AvailablePhoneNumberContract.View mView;
 
-    public ResultSearchNumberPresenter(@NonNull ResultSearchNumberContract.View view) {
+    public AvailablePhoneNumberPresenter(@NonNull AvailablePhoneNumberContract.View view) {
         mView = view;
 
         mView.setPresenter(this);
     }
 
     @Override
-    public void searchPhoneNumber(Context context, String countryCode) {
+    public void searchPhoneNumber(Context context, String countryCode, String phoneNumber, boolean smsEnabled, boolean mmsEnabled, boolean voiceEnabled) {
         mView.showLoading(true);
-        ApiManager.getAvailablePhoneNumbers(context, countryCode, new Callback<AvailablePhoneNumbers>() {
+        ApiManager.getAvailablePhoneNumbers(context,
+                countryCode,
+                phoneNumber,
+                smsEnabled,
+                mmsEnabled,
+                voiceEnabled,
+                new Callback<AvailablePhoneNumbers>() {
             @Override
             public void onResponse(Call<AvailablePhoneNumbers> call, Response<AvailablePhoneNumbers> response) {
                 if(response.isSuccessful()){
-                    mView.showResultSearchNumber(response.body().availablePhoneNumbers);
+                    mView.showResultSearchNumber(response.body().availableAvailablePhoneNumbers);
                 }
                 mView.showLoading(false);
             }

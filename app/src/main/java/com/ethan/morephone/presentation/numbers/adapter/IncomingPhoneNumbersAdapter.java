@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.entity.NumberEntity;
+import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.ethan.morephone.R;
 
 import java.util.List;
@@ -14,35 +14,36 @@ import java.util.List;
  * Created by Ethan on 3/16/17.
  */
 
-public class NumbersAdapter extends RecyclerView.Adapter<NumbersViewHolder> {
+public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPhoneNumbersViewHolder> {
 
-    private List<NumberEntity> mNumberEntities;
-    private NumbersAdapter.OnItemNumberClickListener mOnItemNumberClickListener;
+    private List<IncomingPhoneNumber> mNumberEntities;
+    private IncomingPhoneNumbersAdapter.OnItemNumberClickListener mOnItemNumberClickListener;
 
-    public NumbersAdapter(List<NumberEntity> numberEntities, NumbersAdapter.OnItemNumberClickListener onItemNumberClickListener) {
+    public IncomingPhoneNumbersAdapter(List<IncomingPhoneNumber> numberEntities, IncomingPhoneNumbersAdapter.OnItemNumberClickListener onItemNumberClickListener) {
         mNumberEntities = numberEntities;
         mOnItemNumberClickListener = onItemNumberClickListener;
     }
 
-    public void replaceData(List<NumberEntity> numberEntities) {
+    public void replaceData(List<IncomingPhoneNumber> numberEntities) {
         mNumberEntities = numberEntities;
         notifyDataSetChanged();
     }
 
-    public List<NumberEntity> getData() {
+
+    public List<IncomingPhoneNumber> getData() {
         return mNumberEntities;
     }
 
     @Override
-    public NumbersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public IncomingPhoneNumbersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_number, parent, false);
-        return new NumbersViewHolder(itemView);
+        return new IncomingPhoneNumbersViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(NumbersViewHolder holder, final int position) {
-        final NumberEntity numberEntity = mNumberEntities.get(position);
+    public void onBindViewHolder(IncomingPhoneNumbersViewHolder holder, final int position) {
+        final IncomingPhoneNumber numberEntity = mNumberEntities.get(position);
         holder.textNumber.setText(numberEntity.phoneNumber);
 
         holder.textNumber.setOnClickListener(new View.OnClickListener() {

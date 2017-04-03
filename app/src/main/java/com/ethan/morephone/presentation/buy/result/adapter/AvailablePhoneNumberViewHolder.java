@@ -10,12 +10,12 @@ import com.ethan.morephone.R;
  * Created by Ethan on 4/2/17.
  */
 
-public class ResultNumberViewHolder extends RecyclerView.ViewHolder {
+public class AvailablePhoneNumberViewHolder extends RecyclerView.ViewHolder {
 
     public TextView textPhoneNumber;
     public TextView textRegion;
 
-    public ResultNumberViewHolder(View itemView) {
+    public AvailablePhoneNumberViewHolder(View itemView) {
         super(itemView);
         textPhoneNumber = (TextView) itemView.findViewById(R.id.text_phone_number);
         textRegion = (TextView) itemView.findViewById(R.id.text_region);

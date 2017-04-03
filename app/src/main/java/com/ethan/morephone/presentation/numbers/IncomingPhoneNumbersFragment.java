@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.FakeData;
-import com.android.morephone.data.entity.NumberEntity;
+import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -25,7 +25,7 @@ import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFragment;
 import com.ethan.morephone.presentation.message.conversation.ConversationsActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
-import com.ethan.morephone.presentation.numbers.adapter.NumbersAdapter;
+import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.presentation.voice.VoiceActivity;
 import com.ethan.morephone.presentation.voice.VoiceFragment;
@@ -39,27 +39,27 @@ import java.util.List;
  * Created by Ethan on 3/16/17.
  */
 
-public class NumbersFragment extends BaseFragment implements
-        NumbersAdapter.OnItemNumberClickListener,
+public class IncomingPhoneNumbersFragment extends BaseFragment implements
+        IncomingPhoneNumbersAdapter.OnItemNumberClickListener,
         NavigationView.OnNavigationItemSelectedListener,
-        NumbersContract.View {
+        IncomingPhoneNumbersContract.View {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
-    public static NumbersFragment getInstance() {
-        return new NumbersFragment();
+    public static IncomingPhoneNumbersFragment getInstance() {
+        return new IncomingPhoneNumbersFragment();
     }
 
-    private NumbersAdapter mNumbersAdapter;
+    private IncomingPhoneNumbersAdapter mIncomingPhoneNumbersAdapter;
 
-    private NumbersContract.Presenter mPresenter;
+    private IncomingPhoneNumbersContract.Presenter mPresenter;
 
     private DrawerLayout mDrawerLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new NumbersPresenter(this);
+        new IncomingPhoneNumbersPresenter(this);
     }
 
     @Nullable
@@ -84,11 +84,10 @@ public class NumbersFragment extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
-        mNumbersAdapter = new NumbersAdapter(new ArrayList<NumberEntity>(), this);
-        recyclerView.setAdapter(mNumbersAdapter);
+        mIncomingPhoneNumbersAdapter = new IncomingPhoneNumbersAdapter(new ArrayList<IncomingPhoneNumber>(), this);
+        recyclerView.setAdapter(mIncomingPhoneNumbersAdapter);
 
-        mPresenter.getFakeData(getContext());
-
+        mPresenter.loadIncomingPhoneNumbers(getContext());
         setHasOptionsMenu(true);
 
         return view;
@@ -120,33 +119,33 @@ public class NumbersFragment extends BaseFragment implements
 
     @Override
     public void onItemClick(int pos) {
-        NumberEntity numberEntity = mNumbersAdapter.getData().get(pos);
+        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
         Intent intent = new Intent(getActivity(), DashboardActivity.class);
-        intent.putExtra(DashboardFragment.BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
+        intent.putExtra(DashboardFragment.BUNDLE_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
         startActivity(intent);
     }
 
     @Override
     public void onItemCall(int pos) {
-        NumberEntity numberEntity = mNumbersAdapter.getData().get(pos);
+        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
         Intent intent = new Intent(getActivity(), PhoneActivity.class);
-        intent.putExtra(PhoneActivity.EXTRA_PHONE_NUMBER, numberEntity.phoneNumber);
+        intent.putExtra(PhoneActivity.EXTRA_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
         startActivity(intent);
     }
 
     @Override
     public void onItemMessage(int pos) {
-        NumberEntity numberEntity = mNumbersAdapter.getData().get(pos);
+        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
         Intent intent = new Intent(getActivity(), ConversationsActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
+        bundle.putString(BUNDLE_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
         intent.putExtras(bundle);
         startActivity(intent);
     }
 
     @Override
     public void onItemVoice(int pos) {
-        NumberEntity numberEntity = mNumbersAdapter.getData().get(pos);
+        IncomingPhoneNumber numberEntity = mIncomingPhoneNumbersAdapter.getData().get(pos);
         Intent intent = new Intent(getActivity(), VoiceActivity.class);
         intent.putExtra(VoiceFragment.BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
         startActivity(intent);
@@ -159,8 +158,8 @@ public class NumbersFragment extends BaseFragment implements
     }
 
     @Override
-    public void showPhoneNumbers(List<NumberEntity> numberEntities) {
-        mNumbersAdapter.replaceData(numberEntities);
+    public void showPhoneNumbers(List<IncomingPhoneNumber> numberEntities) {
+        mIncomingPhoneNumbersAdapter.replaceData(numberEntities);
     }
 
     @Override
@@ -169,7 +168,7 @@ public class NumbersFragment extends BaseFragment implements
     }
 
     @Override
-    public void setPresenter(NumbersContract.Presenter presenter) {
+    public void setPresenter(IncomingPhoneNumbersContract.Presenter presenter) {
         mPresenter = presenter;
     }
 

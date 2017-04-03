@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Ethan on 3/30/17.
  */
 
-public class CountryCode {
+public class AvailableCountry {
 
     @SerializedName("country_code")
     public String countryCode;

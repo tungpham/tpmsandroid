@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
-import com.ethan.morephone.presentation.numbers.NumbersFragment;
+import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.voice.VoiceFragment;
 
 /**
@@ -27,7 +27,7 @@ public class DashboardViewPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 Bundle bundle = new Bundle();
-                bundle.putString(NumbersFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
+                bundle.putString(IncomingPhoneNumbersFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
                 return ConversationsFragment.getInstance(bundle);
             case 1:
                 return VoiceFragment.getInstance(mPhoneNumber);

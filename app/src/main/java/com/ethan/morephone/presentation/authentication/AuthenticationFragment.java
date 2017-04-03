@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.FakeData;
-import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
 import com.android.morephone.data.network.ApiManager;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
@@ -136,19 +135,5 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
             }
         });
 
-        ApiManager.getAvailableCountries(context, new Callback<AvailableCountries>() {
-            @Override
-            public void onResponse(Call<AvailableCountries> call, Response<AvailableCountries> response) {
-                if(response.isSuccessful()){
-                    AvailableCountries availableCountries = response.body();
-                    EventBus.getDefault().postSticky(availableCountries);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AvailableCountries> call, Throwable t) {
-
-            }
-        });
     }
 }
