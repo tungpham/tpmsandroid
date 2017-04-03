@@ -40,7 +40,7 @@ public class ResultNumberAdapter extends RecyclerView.Adapter<ResultNumberViewHo
     public void onBindViewHolder(ResultNumberViewHolder holder, int position) {
         final PhoneNumber phoneNumber = mPhoneNumbers.get(position);
         holder.textPhoneNumber.setText(phoneNumber.phoneNumber);
-        holder.textRegion.setText(phoneNumber.region);
+        holder.textRegion.setText(phoneNumber.rateCenter + ", " + phoneNumber.region);
     }
 
     @Override

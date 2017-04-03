@@ -54,4 +54,6 @@
     <!-- Fragment Voice -->
 
     <dimen name="item_voice_space">8dp</dimen>
+
+    <dimen name="result_search_number_item_height">48dp</dimen>
 </resources>

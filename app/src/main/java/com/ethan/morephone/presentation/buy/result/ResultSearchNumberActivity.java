@@ -16,16 +16,13 @@ import com.ethan.morephone.utils.ActivityUtils;
 
 public class ResultSearchNumberActivity extends BaseActivity {
 
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_number);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setTitleActionBar(mToolbar, "Result");
+        setTitleActionBar(mToolbar, "US");
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof BuyNumberFragment) return;

@@ -1,22 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relative_item_sms"
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground">
+    android:layout_marginLeft="@dimen/activity_vertical_margin"
+    android:layout_marginRight="@dimen/activity_vertical_margin">
+
+    <com.ethan.morephone.widget.ExpandableLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/expandable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingBottom="@dimen/item_voice_space"
+        android:paddingTop="@dimen/item_voice_space">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_phone_number"
+                style="@style/TextSmsTitle"
+                android:layout_marginLeft="@dimen/activity_vertical_margin" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_region"
+                style="@style/TextSmsTime"
+                android:layout_below="@+id/text_phone_number"
+                android:layout_marginLeft="@dimen/activity_vertical_margin" />
+
+            <ImageView
+                android:id="@+id/image_buy"
+                style="@style/ImageAction"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="@dimen/activity_vertical_margin"
+                android:paddingRight="@dimen/activity_vertical_margin"
+                android:src="@drawable/ic_buy"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_expand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_time"
+            android:layout_marginTop="@dimen/activity_main_margin"
+            app:canExpand="true">
 
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_phone_number"
-        style="@style/TextSmsTitle"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin" />
+        </RelativeLayout>
+    </com.ethan.morephone.widget.ExpandableLayout>
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_region"
-        style="@style/TextSmsTime"
-        android:layout_below="@+id/text_phone_number"
-        android:layout_marginLeft="@dimen/activity_vertical_margin" />
-
-
-</RelativeLayout>
+</android.support.v7.widget.CardView>
