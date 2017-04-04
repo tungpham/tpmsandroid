@@ -3,6 +3,7 @@ package com.ethan.morephone.presentation.message.conversation.adapter;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.model.ConversationModel;
+import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TextDrawable;
 
 import java.util.Collections;
@@ -33,8 +35,8 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
         mDrawableBuilder = TextDrawable.builder().round();
     }
 
-    public void replaceData(List<ConversationModel> conversationModels){
-        mConversationModels =conversationModels;
+    public void replaceData(List<ConversationModel> conversationModels) {
+        mConversationModels = conversationModels;
         notifyDataSetChanged();
     }
 
@@ -54,7 +56,9 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
 
         holder.textSmsTitle.setText(conversationModel.getPhoneNumber());
         holder.textSmsDescription.setText(messageItem.body);
-        holder.textSmsTime.setText(com.ethan.morephone.utils.Utils.formatDate(messageItem.dateSent));
+        if (!TextUtils.isEmpty(messageItem.dateSent)) {
+            holder.textSmsTime.setText(Utils.formatDate(messageItem.dateSent));
+        }
         holder.relativeItemSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

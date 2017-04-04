@@ -2,6 +2,7 @@ package com.ethan.morephone.presentation.message.list;
 
 import android.support.annotation.NonNull;
 
+import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.message.CreateMessage;
@@ -24,7 +25,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
                                 @NonNull UseCaseHandler useCaseHandler,
                                 @NonNull GetMessages getMessages,
                                 @NonNull CreateMessage createMessage,
-                                @NonNull DeleteMessage deleteMessage){
+                                @NonNull DeleteMessage deleteMessage) {
         mView = view;
         mUseCaseHandler = useCaseHandler;
         mGetMessages = getMessages;
@@ -53,17 +54,40 @@ public class MessageListPresenter implements MessageListContract.Presenter {
     }
 
     @Override
-    public void createMessage(String to, String from, String body) {
+    public void createMessage(String to, String from, String body, final int position) {
+        MessageItem messageItem = new MessageItem(
+                "",
+                "",
+                "",
+                "",
+                null,
+                to,
+                from,
+                null,
+                body,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                null);
+        mView.createMessageSuccess(messageItem);
+        mView.showProgress(true, position);
         CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(to, from, body);
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
             public void onSuccess(CreateMessage.ResponseValue response) {
-
+//                mView.showProgress(false, position);
             }
 
             @Override
             public void onError() {
-
+//                mView.showProgress(false, position);
             }
         });
     }

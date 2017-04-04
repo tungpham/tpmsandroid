@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ethan.morephone.R;
+import com.ethan.morephone.widget.progress.DotProgressBar;
 
 /**
  * Created by Ethan on 2/16/17.
@@ -18,6 +19,7 @@ public class MessageOutViewHolder extends RecyclerView.ViewHolder {
     public TextView textMessageBody;
     public TextView textMessageTime;
     public RelativeLayout relativeMessageBlock;
+    public DotProgressBar dotProgressBar;
 
     public MessageOutViewHolder(View itemView) {
         super(itemView);
@@ -25,6 +27,7 @@ public class MessageOutViewHolder extends RecyclerView.ViewHolder {
         textMessageBody = (TextView) itemView.findViewById(R.id.text_message_body);
         textMessageTime = (TextView) itemView.findViewById(R.id.text_message_time);
         relativeMessageBlock = (RelativeLayout) itemView.findViewById(R.id.relative_message_block);
+        dotProgressBar = (DotProgressBar) itemView.findViewById(R.id.progress_bar);
     }
 
 }

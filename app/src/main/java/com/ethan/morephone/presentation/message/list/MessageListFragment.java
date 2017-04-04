@@ -41,10 +41,9 @@ public class MessageListFragment extends BaseFragment implements
         MessageListAdapter.OnItemMessageClickListener,
         View.OnClickListener,
         MessageListContract.View,
-        MessageDialog.MessageDialogListener{
+        MessageDialog.MessageDialogListener {
 
-    public static final String BUNDLE_PHONE_NUMBER_TO = "BUNDLE_PHONE_NUMBER_TO";
-    public static final String BUNDLE_PHONE_NUMBER_FROM = "BUNDLE_PHONE_NUMBER_FROM";
+    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
     public static MessageListFragment getInstance(Bundle bundle) {
         MessageListFragment messageListFragment = new MessageListFragment();
@@ -59,8 +58,11 @@ public class MessageListFragment extends BaseFragment implements
 
     private MessageListContract.Presenter mPresenter;
 
-//    private String mPhoneNumberTo;
-//    private String mPhoneNumberFrom;
+    private String mPhoneNumberTo;
+    private String mPhoneNumberFrom;
+
+    private RecyclerView mRecyclerView;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,22 +81,30 @@ public class MessageListFragment extends BaseFragment implements
         View view = inflater.inflate(R.layout.fragment_message_list, container, false);
         setHasOptionsMenu(true);
 
-
+        mPhoneNumberFrom = getArguments().getString(BUNDLE_PHONE_NUMBER);
 
         view.findViewById(R.id.image_send).setOnClickListener(this);
 
         mEditTextMessage = (AppCompatEditText) view.findViewById(R.id.edit_text_msg);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         DividerSpacingItemDecoration mDividerSpacingItemDecoration = new DividerSpacingItemDecoration(Utils.dipToPixels(getContext(), 8));
 //        recyclerView.addItemDecoration(mDividerSpacingItemDecoration);
 
         mMessageListAdapter = new MessageListAdapter(getContext(), new ArrayList<MessageItem>(), "+123", this);
-        recyclerView.setAdapter(mMessageListAdapter);
+        mRecyclerView.setAdapter(mMessageListAdapter);
+
+        mMessageListAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                mRecyclerView.scrollToPosition(mMessageListAdapter.getItemCount() - 1);
+            }
+        });
 
 //        mPresenter.loadMessages(mPhoneNumberTo, mPhoneNumberFrom);
         return view;
@@ -125,9 +135,9 @@ public class MessageListFragment extends BaseFragment implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_send:
-                String body =  mEditTextMessage.getText().toString();
+                String body = mEditTextMessage.getText().toString();
                 mEditTextMessage.setText("");
-//                mPresenter.createMessage(mPhoneNumberTo, mPhoneNumberFrom, body);
+                mPresenter.createMessage(mPhoneNumberTo, mPhoneNumberFrom, body, mMessageListAdapter.getData().size() - 1);
                 break;
             default:
                 break;
@@ -136,8 +146,22 @@ public class MessageListFragment extends BaseFragment implements
 
     @Override
     public void showLoading(boolean isActive) {
-        if(isActive) showProgress();
+        if (isActive) showProgress();
         else hideProgress();
+    }
+
+    @Override
+    public void showProgress(boolean isActive, int position) {
+//        if (isAdded()) {
+////            MessageOutViewHolder viewHolder = (MessageOutViewHolder) mRecyclerView.findViewHolderForAdapterPosition(2);
+//            MessageOutViewHolder viewHolder = (MessageOutViewHolder)mRecyclerView.findViewHolderForLayoutPosition(position);
+//            if (viewHolder != null) {
+//                if (isActive) viewHolder.dotProgressBar.setVisibility(View.VISIBLE);
+//                else viewHolder.dotProgressBar.setVisibility(View.GONE);
+//            } else {
+//                DebugTool.logD("CANNOT FILED" + position);
+//            }
+//        }
     }
 
     @Override
@@ -147,7 +171,9 @@ public class MessageListFragment extends BaseFragment implements
 
     @Override
     public void createMessageSuccess(MessageItem messageItem) {
-
+        List<MessageItem> messageItems = mMessageListAdapter.getData();
+        messageItems.add(messageItem);
+        mMessageListAdapter.replaceData(messageItems);
     }
 
     @Override
@@ -193,5 +219,6 @@ public class MessageListFragment extends BaseFragment implements
         baseActivity.setTitleActionBar(toolbar, conversationModel.getPhoneNumber());
 
         showMessages(conversationModel.getMessageItems());
+        mPhoneNumberTo = conversationModel.getPhoneNumber();
     }
 }

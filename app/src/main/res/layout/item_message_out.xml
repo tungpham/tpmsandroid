@@ -35,5 +35,18 @@
             android:layout_below="@+id/text_message_body"
             android:layout_alignParentRight="true" />
 
+        <com.ethan.morephone.widget.progress.DotProgressBar
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/progress_bar"
+            android:layout_width="50dp"
+            android:layout_height="11dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/text_message_time"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            custom:amount="3"
+            android:visibility="gone"
+            custom:endColor="@color/green_400"
+            custom:startColor="@color/green_700" />
+
     </RelativeLayout>
 </RelativeLayout>

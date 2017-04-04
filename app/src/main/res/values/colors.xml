@@ -89,4 +89,9 @@
     <color name="switch_track_enabled_dark">#646464</color>
     <color name="switch_thumb_disabled_dark">#595959</color>
     <color name="switch_track_disabled_dark">#383838</color>
+
+    <color name="green_400">#66BB6A</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="green_600">#43A047</color>
+    <color name="green_700">#388E3C</color>
 </resources>

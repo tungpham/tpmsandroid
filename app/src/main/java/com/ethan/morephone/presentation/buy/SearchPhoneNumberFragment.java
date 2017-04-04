@@ -16,6 +16,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.adapter.CountryAdapter;
 import com.ethan.morephone.presentation.buy.result.AvailablePhoneNumberActivity;
+import com.ethan.morephone.utils.Injection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class SearchPhoneNumberFragment extends BaseFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new SearchPhoneNumberPresenter(this);
+        new SearchPhoneNumberPresenter(this, Injection.providerUseCaseHandler(), Injection.providerAvailableCountries(getContext()));
     }
 
     @Nullable

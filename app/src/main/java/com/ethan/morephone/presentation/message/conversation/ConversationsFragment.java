@@ -22,9 +22,11 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.ConversationListAdapter;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
+import com.ethan.morephone.presentation.message.list.MessageListFragment;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.utils.Injection;
 
@@ -92,7 +94,11 @@ public class ConversationsFragment extends BaseFragment implements
         mConversationListAdapter = new ConversationListAdapter(getContext(), new ArrayList<ConversationModel>(), this);
         recyclerView.setAdapter(mConversationListAdapter);
 
+        view.findViewById(R.id.button_new_compose).setOnClickListener(this);
+
         setHasOptionsMenu(true);
+
+        loadData();
 
         return view;
     }
@@ -173,12 +179,18 @@ public class ConversationsFragment extends BaseFragment implements
     public void onItemClick(ConversationModel conversationModel) {
         EventBus.getDefault().postSticky(conversationModel);
         Intent intent = new Intent(getActivity(), MessageListActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.button_new_compose:
+                startActivity(new Intent(getActivity(), ComposeActivity.class));
+                break;
             default:
                 break;
         }

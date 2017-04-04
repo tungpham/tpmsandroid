@@ -16,6 +16,8 @@ public interface MessageListContract {
 
         void showLoading(boolean isActive);
 
+        void showProgress(boolean isActive, int position);
+
         void showMessages(List<MessageItem> messageItems);
 
         void createMessageSuccess(MessageItem messageItem);
@@ -27,7 +29,7 @@ public interface MessageListContract {
 
         void loadMessages(String to, String from);
 
-        void createMessage(String to, String from, String body);
+        void createMessage(String to, String from, String body, int position);
 
         void deleteMessage(String messagesid);
     }
