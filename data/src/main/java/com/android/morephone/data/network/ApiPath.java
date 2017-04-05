@@ -8,6 +8,7 @@ import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
+import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceListResourceResponse;
 
@@ -45,7 +46,7 @@ interface ApiPath {
                                                          @Path("countrycode") String countryCode,
                                                          @Query("Contains") String contains,
                                                          @Query("SmsEnabled") boolean smsEnabled,
-                                                         @Query("MmsEnabled")  boolean mmsEnable,
+                                                         @Query("MmsEnabled") boolean mmsEnable,
                                                          @Query("VoiceEnabled") boolean voiceEnabled);
 
     /*--------------------------------Incoming Phone Numbers ----------------------------------*/
@@ -76,6 +77,8 @@ interface ApiPath {
     @DELETE("Accounts/{accountsid}/Messages/{messagesid}.json")
     Call<Void> deleteMessage(@Path("accountsid") String accountsid, @Path("messagesid") String messagesid);
 
+    /*-----------------------------------------RECORDINGS-----------------------------------------*/
+
 
     /*-----------------------------------------CALL-----------------------------------------*/
     @FormUrlEncoded
@@ -101,4 +104,11 @@ interface ApiPath {
 
     @DELETE("Accounts/{accountsid}/Calls/{callsid}.json")
     Call<Void> deleteVoice(@Path("accountsid") String accountsid, @Path("callsid") String callsid);
+
+    @GET("Accounts/{accountsid}/Calls{callsid}/Recordings/{recordingsid}.json")
+    Call<RecordItem> getRecoding(@Path("accountsid") String accountsid,
+                                 @Path("callsid") String callsid,
+                                 @Path("recordingsid") String recordingsid);
+
+
 }

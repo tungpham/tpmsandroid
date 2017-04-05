@@ -7,16 +7,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.morephone.data.entity.CallEntity;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.log.DebugTool;
-import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -25,6 +24,7 @@ import com.ethan.morephone.presentation.phone.dial.DialActivity;
 import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
 import com.ethan.morephone.presentation.voice.adapter.VoicesViewHolder;
 import com.ethan.morephone.utils.Injection;
+import com.ethan.morephone.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -99,7 +99,7 @@ public class VoiceFragment extends BaseFragment implements
 
         view.findViewById(R.id.button_dial).setOnClickListener(this);
 
-//        loadData();
+        loadData();
 
         setHasOptionsMenu(true);
 
@@ -121,13 +121,11 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     public void loadData() {
-        String phoneNumber = MyPreference.getPhoneNumber(getContext());
-        if (!TextUtils.isEmpty(phoneNumber)) {
-            if (MyPreference.getInbox(getContext())) {
-                mPresenter.loadVoicesIncoming(phoneNumber);
-            } else {
-                mPresenter.loadVoicesOutgoing(phoneNumber);
-            }
+        if (Utils.isNetworkAvailable(getActivity())) {
+            mPresenter.loadVoicesIncoming(mPhoneNumber);
+            mPresenter.loadVoicesOutgoing(mPhoneNumber);
+        } else {
+            Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }
     }
 
