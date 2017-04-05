@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.message.compose;
 
+import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 
@@ -10,10 +11,16 @@ import com.ethan.morephone.presentation.BaseView;
 public interface ComposeContract {
 
     interface View extends BaseView<Presenter> {
+        void createMessageSuccess(MessageItem messageItem);
 
+        void createMessageError();
+
+        void showLoading(boolean isActive);
     }
 
     interface Presenter extends BasePresenter {
+
+        void createMessage(String to, String from, String body, int position);
 
     }
 }

@@ -40,6 +40,10 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
         notifyDataSetChanged();
     }
 
+    public List<ConversationModel> getData(){
+        return mConversationModels;
+    }
+
     @Override
     public ConversationListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())

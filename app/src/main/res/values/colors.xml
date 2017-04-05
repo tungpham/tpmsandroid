@@ -94,4 +94,8 @@
     <color name="green_500">#4CAF50</color>
     <color name="green_600">#43A047</color>
     <color name="green_700">#388E3C</color>
+
+    <color name="refresh_progress_1">#e91e63</color>
+    <color name="refresh_progress_2">#00b0ff</color>
+    <color name="refresh_progress_3">#3f51b5</color>
 </resources>

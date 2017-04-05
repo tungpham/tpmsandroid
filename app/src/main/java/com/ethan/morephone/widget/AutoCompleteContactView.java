@@ -29,6 +29,10 @@ public class AutoCompleteContactView extends RecipientEditTextView {
         }
     }
 
+    public BaseRecipientAdapter getAdapter() {
+        return mAdapter;
+    }
+
     private void init(Context context) {
         mAdapter = new BaseRecipientAdapter(BaseRecipientAdapter.QUERY_TYPE_PHONE, getContext());
 

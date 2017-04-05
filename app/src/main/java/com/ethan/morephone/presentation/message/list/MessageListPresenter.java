@@ -77,7 +77,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
                 "",
                 null);
         mView.createMessageSuccess(messageItem);
-        mView.showProgress(true, position);
+//        mView.showProgress(true, position);
         CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(to, from, body);
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override

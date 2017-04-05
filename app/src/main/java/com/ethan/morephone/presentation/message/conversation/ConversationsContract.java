@@ -29,6 +29,8 @@ public interface ConversationsContract {
 
         void loadMessageOutgoing(String phoneNumberOutgoing);
 
+        void clearData();
+
         void parseFakeData(FakeData fakeData, String phoneNumber);
 
     }

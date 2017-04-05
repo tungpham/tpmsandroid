@@ -116,6 +116,11 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     }
 
     @Override
+    public void clearData() {
+        mArrayMap.clear();
+    }
+
+    @Override
     public void parseFakeData(FakeData fakeData, String phoneNumber) {
         mArrayMap.clear();
         List<MessageItem> messageItemsIncoming = parseMessageIncoming(fakeData, phoneNumber);

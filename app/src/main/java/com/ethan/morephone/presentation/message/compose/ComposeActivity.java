@@ -22,7 +22,7 @@ public class ComposeActivity extends BaseActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ComposeFragment) return;
-        ComposeFragment composeFragment = ComposeFragment.getInstance();
+        ComposeFragment composeFragment = ComposeFragment.getInstance(getIntent().getExtras());
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 composeFragment,

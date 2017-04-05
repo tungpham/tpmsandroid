@@ -1,9 +1,12 @@
 package com.ethan.morephone.presentation.message.conversation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
@@ -29,6 +33,8 @@ import com.ethan.morephone.presentation.message.list.MessageListActivity;
 import com.ethan.morephone.presentation.message.list.MessageListFragment;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.utils.Injection;
+import com.ethan.morephone.utils.Utils;
+import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -54,11 +60,14 @@ public class ConversationsFragment extends BaseFragment implements
         return conversationsFragment;
     }
 
+    private final int REQUEST_COMPOSE = 100;
+
     private ConversationListAdapter mConversationListAdapter;
 
     private ConversationsContract.Presenter mPresenter;
 
     private Toolbar mToolbar;
+    private MultiSwipeRefreshLayout mSwipeRefreshLayout;
 
     private String mPhoneNumber;
 
@@ -96,6 +105,28 @@ public class ConversationsFragment extends BaseFragment implements
 
         view.findViewById(R.id.button_new_compose).setOnClickListener(this);
 
+        mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+
+         /*-------------------Pull to request ----------------*/
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setColorSchemeResources(
+                    R.color.refresh_progress_1,
+                    R.color.refresh_progress_2,
+                    R.color.refresh_progress_3);
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadData();
+                        }
+                    });
+
+                }
+            });
+        }
+
         setHasOptionsMenu(true);
 
         loadData();
@@ -104,8 +135,13 @@ public class ConversationsFragment extends BaseFragment implements
     }
 
     public void loadData() {
-        mPresenter.loadMessagesIncoming(mPhoneNumber);
-        mPresenter.loadMessageOutgoing(mPhoneNumber);
+        if (Utils.isNetworkAvailable(getActivity())) {
+            mPresenter.clearData();
+            mPresenter.loadMessagesIncoming(mPhoneNumber);
+            mPresenter.loadMessageOutgoing(mPhoneNumber);
+        } else {
+            Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -189,7 +225,11 @@ public class ConversationsFragment extends BaseFragment implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_new_compose:
-                startActivity(new Intent(getActivity(), ComposeActivity.class));
+                Intent intent = new Intent(getActivity(), ComposeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, REQUEST_COMPOSE);
                 break;
             default:
                 break;
@@ -203,8 +243,8 @@ public class ConversationsFragment extends BaseFragment implements
 
     @Override
     public void showLoading(boolean isActive) {
-        if (isActive) showProgress();
-        else hideProgress();
+        if (isActive) mSwipeRefreshLayout.setRefreshing(true);
+        else mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -227,5 +267,15 @@ public class ConversationsFragment extends BaseFragment implements
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(FakeData fakeData) {
         mPresenter.parseFakeData(fakeData, mPhoneNumber);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_COMPOSE){
+            if(resultCode == Activity.RESULT_OK) {
+                loadData();
+            }
+        }
     }
 }
