@@ -57,6 +57,18 @@ public class Utils {
         return "";
     }
 
+    public static Date getDate(String date) {
+        SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
+
+        try {
+            Date time = in.parse(date);
+            return time;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public static boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager connectivityManager =

@@ -1,6 +1,6 @@
 package com.ethan.morephone.presentation.voice;
 
-import com.android.morephone.data.entity.CallEntity;
+import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 
@@ -14,7 +14,7 @@ public interface VoiceContract {
 
     interface View extends BaseView<Presenter> {
 
-        void showVoices(List<CallEntity> voiceItems);
+        void showVoices(List<VoiceItem> voiceItems);
 
         void showLoading(boolean isActive);
 
@@ -29,6 +29,8 @@ public interface VoiceContract {
         void loadVoicesIncoming(String phoneNumberIncoming);
 
         void deleteVoice(String callSid);
+
+        void clearData();
 
         void createVoice(String phoneNumberIncoming, String phoneNumberOutgoing, String applicationSid, String sipAuthUsername, String sipAuthPassword);
 

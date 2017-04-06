@@ -1,12 +1,15 @@
 package com.android.morephone.data.entity.twilio.voice;
 
+import com.android.morephone.data.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
 
 /**
  * Created by Ethan on 3/7/17.
  */
 
-public class VoiceItem {
+public class VoiceItem implements Comparable<VoiceItem>{
 
     @SerializedName("sid")
     public String sid;
@@ -109,6 +112,21 @@ public class VoiceItem {
         this.callerName = callerName;
         this.uri = uri;
         this.subresourceUris = subresourceUris;
+    }
+
+    @Override
+    public int compareTo(VoiceItem voiceItem) {
+        Date current = DateUtils.getDate(this.dateCreated);
+        Date now = DateUtils.getDate(voiceItem.dateCreated);
+        if (current != null && now != null) {
+            if (current.after(now)) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } else {
+            return 0;
+        }
     }
 
     public class SubresourceUris{

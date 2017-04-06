@@ -13,6 +13,7 @@ import com.android.morephone.domain.usecase.voice.GetVoices;
 import com.android.morephone.domain.usecase.voice.GetVoicesIncoming;
 import com.android.morephone.domain.usecase.voice.GetVoicesOutgoing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +31,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
     private final DeleteVoice mDeleteVoice;
     private final CreateVoice mCreateVoice;
 
+    private List<VoiceItem> mVoiceItems;
 
     public VoicePresenter(@NonNull VoiceContract.View view,
                           @NonNull UseCaseHandler useCaseHandler,
@@ -48,6 +50,8 @@ public class VoicePresenter implements VoiceContract.Presenter {
         mDeleteVoice = deleteVoice;
         mCreateVoice = createVoice;
 
+        mVoiceItems = new ArrayList<>();
+
         mView.setPresenter(this);
     }
 
@@ -64,7 +68,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
             @Override
             public void onSuccess(GetAllVoices.ResponseValue response) {
                 List<VoiceItem> voiceItems = response.getVoiceItems();
-//                mView.showVoices(voiceItems);
+                mView.showVoices(voiceItems);
                 mView.showLoading(false);
             }
 
@@ -83,7 +87,8 @@ public class VoicePresenter implements VoiceContract.Presenter {
             @Override
             public void onSuccess(GetVoicesOutgoing.ResponseValue response) {
                 List<VoiceItem> voiceItems = response.getVoiceItems();
-//                mView.showVoices(voiceItems);
+                mVoiceItems.addAll(voiceItems);
+                mView.showVoices(mVoiceItems);
                 mView.showLoading(false);
             }
 
@@ -102,7 +107,8 @@ public class VoicePresenter implements VoiceContract.Presenter {
             @Override
             public void onSuccess(GetVoicesIncoming.ResponseValue response) {
                 List<VoiceItem> voiceItems = response.getVoiceItems();
-//                mView.showVoices(voiceItems);
+                mVoiceItems.addAll(voiceItems);
+                mView.showVoices(mVoiceItems);
                 mView.showLoading(false);
             }
 
@@ -127,6 +133,11 @@ public class VoicePresenter implements VoiceContract.Presenter {
 
             }
         });
+    }
+
+    @Override
+    public void clearData() {
+        mVoiceItems.clear();
     }
 
     @Override

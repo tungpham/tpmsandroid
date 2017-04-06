@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.entity.CallEntity;
+import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.ExpandableLayout;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
 
-    private List<CallEntity> mVoiceItems;
+    private List<VoiceItem> mVoiceItems;
     private OnItemVoiceClickListener mOnItemVoiceClickListener;
     private TextDrawable.IBuilder mDrawableBuilder;
     private Context mContext;
@@ -29,7 +29,7 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
 
     private RecyclerView mRecyclerView;
 
-    public VoicesAdapter(Context context, String phoneNumber, List<CallEntity> conversationEntities, OnItemVoiceClickListener onItemConversationClickListener) {
+    public VoicesAdapter(Context context, String phoneNumber, List<VoiceItem> conversationEntities, OnItemVoiceClickListener onItemConversationClickListener) {
         mContext = context;
         mPhoneNumber = phoneNumber;
         mVoiceItems = conversationEntities;
@@ -37,7 +37,7 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         mDrawableBuilder = TextDrawable.builder().round();
     }
 
-    public void replaceData(List<CallEntity> messageItems) {
+    public void replaceData(List<VoiceItem> messageItems) {
         mVoiceItems = messageItems;
         notifyDataSetChanged();
     }
@@ -46,7 +46,7 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         mRecyclerView = recyclerView;
     }
 
-    public List<CallEntity> getData() {
+    public List<VoiceItem> getData() {
         return mVoiceItems;
     }
 
@@ -59,15 +59,15 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
 
     @Override
     public void onBindViewHolder(final VoicesViewHolder holder, final int position) {
-        final CallEntity callEntity = mVoiceItems.get(position);
-        if (mPhoneNumber.equals(callEntity.phoneNumberIncoming)) {
-            holder.textPhoneNumber.setText(callEntity.phoneNumberOutgoing);
+        final VoiceItem callEntity = mVoiceItems.get(position);
+        if (mPhoneNumber.equals(callEntity.from)) {
+            holder.textPhoneNumber.setText(callEntity.to);
         } else {
-            holder.textPhoneNumber.setText(callEntity.phoneNumberIncoming);
+            holder.textPhoneNumber.setText(callEntity.from);
         }
         holder.textTime.setText(Utils.formatDate(callEntity.dateCreated));
 
-        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(callEntity.phoneNumberIncoming.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
+        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(callEntity.from.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
 
         holder.expandableLayout.setExpanded(false, false);
         holder.expandableLayout.setTag(holder);

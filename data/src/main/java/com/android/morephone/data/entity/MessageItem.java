@@ -1,10 +1,11 @@
 package com.android.morephone.data.entity;
 
+import com.android.morephone.data.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static com.android.morephone.data.utils.DateUtils.getDate;
 
 /**
  * Created by Ethan on 2/21/17.
@@ -118,8 +119,8 @@ public class MessageItem implements Comparable<MessageItem> {
 
     @Override
     public int compareTo(MessageItem messageItem) {
-        Date current = getDate(this.dateSent);
-        Date now = getDate(messageItem.dateSent);
+        Date current = DateUtils.getDate(this.dateSent);
+        Date now = DateUtils.getDate(messageItem.dateSent);
         if (current != null && now != null) {
             if (current.after(now)) {
                 return 1;
@@ -140,18 +141,6 @@ public class MessageItem implements Comparable<MessageItem> {
             this.media = media;
         }
 
-    }
-
-    public Date getDate(String date) {
-        SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
-
-        try {
-            Date time = in.parse(date);
-            return time;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }

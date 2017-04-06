@@ -2,7 +2,9 @@ package com.ethan.morephone.presentation.voice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.morephone.data.entity.CallEntity;
 import com.android.morephone.data.entity.FakeData;
+import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
@@ -25,6 +27,7 @@ import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
 import com.ethan.morephone.presentation.voice.adapter.VoicesViewHolder;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
+import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -61,6 +64,7 @@ public class VoiceFragment extends BaseFragment implements
     private String mPhoneNumber;
 
     private RecyclerView mRecyclerView;
+    private MultiSwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,11 +97,33 @@ public class VoiceFragment extends BaseFragment implements
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
-        mVoicesAdapter = new VoicesAdapter(getContext(), mPhoneNumber, new ArrayList<CallEntity>(), this);
+        mVoicesAdapter = new VoicesAdapter(getContext(), mPhoneNumber, new ArrayList<VoiceItem>(), this);
         mRecyclerView.setAdapter(mVoicesAdapter);
         mVoicesAdapter.setRecyclerView(mRecyclerView);
 
         view.findViewById(R.id.button_dial).setOnClickListener(this);
+
+        mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+
+         /*-------------------Pull to request ----------------*/
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setColorSchemeResources(
+                    R.color.refresh_progress_1,
+                    R.color.refresh_progress_2,
+                    R.color.refresh_progress_3);
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadData();
+                        }
+                    });
+
+                }
+            });
+        }
 
         loadData();
 
@@ -122,6 +148,7 @@ public class VoiceFragment extends BaseFragment implements
 
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
+            mPresenter.clearData();
             mPresenter.loadVoicesIncoming(mPhoneNumber);
             mPresenter.loadVoicesOutgoing(mPhoneNumber);
         } else {
@@ -130,13 +157,14 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void showVoices(List<CallEntity> voiceItems) {
+    public void showVoices(List<VoiceItem> voiceItems) {
         mVoicesAdapter.replaceData(voiceItems);
     }
 
     @Override
     public void showLoading(boolean isActive) {
-
+        if (isActive) mSwipeRefreshLayout.setRefreshing(true);
+        else mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -169,7 +197,7 @@ public class VoiceFragment extends BaseFragment implements
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(FakeData fakeData) {
-        showVoices(fakeData.call_log);
+//        showVoices(fakeData.call_log);
         DebugTool.logD("COME: " + fakeData.call_log.size());
     }
 
