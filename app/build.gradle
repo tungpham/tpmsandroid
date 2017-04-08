@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
 
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
     compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
