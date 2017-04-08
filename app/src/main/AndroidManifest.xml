@@ -62,8 +62,12 @@
         <activity android:name=".presentation.buy.SearchPhoneNumberActivity" />
         <activity android:name=".presentation.buy.result.AvailablePhoneNumberActivity" />
 
-        <activity android:name=".presentation.phone.PhoneActivity"
+        <activity
+            android:name=".presentation.phone.PhoneActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity android:name=".presentation.phone.CallActivity" />
+
         <activity
             android:name=".presentation.phone.dial.DialActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />

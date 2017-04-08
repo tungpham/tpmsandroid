@@ -124,4 +124,156 @@
     <string name="buy_number_sms">SMS</string>
     <string name="buy_number_mms">MMS</string>
     <string name="buy_number_voice">VOICE</string>
+
+
+
+    <!-- In-call menu item labels -->
+    <!-- Regular in-call menu items: -->
+    <!-- In-call menu: Label for "speakerphone" menu item -->
+    <string name="menu_speaker">Speaker</string>
+    <!-- In-call menu: Label for "bluetooth" menu item -->
+    <string name="menu_bluetooth">Bluetooth</string>
+    <!-- In-call menu: Label for "mute" menu item -->
+    <string name="menu_mute">Mute</string>
+    <!-- In-call menu: Label for "hold" menu item -->
+    <string name="menu_hold">Hold</string>
+    <!-- In-call menu: Label for "end call" menu item -->
+    <string name="menu_endCall">End call</string>
+    <!-- In-call menu: Label for "swap calls" menu item -->
+    <string name="menu_swapCalls">Swap calls</string>
+    <!-- In-call menu: Label for "merge calls" menu item -->
+    <string name="menu_mergeCalls">Merge calls</string>
+    <!-- In-call menu: Label for "add call" menu item -->
+    <string name="menu_addCall">Add call</string>
+    <!-- In-call menu: Label for "manage conference call" menu item -->
+    <string name="menu_manageConference">Manage conference call</string>
+    <!-- In-call menu: Label for "show dialpad" menu item -->
+    <string name="menu_showDialpad">Show dialpad</string>
+    <!-- In-call menu: Label for "hide dialpad" menu item -->
+    <string name="menu_hideDialpad">Hide dialpad</string>
+    <!-- Incoming call menu items: -->
+    <!-- Incoming call menu: Label for "Hold and answer" menu item -->
+    <string name="menu_answerAndHold">Hold current call\n&amp; answer</string>
+    <!-- Incoming call menu: Label for "End and answer" menu item -->
+    <string name="menu_answerAndEnd">End current call\n&amp; answer</string>
+    <!-- Other misc labels for the in-call UI -->
+    <!-- Positive button label ("OK") used in several dialogs in the phone UI -->
+    <string name="ok">OK</string>
+    <!-- In-call screen, message just under call window when keyboard is closed -->
+    <string name="menuButtonHint">Press Menu for call options.</string>
+    <!-- In-call screen, message just under call window when keyboard is revealed -->
+    <string name="menuButtonKeyboardDialHint">"Press Menu for call options  \u2022  Use keyboard to dial"</string>
+    <!-- Incoming call menu: Label for "Answer" menu item -->
+    <string name="menu_answer">Answer</string>
+    <!-- Incoming call menu: Label for "Ignore" menu item -->
+    <string name="menu_ignore">Ignore</string>
+    <!-- In-call screen: Button label on "Manage conference" panel -->
+    <string name="caller_manage_manage_done_text">Back to call</string>
+
+
+
+    <!-- The name of the Voice Dialer application. -->
+    <string name="voiceDialer">Voice Dialer</string>
+
+    <!-- title to the Tool Tip window.  open when VoiceDialer not launched
+        by green Call button -->
+    <string name="tool_tip_title">Did you know\u2026</string>
+
+    <!-- message in the Tool Tip window.  purpose is to notify user of green
+        Call button launch -->
+    <string name="tool_tip_message">
+        Pressing &amp; holding the green Call button opens the Voice
+        Dialer.
+    </string>
+
+    <!-- present on the VoiceDialer main screen to give examples of valid
+            speech input -->
+    <string name="examples">
+        Examples:
+        <b>
+            \n\"Call John Doe\"
+            \n\"Call John Doe at home, \u2026\"
+            \n\"Call voicemail\"
+            \n\"Dial (866) 555 0123\"
+            \n\"Dial 911, 811, \u2026\"
+            \n\"Dial +44 7333 444 555\"
+            \n\"Redial\"
+            \n\"Open Calendar\"
+        </b>
+    </string>
+
+    <!-- title to the VoiceDialer main screen -->
+    <string name="title">Voice Dialer</string>
+
+    <!-- title to the VoiceDialer main screen -->
+    <string name="bluetooth_title">Bluetooth Voice Dialer</string>
+
+    <!-- displayed on the VoiceDialer main screen while initializing -->
+    <string name="initializing">Starting up\u2026</string>
+
+    <!-- displayed on the VoiceDialer main screen while listening to speech -->
+    <string name="listening">Listening\u2026</string>
+
+    <!-- displayed on the VoiceDialer main screen upon failure -->
+    <string name="please_try_again">Try again.</string>
+
+
+    <!--displayed when there is a fatal error on initialization or
+        recognition-->
+    <string name="failure">Couldn\'t initialize</string>
+
+    <!-- displayed on the VoiceDialer main screen after unrecoverable error.
+            when present, this message follows the one above -->
+    <string name="recognition_error">
+        Restart your phone then try again.
+    </string>
+
+    <!-- displayed when the connection tot he bluetooth headset is lost -->
+    <string name="headset_connection_lost">
+      Connection to headset lost.
+    </string>
+
+    <!-- appended to recognition result from VoiceDialer.grxml to
+            indicate a 'home' number.
+            'Call John Smith' becomes 'Call John Smith at home'  -->
+    <string name="at_home">" at home"</string>
+
+    <!-- appended to recognition result from VoiceDialer.grxml to
+            indicate a 'mobile' number.
+            'Call John Smith' becomes 'Call John Smith at home'  -->
+    <string name="on_mobile">" on mobile"</string>
+
+    <!-- appended to recognition result from VoiceDialer.grxml to
+            indicate a 'work' number.
+            'Call John Smith' becomes 'Call John Smith at home'  -->
+    <string name="at_work">" at work"</string>
+
+    <!-- appended to recognition result from VoiceDialer.grxml to
+            indicate a 'other' number.
+            'Call John Smith' becomes 'Call John Smith at home'  -->
+    <string name="at_other">" at other"</string>
+
+    <!-- message in popup which indicates that VoiceDialer logging
+            has been enabled -->
+    <string name="logging_enabled">Voice Dialer logging is turned on.</string>
+
+    <!-- message in popup which indicates that VoiceDialer logging
+            has been disabled -->
+    <string name="logging_disabled">Voice Dialer logging is turned off.</string>
+
+    <!-- message that is spoken to indicate that the user can begin speaking.
+    -->
+    <string name="speak_now_tts">Speak now.</string>
+
+    <!-- message that is spoken when we get no results
+    -->
+    <string name="no_results_tts">No results, try again.</string>
+
+    <!-- message that is spoken when the user asks for a choice that
+            is not available -->
+    <string name="invalid_choice_tts">Invalid choice.</string>
+
+    <!-- message that is spoken to inform the user that the application
+            is shutting down.-->
+    <string name="goodbye_tts">Goodbye.</string>
 </resources>

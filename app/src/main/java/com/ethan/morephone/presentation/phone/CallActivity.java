@@ -134,6 +134,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
          */
         clientProfile = new ClientProfile("Number Phone 1", true, true);
 
+
         /*
          * Needed for setting/abandoning audio focus during call
          */
@@ -201,6 +202,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
         try {
             if (clientDevice == null) {
                 clientDevice = Twilio.createDevice(capabilityToken, this);
+                clientDevice.setIncomingSoundEnabled(true);
 
                 /*
                  * Providing a PendingIntent to the newly created Device, allowing you to receive incoming calls
