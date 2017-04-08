@@ -2,6 +2,7 @@ package com.ethan.morephone.presentation.phone.dial;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.phone.callingscreen.CallingScreenActivity;
 import com.ethan.morephone.presentation.phone.dial.view.DialpadImageButton;
 import com.ethan.morephone.presentation.phone.dial.view.UnicodeDialerKeyListener;
 
@@ -100,6 +102,8 @@ public class DialFragment extends BaseFragment implements
             mDelete.setOnLongClickListener(this);
         }
 
+        view.findViewById(R.id.dialButton).setOnClickListener(this);
+
         return view;
     }
 
@@ -156,6 +160,7 @@ public class DialFragment extends BaseFragment implements
             case R.id.dialButton: {
 //                mHaptic.vibrate();  // Vibrate here too, just like we do for the regular keys
 //                dialButtonPressed();
+                startActivity(new Intent(getActivity(), CallingScreenActivity.class));
                 return;
             }
             case R.id.digits: {

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical">
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_incoming_phone_number"
+        style="@style/TextDisplay"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_incoming_text_title"
+        android:text="+18056624394"
+        android:textColor="@android:color/white" />
+
+
+    <RelativeLayout
+        style="@style/ViewCommon"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/margin_incoming_relative"
+        android:gravity="center_horizontal">
+
+        <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/floating_button_incoming_decline"
+            style="@style/ViewCommon"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_phone_missed_white_24dp"
+            app:backgroundTint="@color/call_log_missed_call_highlight_color" />
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_incoming_decline"
+            style="@style/ViewCommon"
+            android:layout_below="@+id/floating_button_incoming_decline"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_top_incoming_text"
+            android:text="@string/incoming_decline"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/ViewCommon"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/margin_incoming_relative"
+        android:gravity="center_horizontal">
+
+        <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/floating_button_incoming_accept"
+            style="@style/ViewCommon"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_phone_white_24dp"
+            app:backgroundTint="@color/colorPrimary" />
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_incoming_accept"
+            style="@style/ViewCommon"
+            android:layout_below="@+id/floating_button_incoming_accept"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_top_incoming_text"
+            android:text="@string/incoming_accept"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+</RelativeLayout>

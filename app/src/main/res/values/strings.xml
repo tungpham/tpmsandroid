@@ -125,6 +125,10 @@
     <string name="buy_number_mms">MMS</string>
     <string name="buy_number_voice">VOICE</string>
 
+    <!-- Fragment Incoming Screen -->
+    <string name="incoming_decline">Decline</string>
+    <string name="incoming_accept">Accept</string>
+
 
 
     <!-- In-call menu item labels -->

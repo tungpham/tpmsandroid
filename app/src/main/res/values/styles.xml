@@ -272,4 +272,12 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
     </style>
 
+    <style name="FloatingButton" parent="ViewCommon">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="RelativeInCall" parent="ViewCommon">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
 </resources>
