@@ -22,7 +22,7 @@ public class CallingScreenActivity extends BaseActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof CallingScreenFragment) return;
-        CallingScreenFragment callingScreenFragment = CallingScreenFragment.getInstance();
+        CallingScreenFragment callingScreenFragment = CallingScreenFragment.getInstance(getIntent().getExtras());
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 callingScreenFragment,

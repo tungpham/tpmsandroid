@@ -19,9 +19,10 @@ import android.widget.EditText;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.phone.callingscreen.CallingScreenActivity;
 import com.ethan.morephone.presentation.phone.dial.view.DialpadImageButton;
 import com.ethan.morephone.presentation.phone.dial.view.UnicodeDialerKeyListener;
+import com.ethan.morephone.presentation.phone.incall.InCallActivity;
+import com.ethan.morephone.presentation.phone.incall.InCallFragment;
 
 
 /**
@@ -37,7 +38,7 @@ public class DialFragment extends BaseFragment implements
 
     private static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
-    public static DialFragment getInstance(String phoneNumber){
+    public static DialFragment getInstance(String phoneNumber) {
         DialFragment dialFragment = new DialFragment();
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
@@ -52,7 +53,7 @@ public class DialFragment extends BaseFragment implements
     private static final int DIAL_TONE_STREAM_TYPE = AudioManager.STREAM_DTMF;
     private static final int TONE_RELATIVE_VOLUME = 80;
 
-    private EditText mDigits;
+    private EditText mEditTextDigits;
     private View mDelete;
     private View mDialpad;
 
@@ -74,20 +75,20 @@ public class DialFragment extends BaseFragment implements
 
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
 
-        mDigits = (EditText) view.findViewById(R.id.digits);
-        mDigits.setKeyListener(UnicodeDialerKeyListener.INSTANCE);
-        mDigits.setOnClickListener(this);
-        mDigits.setOnKeyListener(this);
-        mDigits.setOnLongClickListener(this);
-        mDigits.addTextChangedListener(this);
+        mEditTextDigits = (EditText) view.findViewById(R.id.digits);
+        mEditTextDigits.setKeyListener(UnicodeDialerKeyListener.INSTANCE);
+        mEditTextDigits.setOnClickListener(this);
+        mEditTextDigits.setOnKeyListener(this);
+        mEditTextDigits.setOnLongClickListener(this);
+        mEditTextDigits.addTextChangedListener(this);
 
         mDialpad = view.findViewById(R.id.dialpad);  // This is null in landscape mode.
 
         // In landscape we put the keyboard in phone mode.
         if (null == mDialpad) {
-            mDigits.setInputType(android.text.InputType.TYPE_CLASS_PHONE);
+            mEditTextDigits.setInputType(android.text.InputType.TYPE_CLASS_PHONE);
         } else {
-            mDigits.setCursorVisible(false);
+            mEditTextDigits.setCursorVisible(false);
         }
 
         View oneButton = view.findViewById(R.id.one);
@@ -106,6 +107,7 @@ public class DialFragment extends BaseFragment implements
 
         return view;
     }
+
 
     @Override
     public void onResume() {
@@ -158,14 +160,18 @@ public class DialFragment extends BaseFragment implements
                 return;
             }
             case R.id.dialButton: {
-//                mHaptic.vibrate();  // Vibrate here too, just like we do for the regular keys
-//                dialButtonPressed();
-                startActivity(new Intent(getActivity(), CallingScreenActivity.class));
+                String toPhoneNumber = mEditTextDigits.getText().toString();
+                Intent intent = new Intent(getActivity(), InCallActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(InCallFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
+                bundle.putString(InCallFragment.BUNDLE_TO_PHONE_NUMBER, toPhoneNumber);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 return;
             }
             case R.id.digits: {
                 if (!isDigitsEmpty()) {
-                    mDigits.setCursorVisible(true);
+                    mEditTextDigits.setCursorVisible(true);
                 }
                 return;
             }
@@ -205,7 +211,7 @@ public class DialFragment extends BaseFragment implements
 
     @Override
     public boolean onLongClick(View view) {
-        final Editable digits = mDigits.getText();
+        final Editable digits = mEditTextDigits.getText();
         final int id = view.getId();
         switch (id) {
             case R.id.deleteButton: {
@@ -219,7 +225,7 @@ public class DialFragment extends BaseFragment implements
             case R.id.one: {
                 // '1' may be already entered since we rely on onTouch() event for numeric buttons.
                 // Just for safety we also check if the digits field is empty or not.
-//                if (isDigitsEmpty() || TextUtils.equals(mDigits.getText(), "1")) {
+//                if (isDigitsEmpty() || TextUtils.equals(mEditTextDigits.getText(), "1")) {
                 // We'll try to initiate voicemail and thus we want to remove irrelevant string.
 //                    removePreviousDigitIfPossible();
 //
@@ -264,7 +270,7 @@ public class DialFragment extends BaseFragment implements
                 // Right now EditText does not show the "paste" option when cursor is not visible.
                 // To show that, make the cursor visible, and return false, letting the EditText
                 // show the option by itself.
-                mDigits.setCursorVisible(true);
+                mEditTextDigits.setCursorVisible(true);
                 return false;
             }
             case R.id.dialButton: {
@@ -400,12 +406,12 @@ public class DialFragment extends BaseFragment implements
 
 //        mHaptic.vibrate();
         KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
-        mDigits.onKeyDown(keyCode, event);
+        mEditTextDigits.onKeyDown(keyCode, event);
 
         // If the cursor is at the end of the text we hide it.
-        final int length = mDigits.length();
-        if (length == mDigits.getSelectionStart() && length == mDigits.getSelectionEnd()) {
-            mDigits.setCursorVisible(false);
+        final int length = mEditTextDigits.length();
+        if (length == mEditTextDigits.getSelectionStart() && length == mEditTextDigits.getSelectionEnd()) {
+            mEditTextDigits.setCursorVisible(false);
         }
     }
 
@@ -477,7 +483,7 @@ public class DialFragment extends BaseFragment implements
 
 
     private boolean isDigitsEmpty() {
-        return mDigits.length() == 0;
+        return mEditTextDigits.length() == 0;
     }
 
     private void setupKeypad(View fragmentView) {
@@ -494,7 +500,6 @@ public class DialFragment extends BaseFragment implements
         fragmentView.findViewById(R.id.zero).setOnLongClickListener(this);
 
     }
-
 
 
 }

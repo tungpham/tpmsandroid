@@ -74,7 +74,7 @@
                 android:layout_below="@+id/seek_bar"
                 android:layout_marginLeft="@dimen/activity_main_margin"
                 android:layout_marginTop="@dimen/activity_main_margin"
-                android:src="@drawable/ic_pause" />
+                android:src="@drawable/ic_hold_pause" />
 
             <ImageView
                 android:id="@+id/image_delete"
@@ -83,7 +83,7 @@
                 android:layout_below="@+id/seek_bar"
                 android:layout_marginRight="@dimen/activity_main_margin"
                 android:layout_marginTop="@dimen/activity_main_margin"
-                android:src="@drawable/ic_delete" />
+                android:src="@drawable/ic_delete_black_24dp" />
 
             <View
                 android:id="@+id/view"
@@ -95,7 +95,7 @@
                 android:id="@+id/text_call"
                 style="@style/TextActionCommon"
                 android:layout_below="@+id/view"
-                android:drawableLeft="@drawable/ic_phone"
+                android:drawableLeft="@drawable/ic_phone_black_24dp"
                 android:text="Call" />
 
             <View
@@ -107,7 +107,7 @@
                 android:id="@+id/text_message"
                 style="@style/TextActionCommon"
                 android:layout_below="@+id/view_2"
-                android:drawableLeft="@drawable/ic_message_reply_text"
+                android:drawableLeft="@drawable/ic_comment_black_24dp"
                 android:text="Send Message" />
 
         </RelativeLayout>

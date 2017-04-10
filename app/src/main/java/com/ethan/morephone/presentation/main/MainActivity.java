@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
@@ -38,9 +39,12 @@ public class MainActivity extends BaseActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         View.OnClickListener {
 
+    private final int REQUEST_INCOMING_PHONE = 100;
+
     private Toolbar mToolbar;
 
     private DrawerLayout mDrawerLayout;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +52,7 @@ public class MainActivity extends BaseActivity implements
         setContentView(R.layout.activity_main);
 
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        enableActionBar(mToolbar, "+17606215500");
+        enableActionBar(mToolbar, MyPreference.getPhoneNumber(getApplicationContext()));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -60,7 +64,7 @@ public class MainActivity extends BaseActivity implements
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof IncomingPhoneNumbersFragment) return;
-        DashboardFragment numbersFragment = DashboardFragment.getInstance("+17606215500");
+        DashboardFragment numbersFragment = DashboardFragment.getInstance(MyPreference.getPhoneNumber(getApplicationContext()));
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 numbersFragment,
@@ -88,7 +92,7 @@ public class MainActivity extends BaseActivity implements
         mDrawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.nav_numbers:
-                startActivity(new Intent(this, IncomingPhoneNumbersActivity.class));
+                startActivityForResult(new Intent(this, IncomingPhoneNumbersActivity.class), REQUEST_INCOMING_PHONE);
                 break;
             case R.id.nav_buy_number:
                 startActivity(new Intent(this, SearchPhoneNumberActivity.class));
@@ -158,4 +162,16 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_INCOMING_PHONE && resultCode == RESULT_OK){
+            DashboardFragment numbersFragment = DashboardFragment.getInstance(MyPreference.getPhoneNumber(getApplicationContext()));
+            ActivityUtils.replaceFragmentToActivity(
+                    getSupportFragmentManager(),
+                    numbersFragment,
+                    R.id.content_frame,
+                    IncomingPhoneNumbersFragment.class.getSimpleName());
+        }
+    }
 }

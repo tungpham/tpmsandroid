@@ -66,7 +66,7 @@ public class MyPreference {
 
     public static String getPhoneNumber(Context context){
         SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getString(PROPERTY_PHONE_NUMBER, "");
+        return preferences.getString(PROPERTY_PHONE_NUMBER, "+18052284394");
     }
 
     public static void setPhoneNumber(Context context, String phoneNumber){

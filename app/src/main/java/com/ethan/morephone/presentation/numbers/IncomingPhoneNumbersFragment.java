@@ -1,6 +1,6 @@
 package com.ethan.morephone.presentation.numbers;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,17 +18,12 @@ import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.dashboard.DashboardActivity;
-import com.ethan.morephone.presentation.dashboard.DashboardFragment;
-import com.ethan.morephone.presentation.message.conversation.ConversationsActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
-import com.ethan.morephone.presentation.phone.PhoneActivity;
-import com.ethan.morephone.presentation.voice.VoiceActivity;
-import com.ethan.morephone.presentation.voice.VoiceFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -120,35 +115,38 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void onItemClick(int pos) {
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        Intent intent = new Intent(getActivity(), DashboardActivity.class);
-        intent.putExtra(DashboardFragment.BUNDLE_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
-        startActivity(intent);
+//        Intent intent = new Intent(getActivity(), DashboardActivity.class);
+//        intent.putExtra(DashboardFragment.BUNDLE_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
+        MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+        getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();
+//        startActivity(intent);
     }
 
     @Override
     public void onItemCall(int pos) {
-        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        Intent intent = new Intent(getActivity(), PhoneActivity.class);
-        intent.putExtra(PhoneActivity.EXTRA_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
-        startActivity(intent);
+//        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
+//        Intent intent = new Intent(getActivity(), PhoneActivity.class);
+//        intent.putExtra(PhoneActivity.EXTRA_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
+//        startActivity(intent);
     }
 
     @Override
     public void onItemMessage(int pos) {
-        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        Intent intent = new Intent(getActivity(), ConversationsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
-        intent.putExtras(bundle);
-        startActivity(intent);
+//        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
+//        Intent intent = new Intent(getActivity(), ConversationsActivity.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(BUNDLE_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
+//        intent.putExtras(bundle);
+//        startActivity(intent);
     }
 
     @Override
     public void onItemVoice(int pos) {
-        IncomingPhoneNumber numberEntity = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        Intent intent = new Intent(getActivity(), VoiceActivity.class);
-        intent.putExtra(VoiceFragment.BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
-        startActivity(intent);
+//        IncomingPhoneNumber numberEntity = mIncomingPhoneNumbersAdapter.getData().get(pos);
+//        Intent intent = new Intent(getActivity(), VoiceActivity.class);
+//        intent.putExtra(VoiceFragment.BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
+//        startActivity(intent);
     }
 
     @Override

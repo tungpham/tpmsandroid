@@ -24,7 +24,7 @@
             android:id="@+id/floating_button_incoming_decline"
             style="@style/ViewCommon"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_phone_missed_white_24dp"
+            android:src="@drawable/ic_call_end_white_24dp"
             app:backgroundTint="@color/call_log_missed_call_highlight_color" />
 
         <com.ethan.morephone.widget.MyTextView

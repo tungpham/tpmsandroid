@@ -27,9 +27,14 @@ import com.twilio.client.Twilio;
 public class CallingScreenFragment extends BaseFragment implements View.OnClickListener,
         DeviceListener, ConnectionListener {
 
-    public static CallingScreenFragment getInstance() {
-        return new CallingScreenFragment();
+    public static CallingScreenFragment getInstance(Bundle bundle) {
+        CallingScreenFragment fragment = new CallingScreenFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
+
+    private static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+    private static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
 
     private FloatingActionButton mFloatingButtonMute;
     private Device clientDevice;

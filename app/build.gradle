@@ -4,6 +4,7 @@ android {
 
     lintOptions {
         checkReleaseBuilds false
+        abortOnError false
     }
 
     def globalConfiguration = rootProject.extensions.getByName("ext")
