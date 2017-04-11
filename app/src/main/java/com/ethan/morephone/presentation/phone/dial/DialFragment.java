@@ -68,6 +68,8 @@ public class DialFragment extends BaseFragment implements
 
     private String mPhoneNumber;
 
+    private DialFragmentListener mDialFragmentListener;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -166,7 +168,8 @@ public class DialFragment extends BaseFragment implements
                 bundle.putString(InCallFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
                 bundle.putString(InCallFragment.BUNDLE_TO_PHONE_NUMBER, toPhoneNumber);
                 intent.putExtras(bundle);
-                startActivity(intent);
+//                startActivity(intent);
+                if (mDialFragmentListener != null) mDialFragmentListener.onCallNow(toPhoneNumber);
                 return;
             }
             case R.id.digits: {
@@ -501,5 +504,13 @@ public class DialFragment extends BaseFragment implements
 
     }
 
+    public void setDialFragmentListener(DialFragmentListener dialFragmentListener){
+        mDialFragmentListener = dialFragmentListener;
+    }
+
+
+    public interface DialFragmentListener {
+        void onCallNow(String toPhoneNumber);
+    }
 
 }

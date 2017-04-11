@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import com.android.morephone.data.log.DebugTool;
+
 /**
  * Created by truongnguyen on 10/13/16.
  */
@@ -22,9 +24,14 @@ public class ActivityUtils {
     public static void replaceFragmentToActivity(@NonNull FragmentManager fragmentManager,
                                                  @NonNull Fragment fragment,
                                                  int frameId, String tag) {
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(frameId, fragment, tag);
-        transaction.commit();
+        try {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(frameId, fragment, tag).
+                    addToBackStack(null).
+                    commitAllowingStateLoss();
+        } catch (IllegalStateException e) {
+            DebugTool.logE("Cannot show Fragment after onSaveInstanceState has been called");
+        }
 
     }
 

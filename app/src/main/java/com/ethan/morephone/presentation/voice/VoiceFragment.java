@@ -22,7 +22,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
-import com.ethan.morephone.presentation.phone.dial.DialActivity;
+import com.ethan.morephone.presentation.phone.incall.InCallActivity;
 import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
 import com.ethan.morephone.presentation.voice.adapter.VoicesViewHolder;
 import com.ethan.morephone.utils.Injection;
@@ -206,7 +206,7 @@ public class VoiceFragment extends BaseFragment implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_dial:
-                startActivity(new Intent(getActivity(), DialActivity.class));
+                startActivity(new Intent(getActivity(), InCallActivity.class));
                 break;
             default:
                 break;

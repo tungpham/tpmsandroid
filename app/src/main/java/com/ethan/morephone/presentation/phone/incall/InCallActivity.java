@@ -1,26 +1,40 @@
 package com.ethan.morephone.presentation.phone.incall;
 
+import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.dashboard.DashboardFragment;
+import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
+import com.ethan.morephone.presentation.phone.dial.DialFragment;
+import com.ethan.morephone.presentation.phone.incoming.IncomingFragment;
+import com.ethan.morephone.utils.ActivityUtils;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.twilio.client.Connection;
 import com.twilio.client.ConnectionListener;
 import com.twilio.client.Device;
+import com.twilio.client.DeviceListener;
+import com.twilio.client.PresenceEvent;
+import com.twilio.client.Twilio;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +45,13 @@ import static com.twilio.client.impl.TwilioImpl.getContext;
  * Created by Ethan on 4/10/17.
  */
 
-public class InCallActivity extends BaseActivity implements View.OnClickListener, ConnectionListener {
+public class InCallActivity extends BaseActivity implements
+        View.OnClickListener,
+        ConnectionListener,
+        DeviceListener,
+        DialFragment.DialFragmentListener,
+        IncomingFragment.IncomingListener,
+        InCallFragment.InCallListener{
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
     public static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
@@ -41,6 +61,10 @@ public class InCallActivity extends BaseActivity implements View.OnClickListener
         fragment.setArguments(bundle);
         return fragment;
     }
+
+    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
+
+    private final int MIC_PERMISSION_REQUEST_CODE = 11;
 
     private AudioManager audioManager;
     private int savedAudioMode = AudioManager.MODE_INVALID;
@@ -53,25 +77,50 @@ public class InCallActivity extends BaseActivity implements View.OnClickListener
 
     private Device clientDevice;
 
+    private ClientProfile clientProfile;
+
+    private String mPhoneNumber;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        setContentView(R.layout.fragment_in_call);
+        setContentView(R.layout.activity_fragment);
 
-        TextView textToPhoneNumber = (TextView) findViewById(R.id.text_in_call_phone_number);
+        mPhoneNumber = getIntent().getStringExtra(DashboardFragment.BUNDLE_PHONE_NUMBER);
+        showDialFragment();
 
-        String toPhoneNumber = getIntent().getExtras().getString(BUNDLE_TO_PHONE_NUMBER);
-        textToPhoneNumber.setText(toPhoneNumber);
+//
+//        setContentView(R.layout.fragment_c);
+//
+//        TextView textToPhoneNumber = (TextView) findViewById(R.id.text_in_call_phone_number);
+//
+//        String toPhoneNumber = getIntent().getExtras().getString(BUNDLE_TO_PHONE_NUMBER);
+//        textToPhoneNumber.setText(toPhoneNumber);
 
 
-        mImageSpeaker = (ImageView) findViewById(R.id.image_in_call_speaker);
-        mImageSpeaker.setOnClickListener(this);
-
-        findViewById(R.id.floating_button_in_call_hang_up).setOnClickListener(this);
+//        mImageSpeaker = (ImageView) findViewById(R.id.image_in_call_speaker);
+//        mImageSpeaker.setOnClickListener(this);
+//
+//        findViewById(R.id.floating_button_in_call_hang_up).setOnClickListener(this);
 
         audioManager.setSpeakerphoneOn(speakerPhone);
+
+        clientProfile = new ClientProfile(MyPreference.getPhoneNumber(getApplicationContext()), true, true);
+         /*
+         * Check microphone permissions. Needed in Android M.
+         */
+        if (!checkPermissionForMicrophone()) {
+            requestPermissionForMicrophone();
+        } else {
+            /*
+             * Initialize the Twilio Client SDK
+             */
+            initializeTwilioClientSDK();
+        }
+
+//        makeCall(toPhoneNumber);
 
     }
 
@@ -80,6 +129,7 @@ public class InCallActivity extends BaseActivity implements View.OnClickListener
         super.onNewIntent(intent);
         setIntent(intent);
     }
+
 
     @Override
     public void onResume() {
@@ -103,8 +153,9 @@ public class InCallActivity extends BaseActivity implements View.OnClickListener
 
             pendingConnection = incomingConnection;
             pendingConnection.setConnectionListener(this);
+            DebugTool.logD("INCOMING NOW");
 
-            createIncomingCallDialog(getContext());
+            showIncomingFragment();
         }
     }
 
@@ -151,7 +202,7 @@ public class InCallActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onDisconnected(Connection connection, int i, String s) {
-        if( connection == pendingConnection ) {
+        if (connection == pendingConnection) {
             pendingConnection = null;
 //            alertDialog.dismiss();
         } else if (activeConnection != null && connection != null) {
@@ -164,42 +215,175 @@ public class InCallActivity extends BaseActivity implements View.OnClickListener
                     }
                 });
             }
-            DebugTool.logD( "Disconnect");
+            DebugTool.logD("Disconnect");
         }
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        /*
+         * Check if microphone permissions is granted
+         */
+        if (requestCode == MIC_PERMISSION_REQUEST_CODE && permissions.length > 0) {
+            boolean granted = true;
+            if (granted) {
+                /*
+                * Initialize the Twilio Client SDK
+                */
+                initializeTwilioClientSDK();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Microphone permissions needed. Please allow in App Settings for additional functionality.",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    private boolean checkPermissionForMicrophone() {
+        int resultMic = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
+        if (resultMic == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return false;
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEvent(Device clientDevice) {
-        this.clientDevice = clientDevice;
-        String toPhoneNumber = getIntent().getExtras().getString(BUNDLE_TO_PHONE_NUMBER);
-        makeCall(toPhoneNumber);
+    private void requestPermissionForMicrophone() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+            Toast.makeText(getApplicationContext(),
+                    "Microphone permissions needed. Please allow in App Settings for additional functionality.",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.RECORD_AUDIO},
+                    MIC_PERMISSION_REQUEST_CODE);
+        }
     }
+
+    private void initializeTwilioClientSDK() {
+
+        if (!Twilio.isInitialized()) {
+            Twilio.initialize(getApplicationContext(), new Twilio.InitListener() {
+
+                /*
+                 * Now that the SDK is initialized we can register using a Capability Token.
+                 * A Capability Token is a JSON Web Token (JWT) that specifies how an associated Device
+                 * can interact with Twilio services.
+                 */
+                @Override
+                public void onInitialized() {
+//                    Twilio.setLogLevel(Log.DEBUG);
+                    /*
+                     * Retrieve the Capability Token from your own web server
+                     */
+                    retrieveCapabilityToken(clientProfile);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Toast.makeText(getContext(), "Failed to initialize the Twilio Client SDK", Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            DebugTool.logD("INITED");
+        }
+    }
+
+    private void retrieveCapabilityToken(final ClientProfile newClientProfile) {
+
+        // Correlate desired properties of the Device (from ClientProfile) to properties of the Capability Token
+        Uri.Builder b = Uri.parse(TOKEN_SERVICE_URL).buildUpon();
+        if (newClientProfile.isAllowOutgoing()) {
+            b.appendQueryParameter("allowOutgoing", newClientProfile.isAllowOutgoing() ? "true" : "false");
+        }
+        if (newClientProfile.isAllowIncoming() && newClientProfile.getName() != null) {
+            b.appendQueryParameter("client", newClientProfile.getName());
+        }
+
+        DebugTool.logD("NAME PHONE: " + newClientProfile.getName());
+
+        Ion.with(getContext())
+                .load(b.toString())
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String capabilityToken) {
+                        if (e == null) {
+
+                            // Update the current Client Profile to represent current properties
+                            clientProfile = newClientProfile;
+
+                            DebugTool.logD("NEW: " + clientProfile.getName());
+                            // Create a Device with the Capability Token
+                            createDevice(capabilityToken);
+                        } else {
+                            Toast.makeText(getContext(), "Error retrieving token", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
 
     /*
-* Create an outgoing connection
-*/
-    private void makeCall(String contact) {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("To", contact);
-        if (clientDevice != null) {
-            // Create an outgoing connection
-            activeConnection = clientDevice.connect(params, this);
-//            setCallUI();
-        } else {
-            Toast.makeText(getContext(), "No existing device", Toast.LENGTH_SHORT).show();
+     * Create a Device or update the capabilities of the current Device
+     */
+    private void createDevice(String capabilityToken) {
+        try {
+            if (clientDevice == null) {
+                clientDevice = Twilio.createDevice(capabilityToken, this);
+                clientDevice.setIncomingSoundEnabled(true);
+
+                /*
+                 * Providing a PendingIntent to the newly created Device, allowing you to receive incoming calls
+                 *
+                 *  What you do when you receive the intent depends on the component you set in the Intent.
+                 *
+                 *  If you're using an Activity, you'll want to override Activity.onNewIntent()
+                 *  If you're using a Service, you'll want to override Service.onStartCommand().
+                 *  If you're using a BroadcastReceiver, override BroadcastReceiver.onReceive().
+                 */
+
+                Intent intent = new Intent(this, InCallActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                clientDevice.setIncomingIntent(pendingIntent);
+                DebugTool.logD("CREATE DEVICE: " + clientProfile.getName());
+
+            } else {
+                clientDevice.updateCapabilityToken(capabilityToken);
+            }
+
+            EventBus.getDefault().postSticky(clientDevice);
+
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Device error", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    @Override
+    public void onStartListening(Device device) {
+        DebugTool.logD("Device has started listening for incoming connections");
+    }
+
+    @Override
+    public void onStopListening(Device device) {
+        DebugTool.logD("Device has stopped listening for incoming connections");
+    }
+
+    @Override
+    public void onStopListening(Device device, int i, String s) {
+        DebugTool.logD(String.format("Device has encountered an error and has stopped" +
+                " listening for incoming connections: %s", s));
+    }
+
+    @Override
+    public boolean receivePresenceEvents(Device device) {
+        return false;
+    }
+
+    @Override
+    public void onPresenceChanged(Device device, PresenceEvent presenceEvent) {
+
     }
 
     private void disconnect() {
@@ -232,35 +416,78 @@ public class InCallActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    public AlertDialog createIncomingCallDialog(Context context) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-        alertDialogBuilder.setIcon(R.drawable.ic_call_black_24dp);
-        alertDialogBuilder.setTitle("Incoming Call");
-        alertDialogBuilder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (activeConnection != null) {
-                    activeConnection.disconnect();
-                }
-                pendingConnection.accept();
-                activeConnection = pendingConnection;
-                pendingConnection = null;
-            }
-        });
-        alertDialogBuilder.setNegativeButton("Reject", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (pendingConnection != null) {
-                    pendingConnection.reject();
-                }
-                dialogInterface.dismiss();
-            }
-        });
-        alertDialogBuilder.setMessage("Incoming call");
-
-        return alertDialogBuilder.create();
+    @Override
+    public void onCallNow(String toPhoneNumber) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("client:", toPhoneNumber);
+        if (clientDevice != null) {
+            // Create an outgoing connection
+            activeConnection = clientDevice.connect(params, this);
+            DebugTool.logD("MAKE A CALL : " + toPhoneNumber);
+//            setCallUI();
+        } else {
+            Toast.makeText(getContext(), "No existing device", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    @Override
+    public void decline() {
+        if (pendingConnection != null) {
+            pendingConnection.reject();
+        }
+        showDialFragment();
+    }
 
+    @Override
+    public void accept() {
+        if (activeConnection != null) {
+            activeConnection.disconnect();
+        }
+        pendingConnection.accept();
+        activeConnection = pendingConnection;
+        pendingConnection = null;
+        showInCallFragment();
+    }
+
+    private void showInCallFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment instanceof InCallFragment) return;
+        InCallFragment incomingFragment = InCallFragment.getInstance(mPhoneNumber, mPhoneNumber);
+        ActivityUtils.replaceFragmentToActivity(
+                getSupportFragmentManager(),
+                incomingFragment,
+                R.id.content_frame,
+                InCallFragment.class.getSimpleName());
+        incomingFragment.setInCallListener(this);
+    }
+
+    private void showIncomingFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment instanceof IncomingFragment) return;
+        IncomingFragment incomingFragment = IncomingFragment.getInstance(mPhoneNumber);
+        ActivityUtils.replaceFragmentToActivity(
+                getSupportFragmentManager(),
+                incomingFragment,
+                R.id.content_frame,
+                IncomingFragment.class.getSimpleName());
+        incomingFragment.setIncomingListener(this);
+    }
+
+    private void showDialFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment instanceof DialFragment) return;
+        DialFragment dialFragment = DialFragment.getInstance(mPhoneNumber);
+        ActivityUtils.replaceFragmentToActivity(
+                getSupportFragmentManager(),
+                dialFragment,
+                R.id.content_frame,
+                DialFragment.class.getSimpleName());
+        dialFragment.setDialFragmentListener(this);
+    }
+
+    @Override
+    public void hangUp() {
+        disconnect();
+        showDialFragment();
+    }
 }

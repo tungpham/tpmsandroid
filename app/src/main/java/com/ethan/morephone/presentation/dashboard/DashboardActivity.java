@@ -13,7 +13,8 @@ import com.ethan.morephone.utils.ActivityUtils;
  * Created by Ethan on 3/23/17.
  */
 
-public class DashboardActivity extends BaseActivity{
+public class DashboardActivity extends BaseActivity {
+
 
 
     @Override
@@ -21,14 +22,18 @@ public class DashboardActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
+        String mPhoneNumber = getIntent().getStringExtra(DashboardFragment.BUNDLE_PHONE_NUMBER);
+
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        DashboardFragment voiceFragment = DashboardFragment.getInstance(getIntent().getStringExtra(DashboardFragment.BUNDLE_PHONE_NUMBER));
+        DashboardFragment voiceFragment = DashboardFragment.getInstance(mPhoneNumber);
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 voiceFragment,
                 R.id.content_frame,
                 DashboardFragment.class.getSimpleName());
     }
+
+
 
 }
