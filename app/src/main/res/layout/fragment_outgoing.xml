@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?><!-- In-call Phone UI; see InCallScreen.java. -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_outgoing_phone_number"
+        style="@style/TextDisplay"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_incoming_text_title"
+        android:text="+18056624394"
+        android:textColor="@android:color/white" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_outgoing_time"
+        style="@style/ViewCommon"
+        android:layout_below="@+id/text_outgoing_phone_number"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_in_call_text_time"
+        android:text="Dialing..."
+        android:textColor="@android:color/white" />
+
+    <View
+        android:id="@+id/view_outgoing_common"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true" />
+
+    <RelativeLayout
+        style="@style/ViewCommon"
+        android:layout_above="@+id/view_outgoing_common"
+        android:layout_marginBottom="@dimen/margin_top_in_call_image"
+        android:layout_marginRight="@dimen/margin_in_call_image"
+        android:layout_toLeftOf="@+id/view_outgoing_common">
+
+        <ImageView
+            android:id="@+id/image_outgoing_mute"
+            style="@style/ViewCommon"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_mic_off" />
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_outgoing_mute"
+            style="@style/ViewCommon"
+            android:layout_below="@+id/image_outgoing_mute"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_in_call_text"
+            android:text="Mute"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/ViewCommon"
+        android:layout_above="@+id/view_outgoing_common"
+        android:layout_marginBottom="@dimen/margin_top_in_call_image"
+        android:layout_marginLeft="@dimen/margin_in_call_image"
+        android:layout_toRightOf="@+id/view_outgoing_common">
+
+        <ImageView
+            android:id="@+id/image_outgoing_speaker"
+            style="@style/ViewCommon"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_speaker" />
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_outgoing_speaker"
+            style="@style/ViewCommon"
+            android:layout_below="@+id/image_outgoing_speaker"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_in_call_text"
+            android:text="Speaker"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+
+
+    <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/floating_button_outgoing_hang_up"
+        style="@style/ViewCommon"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/margin_in_call_floating_button"
+        android:src="@drawable/ic_call_end_white_24dp"
+        app:backgroundTint="@color/call_log_missed_call_highlight_color" />
+
+</RelativeLayout>

@@ -24,6 +24,7 @@ import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.phone.dial.DialFragment;
 import com.ethan.morephone.presentation.phone.incoming.IncomingFragment;
+import com.ethan.morephone.presentation.phone.outgoing.OutgoingFragment;
 import com.ethan.morephone.utils.ActivityUtils;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -33,8 +34,6 @@ import com.twilio.client.Device;
 import com.twilio.client.DeviceListener;
 import com.twilio.client.PresenceEvent;
 import com.twilio.client.Twilio;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +50,8 @@ public class InCallActivity extends BaseActivity implements
         DeviceListener,
         DialFragment.DialFragmentListener,
         IncomingFragment.IncomingListener,
-        InCallFragment.InCallListener{
+        InCallFragment.InCallListener,
+        OutgoingFragment.OutgoingFragmentListener{
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
     public static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
@@ -187,17 +187,28 @@ public class InCallActivity extends BaseActivity implements
 
     @Override
     public void onConnecting(Connection connection) {
-
+        DebugTool.logD("CONNECTING : " + connection.isIncoming());
     }
 
     @Override
     public void onConnected(Connection connection) {
-
+        DebugTool.logD("CONNECTED");
+        showInCallFragment();
     }
 
     @Override
     public void onDisconnected(Connection connection) {
+        DebugTool.logD("DISCONNECTED ");
+//        showDialFragment();
+        if(connection.getState() == Connection.State.PENDING){
+            DebugTool.logD("PENDING");
+        }else if(connection.getState() == Connection.State.CONNECTED){
+            DebugTool.logD("CONNECTED");
+        }else if(connection.getState() == Connection.State.CONNECTING){
+            DebugTool.logD("CONNECTING");
+        }
 
+        finish();
     }
 
     @Override
@@ -285,6 +296,7 @@ public class InCallActivity extends BaseActivity implements
                 }
             });
         } else {
+            retrieveCapabilityToken(clientProfile);
             DebugTool.logD("INITED");
         }
     }
@@ -301,7 +313,7 @@ public class InCallActivity extends BaseActivity implements
         }
 
         DebugTool.logD("NAME PHONE: " + newClientProfile.getName());
-
+        DebugTool.logD("URL: " + b.toString());
         Ion.with(getContext())
                 .load(b.toString())
                 .asString()
@@ -352,7 +364,7 @@ public class InCallActivity extends BaseActivity implements
                 clientDevice.updateCapabilityToken(capabilityToken);
             }
 
-            EventBus.getDefault().postSticky(clientDevice);
+//            EventBus.getDefault().postSticky(clientDevice);
 
         } catch (Exception e) {
             Toast.makeText(getContext(), "Device error", Toast.LENGTH_SHORT).show();
@@ -419,12 +431,14 @@ public class InCallActivity extends BaseActivity implements
     @Override
     public void onCallNow(String toPhoneNumber) {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("client:", toPhoneNumber);
+        toPhoneNumber = "client:" + toPhoneNumber.trim();
+        params.put("To", toPhoneNumber);
         if (clientDevice != null) {
             // Create an outgoing connection
             activeConnection = clientDevice.connect(params, this);
             DebugTool.logD("MAKE A CALL : " + toPhoneNumber);
 //            setCallUI();
+            showOutgoingFragment();
         } else {
             Toast.makeText(getContext(), "No existing device", Toast.LENGTH_SHORT).show();
         }
@@ -461,6 +475,18 @@ public class InCallActivity extends BaseActivity implements
         incomingFragment.setInCallListener(this);
     }
 
+    private void showOutgoingFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment instanceof IncomingFragment) return;
+        OutgoingFragment outgoingFragment = OutgoingFragment.getInstance(mPhoneNumber);
+        ActivityUtils.replaceFragmentToActivity(
+                getSupportFragmentManager(),
+                outgoingFragment,
+                R.id.content_frame,
+                OutgoingFragment.class.getSimpleName());
+        outgoingFragment.setOutGoingFragmentListener(this);
+    }
+
     private void showIncomingFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof IncomingFragment) return;
@@ -488,6 +514,14 @@ public class InCallActivity extends BaseActivity implements
     @Override
     public void hangUp() {
         disconnect();
-        showDialFragment();
+        finish();
+//        showDialFragment();
+    }
+
+    @Override
+    public void onHangup() {
+        disconnect();
+        finish();
+//        showDialFragment();
     }
 }

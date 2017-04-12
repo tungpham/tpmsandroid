@@ -360,6 +360,8 @@ public class MainActivity extends BaseActivity implements
                     numbersFragment,
                     R.id.content_frame,
                     DashboardFrag.class.getSimpleName());
+
+            enableActionBar(mToolbar, MyPreference.getPhoneNumber(getApplicationContext()));
         }
     }
 }
