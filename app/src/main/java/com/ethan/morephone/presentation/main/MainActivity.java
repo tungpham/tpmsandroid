@@ -20,7 +20,7 @@ import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
-import com.ethan.morephone.presentation.dashboard.DashboardFragment;
+import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersActivity;
@@ -76,12 +76,12 @@ public class MainActivity extends BaseActivity implements
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof IncomingPhoneNumbersFragment) return;
-        DashboardFragment numbersFragment = DashboardFragment.getInstance(MyPreference.getPhoneNumber(getApplicationContext()));
+        DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()));
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 numbersFragment,
                 R.id.content_frame,
-                IncomingPhoneNumbersFragment.class.getSimpleName());
+                DashboardFrag.class.getSimpleName());
 
         mPhoneNumber = MyPreference.getPhoneNumber(getApplicationContext());
 //
@@ -354,12 +354,12 @@ public class MainActivity extends BaseActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_INCOMING_PHONE && resultCode == RESULT_OK) {
-            DashboardFragment numbersFragment = DashboardFragment.getInstance(MyPreference.getPhoneNumber(getApplicationContext()));
+            DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()));
             ActivityUtils.replaceFragmentToActivity(
                     getSupportFragmentManager(),
                     numbersFragment,
                     R.id.content_frame,
-                    IncomingPhoneNumbersFragment.class.getSimpleName());
+                    DashboardFrag.class.getSimpleName());
         }
     }
 }

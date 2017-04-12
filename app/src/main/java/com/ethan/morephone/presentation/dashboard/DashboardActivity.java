@@ -22,18 +22,15 @@ public class DashboardActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
-        String mPhoneNumber = getIntent().getStringExtra(DashboardFragment.BUNDLE_PHONE_NUMBER);
+        String mPhoneNumber = getIntent().getStringExtra(DashboardFrag.BUNDLE_PHONE_NUMBER);
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        DashboardFragment voiceFragment = DashboardFragment.getInstance(mPhoneNumber);
+        DashboardFrag voiceFragment = DashboardFrag.getInstance(mPhoneNumber);
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 voiceFragment,
                 R.id.content_frame,
-                DashboardFragment.class.getSimpleName());
+                DashboardFrag.class.getSimpleName());
     }
-
-
-
 }

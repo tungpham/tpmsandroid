@@ -7,22 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.dashboard.adapter.DashboardViewPagerAdapter;
 import com.ethan.morephone.widget.NavigationTabStrip;
 
 /**
- * Created by Ethan on 3/23/17.
+ * Created by Ethan on 4/12/17.
  */
 
-public class DashboardFragment extends BaseFragment {
+public class DashboardFrag extends BaseFragment {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
-    public static DashboardFragment getInstance(String phoneNumber) {
-        DashboardFragment dashboardFragment = new DashboardFragment();
+    public static DashboardFrag getInstance(String phoneNumber) {
+        DashboardFrag dashboardFragment = new DashboardFrag();
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
         dashboardFragment.setArguments(bundle);
@@ -37,27 +36,16 @@ public class DashboardFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
-
         setUpViewPager(view);
-
         setHasOptionsMenu(true);
-
-
         return view;
     }
 
-
-
     private void setUpViewPager(View view) {
         NavigationTabStrip navigationTabStrip = (NavigationTabStrip) view.findViewById(R.id.tab_strip);
-
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        DebugTool.logD("PHONE: " + mPhoneNumber);
         DashboardViewPagerAdapter myViewPagerAdapter = new DashboardViewPagerAdapter(getChildFragmentManager(), mPhoneNumber);
         viewPager.setAdapter(myViewPagerAdapter);
         navigationTabStrip.setViewPager(viewPager, 0);
     }
-
-
-
 }
