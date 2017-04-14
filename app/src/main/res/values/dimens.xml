@@ -63,10 +63,11 @@
     <dimen name="margin_incoming_relative">72dp</dimen>
 
     <!-- Fragment In Call Screen -->
-    <dimen name="margin_in_call_floating_button">72dp</dimen>
+    <dimen name="margin_in_call_floating_button">48dp</dimen>
     <dimen name="margin_top_in_call_image">16dp</dimen>
     <dimen name="margin_in_call_image">36dp</dimen>
     <dimen name="margin_in_call_text">4dp</dimen>
     <dimen name="margin_in_call_text_time">24dp</dimen>
+    <dimen name="margin__bottom_in_call_text_hide_dialpad">24dp</dimen>
 
 </resources>

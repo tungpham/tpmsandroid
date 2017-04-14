@@ -51,7 +51,7 @@ public class InCallActivity extends BaseActivity implements
         DialFragment.DialFragmentListener,
         IncomingFragment.IncomingListener,
         InCallFragment.InCallListener,
-        OutgoingFragment.OutgoingFragmentListener{
+        OutgoingFragment.OutgoingFragmentListener {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
     public static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
@@ -90,6 +90,7 @@ public class InCallActivity extends BaseActivity implements
 
         mPhoneNumber = getIntent().getStringExtra(DashboardFrag.BUNDLE_PHONE_NUMBER);
         showDialFragment();
+//        showInCallFragment();
 
 //
 //        setContentView(R.layout.fragment_c);
@@ -200,11 +201,11 @@ public class InCallActivity extends BaseActivity implements
     public void onDisconnected(Connection connection) {
         DebugTool.logD("DISCONNECTED ");
 //        showDialFragment();
-        if(connection.getState() == Connection.State.PENDING){
+        if (connection.getState() == Connection.State.PENDING) {
             DebugTool.logD("PENDING");
-        }else if(connection.getState() == Connection.State.CONNECTED){
+        } else if (connection.getState() == Connection.State.CONNECTED) {
             DebugTool.logD("CONNECTED");
-        }else if(connection.getState() == Connection.State.CONNECTING){
+        } else if (connection.getState() == Connection.State.CONNECTING) {
             DebugTool.logD("CONNECTING");
         }
 
@@ -431,7 +432,7 @@ public class InCallActivity extends BaseActivity implements
     @Override
     public void onCallNow(String toPhoneNumber) {
         Map<String, String> params = new HashMap<String, String>();
-        toPhoneNumber = "client:" + toPhoneNumber.trim();
+//        toPhoneNumber = "client:" + toPhoneNumber.trim();
         params.put("To", toPhoneNumber);
         if (clientDevice != null) {
             // Create an outgoing connection
@@ -516,6 +517,14 @@ public class InCallActivity extends BaseActivity implements
         disconnect();
         finish();
 //        showDialFragment();
+    }
+
+    @Override
+    public void sendDigit(int digit) {
+        DebugTool.logD("DIGIT: " + digit);
+        if (activeConnection != null) {
+            activeConnection.sendDigits(String.valueOf(digit));
+        }
     }
 
     @Override

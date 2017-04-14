@@ -10,12 +10,15 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -49,7 +52,7 @@ public class TestVoiceActivity extends BaseActivity {
     /*
      * You must provide a Twilio Access Token to connect to the Voice service
      */
-    private static final String TWILIO_ACCESS_TOKEN = "eyJ0eXAiOiAiSldUIiwgImFsZyI6ICJIUzI1NiIsICJjdHkiOiAidHdpbGlvLWZwYTt2PTEifQ.eyJpc3MiOiAiU0s5YWJhMjc1ZTk0ODllNjM5NWJiZmM1NGY0YTM5OTZlMyIsICJncmFudHMiOiB7ImlkZW50aXR5IjogInZvaWNlX3Rlc3QiLCAidm9pY2UiOiB7InB1c2hfY3JlZGVudGlhbF9zaWQiOiAiQ1I0NDU5OWM2OTM4OTI3NzBiODZlNTgzY2NkNWMzZTM1MCIsICJvdXRnb2luZyI6IHsiYXBwbGljYXRpb25fc2lkIjogIkFQYmRiZjA1MzgyYTU1NmQ2NmJjODQxOWYzNmU1MWE2ZDYifX19LCAianRpIjogIlNLOWFiYTI3NWU5NDg5ZTYzOTViYmZjNTRmNGEzOTk2ZTMtMTQ4OTU2OTYzMyIsICJleHAiOiAxNDg5NTczMjMzLCAic3ViIjogIkFDZWJkN2QzYTc4ZTJmZGRhOWU1MTIzOWJhZDZiMDlmOTcifQ.VkkMxQ1EsmV_b3duOXcJZykQeI2Att9Mz-h177VBJ9w";
+    private static final String TWILIO_ACCESS_TOKEN = "eyJjdHkiOiAidHdpbGlvLWZwYTt2PTEiLCAidHlwIjogIkpXVCIsICJhbGciOiAiSFMyNTYifQ.eyJqdGkiOiAiU0s5YWJhMjc1ZTk0ODllNjM5NWJiZmM1NGY0YTM5OTZlMy0xNDkyMDc4Njg0IiwgImdyYW50cyI6IHsiaWRlbnRpdHkiOiAidm9pY2VfdGVzdCIsICJ2b2ljZSI6IHsib3V0Z29pbmciOiB7ImFwcGxpY2F0aW9uX3NpZCI6ICJBUGJkYmYwNTM4MmE1NTZkNjZiYzg0MTlmMzZlNTFhNmQ2In0sICJwdXNoX2NyZWRlbnRpYWxfc2lkIjogIkNSNDQ1OTljNjkzODkyNzcwYjg2ZTU4M2NjZDVjM2UzNTAifX0sICJleHAiOiAxNDkyMDgyMjg0LCAiaXNzIjogIlNLOWFiYTI3NWU5NDg5ZTYzOTViYmZjNTRmNGEzOTk2ZTMiLCAic3ViIjogIkFDZWJkN2QzYTc4ZTJmZGRhOWU1MTIzOWJhZDZiMDlmOTcifQ.35ctLzJsaLVDAr7zeZ1PXJbZs75Ry4DSmgh1gbiKs4A";
 
     private static final int MIC_PERMISSION_REQUEST_CODE = 1;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -79,7 +82,7 @@ public class TestVoiceActivity extends BaseActivity {
 
     private NotificationManager notificationManager;
     private String gcmToken;
-    private AlertDialog alertDialog;
+//    private AlertDialog alertDialog;
     private CallInvite activeCallInvite;
     private Call activeCall;
 
@@ -242,19 +245,51 @@ public class TestVoiceActivity extends BaseActivity {
             activeCallInvite = intent.getParcelableExtra(INCOMING_CALL_INVITE);
             if (!activeCallInvite.isCancelled()) {
                 SoundPoolManager.getInstance(this).playRinging();
-                alertDialog = createIncomingCallDialog(TestVoiceActivity.this,
-                        activeCallInvite,
-                        answerCallClickListener(),
-                        cancelCallClickListener());
-                alertDialog.show();
+                mHandler.sendEmptyMessage(0);
                 notificationManager.cancel(intent.getIntExtra(INCOMING_CALL_NOTIFICATION_ID, 0));
             } else {
-                if (alertDialog != null && alertDialog.isShowing()) {
-                    SoundPoolManager.getInstance(this).stopRinging();
-                    alertDialog.cancel();
-                }
+                mHandler.sendEmptyMessage(1);
             }
         }
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+//                alertDialog = createIncomingCallDialog(
+//                        activeCallInvite,
+//                        answerCallClickListener(),
+//                        cancelCallClickListener());
+//                alertDialog.show();
+                showDialog();
+            } else if (msg.what == 1) {
+//                if (alertDialog != null && alertDialog.isShowing()) {
+                    SoundPoolManager.getInstance(TestVoiceActivity.this).stopRinging();
+//                    alertDialog.cancel();
+//                }
+            }
+        }
+    };
+
+    void showDialog() {
+        DialogFragment newFragment = IncomingDialog.newInstance();
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
+
+    public void doPositiveClick() {
+        // Do stuff here.
+        Log.i("FragmentAlertDialog", "Positive click!");
+        answer();
+        setCallUI();
+    }
+
+    public void doNegativeClick() {
+        // Do stuff here.
+        activeCallInvite.reject(TestVoiceActivity.this);
+//        alertDialog.dismiss();
+        Log.i("FragmentAlertDialog", "Negative click!");
     }
 
     private void registerReceiver() {
@@ -277,7 +312,7 @@ public class TestVoiceActivity extends BaseActivity {
                 String gcmToken = intent.getStringExtra(KEY_GCM_TOKEN);
                 Log.i(TAG, "GCM Token : " + gcmToken);
                 TestVoiceActivity.this.gcmToken = gcmToken;
-                if(gcmToken == null) {
+                if (gcmToken == null) {
                     Snackbar.make(coordinatorLayout,
                             "Failed to get GCM Token. Unable to receive calls",
                             Snackbar.LENGTH_LONG).show();
@@ -302,7 +337,7 @@ public class TestVoiceActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 answer();
                 setCallUI();
-                alertDialog.dismiss();
+//                alertDialog.dismiss();
             }
         };
     }
@@ -313,13 +348,13 @@ public class TestVoiceActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 activeCallInvite.reject(TestVoiceActivity.this);
-                alertDialog.dismiss();
+//                alertDialog.dismiss();
             }
         };
     }
 
-    public static AlertDialog createIncomingCallDialog(Context context, CallInvite callInvite, DialogInterface.OnClickListener answerCallClickListener, DialogInterface.OnClickListener cancelClickListener) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+    public AlertDialog createIncomingCallDialog(CallInvite callInvite, DialogInterface.OnClickListener answerCallClickListener, DialogInterface.OnClickListener cancelClickListener) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TestVoiceActivity.this);
         alertDialogBuilder.setIcon(R.drawable.ic_call_black_24dp);
         alertDialogBuilder.setTitle("Incoming Call");
         alertDialogBuilder.setPositiveButton("Accept", answerCallClickListener);
@@ -388,7 +423,7 @@ public class TestVoiceActivity extends BaseActivity {
         setAudioFocus(speakerPhone);
         audioManager.setSpeakerphoneOn(speakerPhone);
 
-        if(speakerPhone) {
+        if (speakerPhone) {
             speakerActionFab.setImageDrawable(ContextCompat.getDrawable(TestVoiceActivity.this, R.drawable.ic_volume_mute_white_24px));
         } else {
             speakerActionFab.setImageDrawable(ContextCompat.getDrawable(TestVoiceActivity.this, R.drawable.ic_volume_down_white_24px));

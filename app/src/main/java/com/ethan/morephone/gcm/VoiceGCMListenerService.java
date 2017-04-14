@@ -13,7 +13,6 @@ import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.voice.TestVoiceActivity;
@@ -86,7 +85,7 @@ public class VoiceGCMListenerService extends GcmListenerService {
             Bundle extras = new Bundle();
             extras.putInt(NOTIFICATION_ID_KEY, notificationId);
             extras.putString(CALL_SID_KEY, callSid);
-            Toast.makeText(getApplicationContext(), "CALLSID: " + callSid, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "CALLSID: " + callSid, Toast.LENGTH_SHORT).show();
 
             /*
              * Create the notification shown in the notification drawer

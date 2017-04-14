@@ -29,6 +29,7 @@
         android:layout_centerInParent="true" />
 
     <RelativeLayout
+        android:id="@+id/relative_in_call_mute"
         style="@style/ViewCommon"
         android:layout_above="@+id/view_in_call_common"
         android:layout_marginBottom="@dimen/margin_top_in_call_image"
@@ -124,6 +125,20 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/relative_in_call_dialpad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="144dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginTop="144dp"
+        android:background="@color/black"
+        android:visibility="gone">
+
+        <include layout="@layout/dialpad_phone" />
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/floating_button_in_call_hang_up"
@@ -133,5 +148,16 @@
         android:layout_marginBottom="@dimen/margin_in_call_floating_button"
         android:src="@drawable/ic_call_end_white_24dp"
         app:backgroundTint="@color/call_log_missed_call_highlight_color" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_in_call_hide_dialpad"
+        style="@style/ViewCommon"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin__bottom_in_call_text_hide_dialpad"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/margin__bottom_in_call_text_hide_dialpad"
+        android:text="Hide"
+        android:textColor="@android:color/white"
+        android:visibility="gone"/>
 
 </RelativeLayout>
