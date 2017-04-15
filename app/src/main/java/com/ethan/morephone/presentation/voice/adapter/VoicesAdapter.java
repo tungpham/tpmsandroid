@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.ExpandableLayout;
@@ -73,12 +74,29 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         holder.expandableLayout.setTag(holder);
         holder.expandableLayout.setOnExpandListener(mOnExpandListener);
 
+        DebugTool.logD("RECORD: " + callEntity.subresourceUris.recordings);
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onItemClick(holder.expandableLayout, position);
+                mOnItemVoiceClickListener.onItemClick(holder.expandableLayout, position, callEntity);
             }
         });
+
+        holder.imagePause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemVoiceClickListener.onPauseRecord();
+            }
+        });
+
+        holder.imageDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemVoiceClickListener.onDeleteRecord();
+            }
+        });
+
     }
 
     @Override
@@ -118,6 +136,12 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
     };
 
     public interface OnItemVoiceClickListener {
-        void onItemClick(View view, int pos);
+        void onItemClick(View view, int pos, VoiceItem voiceItem);
+
+        void onPauseRecord();
+
+        void onVolumeRecord();
+
+        void onDeleteRecord();
     }
 }

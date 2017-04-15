@@ -48,39 +48,50 @@
             android:layout_marginTop="@dimen/activity_main_margin"
             app:canExpand="true">
 
+            <com.ethan.morephone.widget.progress.DotProgressBar xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/progress_bar_item_voice"
+                android:layout_width="50dp"
+                android:layout_height="11dp"
+                android:visibility="gone"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                custom:amount="3"
+                custom:endColor="@color/green_400"
+                custom:startColor="@color/green_700" />
+
             <com.ethan.morephone.widget.MyTextView
-                android:id="@+id/text_duration"
+                android:id="@+id/text_item_voice_duration"
                 style="@style/TextSmsTime"
                 android:layout_centerHorizontal="true" />
 
             <android.support.v7.widget.AppCompatSeekBar
-                android:id="@+id/seek_bar"
+                android:id="@+id/seek_bar_item_voice"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_duration"
+                android:layout_below="@+id/text_item_voice_duration"
                 android:layout_centerHorizontal="true" />
 
             <ImageView
-                android:id="@+id/image_volume"
+                android:id="@+id/image_item_voice_volume"
                 style="@style/ImageActionCommon"
-                android:layout_below="@+id/seek_bar"
+                android:layout_below="@+id/seek_bar_item_voice"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_main_margin"
                 android:src="@drawable/ic_volume_medium" />
 
             <ImageView
-                android:id="@+id/image_pause"
+                android:id="@+id/image_item_voice_pause"
                 style="@style/ImageActionCommon"
-                android:layout_below="@+id/seek_bar"
+                android:layout_below="@+id/seek_bar_item_voice"
                 android:layout_marginLeft="@dimen/activity_main_margin"
                 android:layout_marginTop="@dimen/activity_main_margin"
-                android:src="@drawable/ic_hold_pause" />
+                android:src="@drawable/ic_play_arrow_black_24dp" />
 
             <ImageView
-                android:id="@+id/image_delete"
+                android:id="@+id/image_item_voice_delete"
                 style="@style/ImageActionCommon"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/seek_bar"
+                android:layout_below="@+id/seek_bar_item_voice"
                 android:layout_marginRight="@dimen/activity_main_margin"
                 android:layout_marginTop="@dimen/activity_main_margin"
                 android:src="@drawable/ic_delete_black_24dp" />
@@ -88,7 +99,7 @@
             <View
                 android:id="@+id/view"
                 style="@style/DividerAction"
-                android:layout_below="@+id/image_delete"
+                android:layout_below="@+id/image_item_voice_delete"
                 android:layout_marginTop="@dimen/activity_main_margin" />
 
             <com.ethan.morephone.widget.MyTextView

@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 
 import com.android.morephone.data.repository.message.MessageRepository;
 import com.android.morephone.data.repository.message.source.remote.MessageRemoteDataSource;
+import com.android.morephone.data.repository.record.RecordRepository;
+import com.android.morephone.data.repository.record.source.remote.RecordRemoteDataSource;
 import com.android.morephone.data.repository.voice.VoiceRepository;
 import com.android.morephone.data.repository.voice.source.remote.VoiceRemoteDataSource;
 import com.android.morephone.domain.UseCaseHandler;
@@ -15,6 +17,7 @@ import com.android.morephone.domain.usecase.message.GetMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
 import com.android.morephone.domain.usecase.number.GetAvailableCountries;
+import com.android.morephone.domain.usecase.record.GetCallRecords;
 import com.android.morephone.domain.usecase.voice.CreateVoice;
 import com.android.morephone.domain.usecase.voice.DeleteVoice;
 import com.android.morephone.domain.usecase.voice.GetAllVoices;
@@ -28,12 +31,14 @@ import com.android.morephone.domain.usecase.voice.GetVoicesOutgoing;
 
 public class Injection {
 
-    private static MessageRepository providerMessageRepository(@NonNull Context context) {
-        return MessageRepository.getInstance(MessageRemoteDataSource.getInstance(context));
-    }
-
     public static UseCaseHandler providerUseCaseHandler() {
         return UseCaseHandler.getInstance();
+    }
+
+    /*-----------------------------------------MESSAGE-----------------------------------------*/
+
+    private static MessageRepository providerMessageRepository(@NonNull Context context) {
+        return MessageRepository.getInstance(MessageRemoteDataSource.getInstance(context));
     }
 
     public static GetAllMessages providerGetMessages(@NonNull Context context) {
@@ -61,6 +66,7 @@ public class Injection {
         return new DeleteMessage(providerMessageRepository(context));
     }
 
+    /*-----------------------------------------VOICE-----------------------------------------*/
 
     private static VoiceRepository providerVoiceRepository(@NonNull Context context) {
         return VoiceRepository.getInstance(VoiceRemoteDataSource.getInstance(context));
@@ -94,6 +100,17 @@ public class Injection {
     /*--------------------------------Available Phone Numbers----------------------------------*/
     public static GetAvailableCountries providerAvailableCountries(@NonNull Context context){
         return new GetAvailableCountries(context);
+    }
+
+
+    /*-----------------------------------------RECORD-----------------------------------------*/
+
+    private static RecordRepository providerRecordRepository(@NonNull Context context) {
+        return RecordRepository.getInstance(RecordRemoteDataSource.getInstance(context));
+    }
+
+    public static GetCallRecords providerGetCallRecords(@NonNull Context context) {
+        return new GetCallRecords(providerRecordRepository(context));
     }
 
 }

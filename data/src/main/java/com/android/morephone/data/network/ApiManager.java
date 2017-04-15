@@ -9,6 +9,7 @@ import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
+import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceListResourceResponse;
 
@@ -154,6 +155,9 @@ public class ApiManager {
         });
     }
 
+
+    /*-----------------------------------------VOICE-----------------------------------------*/
+
     public static void createVoice(Context context,
                                    String phoneNumberOutgoing,
                                    String phoneNumberIncoming,
@@ -214,6 +218,8 @@ public class ApiManager {
         });
     }
 
+
+
     public static void fakeData(Context context, Callback<FakeData> callback) {
         Call<FakeData> call = getApiPath(context).getFakeDAta();
         call.enqueue(callback);
@@ -246,6 +252,17 @@ public class ApiManager {
                                                Callback<IncomingPhoneNumbers> callback) {
         String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
         Call<IncomingPhoneNumbers> call = getApiPath(context).getIncomingPhoneNumbers(accountsid);
+        call.enqueue(callback);
+    }
+
+
+    /*-----------------------------------------RECORDINGS-----------------------------------------*/
+
+    public static void getRecordListResource(Context context,
+                                             String accountSid,
+                                             String callSid,
+                                             Callback<RecordListResourceResponse> callback) {
+        Call<RecordListResourceResponse> call = getApiPath(context).getRecordListResource(accountSid, callSid);
         call.enqueue(callback);
     }
 }

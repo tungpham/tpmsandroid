@@ -18,6 +18,9 @@ public interface VoiceContract {
 
         void showLoading(boolean isActive);
 
+        void initializeRecord(String url);
+
+        void emptyRecord();
     }
 
     interface Presenter extends BasePresenter {
@@ -29,6 +32,8 @@ public interface VoiceContract {
         void loadVoicesIncoming(String phoneNumberIncoming);
 
         void deleteVoice(String callSid);
+
+        void loadRecords(String callSid);
 
         void clearData();
 

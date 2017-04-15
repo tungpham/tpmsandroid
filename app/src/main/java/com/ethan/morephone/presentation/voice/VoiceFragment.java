@@ -1,6 +1,8 @@
 package com.ethan.morephone.presentation.voice;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -28,6 +30,21 @@ import com.ethan.morephone.presentation.voice.adapter.VoicesViewHolder;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.mp3.Mp3Extractor;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,7 +61,8 @@ import java.util.List;
 public class VoiceFragment extends BaseFragment implements
         VoiceContract.View,
         VoicesAdapter.OnItemVoiceClickListener,
-        View.OnClickListener {
+        View.OnClickListener,
+        ExoPlayer.EventListener {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
@@ -66,6 +84,11 @@ public class VoiceFragment extends BaseFragment implements
     private RecyclerView mRecyclerView;
     private MultiSwipeRefreshLayout mSwipeRefreshLayout;
 
+    private MediaPlayer mMediaPlayer;
+
+    private ExoPlayer mExoPlayer;
+    private VoicesViewHolder mVoicesViewHolder;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +99,8 @@ public class VoiceFragment extends BaseFragment implements
                 Injection.providerGetVoicesIncoming(getContext()),
                 Injection.providerGetVoicesOutgoing(getContext()),
                 Injection.providerDeleteVoice(getContext()),
-                Injection.providerCreateVoice(getContext()));
+                Injection.providerCreateVoice(getContext()),
+                Injection.providerGetCallRecords(getContext()));
     }
 
     @Nullable
@@ -150,7 +174,7 @@ public class VoiceFragment extends BaseFragment implements
         if (Utils.isNetworkAvailable(getActivity())) {
             mPresenter.clearData();
             mPresenter.loadVoicesIncoming(mPhoneNumber);
-            mPresenter.loadVoicesOutgoing(mPhoneNumber);
+//            mPresenter.loadVoicesOutgoing(mPhoneNumber);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }
@@ -168,19 +192,99 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
+    public void initializeRecord(String url) {
+        DebugTool.logD("URL: " + url);
+//        mMediaPlayer = new MediaPlayer();
+//        try {
+//            mMediaPlayer.setDataSource(url);
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        mMediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+//
+//            public void onBufferingUpdate(MediaPlayer mp, int percent) {
+////                playSeekBar.setSecondaryProgress(percent);
+//                Log.i("Buffering", "" + percent);
+//            }
+//        });
+
+        Handler mHandler = new Handler();
+
+        String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:40.0) Gecko/20100101 Firefox/40.0";
+        Uri uri = Uri.parse(url);
+        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(
+                userAgent, null,
+                DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
+                true);
+        MediaSource mediaSource = new ExtractorMediaSource(uri, dataSourceFactory, Mp3Extractor.FACTORY,
+                mHandler, null);
+        TrackSelector trackSelector = new DefaultTrackSelector();
+        DefaultLoadControl loadControl = new DefaultLoadControl();
+        mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+        //exoPlayer.addListener(this);
+        mExoPlayer.addListener(this);
+        mExoPlayer.prepare(mediaSource);
+//        mExoPlayer.setPlayWhenReady(true);
+    }
+
+    @Override
+    public void emptyRecord() {
+        if(mVoicesViewHolder != null) mVoicesViewHolder.showLoading(false);
+    }
+
+    @Override
     public void setPresenter(VoiceContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
     @Override
-    public void onItemClick(View view, int pos) {
+    public void onItemClick(View view, int pos, VoiceItem voiceItem) {
         if (view.getTag() instanceof VoicesViewHolder) {
-            VoicesViewHolder holder = (VoicesViewHolder) view.getTag();
-            holder.expandableLayout.toggleExpansion();
+            mVoicesViewHolder = (VoicesViewHolder) view.getTag();
+            mVoicesViewHolder.expandableLayout.toggleExpansion();
+            if (!mVoicesViewHolder.expandableLayout.isExpanded()) {
+                mPresenter.loadRecords(voiceItem.sid);
+                mVoicesViewHolder.showLoading(true);
+            }
         }
 //        mPresenter.deleteVoice(mVoicesAdapter.getData().get(pos).sid);
 //        mVoicesAdapter.getData().remove(pos);
 //        mVoicesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPauseRecord() {
+//        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+//            mMediaPlayer.pause();
+//        } else {
+//            playVoice();
+//        }
+
+        if (mExoPlayer != null) {
+            if (mExoPlayer.getPlayWhenReady()) {
+                mExoPlayer.setPlayWhenReady(false);
+                mVoicesViewHolder.uiPlay();
+            } else {
+                mExoPlayer.setPlayWhenReady(true);
+                mVoicesViewHolder.uiPause();
+            }
+        }
+    }
+
+    @Override
+    public void onVolumeRecord() {
+
+    }
+
+    @Override
+    public void onDeleteRecord() {
+
     }
 
     @Override
@@ -198,7 +302,7 @@ public class VoiceFragment extends BaseFragment implements
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(FakeData fakeData) {
 //        showVoices(fakeData.call_log);
-        DebugTool.logD("COME: " + fakeData.call_log.size());
+//        DebugTool.logD("COME: " + fakeData.call_log.size());
     }
 
 
@@ -211,5 +315,39 @@ public class VoiceFragment extends BaseFragment implements
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+        DebugTool.logD("TIME LINE: " + timeline.getIndexOfPeriod(manifest));
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+        DebugTool.logD("isLoading: " + isLoading);
+        if (!isLoading && mVoicesViewHolder != null) {
+            mVoicesViewHolder.visiblePlayerControl(true);
+            mVoicesViewHolder.showLoading(false);
+        }
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        DebugTool.logD("playWhenReady: " + playWhenReady + " |||    playbackState: " + playbackState);
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity() {
+
     }
 }

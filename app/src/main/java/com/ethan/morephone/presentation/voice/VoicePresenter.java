@@ -1,17 +1,22 @@
 package com.ethan.morephone.presentation.voice;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
+import com.android.morephone.data.entity.twilio.record.RecordItem;
+import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
+import com.android.morephone.domain.usecase.record.GetCallRecords;
 import com.android.morephone.domain.usecase.voice.CreateVoice;
 import com.android.morephone.domain.usecase.voice.DeleteVoice;
 import com.android.morephone.domain.usecase.voice.GetAllVoices;
 import com.android.morephone.domain.usecase.voice.GetVoices;
 import com.android.morephone.domain.usecase.voice.GetVoicesIncoming;
 import com.android.morephone.domain.usecase.voice.GetVoicesOutgoing;
+import com.ethan.morephone.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +36,8 @@ public class VoicePresenter implements VoiceContract.Presenter {
     private final DeleteVoice mDeleteVoice;
     private final CreateVoice mCreateVoice;
 
+    private final GetCallRecords mGetCallRecords;
+
     private List<VoiceItem> mVoiceItems;
 
     public VoicePresenter(@NonNull VoiceContract.View view,
@@ -40,7 +47,8 @@ public class VoicePresenter implements VoiceContract.Presenter {
                           @NonNull GetVoicesIncoming getVoicesIncoming,
                           @NonNull GetVoicesOutgoing getVoicesOutgoing,
                           @NonNull DeleteVoice deleteVoice,
-                          @NonNull CreateVoice createVoice) {
+                          @NonNull CreateVoice createVoice,
+                          @NonNull GetCallRecords getCallRecords) {
         mView = view;
         mUseCaseHandler = useCaseHandler;
         mGetAllVoices = getAllVoices;
@@ -49,6 +57,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
         mGetVoicesOutgoing = getVoicesOutgoing;
         mDeleteVoice = deleteVoice;
         mCreateVoice = createVoice;
+        mGetCallRecords = getCallRecords;
 
         mVoiceItems = new ArrayList<>();
 
@@ -131,6 +140,31 @@ public class VoicePresenter implements VoiceContract.Presenter {
             @Override
             public void onError() {
 
+            }
+        });
+    }
+
+    @Override
+    public void loadRecords(String callSid) {
+        GetCallRecords.RequestValue requestValue = new GetCallRecords.RequestValue(Constant.ACCOUNT_SID, callSid);
+        mUseCaseHandler.execute(mGetCallRecords, requestValue, new UseCase.UseCaseCallback<GetCallRecords.ResponseValue>() {
+            @Override
+            public void onSuccess(GetCallRecords.ResponseValue response) {
+                RecordListResourceResponse recordListResourceResponse = response.getRecordListResourceResponse();
+                if (recordListResourceResponse.recordings != null && !recordListResourceResponse.recordings.isEmpty()) {
+                    RecordItem recordItem = recordListResourceResponse.recordings.get(0);
+                    if(!TextUtils.isEmpty(recordItem.uri)) {
+                        String url = recordItem.uri.replace("json", "mp3");
+                        mView.initializeRecord(Constant.API_ROOT + url);
+                    }
+                }else{
+                    DebugTool.logD("EMPTY RECORD");
+                }
+            }
+
+            @Override
+            public void onError() {
+                DebugTool.logD("ERROR LOAD RECORD");
             }
         });
     }

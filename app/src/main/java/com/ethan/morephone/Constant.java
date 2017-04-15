@@ -13,4 +13,8 @@ public class Constant {
 
     public static final String CLOUD_KEY = "AIzaSyDavSQjJd9WqRVlhmSFdzPn7_5-bFp8IGA";
     public static final String CLOUD_SEEDER_ID = "25395780229";
+
+    public static final String API_ROOT = "https://api.twilio.com";
+
+    public static final String ACCOUNT_SID = "ACebd7d3a78e2fdda9e51239bad6b09f97";
 }

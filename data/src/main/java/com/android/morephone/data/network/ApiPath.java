@@ -9,6 +9,7 @@ import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.record.RecordItem;
+import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceListResourceResponse;
 
@@ -79,8 +80,14 @@ interface ApiPath {
 
     /*-----------------------------------------RECORDINGS-----------------------------------------*/
 
+    @GET("Accounts/{accountsid}/Calls/{callsid}/Recordings/{recordingsid}.json")
+    Call<RecordItem> getRecordItem(@Path("accountsid") String accountSid, @Path("callsid") String callSid, @Path("recordingsid") String recordingSid);
 
-    /*-----------------------------------------CALL-----------------------------------------*/
+    @GET("Accounts/{accountsid}/Calls/{callsid}/Recordings.json")
+    Call<RecordListResourceResponse> getRecordListResource(@Path("accountsid") String accountSid, @Path("callsid") String callSid);
+
+
+    /*-----------------------------------------VOICE-----------------------------------------*/
     @FormUrlEncoded
     @POST("Accounts/{accountsid}/Calls.json")
     Call<VoiceItem> createVoice(@Path("accountsid") String accountsid,
