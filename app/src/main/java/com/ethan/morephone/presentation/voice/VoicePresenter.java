@@ -97,6 +97,8 @@ public class VoicePresenter implements VoiceContract.Presenter {
             public void onSuccess(GetVoicesOutgoing.ResponseValue response) {
                 List<VoiceItem> voiceItems = response.getVoiceItems();
                 mVoiceItems.addAll(voiceItems);
+
+//                Collections.reverse(mVoiceItems);
                 mView.showVoices(mVoiceItems);
                 mView.showLoading(false);
             }
@@ -117,6 +119,8 @@ public class VoicePresenter implements VoiceContract.Presenter {
             public void onSuccess(GetVoicesIncoming.ResponseValue response) {
                 List<VoiceItem> voiceItems = response.getVoiceItems();
                 mVoiceItems.addAll(voiceItems);
+
+//                Collections.reverse(mVoiceItems);
                 mView.showVoices(mVoiceItems);
                 mView.showLoading(false);
             }
@@ -158,13 +162,13 @@ public class VoicePresenter implements VoiceContract.Presenter {
                         mView.initializeRecord(Constant.API_ROOT + url);
                     }
                 }else{
-                    DebugTool.logD("EMPTY RECORD");
+                    mView.emptyRecord();
                 }
             }
 
             @Override
             public void onError() {
-                DebugTool.logD("ERROR LOAD RECORD");
+                mView.emptyRecord();
             }
         });
     }

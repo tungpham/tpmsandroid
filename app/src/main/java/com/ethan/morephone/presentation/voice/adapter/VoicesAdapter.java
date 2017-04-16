@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
-import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.ExpandableLayout;
@@ -63,8 +62,10 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         final VoiceItem callEntity = mVoiceItems.get(position);
         if (mPhoneNumber.equals(callEntity.from)) {
             holder.textPhoneNumber.setText(callEntity.to);
+            holder.imageStatus.setImageResource(R.drawable.ic_call_outgoing_holo_dark);
         } else {
             holder.textPhoneNumber.setText(callEntity.from);
+            holder.imageStatus.setImageResource(R.drawable.ic_call_incoming_holo_dark);
         }
         holder.textTime.setText(Utils.formatDate(callEntity.dateCreated));
 
@@ -73,8 +74,6 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         holder.expandableLayout.setExpanded(false, false);
         holder.expandableLayout.setTag(holder);
         holder.expandableLayout.setOnExpandListener(mOnExpandListener);
-
-        DebugTool.logD("RECORD: " + callEntity.subresourceUris.recordings);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -28,6 +28,7 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
     public TextView textDuration;
     public AppCompatSeekBar seekBar;
     public DotProgressBar dotProgressBar;
+    public ImageView imageStatus;
 
     public VoicesViewHolder(View itemView) {
         super(itemView);
@@ -42,6 +43,7 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
         textDuration = (TextView) itemView.findViewById(R.id.text_item_voice_duration);
         seekBar = (AppCompatSeekBar) itemView.findViewById(R.id.seek_bar_item_voice);
         dotProgressBar = (DotProgressBar) itemView.findViewById(R.id.progress_bar_item_voice);
+        imageStatus = (ImageView) itemView.findViewById(R.id.image_item_voice_status);
         visiblePlayerControl(false);
     }
 
