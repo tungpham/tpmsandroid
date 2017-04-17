@@ -20,15 +20,19 @@ public class DashboardFrag extends BaseFragment {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
-    public static DashboardFrag getInstance(String phoneNumber) {
+    public static final String BUNDLE_CHOOSE_VOICE = "BUNDLE_CHOOSE_VOICE";
+
+    public static DashboardFrag getInstance(String phoneNumber, boolean isVoice) {
         DashboardFrag dashboardFragment = new DashboardFrag();
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
+        bundle.putBoolean(BUNDLE_CHOOSE_VOICE, isVoice);
         dashboardFragment.setArguments(bundle);
         return dashboardFragment;
     }
 
     private String mPhoneNumber;
+    private ViewPager mViewPager;
 
     @Nullable
     @Override
@@ -36,16 +40,26 @@ public class DashboardFrag extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
-        setUpViewPager(view);
+
+        boolean isVoice = getArguments().getBoolean(BUNDLE_CHOOSE_VOICE);
+
+        setUpViewPager(view, isVoice);
+
         setHasOptionsMenu(true);
         return view;
     }
 
-    private void setUpViewPager(View view) {
+    private void setUpViewPager(View view, boolean isVoice) {
         NavigationTabStrip navigationTabStrip = (NavigationTabStrip) view.findViewById(R.id.tab_strip);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         DashboardViewPagerAdapter myViewPagerAdapter = new DashboardViewPagerAdapter(getChildFragmentManager(), mPhoneNumber);
-        viewPager.setAdapter(myViewPagerAdapter);
-        navigationTabStrip.setViewPager(viewPager, 0);
+        mViewPager.setAdapter(myViewPagerAdapter);
+        navigationTabStrip.setViewPager(mViewPager, 0);
+
+        if (isVoice) {
+            mViewPager.setCurrentItem(1);
+        } else {
+            mViewPager.setCurrentItem(0);
+        }
     }
 }

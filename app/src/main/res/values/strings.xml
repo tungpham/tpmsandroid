@@ -129,7 +129,17 @@
     <string name="incoming_decline">Decline</string>
     <string name="incoming_accept">Accept</string>
 
+    <!-- Delete Fragment Dialog -->
+    <string name="delete_phone_number_dialog_title">Delete</string>
+    <string name="delete_phone_number_dialog_message">Are you sure?</string>
+    <string name="delete_phone_number_dialog_ok">OK</string>
+    <string name="delete_phone_number_dialog_cancel">CANCEL</string>
 
+    <!-- RequirePhoneNumberDialog -->
+    <string name="require_phone_number_dialog_title">Require phone number</string>
+    <string name="require_phone_number_dialog_message">Please choose phone number or buy a phone</string>
+    <string name="require_phone_number_dialog_choose">CHOOSE</string>
+    <string name="require_phone_number_dialog_buy">BUY</string>
 
     <!-- In-call menu item labels -->
     <!-- Regular in-call menu items: -->

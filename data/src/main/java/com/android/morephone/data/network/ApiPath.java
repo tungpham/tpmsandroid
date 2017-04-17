@@ -54,6 +54,9 @@ interface ApiPath {
     @GET("Accounts/{accountsid}/IncomingPhoneNumbers.json")
     Call<IncomingPhoneNumbers> getIncomingPhoneNumbers(@Path("accountsid") String accountsid);
 
+    @DELETE("Accounts/{accountsid}/IncomingPhoneNumbers/{incomingPhoneNumberSid}")
+    Call<Void> deletePhoneNumber(@Path("accountsid") String accountsid, @Path("incomingPhoneNumberSid") String incomingPhoneNumberSid);
+
     /*-----------------------------------------MESSAGE-----------------------------------------*/
 
     @FormUrlEncoded

@@ -1,6 +1,7 @@
 package com.ethan.morephone.presentation.numbers;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,8 +23,10 @@ import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
+import com.ethan.morephone.utils.Injection;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -37,9 +40,11 @@ import java.util.List;
 public class IncomingPhoneNumbersFragment extends BaseFragment implements
         IncomingPhoneNumbersAdapter.OnItemNumberClickListener,
         NavigationView.OnNavigationItemSelectedListener,
-        IncomingPhoneNumbersContract.View {
+        IncomingPhoneNumbersContract.View,
+        DeletePhoneNumberDialog.DeletePhoneNumberListener {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+
 
     public static IncomingPhoneNumbersFragment getInstance() {
         return new IncomingPhoneNumbersFragment();
@@ -54,7 +59,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new IncomingPhoneNumbersPresenter(this);
+        new IncomingPhoneNumbersPresenter(this, Injection.providerUseCaseHandler(), Injection.providerDeleteIncomingPhoneNumber(getContext()));
     }
 
     @Nullable
@@ -64,7 +69,12 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setTitleActionBar(toolbar, "+17606215500");
+        String phoneNumber = MyPreference.getPhoneNumber(getContext());
+//        if (TextUtils.isEmpty(phoneNumber)) {
+//            phoneNumber = "";
+//        }
+
+        baseActivity.setTitleActionBar(toolbar, phoneNumber);
 //
 //        mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -115,38 +125,40 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void onItemClick(int pos) {
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-//        Intent intent = new Intent(getActivity(), DashboardActivity.class);
-//        intent.putExtra(DashboardFragment.BUNDLE_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
         getActivity().setResult(Activity.RESULT_OK);
         getActivity().finish();
-//        startActivity(intent);
     }
 
     @Override
-    public void onItemCall(int pos) {
-//        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-//        Intent intent = new Intent(getActivity(), PhoneActivity.class);
-//        intent.putExtra(PhoneActivity.EXTRA_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
-//        startActivity(intent);
+    public void onItemDelete(int pos) {
+        DeletePhoneNumberDialog deletePhoneNumberDialog = DeletePhoneNumberDialog.getInstance(pos);
+        deletePhoneNumberDialog.show(getChildFragmentManager(), DeletePhoneNumberDialog.class.getSimpleName());
+        deletePhoneNumberDialog.setDeletePhoneNumberListener(this);
+//        getActivity().setResult(Activity.RESULT_OK);
+//        getActivity().finish();
     }
 
     @Override
     public void onItemMessage(int pos) {
-//        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-//        Intent intent = new Intent(getActivity(), ConversationsActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putString(BUNDLE_PHONE_NUMBER, incomingPhoneNumber.phoneNumber);
-//        intent.putExtras(bundle);
-//        startActivity(intent);
+        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
+        MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+
+        Intent intent = new Intent();
+        intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        getActivity().finish();
     }
 
     @Override
     public void onItemVoice(int pos) {
-//        IncomingPhoneNumber numberEntity = mIncomingPhoneNumbersAdapter.getData().get(pos);
-//        Intent intent = new Intent(getActivity(), VoiceActivity.class);
-//        intent.putExtra(VoiceFragment.BUNDLE_PHONE_NUMBER, numberEntity.phoneNumber);
-//        startActivity(intent);
+        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
+        MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+
+        Intent intent = new Intent();
+        intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, true);
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        getActivity().finish();
     }
 
     @Override
@@ -174,5 +186,16 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         mDrawerLayout.closeDrawers();
         return false;
+    }
+
+    @Override
+    public void onDelete(int position) {
+        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(position);
+        mIncomingPhoneNumbersAdapter.getData().remove(incomingPhoneNumber);
+        mIncomingPhoneNumbersAdapter.notifyDataSetChanged();
+        mPresenter.deleteIncomingPhoneNumber(incomingPhoneNumber.sid);
+        if (incomingPhoneNumber.phoneNumber.equals(MyPreference.getPhoneNumber(getContext()))) {
+            MyPreference.setPhoneNumber(getContext(), "");
+        }
     }
 }

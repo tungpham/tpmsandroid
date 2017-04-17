@@ -54,11 +54,11 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
             }
         });
 
-        holder.imageCall.setOnClickListener(new View.OnClickListener() {
+        holder.imageDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mOnItemNumberClickListener != null)
-                    mOnItemNumberClickListener.onItemCall(position);
+                    mOnItemNumberClickListener.onItemDelete(position);
             }
         });
 
@@ -88,7 +88,7 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
     public interface OnItemNumberClickListener {
         void onItemClick(int pos);
 
-        void onItemCall(int pos);
+        void onItemDelete(int pos);
 
         void onItemMessage(int pos);
 

@@ -14,14 +14,14 @@ import com.ethan.morephone.R;
 public class IncomingPhoneNumbersViewHolder extends RecyclerView.ViewHolder {
 
     public TextView textNumber;
-    public ImageView imageCall;
+    public ImageView imageDelete;
     public ImageView imageMessage;
     public ImageView imageVoice;
 
     public IncomingPhoneNumbersViewHolder(View itemView) {
         super(itemView);
         textNumber = (TextView) itemView.findViewById(R.id.text_number);
-        imageCall = (ImageView) itemView.findViewById(R.id.image_call);
+        imageDelete = (ImageView) itemView.findViewById(R.id.image_delete);
         imageMessage = (ImageView) itemView.findViewById(R.id.image_message);
         imageVoice = (ImageView) itemView.findViewById(R.id.image_voice);
     }

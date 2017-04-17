@@ -6,11 +6,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,9 +24,7 @@ import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersActivity;
-import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.utils.ActivityUtils;
-import com.ethan.morephone.widget.NavigationTabStrip;
 import com.twilio.client.Device;
 
 import java.util.ArrayList;
@@ -39,7 +37,8 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements
         SearchView.OnQueryTextListener,
         NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener{
+        View.OnClickListener,
+        RequirePhoneNumberDialog.RequirePhoneNumberListener {
 
     private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
 
@@ -74,16 +73,9 @@ public class MainActivity extends BaseActivity implements
 
         setUpNavigation();
 
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (fragment instanceof IncomingPhoneNumbersFragment) return;
-        DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()));
-        ActivityUtils.replaceFragmentToActivity(
-                getSupportFragmentManager(),
-                numbersFragment,
-                R.id.content_frame,
-                DashboardFrag.class.getSimpleName());
-
         mPhoneNumber = MyPreference.getPhoneNumber(getApplicationContext());
+
+
 //
 //        clientProfile = new ClientProfile(mPhoneNumber, true, true);
 //
@@ -94,13 +86,10 @@ public class MainActivity extends BaseActivity implements
 //        }
     }
 
-    private void setUpViewPager() {
-        NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.tab_strip);
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(myViewPagerAdapter);
-        navigationTabStrip.setViewPager(viewPager, 0);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkRequirePhoneNumber(false);
     }
 
     private void setUpNavigation() {
@@ -354,14 +343,46 @@ public class MainActivity extends BaseActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_INCOMING_PHONE && resultCode == RESULT_OK) {
-            DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()));
+
+            boolean isVoice = false;
+            if (data != null) {
+                isVoice = data.getBooleanExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
+            }
+            checkRequirePhoneNumber(isVoice);
+        }
+    }
+
+    @Override
+    public void onChoosePhone() {
+        startActivity(new Intent(this, IncomingPhoneNumbersActivity.class));
+    }
+
+    @Override
+    public void onBuyPhone() {
+        startActivity(new Intent(this, SearchPhoneNumberActivity.class));
+    }
+
+
+    private void checkRequirePhoneNumber(boolean isVoice) {
+        if (TextUtils.isEmpty(MyPreference.getPhoneNumber(getApplicationContext()))) {
+            RequirePhoneNumberDialog requirePhoneNumberDialog = RequirePhoneNumberDialog.getInstance();
+            requirePhoneNumberDialog.show(getSupportFragmentManager(), RequirePhoneNumberDialog.class.getSimpleName());
+            requirePhoneNumberDialog.setRequirePhoneNumberListener(this);
+            ActivityUtils.replaceFragmentToActivity(
+                    getSupportFragmentManager(),
+                    new Fragment(),
+                    R.id.content_frame,
+                    DashboardFrag.class.getSimpleName());
+        } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+            DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), isVoice);
             ActivityUtils.replaceFragmentToActivity(
                     getSupportFragmentManager(),
                     numbersFragment,
                     R.id.content_frame,
                     DashboardFrag.class.getSimpleName());
-
-            enableActionBar(mToolbar, MyPreference.getPhoneNumber(getApplicationContext()));
         }
+
+        enableActionBar(mToolbar, MyPreference.getPhoneNumber(getApplicationContext()));
     }
 }

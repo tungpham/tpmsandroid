@@ -6,6 +6,10 @@ import android.support.annotation.NonNull;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.network.ApiManager;
+import com.android.morephone.domain.UseCase;
+import com.android.morephone.domain.UseCaseHandler;
+import com.android.morephone.domain.usecase.number.DeleteIncomingPhoneNumber;
+import com.ethan.morephone.Constant;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,9 +22,15 @@ import retrofit2.Response;
 public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContract.Presenter {
 
     private final IncomingPhoneNumbersContract.View mView;
+    private final UseCaseHandler mUseCaseHandler;
+    private final DeleteIncomingPhoneNumber mDeleteIncomingPhoneNumber;
 
-    public IncomingPhoneNumbersPresenter(@NonNull IncomingPhoneNumbersContract.View view) {
+    public IncomingPhoneNumbersPresenter(@NonNull IncomingPhoneNumbersContract.View view,
+                                         @NonNull UseCaseHandler useCaseHandler,
+                                         @NonNull DeleteIncomingPhoneNumber deleteIncomingPhoneNumber) {
         mView = view;
+        mUseCaseHandler = useCaseHandler;
+        mDeleteIncomingPhoneNumber = deleteIncomingPhoneNumber;
 
         mView.setPresenter(this);
     }
@@ -46,6 +56,22 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
             @Override
             public void onFailure(Call<FakeData> call, Throwable t) {
                 mView.showLoading(false);
+            }
+        });
+    }
+
+    @Override
+    public void deleteIncomingPhoneNumber(String incomingPhoneNumberSid) {
+        DeleteIncomingPhoneNumber.RequestValue requestValue = new DeleteIncomingPhoneNumber.RequestValue(Constant.ACCOUNT_SID, incomingPhoneNumberSid);
+        mUseCaseHandler.execute(mDeleteIncomingPhoneNumber, requestValue, new UseCase.UseCaseCallback<DeleteIncomingPhoneNumber.ResponseValue>() {
+            @Override
+            public void onSuccess(DeleteIncomingPhoneNumber.ResponseValue response) {
+
+            }
+
+            @Override
+            public void onError() {
+
             }
         });
     }

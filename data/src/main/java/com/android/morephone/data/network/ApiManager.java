@@ -255,6 +255,21 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    public static void deleteIncomingPhoneNumber(Context context, String accountsid, String incomingPhoneNumberSid) {
+//        Call<Void> call = getApiPath(context).deletePhoneNumber(accountsid, incomingPhoneNumberSid);
+//        call.enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//
+//            }
+//        });
+    }
+
 
     /*-----------------------------------------RECORDINGS-----------------------------------------*/
 
