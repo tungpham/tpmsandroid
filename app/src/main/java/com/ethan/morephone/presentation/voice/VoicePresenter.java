@@ -149,7 +149,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
     }
 
     @Override
-    public void loadRecords(String callSid) {
+    public void loadRecords(String callSid, final int position) {
         GetCallRecords.RequestValue requestValue = new GetCallRecords.RequestValue(Constant.ACCOUNT_SID, callSid);
         mUseCaseHandler.execute(mGetCallRecords, requestValue, new UseCase.UseCaseCallback<GetCallRecords.ResponseValue>() {
             @Override
@@ -162,13 +162,13 @@ public class VoicePresenter implements VoiceContract.Presenter {
                         mView.initializeRecord(Constant.API_ROOT + url);
                     }
                 }else{
-                    mView.emptyRecord();
+                    mView.emptyRecord(position);
                 }
             }
 
             @Override
             public void onError() {
-                mView.emptyRecord();
+                mView.emptyRecord(position);
             }
         });
     }

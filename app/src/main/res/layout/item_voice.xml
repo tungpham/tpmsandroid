@@ -112,7 +112,7 @@
                 android:layout_marginTop="@dimen/activity_main_margin" />
 
             <com.ethan.morephone.widget.MyTextView
-                android:id="@+id/text_call"
+                android:id="@+id/text_item_voice_call"
                 style="@style/TextActionCommon"
                 android:layout_below="@+id/view"
                 android:drawableLeft="@drawable/ic_phone_black_24dp"
@@ -121,10 +121,10 @@
             <View
                 android:id="@+id/view_2"
                 style="@style/DividerAction"
-                android:layout_below="@+id/text_call" />
+                android:layout_below="@+id/text_item_voice_call" />
 
             <com.ethan.morephone.widget.MyTextView
-                android:id="@+id/text_message"
+                android:id="@+id/text_item_voice_message"
                 style="@style/TextActionCommon"
                 android:layout_below="@+id/view_2"
                 android:drawableLeft="@drawable/ic_comment_black_24dp"

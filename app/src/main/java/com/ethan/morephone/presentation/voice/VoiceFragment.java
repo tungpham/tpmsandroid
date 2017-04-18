@@ -193,26 +193,6 @@ public class VoiceFragment extends BaseFragment implements
 
     @Override
     public void initializeRecord(String url) {
-        DebugTool.logD("URL: " + url);
-//        mMediaPlayer = new MediaPlayer();
-//        try {
-//            mMediaPlayer.setDataSource(url);
-//        } catch (IllegalArgumentException e) {
-//            e.printStackTrace();
-//        } catch (IllegalStateException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        mMediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-//
-//            public void onBufferingUpdate(MediaPlayer mp, int percent) {
-////                playSeekBar.setSecondaryProgress(percent);
-//                Log.i("Buffering", "" + percent);
-//            }
-//        });
-
         Handler mHandler = new Handler();
 
         String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:40.0) Gecko/20100101 Firefox/40.0";
@@ -228,14 +208,16 @@ public class VoiceFragment extends BaseFragment implements
         DefaultLoadControl loadControl = new DefaultLoadControl();
         mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
         //exoPlayer.addListener(this);
+//        mExoPlayer.setVoicesViewHolder();
         mExoPlayer.addListener(this);
         mExoPlayer.prepare(mediaSource);
 //        mExoPlayer.setPlayWhenReady(true);
     }
 
     @Override
-    public void emptyRecord() {
-        if(mVoicesViewHolder != null) mVoicesViewHolder.showLoading(false);
+    public void emptyRecord(int position) {
+        VoicesViewHolder holder = getVoicesViewHolder(position);
+        if (holder != null) holder.showLoading(false);
     }
 
     @Override
@@ -244,46 +226,35 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onItemClick(View view, int pos, VoiceItem voiceItem) {
-        if (view.getTag() instanceof VoicesViewHolder) {
-            mVoicesViewHolder = (VoicesViewHolder) view.getTag();
-            mVoicesViewHolder.expandableLayout.toggleExpansion();
-            if (!mVoicesViewHolder.expandableLayout.isExpanded()) {
-                mPresenter.loadRecords(voiceItem.sid);
-                mVoicesViewHolder.showLoading(true);
-            }
+    public void onItemClick(VoicesViewHolder holder, int pos, VoiceItem voiceItem) {
+        holder.expandableLayout.toggleExpansion();
+        if (!holder.expandableLayout.isExpanded()) {
+            mPresenter.loadRecords(voiceItem.sid, pos);
+            holder.showLoading(true);
         }
-//        mPresenter.deleteVoice(mVoicesAdapter.getData().get(pos).sid);
-//        mVoicesAdapter.getData().remove(pos);
-//        mVoicesAdapter.notifyDataSetChanged();
+        mVoicesViewHolder = holder;
     }
 
     @Override
-    public void onPauseRecord() {
-//        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-//            mMediaPlayer.pause();
-//        } else {
-//            playVoice();
-//        }
-
+    public void onPauseRecord(VoicesViewHolder holder) {
         if (mExoPlayer != null) {
             if (mExoPlayer.getPlayWhenReady()) {
                 mExoPlayer.setPlayWhenReady(false);
-                mVoicesViewHolder.uiPlay();
+                holder.uiPlay();
             } else {
                 mExoPlayer.setPlayWhenReady(true);
-                mVoicesViewHolder.uiPause();
+                holder.uiPause();
             }
         }
     }
 
     @Override
-    public void onVolumeRecord() {
+    public void onVolumeRecord(VoicesViewHolder holder) {
 
     }
 
     @Override
-    public void onDeleteRecord() {
+    public void onDeleteRecord(VoicesViewHolder holder) {
 
     }
 
@@ -329,7 +300,6 @@ public class VoiceFragment extends BaseFragment implements
 
     @Override
     public void onLoadingChanged(boolean isLoading) {
-        DebugTool.logD("isLoading: " + isLoading);
         if (!isLoading && mVoicesViewHolder != null) {
             mVoicesViewHolder.visiblePlayerControl(true);
             mVoicesViewHolder.showLoading(false);
@@ -349,5 +319,9 @@ public class VoiceFragment extends BaseFragment implements
     @Override
     public void onPositionDiscontinuity() {
 
+    }
+
+    private VoicesViewHolder getVoicesViewHolder(int pos) {
+        return (VoicesViewHolder) mRecyclerView.findViewHolderForLayoutPosition(pos);
     }
 }

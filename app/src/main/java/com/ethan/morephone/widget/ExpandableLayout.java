@@ -16,13 +16,15 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
+import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
 
 /**
  * Created by Ethan on 3/21/17.
  */
 
-public class ExpandableLayout extends LinearLayout {
+public class ExpandableLayout extends LinearLayout implements VoicesAdapter.OnOtherExpandListener {
     private int mWidthMeasureSpec;
     private int mHeightMeasureSpec;
     private boolean mAttachedToWindow;
@@ -30,6 +32,8 @@ public class ExpandableLayout extends LinearLayout {
     private boolean mInLayout;
     private ObjectAnimator mExpandAnimator;
     private OnExpandListener mListener;
+    private int mPosition;
+    private VoicesAdapter mAdater;
 
     public ExpandableLayout(Context context) {
         super(context);
@@ -126,6 +130,19 @@ public class ExpandableLayout extends LinearLayout {
         if (!mInLayout) {
             super.requestLayout();
         }
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
+    }
+
+    public int getPosition() {
+        return mPosition;
+    }
+
+    public void setAdapter(VoicesAdapter adapter) {
+        mAdater = adapter;
+        mAdater.setOnOtherExpandListener(this);
     }
 
     public View findExpandableView() {
@@ -393,6 +410,15 @@ public class ExpandableLayout extends LinearLayout {
                 setExpanded(true);
             }
         }
+    }
+
+    @Override
+    public void onOtherExpand(boolean isExpanding, int position) {
+        if (mPosition == position && isExpanding && this.isExpanded()) {
+            setExpanded(false);
+            DebugTool.logD("CLOSE");
+        }
+        DebugTool.logD("POS: " + position + " IS : " + isExpanding);
     }
 
     private static class SavedState extends BaseSavedState {

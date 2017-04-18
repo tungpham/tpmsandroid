@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.ethan.morephone.R;
 import com.ethan.morephone.widget.ExpandableLayout;
 import com.ethan.morephone.widget.progress.DotProgressBar;
+import com.google.android.exoplayer2.ExoPlayer;
 
 /**
  * Created by Ethan on 2/16/17.
@@ -29,6 +30,10 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
     public AppCompatSeekBar seekBar;
     public DotProgressBar dotProgressBar;
     public ImageView imageStatus;
+    public TextView textCall;
+    public TextView textMessage;
+
+    public ExoPlayer exoPlayer;
 
     public VoicesViewHolder(View itemView) {
         super(itemView);

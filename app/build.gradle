@@ -28,6 +28,7 @@ android {
         versionCode globalConfiguration.getAt("androidVersionCode")
         versionName globalConfiguration.getAt("androidVersionName")
     }
+
     buildTypes {
         debug {
             signingConfig signingConfigs.debug

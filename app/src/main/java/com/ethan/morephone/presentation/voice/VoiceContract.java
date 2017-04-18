@@ -20,7 +20,7 @@ public interface VoiceContract {
 
         void initializeRecord(String url);
 
-        void emptyRecord();
+        void emptyRecord(int position);
     }
 
     interface Presenter extends BasePresenter {
@@ -33,7 +33,7 @@ public interface VoiceContract {
 
         void deleteVoice(String callSid);
 
-        void loadRecords(String callSid);
+        void loadRecords(String callSid, int position);
 
         void clearData();
 

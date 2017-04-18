@@ -374,7 +374,7 @@ public class MainActivity extends BaseActivity implements
                     R.id.content_frame,
                     DashboardFrag.class.getSimpleName());
         } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+//            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
             DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), isVoice);
             ActivityUtils.replaceFragmentToActivity(
                     getSupportFragmentManager(),

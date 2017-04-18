@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.ExpandableLayout;
@@ -26,6 +27,7 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
     private TextDrawable.IBuilder mDrawableBuilder;
     private Context mContext;
     private String mPhoneNumber;
+    private OnOtherExpandListener mOnOtherExpandListener;
 
     private RecyclerView mRecyclerView;
 
@@ -74,28 +76,34 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         holder.expandableLayout.setExpanded(false, false);
         holder.expandableLayout.setTag(holder);
         holder.expandableLayout.setOnExpandListener(mOnExpandListener);
+        holder.expandableLayout.setPosition(position);
+        holder.expandableLayout.setAdapter(this);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onItemClick(holder.expandableLayout, position, callEntity);
+                mOnItemVoiceClickListener.onItemClick(holder, position, callEntity);
             }
         });
 
         holder.imagePause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onPauseRecord();
+                mOnItemVoiceClickListener.onPauseRecord(holder);
             }
         });
 
         holder.imageDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onDeleteRecord();
+                mOnItemVoiceClickListener.onDeleteRecord(holder);
             }
         });
 
+    }
+
+    public void setOnOtherExpandListener(OnOtherExpandListener onOtherExpandListener){
+        mOnOtherExpandListener = onOtherExpandListener;
     }
 
     @Override
@@ -111,6 +119,14 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         @Override
         public void onToggle(ExpandableLayout view, View child,
                              boolean isExpanded) {
+            DebugTool.logD("bol: " + isExpanded);
+            if (view.getTag() instanceof VoicesViewHolder) {
+                final VoicesViewHolder holder = (VoicesViewHolder) view.getTag();
+                if(mOnOtherExpandListener != null) {
+                    mOnOtherExpandListener.onOtherExpand(isExpanded, holder.getAdapterPosition());
+                }
+            }
+
         }
 
         @Override
@@ -135,12 +151,16 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
     };
 
     public interface OnItemVoiceClickListener {
-        void onItemClick(View view, int pos, VoiceItem voiceItem);
+        void onItemClick(VoicesViewHolder holder, int pos, VoiceItem voiceItem);
 
-        void onPauseRecord();
+        void onPauseRecord(VoicesViewHolder holder);
 
-        void onVolumeRecord();
+        void onVolumeRecord(VoicesViewHolder holder);
 
-        void onDeleteRecord();
+        void onDeleteRecord(VoicesViewHolder holder);
+    }
+
+    public interface OnOtherExpandListener {
+        void onOtherExpand(boolean isExpanding, int position);
     }
 }
