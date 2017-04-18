@@ -24,7 +24,7 @@ public class PhoneViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return DialFragment.getInstance(mPhoneNumber);
+                return DialFragment.getInstance(mPhoneNumber, "");
             case 1:
 
                 return CallLogFragment.getInstance(mPhoneNumber);

@@ -56,12 +56,6 @@ public class InCallActivity extends BaseActivity implements
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
     public static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
 
-    public static InCallFragment getInstance(Bundle bundle) {
-        InCallFragment fragment = new InCallFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
 
     private final int MIC_PERMISSION_REQUEST_CODE = 11;
@@ -80,6 +74,7 @@ public class InCallActivity extends BaseActivity implements
     private ClientProfile clientProfile;
 
     private String mPhoneNumber;
+    private String mToPhoneNumber;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +84,7 @@ public class InCallActivity extends BaseActivity implements
         setContentView(R.layout.activity_fragment);
 
         mPhoneNumber = getIntent().getStringExtra(DashboardFrag.BUNDLE_PHONE_NUMBER);
+        mToPhoneNumber = getIntent().getStringExtra(BUNDLE_TO_PHONE_NUMBER);
         showDialFragment();
 //        showInCallFragment();
 
@@ -503,7 +499,7 @@ public class InCallActivity extends BaseActivity implements
     private void showDialFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof DialFragment) return;
-        DialFragment dialFragment = DialFragment.getInstance(mPhoneNumber);
+        DialFragment dialFragment = DialFragment.getInstance(mPhoneNumber, mToPhoneNumber);
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 dialFragment,

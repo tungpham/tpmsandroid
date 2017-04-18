@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,6 +57,8 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
     private DrawerLayout mDrawerLayout;
 
+    private boolean mIsDelete;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +98,22 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         mPresenter.loadIncomingPhoneNumbers(getContext());
         setHasOptionsMenu(true);
 
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        if(mIsDelete){
+                            getActivity().setResult(Activity.RESULT_OK);
+                        }
+                        getActivity().finish();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         return view;
     }
 
@@ -113,6 +132,9 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         switch (item.getItemId()) {
 
             case android.R.id.home:
+                if(mIsDelete){
+                    getActivity().setResult(Activity.RESULT_OK);
+                }
                 getActivity().finish();
                 break;
 
@@ -196,6 +218,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         mPresenter.deleteIncomingPhoneNumber(incomingPhoneNumber.sid);
         if (incomingPhoneNumber.phoneNumber.equals(MyPreference.getPhoneNumber(getContext()))) {
             MyPreference.setPhoneNumber(getContext(), "");
+            mIsDelete = true;
         }
     }
 }

@@ -23,6 +23,8 @@ import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.message.compose.ComposeActivity;
+import com.ethan.morephone.presentation.message.compose.ComposeFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.phone.incall.InCallActivity;
 import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
@@ -256,6 +258,36 @@ public class VoiceFragment extends BaseFragment implements
     @Override
     public void onDeleteRecord(VoicesViewHolder holder) {
 
+    }
+
+    @Override
+    public void onCall(VoiceItem voiceItem) {
+        Intent intent = new Intent(getActivity(), InCallActivity.class);
+        Bundle bundle = new Bundle();
+        String phoneNumber;
+        if (voiceItem.from.equals(mPhoneNumber)) {
+            phoneNumber = voiceItem.to;
+        } else {
+            phoneNumber = voiceItem.from;
+        }
+        bundle.putString(InCallActivity.BUNDLE_TO_PHONE_NUMBER, phoneNumber);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onMessage(VoiceItem voiceItem) {
+        Intent intent = new Intent(getActivity(), ComposeActivity.class);
+        Bundle bundle = new Bundle();
+        String phoneNumber;
+        if (voiceItem.from.equals(mPhoneNumber)) {
+            phoneNumber = voiceItem.to;
+        } else {
+            phoneNumber = voiceItem.from;
+        }
+        bundle.putString(ComposeFragment.BUNDLE_TO_PHONE_NUMBER, phoneNumber);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

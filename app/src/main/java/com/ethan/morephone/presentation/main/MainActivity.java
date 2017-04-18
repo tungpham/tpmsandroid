@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity implements
         setUpNavigation();
 
         mPhoneNumber = MyPreference.getPhoneNumber(getApplicationContext());
-
+        checkRequirePhoneNumber(false);
 
 //
 //        clientProfile = new ClientProfile(mPhoneNumber, true, true);
@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        checkRequirePhoneNumber(false);
+//        checkRequirePhoneNumber(false);
     }
 
     private void setUpNavigation() {

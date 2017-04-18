@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -37,11 +38,13 @@ public class DialFragment extends BaseFragment implements
         DialpadImageButton.OnPressedListener {
 
     private static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+    private static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
 
-    public static DialFragment getInstance(String phoneNumber) {
+    public static DialFragment getInstance(String phoneNumber, String toPhoneNumber) {
         DialFragment dialFragment = new DialFragment();
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
+        bundle.putString(BUNDLE_TO_PHONE_NUMBER, toPhoneNumber);
         dialFragment.setArguments(bundle);
         return dialFragment;
     }
@@ -67,6 +70,7 @@ public class DialFragment extends BaseFragment implements
 //    private final HapticFeedback mHaptic = new HapticFeedback();
 
     private String mPhoneNumber;
+    private String mToPhoneNumber;
 
     private DialFragmentListener mDialFragmentListener;
 
@@ -76,6 +80,7 @@ public class DialFragment extends BaseFragment implements
         View view = inflater.inflate(R.layout.dialpad_fragment, container, false);
 
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
+        mToPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
 
         mEditTextDigits = (EditText) view.findViewById(R.id.digits);
         mEditTextDigits.setKeyListener(UnicodeDialerKeyListener.INSTANCE);
@@ -83,6 +88,10 @@ public class DialFragment extends BaseFragment implements
         mEditTextDigits.setOnKeyListener(this);
         mEditTextDigits.setOnLongClickListener(this);
         mEditTextDigits.addTextChangedListener(this);
+
+        if(!TextUtils.isEmpty(mToPhoneNumber)){
+            mEditTextDigits.setText(mToPhoneNumber);
+        }
 
         mDialpad = view.findViewById(R.id.dialpad);  // This is null in landscape mode.
 

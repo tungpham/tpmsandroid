@@ -70,7 +70,8 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity android:name=".presentation.phone.CallActivity" />
-        <activity android:name=".presentation.phone.incall.InCallActivity" />
+        <activity android:name=".presentation.phone.incall.InCallActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".presentation.phone.callingscreen.CallingScreenActivity" />
 
         <activity

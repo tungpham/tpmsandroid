@@ -31,6 +31,7 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
 
     private RecyclerView mRecyclerView;
 
+
     public VoicesAdapter(Context context, String phoneNumber, List<VoiceItem> conversationEntities, OnItemVoiceClickListener onItemConversationClickListener) {
         mContext = context;
         mPhoneNumber = phoneNumber;
@@ -78,6 +79,20 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         holder.expandableLayout.setOnExpandListener(mOnExpandListener);
         holder.expandableLayout.setPosition(position);
         holder.expandableLayout.setAdapter(this);
+
+        holder.textCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemVoiceClickListener.onCall(callEntity);
+            }
+        });
+
+        holder.textMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemVoiceClickListener.onMessage(callEntity);
+            }
+        });
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,6 +173,10 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         void onVolumeRecord(VoicesViewHolder holder);
 
         void onDeleteRecord(VoicesViewHolder holder);
+
+        void onCall(VoiceItem voiceItem);
+
+        void onMessage(VoiceItem voiceItem);
     }
 
     public interface OnOtherExpandListener {

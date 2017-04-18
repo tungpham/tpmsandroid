@@ -28,7 +28,7 @@ public class DialActivity extends BaseActivity implements KeyboardView.OnKeyboar
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        DialFragment browserFragment = DialFragment.getInstance("");
+        DialFragment browserFragment = DialFragment.getInstance("", "");
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 browserFragment,

@@ -28,6 +28,7 @@ import com.ethan.morephone.widget.AutoCompleteContactView;
 public class ComposeFragment extends BaseFragment implements View.OnClickListener, ComposeContract.View {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+    public static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
 
     public static ComposeFragment getInstance(Bundle bundle) {
         ComposeFragment composeFragment = new ComposeFragment();
@@ -40,6 +41,7 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
 
     private ComposeContract.Presenter mPresenter;
     private String mPhoneNumber;
+    private String mToPhoneNumber;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,13 +55,21 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_message_compose, container, false);
 
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
+        mToPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();
         baseActivity.setTitleActionBar(toolbar, getString(R.string.message_compose_label));
 
         mRecipients = (AutoCompleteContactView) view.findViewById(R.id.auto_complete_recipient);
+
+        if(!TextUtils.isEmpty(mToPhoneNumber)){
+            mRecipients.setText(mToPhoneNumber);
+        }
+
         mEditTextBody = (AppCompatEditText) view.findViewById(R.id.edit_text_msg);
+
+
         view.findViewById(R.id.image_send).setOnClickListener(this);
 
         setHasOptionsMenu(true);
