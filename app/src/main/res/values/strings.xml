@@ -115,6 +115,9 @@
 
     <string name="action_bar_title_dial_label">Dialing from</string>
 
+    <!-- Activity Dashboard -->
+    <string name="dashboard_label">Dashboard</string>
+
     <!-- Fragment Buy a number -->
     <string name="buy_number_label">Buy a number</string>
     <string name="buy_number_country">Country</string>
