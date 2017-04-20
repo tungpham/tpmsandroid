@@ -1,6 +1,7 @@
 package com.ethan.morephone.presentation.main;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +57,7 @@ public class MainActivity extends BaseActivity implements
     private Toolbar mToolbar;
 
     private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
 
 
     @Override
@@ -66,15 +69,16 @@ public class MainActivity extends BaseActivity implements
         enableActionBar(mToolbar, MyPreference.getPhoneNumber(getApplicationContext()));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        mDrawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
 
         setUpNavigation();
 
         mPhoneNumber = MyPreference.getPhoneNumber(getApplicationContext());
         checkRequirePhoneNumber(false);
+
 
 //
 //        clientProfile = new ClientProfile(mPhoneNumber, true, true);
@@ -85,6 +89,20 @@ public class MainActivity extends BaseActivity implements
 //            initializeTwilioClientSDK();
 //        }
     }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
 
     @Override
     protected void onResume() {
@@ -303,6 +321,20 @@ public class MainActivity extends BaseActivity implements
 //                        return true; // Return true to expand action view
 //                    }
 //                });
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+                break;
+
+            default:
+                break;
+        }
         return true;
     }
 

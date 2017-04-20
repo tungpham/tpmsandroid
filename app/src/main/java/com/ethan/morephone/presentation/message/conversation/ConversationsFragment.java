@@ -5,17 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -24,7 +19,6 @@ import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.model.ConversationModel;
-import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.ConversationListAdapter;
@@ -66,7 +60,7 @@ public class ConversationsFragment extends BaseFragment implements
 
     private ConversationsContract.Presenter mPresenter;
 
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
     private MultiSwipeRefreshLayout mSwipeRefreshLayout;
 
     private String mPhoneNumber;
@@ -88,11 +82,11 @@ public class ConversationsFragment extends BaseFragment implements
 
         mPhoneNumber = getArguments().getString(IncomingPhoneNumbersFragment.BUNDLE_PHONE_NUMBER);
 
-        mToolbar = (Toolbar) view.findViewById(R.id.tool_bar);
-        BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setTitleActionBar(mToolbar, mPhoneNumber);
-        baseActivity.setSubTitleActionBar(mToolbar, getString(R.string.action_bar_title_conversation_label), mPhoneNumber);
-        mToolbar.setVisibility(View.GONE);
+//        mToolbar = (Toolbar) view.findViewById(R.id.tool_bar);
+//        BaseActivity baseActivity = (BaseActivity) getActivity();
+//        baseActivity.setTitleActionBar(mToolbar, mPhoneNumber);
+//        baseActivity.setSubTitleActionBar(mToolbar, getString(R.string.action_bar_title_conversation_label), mPhoneNumber);
+//        mToolbar.setVisibility(View.GONE);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -127,7 +121,7 @@ public class ConversationsFragment extends BaseFragment implements
             });
         }
 
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
 
         loadData();
 
@@ -144,44 +138,44 @@ public class ConversationsFragment extends BaseFragment implements
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//
+//            case android.R.id.home:
+//                getActivity().finish();
+//                break;
+//
+//            default:
+//                break;
+//        }
+//        return true;
+//    }
 
-            case android.R.id.home:
-                getActivity().finish();
-                break;
-
-            default:
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_conversation, menu);
-
-        final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-        searchView.setOnQueryTextListener(this);
-
-        MenuItemCompat.setOnActionExpandListener(item,
-                new MenuItemCompat.OnActionExpandListener() {
-                    @Override
-                    public boolean onMenuItemActionCollapse(MenuItem item) {
-                        // Do something when collapsed
-//                        mConversationListAdapter.setFilter(mConversationEntities);
-                        return true; // Return true to collapse action view
-                    }
-
-                    @Override
-                    public boolean onMenuItemActionExpand(MenuItem item) {
-                        // Do something when expanded
-                        return true; // Return true to expand action view
-                    }
-                });
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.menu_conversation, menu);
+//
+//        final MenuItem item = menu.findItem(R.id.action_search);
+//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+//        searchView.setOnQueryTextListener(this);
+//
+//        MenuItemCompat.setOnActionExpandListener(item,
+//                new MenuItemCompat.OnActionExpandListener() {
+//                    @Override
+//                    public boolean onMenuItemActionCollapse(MenuItem item) {
+//                        // Do something when collapsed
+////                        mConversationListAdapter.setFilter(mConversationEntities);
+//                        return true; // Return true to collapse action view
+//                    }
+//
+//                    @Override
+//                    public boolean onMenuItemActionExpand(MenuItem item) {
+//                        // Do something when expanded
+//                        return true; // Return true to expand action view
+//                    }
+//                });
+//    }
 
     @Override
     public boolean onQueryTextChange(String newText) {

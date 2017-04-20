@@ -10,9 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -21,7 +19,6 @@ import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.message.compose.ComposeFragment;
@@ -112,11 +109,6 @@ public class VoiceFragment extends BaseFragment implements
 
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
-        BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setSubTitleActionBar(toolbar, getString(R.string.action_bar_title_voice_label), mPhoneNumber);
-        toolbar.setVisibility(View.GONE);
-
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
@@ -153,24 +145,24 @@ public class VoiceFragment extends BaseFragment implements
 
         loadData();
 
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
 
         return view;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                getActivity().finish();
-                break;
-
-            default:
-                break;
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//
+//            case android.R.id.home:
+//                getActivity().finish();
+//                break;
+//
+//            default:
+//                break;
+//        }
+//        return true;
+//    }
 
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {

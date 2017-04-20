@@ -45,7 +45,6 @@ public class DashboardFrag extends BaseFragment {
 
         setUpViewPager(view, isVoice);
 
-        setHasOptionsMenu(true);
         return view;
     }
 

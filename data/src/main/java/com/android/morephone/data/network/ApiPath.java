@@ -89,6 +89,8 @@ interface ApiPath {
     @GET("Accounts/{accountsid}/Calls/{callsid}/Recordings.json")
     Call<RecordListResourceResponse> getRecordListResource(@Path("accountsid") String accountSid, @Path("callsid") String callSid);
 
+    @DELETE("Accounts/{accountsid}/Recordings/{recordingsid}.json")
+    Call<Void> deleteRecord(@Path("accountsid") String accountSid, @Path("recordingsid") String recordingSid);
 
     /*-----------------------------------------VOICE-----------------------------------------*/
     @FormUrlEncoded
@@ -114,6 +116,8 @@ interface ApiPath {
 
     @DELETE("Accounts/{accountsid}/Calls/{callsid}.json")
     Call<Void> deleteVoice(@Path("accountsid") String accountsid, @Path("callsid") String callsid);
+
+
 
     @GET("Accounts/{accountsid}/Calls{callsid}/Recordings/{recordingsid}.json")
     Call<RecordItem> getRecoding(@Path("accountsid") String accountsid,

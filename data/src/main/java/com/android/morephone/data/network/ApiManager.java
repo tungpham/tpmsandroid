@@ -62,8 +62,8 @@ public class ApiManager {
                             .authenticator(new Authenticator() {
                                 @Override
                                 public Request authenticate(Route route, Response response) throws IOException {
-                                    System.out.println("Authenticating for response: " + response);
-                                    System.out.println("Challenges: " + response.challenges());
+//                                    System.out.println("Authenticating for response: " + response);
+//                                    System.out.println("Challenges: " + response.challenges());
                                     String credential = Credentials.basic("ACebd7d3a78e2fdda9e51239bad6b09f97", "8d2af0937ed2a581dbb19f70dd1dd43b");
                                     return response.request().newBuilder()
                                             .header("Authorization", credential)
