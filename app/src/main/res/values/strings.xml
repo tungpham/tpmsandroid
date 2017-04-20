@@ -121,6 +121,12 @@
     <!-- Activity My Number -->
     <string name="my_number_label">My Numbers</string>
 
+    <!-- Activity Usage -->
+    <string name="usage_label">Usage</string>
+
+    <!-- Activity Setting -->
+    <string name="setting_label">Setting</string>
+
     <!-- Fragment setting -->
     <string name="setting_version">Version\u0020</string>
     <string name="setting_friendly_name">Friendly name</string>

@@ -8,9 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <include layout="@layout/tool_bar" />
+
         <com.ethan.morephone.widget.MyTextView
             android:id="@+id/text_setting_title"
             style="@style/TextDisplay"
+            android:layout_below="@+id/tool_bar"
             android:layout_marginTop="?attr/actionBarSize"
             android:text="@string/app_name" />
 
@@ -45,8 +48,8 @@
                 style="@style/ViewCommon"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_setting_friendly_name"
-                android:text="Phone 1"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="4dp"
+                android:text="Phone 1" />
         </RelativeLayout>
 
         <View
@@ -70,8 +73,8 @@
                 style="@style/ViewCommon"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_setting_folder"
-                android:text="SMS"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="4dp"
+                android:text="SMS" />
         </RelativeLayout>
 
         <View
