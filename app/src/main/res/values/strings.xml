@@ -118,6 +118,17 @@
     <!-- Activity Dashboard -->
     <string name="dashboard_label">Dashboard</string>
 
+    <!-- Activity My Number -->
+    <string name="my_number_label">My Numbers</string>
+
+    <!-- Fragment setting -->
+    <string name="setting_version">Version\u0020</string>
+    <string name="setting_friendly_name">Friendly name</string>
+    <string name="setting_configure_sms_forwarding">Configure SMS Forwarding</string>
+
+    <!-- Fragment License -->
+    <string name="license_label">License</string>
+
     <!-- Fragment Buy a number -->
     <string name="buy_number_label">Buy a number</string>
     <string name="buy_number_country">Country</string>
@@ -143,6 +154,13 @@
     <string name="require_phone_number_dialog_message">Please choose phone number or buy a phone</string>
     <string name="require_phone_number_dialog_choose">CHOOSE</string>
     <string name="require_phone_number_dialog_buy">BUY</string>
+
+    <string name="title_dialog_rate">Review</string>
+    <string name="msg_dialog_rate">RATE NOW</string>
+    <string name="title_rate_like">You really seem to like this app, since you have already used it %1$d times! It would be great if you took a moment to rate it in the Play Store. Thank you!.</string>
+    <string name="title_rate_now">Your review from you help us a lots to improve this app in the future. Hope that you have a relax time. Thank you!.</string>
+    <string name="btn_rate_now">RATE NOW</string>
+    <string name="btn_not_now">NOT NOW</string>
 
     <!-- In-call menu item labels -->
     <!-- Regular in-call menu items: -->
@@ -186,7 +204,6 @@
     <string name="menu_ignore">Ignore</string>
     <!-- In-call screen: Button label on "Manage conference" panel -->
     <string name="caller_manage_manage_done_text">Back to call</string>
-
 
 
     <!-- The name of the Voice Dialer application. -->

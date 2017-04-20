@@ -72,12 +72,11 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();
-        String phoneNumber = MyPreference.getPhoneNumber(getContext());
 //        if (TextUtils.isEmpty(phoneNumber)) {
 //            phoneNumber = "";
 //        }
 
-        baseActivity.setTitleActionBar(toolbar, phoneNumber);
+        baseActivity.enableActionBar(toolbar, getString(R.string.my_number_label));
 //
 //        mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

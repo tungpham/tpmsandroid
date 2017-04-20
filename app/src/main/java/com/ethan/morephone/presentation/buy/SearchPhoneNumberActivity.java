@@ -22,7 +22,7 @@ public class SearchPhoneNumberActivity extends BaseActivity {
         setContentView(R.layout.activity_buy_number);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setTitleActionBar(mToolbar, getString(R.string.buy_number_label));
+        enableActionBar(mToolbar, getString(R.string.buy_number_label));
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof SearchPhoneNumberFragment) return;

@@ -18,6 +18,10 @@ public class MyPreference {
 
     private static final String PROPERTY_INBOX = "PROPERTY_INBOX";
 
+    private static final String PROPERTY_NOT_NOW = "PROPERTY_NOT_NOW";
+    private static final String PROPERTY_RATE_NOW = "PROPERTY_RATE_NOW";
+    private static final String PROPERTY_TIMES_USE = "PROPERTY_TIMES_USE";
+
     private static final String APP_PREF = "MorePhone";
 
     private static SharedPreferences getSharedPreferences(Context context) {
@@ -82,5 +86,35 @@ public class MyPreference {
     public static void setInbox(Context context, boolean isInbox){
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putBoolean(PROPERTY_INBOX, isInbox).commit();
+    }
+
+    public static boolean getNotNow(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(PROPERTY_NOT_NOW, false);
+    }
+
+    public static void setPrefNotNow(Context context, Boolean notNow) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putBoolean(PROPERTY_NOT_NOW, notNow).commit();
+    }
+
+    public static boolean getRateNow(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(PROPERTY_RATE_NOW, false);
+    }
+
+    public static void setPrefRateNow(Context context, Boolean rateNow) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putBoolean(PROPERTY_RATE_NOW, rateNow).commit();
+    }
+
+    public static long getTimesUse(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getLong(PROPERTY_TIMES_USE, 0);
+    }
+
+    public static void setTimesUse(Context context, long timesUse){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putLong(PROPERTY_TIMES_USE, timesUse).commit();
     }
 }

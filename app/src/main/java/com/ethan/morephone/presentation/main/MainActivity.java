@@ -24,8 +24,12 @@ import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
+import com.ethan.morephone.presentation.license.LicenseActivity;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersActivity;
+import com.ethan.morephone.presentation.review.AlertReviewDialog;
+import com.ethan.morephone.presentation.setting.SettingActivity;
+import com.ethan.morephone.presentation.usage.UsageActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 import com.twilio.client.Device;
 
@@ -88,6 +92,8 @@ public class MainActivity extends BaseActivity implements
 //        } else {
 //            initializeTwilioClientSDK();
 //        }
+
+        MyPreference.setTimesUse(getApplicationContext(), MyPreference.getTimesUse(getApplicationContext()) + 1);
     }
 
     @Override
@@ -291,6 +297,25 @@ public class MainActivity extends BaseActivity implements
                 break;
             case R.id.nav_buy_number:
                 startActivity(new Intent(this, SearchPhoneNumberActivity.class));
+                break;
+            case R.id.nav_setting:
+                startActivity(new Intent(this, SettingActivity.class));
+                break;
+            case R.id.nav_license:
+                startActivity(new Intent(this, LicenseActivity.class));
+                break;
+            case R.id.nav_share:
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Share more get nothing!");
+                startActivity(Intent.createChooser(sharingIntent, "More phone more girl!"));
+                break;
+            case R.id.nav_review:
+                AlertReviewDialog alertReviewDialog = AlertReviewDialog.getInstance();
+                alertReviewDialog.show(getSupportFragmentManager(), AlertReviewDialog.class.getSimpleName());
+                break;
+            case R.id.nav_usage:
+                startActivity(new Intent(this, UsageActivity.class));
                 break;
             default:
                 break;
