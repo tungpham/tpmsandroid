@@ -220,6 +220,7 @@ public class InCallActivity extends BaseActivity implements
                     @Override
                     public void run() {
 //                        resetUI();
+                        showDialFragment();
                     }
                 });
             }
