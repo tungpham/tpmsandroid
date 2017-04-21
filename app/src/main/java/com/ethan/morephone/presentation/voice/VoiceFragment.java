@@ -10,12 +10,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.FakeData;
+import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
@@ -26,13 +28,15 @@ import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpac
 import com.ethan.morephone.presentation.phone.incall.InCallActivity;
 import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
 import com.ethan.morephone.presentation.voice.adapter.VoicesViewHolder;
+import com.ethan.morephone.presentation.voice.dialog.AlertDeleteRecordDialog;
+import com.ethan.morephone.presentation.voice.player.MyExoPlayer;
+import com.ethan.morephone.presentation.voice.player.MyExoPlayerFactory;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.mp3.Mp3Extractor;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -49,8 +53,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -61,9 +70,14 @@ public class VoiceFragment extends BaseFragment implements
         VoiceContract.View,
         VoicesAdapter.OnItemVoiceClickListener,
         View.OnClickListener,
-        ExoPlayer.EventListener {
+        ExoPlayer.EventListener,
+        AlertDeleteRecordDialog.AlertDeleteRecordListener {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+
+    private static final long PROGRESS_UPDATE_INTERNAL = 10;
+    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 10;
+    private static final int PROGRESS_MAX = 1000;
 
     public static VoiceFragment getInstance(String phoneNumber) {
         VoiceFragment voiceFragment = new VoiceFragment();
@@ -85,8 +99,15 @@ public class VoiceFragment extends BaseFragment implements
 
     private MediaPlayer mMediaPlayer;
 
-    private ExoPlayer mExoPlayer;
+    private RecordItem mRecordItem;
+
+    private MyExoPlayer mExoPlayer;
     private VoicesViewHolder mVoicesViewHolder;
+
+    private final Handler mHandler = new Handler();
+    private MyRunnable mRunnableUpdateProgress;
+    private ScheduledExecutorService mExecutorService;
+    private ScheduledFuture<?> mScheduleFuture;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,7 +120,10 @@ public class VoiceFragment extends BaseFragment implements
                 Injection.providerGetVoicesOutgoing(getContext()),
                 Injection.providerDeleteVoice(getContext()),
                 Injection.providerCreateVoice(getContext()),
-                Injection.providerGetCallRecords(getContext()));
+                Injection.providerGetCallRecords(getContext()),
+                Injection.providerDeleteCallRecord(getContext()));
+
+        mExecutorService = Executors.newSingleThreadScheduledExecutor();
     }
 
     @Nullable
@@ -186,8 +210,8 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void initializeRecord(String url) {
-        Handler mHandler = new Handler();
+    public void initializeRecord(RecordItem recordItem, String url) {
+        mRecordItem = recordItem;
 
         String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:40.0) Gecko/20100101 Firefox/40.0";
         Uri uri = Uri.parse(url);
@@ -200,11 +224,12 @@ public class VoiceFragment extends BaseFragment implements
                 mHandler, null);
         TrackSelector trackSelector = new DefaultTrackSelector();
         DefaultLoadControl loadControl = new DefaultLoadControl();
-        mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+        mExoPlayer = MyExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
         //exoPlayer.addListener(this);
 //        mExoPlayer.setVoicesViewHolder();
         mExoPlayer.addListener(this);
         mExoPlayer.prepare(mediaSource);
+        mRunnableUpdateProgress = new MyRunnable(this);
 //        mExoPlayer.setPlayWhenReady(true);
     }
 
@@ -239,17 +264,30 @@ public class VoiceFragment extends BaseFragment implements
                 mExoPlayer.setPlayWhenReady(true);
                 holder.uiPause();
             }
+
+            mRunnableUpdateProgress.setVoicesViewHolder(holder);
+            scheduleDonutProgressUpdate();
         }
     }
 
     @Override
     public void onVolumeRecord(VoicesViewHolder holder) {
-
+        if (mExoPlayer != null) {
+            if (mExoPlayer.getVolume() == 0f) {
+                mExoPlayer.setVolume(1f);
+                holder.mute(false);
+            } else {
+                mExoPlayer.setVolume(0f);
+                holder.mute(true);
+            }
+        }
     }
 
     @Override
     public void onDeleteRecord(VoicesViewHolder holder) {
-
+        AlertDeleteRecordDialog recordDialog = AlertDeleteRecordDialog.getInstance(mRecordItem.callSid, mRecordItem.sid);
+        recordDialog.show(getChildFragmentManager(), AlertDeleteRecordDialog.class.getSimpleName());
+        recordDialog.setAlertDeleteRecordListener(this);
     }
 
     @Override
@@ -342,7 +380,83 @@ public class VoiceFragment extends BaseFragment implements
 
     @Override
     public void onPositionDiscontinuity() {
+        DebugTool.logD("onPositionDiscontinuity");
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopDonutProgressUpdate();
+    }
+
+    @Override
+    public void onDelete(String callSid, String recordSid) {
+        mPresenter.deleteRecord(callSid, recordSid);
+        mVoicesViewHolder.visiblePlayerControl(false);
+    }
+
+    private final static class MyRunnable implements Runnable {
+
+        private VoicesViewHolder mVoicesViewHolder;
+        private final WeakReference<VoiceFragment> mWeakReference;
+
+        public MyRunnable(VoiceFragment voiceFragment) {
+            mWeakReference = new WeakReference<VoiceFragment>(voiceFragment);
+        }
+
+        public void setVoicesViewHolder(VoicesViewHolder voicesViewHolder) {
+            mVoicesViewHolder = voicesViewHolder;
+        }
+
+        @Override
+        public void run() {
+            VoiceFragment voiceFragment = mWeakReference.get();
+            if (voiceFragment != null) {
+                long currentPosition = voiceFragment.getCurrentPosition();
+                long duration = voiceFragment.getDuration();
+                int progress = (int) (currentPosition * PROGRESS_MAX / duration);
+                mVoicesViewHolder.seekBar.setMax(PROGRESS_MAX);
+                mVoicesViewHolder.seekBar.setProgress(progress);
+                if (progress == PROGRESS_MAX) {
+                    voiceFragment.stopDonutProgressUpdate();
+                }
+                mVoicesViewHolder.textDuration.setText(DateUtils.formatElapsedTime((duration - currentPosition) / 1000));
+            }
+        }
+    }
+
+    private void scheduleDonutProgressUpdate() {
+        stopDonutProgressUpdate();
+        if (!mExecutorService.isShutdown()) {
+            mScheduleFuture = mExecutorService.scheduleAtFixedRate(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            mHandler.post(mRunnableUpdateProgress);
+                        }
+                    }, PROGRESS_UPDATE_INITIAL_INTERVAL,
+                    PROGRESS_UPDATE_INTERNAL, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    private void stopDonutProgressUpdate() {
+        if (mScheduleFuture != null) {
+            mScheduleFuture.cancel(false);
+        }
+    }
+
+    public long getCurrentPosition() {
+        if (mExoPlayer != null)
+            return mExoPlayer.getCurrentPosition();
+        else
+            return Integer.MIN_VALUE;
+    }
+
+    private long getDuration() {
+        if (mExoPlayer != null)
+            return mExoPlayer.getDuration();
+        else
+            return Integer.MIN_VALUE;
     }
 
     private VoicesViewHolder getVoicesViewHolder(int pos) {

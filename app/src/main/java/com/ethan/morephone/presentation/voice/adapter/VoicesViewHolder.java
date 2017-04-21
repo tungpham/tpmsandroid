@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.ethan.morephone.R;
 import com.ethan.morephone.widget.ExpandableLayout;
 import com.ethan.morephone.widget.progress.DotProgressBar;
-import com.google.android.exoplayer2.ExoPlayer;
 
 /**
  * Created by Ethan on 2/16/17.
@@ -33,7 +32,7 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
     public TextView textCall;
     public TextView textMessage;
 
-    public ExoPlayer exoPlayer;
+    private int mPosition;
 
     public VoicesViewHolder(View itemView) {
         super(itemView);
@@ -63,6 +62,8 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
             imageVolume.setVisibility(View.INVISIBLE);
             textDuration.setVisibility(View.INVISIBLE);
             seekBar.setVisibility(View.INVISIBLE);
+            uiPlay();
+            seekBar.setProgress(0);
         } else {
             imagePause.setVisibility(View.VISIBLE);
             imageDelete.setVisibility(View.VISIBLE);
@@ -77,6 +78,14 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
             dotProgressBar.setVisibility(View.VISIBLE);
         } else {
             dotProgressBar.setVisibility(View.GONE);
+        }
+    }
+
+    public void mute(boolean isMute) {
+        if (!isMute) {
+            imageVolume.setImageResource(R.drawable.ic_volume_up_black_24dp);
+        } else {
+            imageVolume.setImageResource(R.drawable.ic_volume_off_black_24dp);
         }
     }
 

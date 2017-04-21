@@ -124,5 +124,10 @@ interface ApiPath {
                                  @Path("callsid") String callsid,
                                  @Path("recordingsid") String recordingsid);
 
+    @DELETE("Accounts/{accountsid}/Calls{callsid}/Recordings/{recordingsid}.json")
+    Call<Void> deleteCallRecoding(@Path("accountsid") String accountsid,
+                                 @Path("callsid") String callsid,
+                                 @Path("recordingsid") String recordingsid);
+
 
 }

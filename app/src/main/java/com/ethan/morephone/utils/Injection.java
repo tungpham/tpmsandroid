@@ -18,6 +18,7 @@ import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
 import com.android.morephone.domain.usecase.number.DeleteIncomingPhoneNumber;
 import com.android.morephone.domain.usecase.number.GetAvailableCountries;
+import com.android.morephone.domain.usecase.record.DeleteCallRecord;
 import com.android.morephone.domain.usecase.record.GetCallRecords;
 import com.android.morephone.domain.usecase.voice.CreateVoice;
 import com.android.morephone.domain.usecase.voice.DeleteVoice;
@@ -116,6 +117,10 @@ public class Injection {
 
     public static GetCallRecords providerGetCallRecords(@NonNull Context context) {
         return new GetCallRecords(providerRecordRepository(context));
+    }
+
+    public static DeleteCallRecord providerDeleteCallRecord(@NonNull Context context) {
+        return new DeleteCallRecord(providerRecordRepository(context));
     }
 
 }

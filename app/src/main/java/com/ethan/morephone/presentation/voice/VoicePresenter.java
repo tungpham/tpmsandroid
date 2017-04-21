@@ -9,6 +9,7 @@ import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
+import com.android.morephone.domain.usecase.record.DeleteCallRecord;
 import com.android.morephone.domain.usecase.record.GetCallRecords;
 import com.android.morephone.domain.usecase.voice.CreateVoice;
 import com.android.morephone.domain.usecase.voice.DeleteVoice;
@@ -37,6 +38,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
     private final CreateVoice mCreateVoice;
 
     private final GetCallRecords mGetCallRecords;
+    private final DeleteCallRecord mDeleteCallRecord;
 
     private List<VoiceItem> mVoiceItems;
 
@@ -48,7 +50,8 @@ public class VoicePresenter implements VoiceContract.Presenter {
                           @NonNull GetVoicesOutgoing getVoicesOutgoing,
                           @NonNull DeleteVoice deleteVoice,
                           @NonNull CreateVoice createVoice,
-                          @NonNull GetCallRecords getCallRecords) {
+                          @NonNull GetCallRecords getCallRecords,
+                          @NonNull DeleteCallRecord deleteCallRecord) {
         mView = view;
         mUseCaseHandler = useCaseHandler;
         mGetAllVoices = getAllVoices;
@@ -58,6 +61,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
         mDeleteVoice = deleteVoice;
         mCreateVoice = createVoice;
         mGetCallRecords = getCallRecords;
+        mDeleteCallRecord = deleteCallRecord;
 
         mVoiceItems = new ArrayList<>();
 
@@ -149,6 +153,22 @@ public class VoicePresenter implements VoiceContract.Presenter {
     }
 
     @Override
+    public void deleteRecord(String callSid, String recordSid) {
+        DeleteCallRecord.RequestValue requestValue = new DeleteCallRecord.RequestValue(Constant.ACCOUNT_SID, callSid, recordSid);
+        mUseCaseHandler.execute(mDeleteCallRecord, requestValue, new UseCase.UseCaseCallback<DeleteCallRecord.ResponseValue>() {
+            @Override
+            public void onSuccess(DeleteCallRecord.ResponseValue response) {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+    }
+
+    @Override
     public void loadRecords(String callSid, final int position) {
         GetCallRecords.RequestValue requestValue = new GetCallRecords.RequestValue(Constant.ACCOUNT_SID, callSid);
         mUseCaseHandler.execute(mGetCallRecords, requestValue, new UseCase.UseCaseCallback<GetCallRecords.ResponseValue>() {
@@ -159,7 +179,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
                     RecordItem recordItem = recordListResourceResponse.recordings.get(0);
                     if(!TextUtils.isEmpty(recordItem.uri)) {
                         String url = recordItem.uri.replace("json", "mp3");
-                        mView.initializeRecord(Constant.API_ROOT + url);
+                        mView.initializeRecord(recordItem, Constant.API_ROOT + url);
                     }
                 }else{
                     mView.emptyRecord(position);

@@ -86,7 +86,7 @@
                 android:layout_below="@+id/seek_bar_item_voice"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_main_margin"
-                android:src="@drawable/ic_volume_medium" />
+                android:src="@drawable/ic_volume_up_black_24dp" />
 
             <ImageView
                 android:id="@+id/image_item_voice_pause"

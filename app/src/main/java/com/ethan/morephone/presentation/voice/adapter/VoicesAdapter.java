@@ -115,9 +115,16 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
             }
         });
 
+        holder.imageVolume.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemVoiceClickListener.onVolumeRecord(holder);
+            }
+        });
+
     }
 
-    public void setOnOtherExpandListener(OnOtherExpandListener onOtherExpandListener){
+    public void setOnOtherExpandListener(OnOtherExpandListener onOtherExpandListener) {
         mOnOtherExpandListener = onOtherExpandListener;
     }
 
@@ -137,7 +144,10 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
             DebugTool.logD("bol: " + isExpanded);
             if (view.getTag() instanceof VoicesViewHolder) {
                 final VoicesViewHolder holder = (VoicesViewHolder) view.getTag();
-                if(mOnOtherExpandListener != null) {
+                if (!isExpanded) {
+                    holder.visiblePlayerControl(false);
+                }
+                if (mOnOtherExpandListener != null) {
                     mOnOtherExpandListener.onOtherExpand(isExpanded, holder.getAdapterPosition());
                 }
             }

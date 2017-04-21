@@ -54,4 +54,9 @@ public class RecordRepository implements RecordDataSource {
     public void deleteRecord(String accountSid, String callSid, String recordSid) {
         mRecordRemoteDataSource.deleteRecord(accountSid, callSid, recordSid);
     }
+
+    @Override
+    public void deleteRecord(String accountSid, String recordSid) {
+        mRecordRemoteDataSource.deleteRecord(accountSid, recordSid);
+    }
 }

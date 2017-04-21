@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.voice;
 
+import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
@@ -18,7 +19,7 @@ public interface VoiceContract {
 
         void showLoading(boolean isActive);
 
-        void initializeRecord(String url);
+        void initializeRecord(RecordItem recordItem, String url);
 
         void emptyRecord(int position);
     }
@@ -32,6 +33,8 @@ public interface VoiceContract {
         void loadVoicesIncoming(String phoneNumberIncoming);
 
         void deleteVoice(String callSid);
+
+        void deleteRecord(String callSid, String recordSid);
 
         void loadRecords(String callSid, int position);
 

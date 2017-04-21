@@ -34,7 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiManager {
 
-//    private static final String BASE_URL = "https://raw.githubusercontent.com/tungpham/tpmsservices/";
+    //    private static final String BASE_URL = "https://raw.githubusercontent.com/tungpham/tpmsservices/";
     private static final String BASE_URL = "https://api.twilio.com/2010-04-01/";
 
     private static ApiPath mApiPath;
@@ -219,7 +219,6 @@ public class ApiManager {
     }
 
 
-
     public static void fakeData(Context context, Callback<FakeData> callback) {
         Call<FakeData> call = getApiPath(context).getFakeDAta();
         call.enqueue(callback);
@@ -279,5 +278,40 @@ public class ApiManager {
                                              Callback<RecordListResourceResponse> callback) {
         Call<RecordListResourceResponse> call = getApiPath(context).getRecordListResource(accountSid, callSid);
         call.enqueue(callback);
+    }
+
+    public static void deleteRecord(Context context,
+                                    String accountSid,
+                                    String recordSid) {
+        Call<Void> call = getApiPath(context).deleteRecord(accountSid, recordSid);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void deleteCallRecord(Context context,
+                                        String accountSid,
+                                        String callSid,
+                                        String recordSid) {
+        Call<Void> call = getApiPath(context).deleteCallRecoding(accountSid, callSid, recordSid);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
     }
 }

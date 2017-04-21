@@ -36,4 +36,6 @@ public interface RecordDataSource {
     void createRecord(String accountSid, String callSid, String url, @NonNull RecordDataSource.GetRecordCallback callback);
 
     void deleteRecord(String accountSid, String callSid, String recordSid);
+
+    void deleteRecord(String accountSid, String recordSid);
 }

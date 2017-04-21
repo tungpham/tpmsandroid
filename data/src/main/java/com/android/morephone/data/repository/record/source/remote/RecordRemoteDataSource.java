@@ -76,4 +76,9 @@ public class RecordRemoteDataSource implements RecordDataSource {
     public void deleteRecord(String accountSid, String callSid, String recordSid) {
 
     }
+
+    @Override
+    public void deleteRecord(String accountSid, String recordSid) {
+        ApiManager.deleteRecord(mContext, accountSid, recordSid);
+    }
 }
