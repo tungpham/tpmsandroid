@@ -295,4 +295,34 @@
         <item name="android:clickable">true</item>
     </style>
 
+    <style name="AppGuestToolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="ItemToolbarRelative" parent="ViewCommon">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <!--<item name="android:background">@drawable/tb_item_selector</item>-->
+    </style>
+
+    <style name="ItemToolbarText" parent="ViewCommon">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginTop">2dp</item>
+    </style>
+
+    <style name="ItemToolbarTextTitle" parent="ViewCommon">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
 </resources>

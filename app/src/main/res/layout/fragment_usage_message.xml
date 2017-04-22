@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linear_usage_message"/>
+
+    <LinearLayout
+        android:id="@+id/linear_usage_message"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/relative_usage_message_total"
+            style="@style/ItemToolbarRelative">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_message_total"
+                style="@style/ItemToolbarTextTitle"
+                android:text="@string/usage_message_total"
+                android:textColor="@color/colorPrimary" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_message_total_set"
+                style="@style/ItemToolbarText"
+                android:layout_below="@+id/text_usage_message_total"
+                android:text="319"
+                android:textColor="@color/colorPrimary" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/relative_usage_message_incoming"
+            style="@style/ItemToolbarRelative">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_message_incoming"
+                style="@style/ItemToolbarTextTitle"
+                android:text="@string/usage_message_incoming" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_message_incoming_set"
+                style="@style/ItemToolbarText"
+                android:layout_below="@+id/text_usage_message_incoming"
+                android:text="108" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_usage_message_outgoing"
+            style="@style/ItemToolbarRelative">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_message_outgoing"
+                style="@style/ItemToolbarTextTitle"
+                android:text="@string/usage_message_outgoing" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_message_outgoing_set"
+                style="@style/ItemToolbarText"
+                android:layout_below="@+id/text_usage_message_outgoing"
+                android:text="211" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

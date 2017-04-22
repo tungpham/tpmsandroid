@@ -27,6 +27,7 @@ android {
         targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
         versionCode globalConfiguration.getAt("androidVersionCode")
         versionName globalConfiguration.getAt("androidVersionName")
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -77,6 +78,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.koushikdutta.ion:ion:2.1.8'
     compile 'com.google.android.exoplayer:exoplayer:r2.3.1'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile project(':domain')
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

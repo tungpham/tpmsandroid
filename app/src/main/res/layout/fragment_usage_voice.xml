@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linear_usage_voice"/>
+
+    <LinearLayout
+        android:id="@+id/linear_usage_voice"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/relative_usage_voice_total"
+            style="@style/ItemToolbarRelative">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_voice_total"
+                style="@style/ItemToolbarTextTitle"
+                android:text="@string/usage_voice_total"
+                android:textColor="@color/colorPrimary" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_voice_total_set"
+                style="@style/ItemToolbarText"
+                android:layout_below="@+id/text_usage_voice_total"
+                android:text="319"
+                android:textColor="@color/colorPrimary" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/relative_usage_voice_incoming"
+            style="@style/ItemToolbarRelative">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_voice_incoming"
+                style="@style/ItemToolbarTextTitle"
+                android:text="@string/usage_voice_incoming" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_voice_incoming_set"
+                style="@style/ItemToolbarText"
+                android:layout_below="@+id/text_usage_voice_incoming"
+                android:text="108" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_usage_voice_outgoing"
+            style="@style/ItemToolbarRelative">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_voice_outgoing"
+                style="@style/ItemToolbarTextTitle"
+                android:text="@string/usage_voice_outgoing" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_voice_outgoing_set"
+                style="@style/ItemToolbarText"
+                android:layout_below="@+id/text_usage_voice_outgoing"
+                android:text="211" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_usage_voice_missing"
+            style="@style/ItemToolbarRelative">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_voice_missing"
+                style="@style/ItemToolbarTextTitle"
+                android:text="@string/usage_voice_missing" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_usage_voice_missing_set"
+                style="@style/ItemToolbarText"
+                android:layout_below="@+id/text_usage_voice_missing"
+                android:text="211" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
