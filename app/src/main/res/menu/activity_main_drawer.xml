@@ -14,30 +14,31 @@
             android:title="Buy a phone" />
 
         <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Setting" />
+
+        <item
             android:id="@+id/nav_usage"
             android:icon="@drawable/ic_data_usage_black_24dp"
             android:title="Usage" />
 
-        <item
-            android:id="@+id/nav_review"
-            android:icon="@drawable/ic_rate_review_black_24dp"
-            android:title="Review" />
 
-        <item
-            android:id="@+id/nav_share"
-            android:actionProviderClass="android.widget.ShareActionProvider"
-            android:icon="@drawable/ic_share_black_24dp"
-            android:title="Share" />
     </group>
 
     <item android:title="Settings">
         <menu>
 
             <item
-                android:id="@+id/nav_setting"
-                android:icon="@drawable/ic_settings_black_24dp"
-                android:title="Setting" />
+                android:id="@+id/nav_review"
+                android:icon="@drawable/ic_rate_review_black_24dp"
+                android:title="Review" />
 
+            <item
+                android:id="@+id/nav_share"
+                android:actionProviderClass="android.widget.ShareActionProvider"
+                android:icon="@drawable/ic_share_black_24dp"
+                android:title="Share" />
             <item
                 android:id="@+id/nav_license"
                 android:icon="@drawable/ic_android_black_24dp"
