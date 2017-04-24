@@ -8,6 +8,11 @@
         <item>Dial</item>
     </string-array>
 
+    <string-array name="usage_titles">
+        <item>Message</item>
+        <item>Voice</item>
+    </string-array>
+
     <string-array name="phone_titles_fragment">
         <item>Dial</item>
         <item>Call log</item>

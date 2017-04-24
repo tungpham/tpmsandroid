@@ -22,7 +22,7 @@
             app:nts_color="@color/colorBackgroundBlue"
             app:nts_corners_radius="1dp"
             app:nts_inactive_color="@color/colorText"
-            app:nts_titles="@array/titles"/>
+            app:nts_titles="@array/usage_titles"/>
 
     </android.support.design.widget.AppBarLayout>
 
