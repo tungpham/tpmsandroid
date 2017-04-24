@@ -3,18 +3,19 @@ package com.ethan.morephone.presentation.usage;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.utils.ActivityUtils;
+import com.ethan.morephone.widget.MyTextView;
 
 /**
  * Created by Ethan on 4/20/17.
  */
 
-public class UsageActivity extends BaseActivity {
+public class UsageActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,8 +31,12 @@ public class UsageActivity extends BaseActivity {
                 R.id.content_frame,
                 UsageFragment.class.getSimpleName());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        enableActionBar(toolbar, getString(R.string.usage_label));
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+//        enableActionBar(toolbar, getString(R.string.usage_label));
+
+        findViewById(R.id.text_home).setOnClickListener(this);
+        MyTextView myTextView = (MyTextView) findViewById(R.id.text_toolbar_title);
+        myTextView.setText(getString(R.string.usage_label));
     }
 
     @Override
@@ -49,4 +54,14 @@ public class UsageActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.text_home:
+                finish();
+                break;
+            default:
+                break;
+        }
+    }
 }

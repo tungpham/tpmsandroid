@@ -4,6 +4,8 @@
     <string-array name="titles">
         <item>Message</item>
         <item>Voice</item>
+        <item>Call Logs</item>
+        <item>Dial</item>
     </string-array>
 
     <string-array name="phone_titles_fragment">

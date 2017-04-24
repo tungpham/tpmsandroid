@@ -15,8 +15,6 @@ import com.ethan.morephone.utils.ActivityUtils;
 
 public class DashboardActivity extends BaseActivity {
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

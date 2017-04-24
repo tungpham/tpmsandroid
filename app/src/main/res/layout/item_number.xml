@@ -41,6 +41,14 @@
             android:src="@drawable/message"
             android:visibility="visible" />
 
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_item_number_message_unread"
+            style="@style/ViewCommon"
+            android:text="2"
+            android:layout_toLeftOf="@+id/view_0"
+            android:layout_margin="8dp"
+            android:textColor="@color/colorPink"/>
+
         <View
             android:id="@+id/view"
             style="@style/ViewDivider"
@@ -61,6 +69,14 @@
             style="@style/ViewDivider"
             android:layout_toLeftOf="@+id/image_call"
             android:visibility="visible" />
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_item_number_voice_unread"
+            style="@style/ViewCommon"
+            android:text="4"
+            android:layout_toLeftOf="@+id/view_2"
+            android:layout_margin="8dp"
+            android:textColor="@color/colorPink"/>
 
         <ImageView
             android:id="@+id/image_voice"

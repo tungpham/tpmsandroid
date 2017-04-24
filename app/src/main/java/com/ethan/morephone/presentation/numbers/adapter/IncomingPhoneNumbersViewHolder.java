@@ -18,11 +18,16 @@ public class IncomingPhoneNumbersViewHolder extends RecyclerView.ViewHolder {
     public ImageView imageMessage;
     public ImageView imageVoice;
 
+    public TextView textMessageUnread;
+    public TextView textVoiceUnread;
+
     public IncomingPhoneNumbersViewHolder(View itemView) {
         super(itemView);
         textNumber = (TextView) itemView.findViewById(R.id.text_number);
         imageDelete = (ImageView) itemView.findViewById(R.id.image_delete);
         imageMessage = (ImageView) itemView.findViewById(R.id.image_message);
         imageVoice = (ImageView) itemView.findViewById(R.id.image_voice);
+        textMessageUnread = (TextView) itemView.findViewById(R.id.text_item_number_message_unread);
+        textVoiceUnread = (TextView) itemView.findViewById(R.id.text_item_number_voice_unread);
     }
 }

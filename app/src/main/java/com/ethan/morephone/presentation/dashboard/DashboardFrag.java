@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.dashboard.adapter.DashboardViewPagerAdapter;
-import com.ethan.morephone.widget.NavigationTabStrip;
+import com.ethan.morephone.widget.PagerSlidingTabStrip;
 
 /**
  * Created by Ethan on 4/12/17.
@@ -49,11 +49,11 @@ public class DashboardFrag extends BaseFragment {
     }
 
     private void setUpViewPager(View view, boolean isVoice) {
-        NavigationTabStrip navigationTabStrip = (NavigationTabStrip) view.findViewById(R.id.tab_strip);
+        PagerSlidingTabStrip navigationTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_strip);
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        DashboardViewPagerAdapter myViewPagerAdapter = new DashboardViewPagerAdapter(getChildFragmentManager(), mPhoneNumber);
+        DashboardViewPagerAdapter myViewPagerAdapter = new DashboardViewPagerAdapter(getContext(), getChildFragmentManager(), mPhoneNumber);
         mViewPager.setAdapter(myViewPagerAdapter);
-        navigationTabStrip.setViewPager(mViewPager, 0);
+        navigationTabStrip.setViewPager(mViewPager);
 
         if (isVoice) {
             mViewPager.setCurrentItem(1);

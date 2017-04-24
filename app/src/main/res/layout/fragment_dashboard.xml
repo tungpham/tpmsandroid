@@ -12,17 +12,15 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.ethan.morephone.widget.NavigationTabStrip
+        <com.ethan.morephone.widget.PagerSlidingTabStrip
             android:id="@+id/tab_strip"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/white"
             android:layout_gravity="center"
-            app:nts_active_color="@color/colorBackgroundBlue"
-            app:nts_color="@color/colorBackgroundBlue"
-            app:nts_corners_radius="1dp"
-            app:nts_inactive_color="@color/colorText"
-            app:nts_titles="@array/titles"/>
+            app:pstsDividerColor="#00000000"
+            app:pstsIndicatorColor="#FF33B5E6"
+            app:pstsUnderlineColor="@android:color/transparent"/>
 
     </android.support.design.widget.AppBarLayout>
 

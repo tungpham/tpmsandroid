@@ -25,6 +25,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
+import com.ethan.morephone.presentation.main.MainActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
 import com.ethan.morephone.utils.Injection;
@@ -42,13 +43,19 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         IncomingPhoneNumbersAdapter.OnItemNumberClickListener,
         NavigationView.OnNavigationItemSelectedListener,
         IncomingPhoneNumbersContract.View,
-        DeletePhoneNumberDialog.DeletePhoneNumberListener {
+        DeletePhoneNumberDialog.DeletePhoneNumberListener,
+        View.OnClickListener {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+    public static final String BUNDLE_IS_AUTHENTICATE = "BUNDLE_IS_AUTHENTICATE";
 
 
-    public static IncomingPhoneNumbersFragment getInstance() {
-        return new IncomingPhoneNumbersFragment();
+    public static IncomingPhoneNumbersFragment getInstance(boolean isAuthenticate) {
+        IncomingPhoneNumbersFragment numbersFragment = new IncomingPhoneNumbersFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(BUNDLE_IS_AUTHENTICATE, isAuthenticate);
+        numbersFragment.setArguments(bundle);
+        return numbersFragment;
     }
 
     private IncomingPhoneNumbersAdapter mIncomingPhoneNumbersAdapter;
@@ -58,6 +65,8 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     private DrawerLayout mDrawerLayout;
 
     private boolean mIsDelete;
+
+    private boolean mIsAuthenticate = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,21 +79,15 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_numbers, container, false);
 
+        mIsAuthenticate = getArguments().getBoolean(BUNDLE_IS_AUTHENTICATE);
+
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();
-//        if (TextUtils.isEmpty(phoneNumber)) {
-//            phoneNumber = "";
-//        }
-
-        baseActivity.enableActionBar(toolbar, getString(R.string.my_number_label));
-//
-//        mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                getActivity(), mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        mDrawerLayout.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        setUpNavigation(view);
+        if (mIsAuthenticate) {
+            baseActivity.setTitleActionBar(toolbar, getString(R.string.my_number_label));
+        } else {
+            baseActivity.enableActionBar(toolbar, getString(R.string.my_number_label));
+        }
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -102,7 +105,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        if(mIsDelete){
+                        if (mIsDelete) {
                             getActivity().setResult(Activity.RESULT_OK);
                         }
                         getActivity().finish();
@@ -131,7 +134,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                if(mIsDelete){
+                if (mIsDelete) {
                     getActivity().setResult(Activity.RESULT_OK);
                 }
                 getActivity().finish();
@@ -147,8 +150,12 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     public void onItemClick(int pos) {
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
-        getActivity().setResult(Activity.RESULT_OK);
-        getActivity().finish();
+        if (mIsAuthenticate) {
+            startActivity(new Intent(getActivity(), MainActivity.class));
+        } else {
+            getActivity().setResult(Activity.RESULT_OK);
+            getActivity().finish();
+        }
     }
 
     @Override
@@ -156,8 +163,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         DeletePhoneNumberDialog deletePhoneNumberDialog = DeletePhoneNumberDialog.getInstance(pos);
         deletePhoneNumberDialog.show(getChildFragmentManager(), DeletePhoneNumberDialog.class.getSimpleName());
         deletePhoneNumberDialog.setDeletePhoneNumberListener(this);
-//        getActivity().setResult(Activity.RESULT_OK);
-//        getActivity().finish();
     }
 
     @Override
@@ -165,10 +170,16 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
 
-        Intent intent = new Intent();
-        intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
-        getActivity().setResult(Activity.RESULT_OK, intent);
-        getActivity().finish();
+        if (mIsAuthenticate) {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent();
+            intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
+            getActivity().setResult(Activity.RESULT_OK, intent);
+            getActivity().finish();
+        }
     }
 
     @Override
@@ -176,10 +187,16 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
 
-        Intent intent = new Intent();
-        intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, true);
-        getActivity().setResult(Activity.RESULT_OK, intent);
-        getActivity().finish();
+        if (mIsAuthenticate) {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, true);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent();
+            intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, true);
+            getActivity().setResult(Activity.RESULT_OK, intent);
+            getActivity().finish();
+        }
     }
 
     @Override
@@ -218,6 +235,17 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         if (incomingPhoneNumber.phoneNumber.equals(MyPreference.getPhoneNumber(getContext()))) {
             MyPreference.setPhoneNumber(getContext(), "");
             mIsDelete = true;
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.text_home:
+                getActivity().finish();
+                break;
+            default:
+                break;
         }
     }
 }

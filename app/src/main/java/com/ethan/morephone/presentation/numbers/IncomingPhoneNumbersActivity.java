@@ -15,7 +15,6 @@ import com.ethan.morephone.utils.ActivityUtils;
 
 public class IncomingPhoneNumbersActivity extends BaseActivity{
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +22,7 @@ public class IncomingPhoneNumbersActivity extends BaseActivity{
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        IncomingPhoneNumbersFragment voiceFragment = IncomingPhoneNumbersFragment.getInstance();
+        IncomingPhoneNumbersFragment voiceFragment = IncomingPhoneNumbersFragment.getInstance(getIntent().getBooleanExtra(IncomingPhoneNumbersFragment.BUNDLE_IS_AUTHENTICATE, false));
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 voiceFragment,

@@ -81,8 +81,12 @@ public class MainActivity extends BaseActivity implements
         setUpNavigation();
 
         mPhoneNumber = MyPreference.getPhoneNumber(getApplicationContext());
-        checkRequirePhoneNumber(false);
 
+        boolean isVoice = false;
+        if (getIntent() != null) {
+            isVoice = getIntent().getBooleanExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
+        }
+        checkRequirePhoneNumber(isVoice);
 
 //
 //        clientProfile = new ClientProfile(mPhoneNumber, true, true);

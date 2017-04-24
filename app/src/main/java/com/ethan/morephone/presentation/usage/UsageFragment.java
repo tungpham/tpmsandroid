@@ -15,7 +15,7 @@ import com.ethan.morephone.widget.NavigationTabStrip;
  * Created by Ethan on 4/22/17.
  */
 
-public class UsageFragment extends BaseFragment {
+public class UsageFragment extends BaseFragment implements View.OnClickListener {
 
     public static UsageFragment getInstance() {
         return new UsageFragment();
@@ -34,6 +34,7 @@ public class UsageFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_usage, container, false);
 
+
         setUpViewPager(view);
 
         return view;
@@ -48,4 +49,7 @@ public class UsageFragment extends BaseFragment {
         navigationTabStrip.setViewPager(mViewPager, 0);
     }
 
+    @Override
+    public void onClick(View view) {
+    }
 }

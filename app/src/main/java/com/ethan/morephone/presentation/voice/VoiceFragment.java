@@ -143,7 +143,6 @@ public class VoiceFragment extends BaseFragment implements
         mRecyclerView.setAdapter(mVoicesAdapter);
         mVoicesAdapter.setRecyclerView(mRecyclerView);
 
-        view.findViewById(R.id.button_dial).setOnClickListener(this);
 
         mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 
@@ -342,9 +341,6 @@ public class VoiceFragment extends BaseFragment implements
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.button_dial:
-                startActivity(new Intent(getActivity(), InCallActivity.class));
-                break;
             default:
                 break;
         }

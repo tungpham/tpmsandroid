@@ -183,6 +183,9 @@
     <string name="usage_voice_outgoing">OUTGOING</string>
     <string name="usage_voice_missing">MISSING</string>
 
+    <!-- Toolbar text home-->
+    <string name="all_toolbar_home">&lt;\u0020 Home</string>
+
     <!-- In-call menu item labels -->
     <!-- Regular in-call menu items: -->
     <!-- In-call menu: Label for "speakerphone" menu item -->
