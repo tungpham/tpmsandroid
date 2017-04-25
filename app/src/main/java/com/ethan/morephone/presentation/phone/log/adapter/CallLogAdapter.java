@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.entity.CallEntity;
+import com.android.morephone.data.entity.call.Call;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TextDrawable;
@@ -20,60 +20,68 @@ import java.util.List;
 
 public class CallLogAdapter extends RecyclerView.Adapter<CallLogViewHolder> {
 
-    private List<CallEntity> mCallEntities;
-    private CallLogAdapter.OnItemNumberClickListener mOnItemNumberClickListener;
-
+    private List<Call> mCalls;
     private TextDrawable.IBuilder mDrawableBuilder;
-
     private Context mContext;
-
     private String mPhoneNumber;
+    private OnItemCallLogClickListener mOnItemCallLogClickListener;
 
-    public CallLogAdapter(Context context, String phoneNumber, List<CallEntity> numberEntities, CallLogAdapter.OnItemNumberClickListener onItemNumberClickListener) {
+    public CallLogAdapter(Context context, String phoneNumber, List<Call> conversationEntities, OnItemCallLogClickListener onItemCallLogClickListener) {
         mContext = context;
         mPhoneNumber = phoneNumber;
-
-        mCallEntities = numberEntities;
-        mOnItemNumberClickListener = onItemNumberClickListener;
-
+        mCalls = conversationEntities;
+        mOnItemCallLogClickListener = onItemCallLogClickListener;
         mDrawableBuilder = TextDrawable.builder().round();
     }
 
-    public void replaceData(List<CallEntity> numberEntities) {
-        mCallEntities = numberEntities;
+    public void replaceData(List<Call> calls) {
+        mCalls = calls;
         notifyDataSetChanged();
     }
 
-    public List<CallEntity> getData() {
-        return mCallEntities;
+    public List<Call> getData() {
+        return mCalls;
     }
 
     @Override
     public CallLogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()) .inflate(R.layout.item_call_log, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_call_log, parent, false);
         return new CallLogViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(CallLogViewHolder holder, final int position) {
-        final CallEntity callEntity = mCallEntities.get(position);
-        if(mPhoneNumber.equals(callEntity.phoneNumberIncoming)) {
-            holder.textNumber.setText(callEntity.phoneNumberOutgoing);
-        }else{
-            holder.textNumber.setText(callEntity.phoneNumberIncoming);
+    public void onBindViewHolder(final CallLogViewHolder holder, final int position) {
+        final Call callEntity = mCalls.get(position);
+        if (mPhoneNumber.equals(callEntity.from)) {
+            holder.textPhoneNumber.setText(callEntity.to);
+            holder.imageStatus.setImageResource(R.drawable.ic_call_outgoing_holo_dark);
+        } else {
+            holder.textPhoneNumber.setText(callEntity.from);
+            holder.imageStatus.setImageResource(R.drawable.ic_call_incoming_holo_dark);
         }
         holder.textTime.setText(Utils.formatDate(callEntity.dateCreated));
 
-        holder.imageAvatar.setImageDrawable(mDrawableBuilder.build(String.valueOf(callEntity.phoneNumberIncoming.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
+        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(callEntity.from.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
+
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemCallLogClickListener.onCall(callEntity);
+            }
+        });
+
+
     }
+
 
     @Override
     public int getItemCount() {
-        return mCallEntities.size();
+        return mCalls.size();
     }
 
-    public interface OnItemNumberClickListener {
-        void onItemClick(int pos);
-
+    public interface OnItemCallLogClickListener{
+        void onCall(Call call);
     }
 }

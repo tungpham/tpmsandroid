@@ -26,10 +26,6 @@ public interface VoiceContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadVoicesResource();
-
-        void loadVoicesOutgoing(String phoneNumberOutgoing);
-
         void loadVoicesIncoming(String phoneNumberIncoming);
 
         void deleteVoice(String callSid);
@@ -39,8 +35,6 @@ public interface VoiceContract {
         void loadRecords(String callSid, int position);
 
         void clearData();
-
-        void createVoice(String phoneNumberIncoming, String phoneNumberOutgoing, String applicationSid, String sipAuthUsername, String sipAuthPassword);
 
     }
 }

@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.phone.log.adapter;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,14 +14,21 @@ import com.ethan.morephone.R;
 
 public class CallLogViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView textNumber;
-    public ImageView imageAvatar;
+    public CardView cardView;
+    public ImageView imageIcon;
+    public TextView textPhoneNumber;
     public TextView textTime;
+    public ImageView imageStatus;
+
 
     public CallLogViewHolder(View itemView) {
         super(itemView);
-        textNumber = (TextView) itemView.findViewById(R.id.text_phone_number);
-        imageAvatar = (ImageView) itemView.findViewById(R.id.image_avatar);
+        cardView = (CardView) itemView.findViewById(R.id.card_view);
+        imageIcon = (ImageView) itemView.findViewById(R.id.image_avatar);
+        textPhoneNumber = (TextView) itemView.findViewById(R.id.text_phone_number);
         textTime = (TextView) itemView.findViewById(R.id.text_time);
+        imageStatus = (ImageView) itemView.findViewById(R.id.image_item_voice_status);
     }
+
+
 }

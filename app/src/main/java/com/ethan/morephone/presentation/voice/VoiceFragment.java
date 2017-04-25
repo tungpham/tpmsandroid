@@ -114,12 +114,8 @@ public class VoiceFragment extends BaseFragment implements
         super.onCreate(savedInstanceState);
         new VoicePresenter(this,
                 Injection.providerUseCaseHandler(),
-                Injection.providerGetAllVoice(getContext()),
-                Injection.providerGetVoices(getContext()),
                 Injection.providerGetVoicesIncoming(getContext()),
-                Injection.providerGetVoicesOutgoing(getContext()),
                 Injection.providerDeleteVoice(getContext()),
-                Injection.providerCreateVoice(getContext()),
                 Injection.providerGetCallRecords(getContext()),
                 Injection.providerDeleteCallRecord(getContext()));
 

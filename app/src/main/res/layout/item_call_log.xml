@@ -1,30 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relative_item_sms"
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground">
+    android:layout_marginLeft="@dimen/activity_vertical_margin"
+    android:layout_marginRight="@dimen/activity_vertical_margin">
 
-    <ImageView
-        android:id="@+id/image_avatar"
-        android:layout_width="@dimen/item_icon_sms_width_height"
-        android:layout_height="@dimen/item_icon_sms_width_height"
-        android:layout_marginLeft="@dimen/item_sms_margin_left" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingBottom="@dimen/item_voice_space"
+        android:paddingTop="@dimen/item_voice_space">
 
+        <ImageView
+            android:id="@+id/image_avatar"
+            android:layout_width="@dimen/item_icon_sms_width_height"
+            android:layout_height="@dimen/item_icon_sms_width_height"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/item_voice_space" />
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_phone_number"
-        style="@style/TextSmsTitle"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
-        android:layout_toRightOf="@+id/image_avatar" />
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_phone_number"
+            style="@style/TextSmsTitle"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_toRightOf="@+id/image_avatar" />
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_time"
-        style="@style/TextSmsTime"
-        android:layout_below="@+id/text_phone_number"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_toRightOf="@+id/image_avatar" />
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_time"
+            style="@style/TextSmsTime"
+            android:layout_below="@+id/text_phone_number"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_toRightOf="@+id/image_avatar" />
 
+        <ImageView
+            android:id="@+id/image_item_voice_status"
+            style="@style/ViewCommon"
+            android:layout_below="@+id/text_time"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_toRightOf="@+id/image_avatar"
+            android:src="@drawable/ic_call_incoming_holo_dark" />
+    </RelativeLayout>
 
-</RelativeLayout>
+</android.support.v7.widget.CardView>
