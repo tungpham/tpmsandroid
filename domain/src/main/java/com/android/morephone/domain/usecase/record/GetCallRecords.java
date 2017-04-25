@@ -22,9 +22,9 @@ public class GetCallRecords extends UseCase<GetCallRecords.RequestValue, GetCall
 
     @Override
     protected void executeUseCase(RequestValue requestValue) {
-        mRecordRepository.getRecords(requestValue.getAccountSid(), requestValue.getCallSid(), new RecordDataSource.LoadRecordCallback() {
+        mRecordRepository.getRecords(requestValue.getAccountSid(), requestValue.getCallSid(), new RecordDataSource.LoadRecordsCallback() {
             @Override
-            public void onRecordLoaded(RecordListResourceResponse recordListResourceResponse) {
+            public void onRecordsLoaded(RecordListResourceResponse recordListResourceResponse) {
                 getUseCaseCallback().onSuccess(new ResponseValue(recordListResourceResponse));
             }
 

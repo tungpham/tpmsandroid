@@ -11,8 +11,8 @@ import com.android.morephone.data.entity.twilio.record.RecordListResourceRespons
 
 public interface RecordDataSource {
 
-    interface LoadRecordCallback {
-        void onRecordLoaded(RecordListResourceResponse recordListResourceResponse);
+    interface LoadRecordsCallback {
+        void onRecordsLoaded(RecordListResourceResponse recordListResourceResponse);
 
         void onDataNotAvailable();
     }
@@ -27,9 +27,9 @@ public interface RecordDataSource {
         void onResult(boolean isResult);
     }
 
-    void getRecords(String accountSid, @NonNull RecordDataSource.LoadRecordCallback callback);
+    void getRecords(String accountSid, @NonNull LoadRecordsCallback callback);
 
-    void getRecords(String accountSid, String callSid, @NonNull RecordDataSource.LoadRecordCallback callback);
+    void getRecords(String accountSid, String callSid, @NonNull LoadRecordsCallback callback);
 
     void getRecord(String accountSid, String callSid, String recordSid, @NonNull RecordDataSource.GetRecordCallback callback);
 

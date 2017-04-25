@@ -31,12 +31,12 @@ public class RecordRepository implements RecordDataSource {
 
 
     @Override
-    public void getRecords(String accountSid, @NonNull LoadRecordCallback callback) {
+    public void getRecords(String accountSid, @NonNull LoadRecordsCallback callback) {
 
     }
 
     @Override
-    public void getRecords(String accountSid, String callSid, @NonNull LoadRecordCallback callback) {
+    public void getRecords(String accountSid, String callSid, @NonNull LoadRecordsCallback callback) {
         mRecordRemoteDataSource.getRecords(accountSid, callSid, callback);
     }
 

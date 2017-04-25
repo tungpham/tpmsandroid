@@ -3,8 +3,7 @@ package com.android.morephone.domain.usecase.call;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.twilio.voice.VoiceItem;
-import com.android.morephone.data.repository.voice.VoiceRepository;
-import com.android.morephone.data.repository.voice.source.VoiceDataSource;
+import com.android.morephone.data.repository.call.CallRepository;
 import com.android.morephone.domain.UseCase;
 
 import java.util.List;
@@ -15,26 +14,15 @@ import java.util.List;
 
 public class GetCallLogs extends UseCase<GetCallLogs.RequestValue, GetCallLogs.ResponseValue> {
 
-    private final VoiceRepository mVoiceRepository;
+    private final CallRepository mCallRepository;
 
-    public GetCallLogs(@NonNull VoiceRepository messageRepository) {
-        mVoiceRepository = messageRepository;
+    public GetCallLogs(@NonNull CallRepository messageRepository) {
+        mCallRepository = messageRepository;
     }
 
 
     @Override
     protected void executeUseCase(RequestValue requestValue) {
-        mVoiceRepository.getVoicesIncoming(requestValue.getPhoneNumberIncoming(), new VoiceDataSource.LoadVoiceCallback() {
-            @Override
-            public void onVoiceLoaded(List<VoiceItem> voiceItems) {
-                getUseCaseCallback().onSuccess(new ResponseValue(voiceItems));
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-                getUseCaseCallback().onError();
-            }
-        });
     }
 
     public static final class RequestValue implements UseCase.RequestValue {
