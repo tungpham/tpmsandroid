@@ -125,7 +125,7 @@
     <string name="usage_label">\u0020Usage</string>
 
     <!-- Activity Setting -->
-    <string name="setting_label">Setting</string>
+    <string name="setting_label">\u0020Setting</string>
 
     <!-- Fragment setting -->
     <string name="setting_version">Version\u0020</string>

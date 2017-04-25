@@ -1,11 +1,14 @@
 package com.ethan.morephone.presentation.numbers.adapter;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 
 import java.util.List;
@@ -16,10 +19,13 @@ import java.util.List;
 
 public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPhoneNumbersViewHolder> {
 
+    private Context mContext;
     private List<IncomingPhoneNumber> mNumberEntities;
     private IncomingPhoneNumbersAdapter.OnItemNumberClickListener mOnItemNumberClickListener;
+    private IncomingPhoneNumbersViewHolder mCurrentHolder;
 
-    public IncomingPhoneNumbersAdapter(List<IncomingPhoneNumber> numberEntities, IncomingPhoneNumbersAdapter.OnItemNumberClickListener onItemNumberClickListener) {
+    public IncomingPhoneNumbersAdapter(Context context, List<IncomingPhoneNumber> numberEntities, IncomingPhoneNumbersAdapter.OnItemNumberClickListener onItemNumberClickListener) {
+        mContext = context;
         mNumberEntities = numberEntities;
         mOnItemNumberClickListener = onItemNumberClickListener;
     }
@@ -42,15 +48,17 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
     }
 
     @Override
-    public void onBindViewHolder(IncomingPhoneNumbersViewHolder holder, final int position) {
+    public void onBindViewHolder(final IncomingPhoneNumbersViewHolder holder, final int position) {
         final IncomingPhoneNumber numberEntity = mNumberEntities.get(position);
         holder.textNumber.setText(numberEntity.phoneNumber);
+
+        validatePhoneNumberSelected(holder, numberEntity.phoneNumber);
 
         holder.textNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mOnItemNumberClickListener != null)
-                    mOnItemNumberClickListener.onItemClick(position);
+                    mOnItemNumberClickListener.onItemClick(holder, position);
             }
         });
 
@@ -66,7 +74,7 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
             @Override
             public void onClick(View view) {
                 if (mOnItemNumberClickListener != null)
-                    mOnItemNumberClickListener.onItemMessage(position);
+                    mOnItemNumberClickListener.onItemMessage(holder, position);
             }
         });
 
@@ -74,7 +82,7 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
             @Override
             public void onClick(View view) {
                 if (mOnItemNumberClickListener != null)
-                    mOnItemNumberClickListener.onItemVoice(position);
+                    mOnItemNumberClickListener.onItemVoice(holder, position);
             }
         });
 
@@ -85,13 +93,35 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
         return mNumberEntities.size();
     }
 
+    public IncomingPhoneNumbersViewHolder getCurrentHolder() {
+        return mCurrentHolder;
+    }
+
+    public void validatePhoneNumberSelected(IncomingPhoneNumbersViewHolder holder, String phoneNumber) {
+        mCurrentHolder = holder;
+        if (MyPreference.getPhoneNumber(mContext).equals(phoneNumber)) {
+            holder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+            holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+        } else {
+            holder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+            holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
+        }
+    }
+
+    public void validateCurrentPhoneNumberSelected() {
+        if (mCurrentHolder != null) {
+            mCurrentHolder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+            mCurrentHolder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
+        }
+    }
+
     public interface OnItemNumberClickListener {
-        void onItemClick(int pos);
+        void onItemClick(IncomingPhoneNumbersViewHolder holder, int pos);
 
         void onItemDelete(int pos);
 
-        void onItemMessage(int pos);
+        void onItemMessage(IncomingPhoneNumbersViewHolder holder, int pos);
 
-        void onItemVoice(int pos);
+        void onItemVoice(IncomingPhoneNumbersViewHolder holder, int pos);
     }
 }

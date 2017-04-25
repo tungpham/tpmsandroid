@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -29,7 +30,7 @@ public class SettingFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity activity = (BaseActivity) getActivity();
-        activity.enableHomeActionBar(toolbar, getString(R.string.setting_label));
+        activity.enableHomeActionBar(toolbar, MyPreference.getPhoneNumber(getContext()) + getString(R.string.setting_label));
 
         setHasOptionsMenu(true);
         return view;

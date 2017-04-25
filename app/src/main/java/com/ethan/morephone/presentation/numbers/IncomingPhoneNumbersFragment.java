@@ -28,6 +28,7 @@ import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.main.MainActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
+import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersViewHolder;
 import com.ethan.morephone.utils.Injection;
 
 import org.greenrobot.eventbus.EventBus;
@@ -94,7 +95,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
-        mIncomingPhoneNumbersAdapter = new IncomingPhoneNumbersAdapter(new ArrayList<IncomingPhoneNumber>(), this);
+        mIncomingPhoneNumbersAdapter = new IncomingPhoneNumbersAdapter(getContext(), new ArrayList<IncomingPhoneNumber>(), this);
         recyclerView.setAdapter(mIncomingPhoneNumbersAdapter);
 
         mPresenter.loadIncomingPhoneNumbers(getContext());
@@ -147,9 +148,11 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     }
 
     @Override
-    public void onItemClick(int pos) {
+    public void onItemClick(IncomingPhoneNumbersViewHolder holder, int pos) {
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
+        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
         if (mIsAuthenticate) {
             startActivity(new Intent(getActivity(), MainActivity.class));
         } else {
@@ -166,9 +169,12 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     }
 
     @Override
-    public void onItemMessage(int pos) {
+    public void onItemMessage(IncomingPhoneNumbersViewHolder holder, int pos) {
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+
+        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
+        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
 
         if (mIsAuthenticate) {
             Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -183,9 +189,12 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     }
 
     @Override
-    public void onItemVoice(int pos) {
+    public void onItemVoice(IncomingPhoneNumbersViewHolder holder, int pos) {
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+
+        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
+        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
 
         if (mIsAuthenticate) {
             Intent intent = new Intent(getActivity(), MainActivity.class);

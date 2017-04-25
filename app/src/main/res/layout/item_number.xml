@@ -11,6 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <View
+            android:id="@+id/view_item_number_choose"
+            style="@style/ViewDivider"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2dp"
+            android:background="@android:color/white" />
+
         <com.ethan.morephone.widget.MyTextView
             android:id="@+id/text_number"
             style="@style/TextNumberItem"
@@ -31,15 +38,13 @@
             android:layout_toLeftOf="@+id/image_delete"
             android:visibility="visible" />
 
-
-
         <com.ethan.morephone.widget.MyTextView
             android:id="@+id/text_item_number_voice_unread"
             style="@style/ViewCommon"
-            android:text="4"
-            android:layout_toLeftOf="@+id/view_0"
             android:layout_margin="8dp"
-            android:textColor="@color/colorPink"/>
+            android:layout_toLeftOf="@+id/view_0"
+            android:text="4"
+            android:textColor="@color/colorPink" />
 
         <ImageView
             android:id="@+id/image_voice"
@@ -68,10 +73,10 @@
         <com.ethan.morephone.widget.MyTextView
             android:id="@+id/text_item_number_message_unread"
             style="@style/ViewCommon"
-            android:text="2"
-            android:layout_toLeftOf="@+id/view_2"
             android:layout_margin="8dp"
-            android:textColor="@color/colorPink"/>
+            android:layout_toLeftOf="@+id/view_2"
+            android:text="2"
+            android:textColor="@color/colorPink" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
