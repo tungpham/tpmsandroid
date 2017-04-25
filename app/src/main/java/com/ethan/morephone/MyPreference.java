@@ -15,6 +15,8 @@ public class MyPreference {
     private static final String PROPERTY_USER_PASSWORD = "PROPERTY_USER_PASSWORD";
 
     private static final String PROPERTY_PHONE_NUMBER = "PROPERTY_PHONE_NUMBER";
+    private static final String PROPERTY_FRIENDLY_NAME = "PROPERTY_FRIENDLY_NAME";
+    private static final String PROPERTY_PHONE_NUMBER_SID = "PROPERTY_PHONE_NUMBER_SID";
 
     private static final String PROPERTY_INBOX = "PROPERTY_INBOX";
 
@@ -70,12 +72,32 @@ public class MyPreference {
 
     public static String getPhoneNumber(Context context){
         SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getString(PROPERTY_PHONE_NUMBER, "+18052284394");
+        return preferences.getString(PROPERTY_PHONE_NUMBER, "");
     }
 
     public static void setPhoneNumber(Context context, String phoneNumber){
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_PHONE_NUMBER, phoneNumber).commit();
+    }
+
+    public static String getFriendlyName(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_FRIENDLY_NAME, "");
+    }
+
+    public static void setFriendlyName(Context context, String phoneNumber){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_FRIENDLY_NAME, phoneNumber).commit();
+    }
+
+    public static String getPhoneNumberSid(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_PHONE_NUMBER_SID, "");
+    }
+
+    public static void setPhoneNumberSid(Context context, String phoneNumber){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_PHONE_NUMBER_SID, phoneNumber).commit();
     }
 
     public static boolean getInbox(Context context){

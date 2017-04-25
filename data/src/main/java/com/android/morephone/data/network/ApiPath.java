@@ -1,11 +1,12 @@
 package com.android.morephone.data.network;
 
 
-import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
-import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
-import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
+import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
+import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.record.RecordItem;
@@ -51,11 +52,18 @@ interface ApiPath {
                                                          @Query("VoiceEnabled") boolean voiceEnabled);
 
     /*--------------------------------Incoming Phone Numbers ----------------------------------*/
+
     @GET("Accounts/{accountsid}/IncomingPhoneNumbers.json")
     Call<IncomingPhoneNumbers> getIncomingPhoneNumbers(@Path("accountsid") String accountsid);
 
     @DELETE("Accounts/{accountsid}/IncomingPhoneNumbers/{incomingPhoneNumberSid}")
     Call<Void> deletePhoneNumber(@Path("accountsid") String accountsid, @Path("incomingPhoneNumberSid") String incomingPhoneNumberSid);
+
+    @FormUrlEncoded
+    @POST("Accounts/{accountsid}/IncomingPhoneNumbers/{incomingPhoneNumberSid}.json")
+    Call<IncomingPhoneNumber> changeFriendlyName(@Path("accountsid") String accountsid,
+                                                 @Path("incomingPhoneNumberSid") String incomingPhoneNumberSid,
+                                                 @Field("FriendlyName") String friendlyName);
 
     /*-----------------------------------------MESSAGE-----------------------------------------*/
 
@@ -118,7 +126,6 @@ interface ApiPath {
     Call<Void> deleteVoice(@Path("accountsid") String accountsid, @Path("callsid") String callsid);
 
 
-
     @GET("Accounts/{accountsid}/Calls{callsid}/Recordings/{recordingsid}.json")
     Call<RecordItem> getRecoding(@Path("accountsid") String accountsid,
                                  @Path("callsid") String callsid,
@@ -126,8 +133,8 @@ interface ApiPath {
 
     @DELETE("Accounts/{accountsid}/Calls{callsid}/Recordings/{recordingsid}.json")
     Call<Void> deleteCallRecoding(@Path("accountsid") String accountsid,
-                                 @Path("callsid") String callsid,
-                                 @Path("recordingsid") String recordingsid);
+                                  @Path("callsid") String callsid,
+                                  @Path("recordingsid") String recordingsid);
 
 
 }

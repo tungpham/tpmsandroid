@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 
 import com.android.morephone.data.repository.message.MessageRepository;
 import com.android.morephone.data.repository.message.source.remote.MessageRemoteDataSource;
+import com.android.morephone.data.repository.phonenumbers.incoming.IncomingPhoneNumberRepository;
+import com.android.morephone.data.repository.phonenumbers.incoming.source.remote.IncomingPhoneNumberRemoteDataSource;
 import com.android.morephone.data.repository.record.RecordRepository;
 import com.android.morephone.data.repository.record.source.remote.RecordRemoteDataSource;
 import com.android.morephone.data.repository.voice.VoiceRepository;
@@ -18,6 +20,7 @@ import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
 import com.android.morephone.domain.usecase.number.DeleteIncomingPhoneNumber;
 import com.android.morephone.domain.usecase.number.GetAvailableCountries;
+import com.android.morephone.domain.usecase.number.incoming.ChangeFriendlyName;
 import com.android.morephone.domain.usecase.record.DeleteCallRecord;
 import com.android.morephone.domain.usecase.record.GetCallRecords;
 import com.android.morephone.domain.usecase.voice.CreateVoice;
@@ -108,6 +111,14 @@ public class Injection {
         return new DeleteIncomingPhoneNumber(context);
     }
 
+    /*--------------------------------Incoming Phone Numbers----------------------------------*/
+    private static IncomingPhoneNumberRepository providerIncomingPhoneNumberRepository(@NonNull Context context) {
+        return IncomingPhoneNumberRepository.getInstance(IncomingPhoneNumberRemoteDataSource.getInstance(context));
+    }
+
+    public static ChangeFriendlyName providerChangeFriendlyName(@NonNull Context context) {
+        return new ChangeFriendlyName(providerIncomingPhoneNumberRepository(context));
+    }
 
     /*-----------------------------------------RECORD-----------------------------------------*/
 

@@ -127,10 +127,24 @@
     <!-- Activity Setting -->
     <string name="setting_label">\u0020Setting</string>
 
-    <!-- Fragment setting -->
+    <!-- Change Friendly Name Dialog -->
+    <string name="change_friendly_name_dialog_title">Change Friendly Name</string>
+    <string name="change_friendly_name_dialog_change">CHANGE</string>
+    <string name="change_friendly_name_dialog_cancel">CANCEL</string>
+    <string name="change_friendly_name_dialog_empty">Please enter friendly name</string>
+
+    <string name="setting_enable_record">Enable Record</string>
+    <string name="setting_enable_record_summary">Allow device record a call</string>
+
+    <string name="setting_enable_notification">Enable Notification</string>
+    <string name="setting_enable_notification_summary">Allow device show notification</string>
+
     <string name="setting_version">Version\u0020</string>
     <string name="setting_friendly_name">Friendly name</string>
     <string name="setting_configure_sms_forwarding">Configure SMS Forwarding</string>
+    <string name="setting_configure_sms_forwarding_summary">Configure SMS Forwarding</string>
+    <string name="setting_phone">Phone</string>
+    <string name="setting_email">Email</string>
 
     <!-- Fragment License -->
     <string name="license_label">License</string>
@@ -182,6 +196,7 @@
     <string name="usage_voice_incoming">INCOMING</string>
     <string name="usage_voice_outgoing">OUTGOING</string>
     <string name="usage_voice_missing">MISSING</string>
+
 
     <!-- Toolbar text home-->
     <string name="all_toolbar_home">&lt;\u0020 Home</string>

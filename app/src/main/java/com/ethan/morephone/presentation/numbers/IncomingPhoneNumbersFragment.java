@@ -150,7 +150,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void onItemClick(IncomingPhoneNumbersViewHolder holder, int pos) {
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+        storePhoneNumber(incomingPhoneNumber);
         mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
         mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
         if (mIsAuthenticate) {
@@ -171,7 +171,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void onItemMessage(IncomingPhoneNumbersViewHolder holder, int pos) {
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+        storePhoneNumber(incomingPhoneNumber);
 
         mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
         mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
@@ -191,7 +191,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void onItemVoice(IncomingPhoneNumbersViewHolder holder, int pos) {
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+        storePhoneNumber(incomingPhoneNumber);
 
         mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
         mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
@@ -256,5 +256,11 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
             default:
                 break;
         }
+    }
+
+    private void storePhoneNumber(IncomingPhoneNumber incomingPhoneNumber){
+        MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
+        MyPreference.setFriendlyName(getContext(), incomingPhoneNumber.friendlyName);
+        MyPreference.setPhoneNumberSid(getContext(), incomingPhoneNumber.sid);
     }
 }

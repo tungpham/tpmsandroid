@@ -2,11 +2,12 @@ package com.android.morephone.data.network;
 
 import android.content.Context;
 
-import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
-import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
-import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
+import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
+import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
+import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
@@ -224,6 +225,9 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+
+    /*-----------------------------------------INCOMING PHONE NUMBER -----------------------------------------*/
+
     public static void getCountryCode(Context context, Callback<List<AvailableCountry>> callback) {
         Call<List<AvailableCountry>> call = getApiPath(context).getCountryCode();
         call.enqueue(callback);
@@ -267,6 +271,15 @@ public class ApiManager {
 //
 //            }
 //        });
+    }
+
+    public static void changeFriendlyName(Context context,
+                                          String accountSid,
+                                          String incomingPhoneNumberSid,
+                                          String friendlyName,
+                                          Callback<IncomingPhoneNumber> callback) {
+        Call<IncomingPhoneNumber> call = getApiPath(context).changeFriendlyName(accountSid, incomingPhoneNumberSid, friendlyName);
+        call.enqueue(callback);
     }
 
 
