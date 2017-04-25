@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <include layout="@layout/tool_bar_custom" />
+        <include layout="@layout/tool_bar" />
 
         <FrameLayout
             android:id="@+id/content_frame"

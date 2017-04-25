@@ -29,7 +29,7 @@ public class SettingFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity activity = (BaseActivity) getActivity();
-        activity.enableActionBar(toolbar, getString(R.string.setting_label));
+        activity.enableHomeActionBar(toolbar, getString(R.string.setting_label));
 
         setHasOptionsMenu(true);
         return view;

@@ -86,7 +86,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         if (mIsAuthenticate) {
             baseActivity.setTitleActionBar(toolbar, getString(R.string.my_number_label));
         } else {
-            baseActivity.enableActionBar(toolbar, getString(R.string.my_number_label));
+            baseActivity.enableHomeActionBar(toolbar, getString(R.string.my_number_label));
         }
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);

@@ -36,6 +36,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void enableHomeActionBar(Toolbar toolbar, String title) {
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setTitle(title);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        }
+    }
+
 
     public void setTitleActionBar(Toolbar toolbar, String title) {
         setSupportActionBar(toolbar);

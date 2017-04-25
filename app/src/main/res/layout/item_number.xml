@@ -32,10 +32,34 @@
             android:visibility="visible" />
 
 
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_item_number_voice_unread"
+            style="@style/ViewCommon"
+            android:text="4"
+            android:layout_toLeftOf="@+id/view_0"
+            android:layout_margin="8dp"
+            android:textColor="@color/colorPink"/>
+
+        <ImageView
+            android:id="@+id/image_voice"
+            style="@style/ImageAction"
+            android:layout_toLeftOf="@+id/view_0"
+            android:paddingLeft="@dimen/activity_vertical_margin"
+            android:paddingRight="@dimen/activity_vertical_margin"
+            android:src="@drawable/ic_voice"
+            android:visibility="visible" />
+
+        <View
+            android:id="@+id/view_2"
+            style="@style/ViewDivider"
+            android:layout_toLeftOf="@+id/image_voice"
+            android:visibility="visible" />
+
         <ImageView
             android:id="@+id/image_message"
             style="@style/ImageAction"
-            android:layout_toLeftOf="@+id/view_0"
+            android:layout_toLeftOf="@+id/view_2"
             android:paddingLeft="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_vertical_margin"
             android:src="@drawable/message"
@@ -45,47 +69,9 @@
             android:id="@+id/text_item_number_message_unread"
             style="@style/ViewCommon"
             android:text="2"
-            android:layout_toLeftOf="@+id/view_0"
-            android:layout_margin="8dp"
-            android:textColor="@color/colorPink"/>
-
-        <View
-            android:id="@+id/view"
-            style="@style/ViewDivider"
-            android:layout_toLeftOf="@+id/image_message"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/image_call"
-            style="@style/ImageAction"
-            android:layout_toLeftOf="@+id/view"
-            android:paddingLeft="@dimen/activity_vertical_margin"
-            android:paddingRight="@dimen/activity_vertical_margin"
-            android:src="@drawable/phone"
-            android:visibility="gone" />
-
-        <View
-            android:id="@+id/view_2"
-            style="@style/ViewDivider"
-            android:layout_toLeftOf="@+id/image_call"
-            android:visibility="visible" />
-
-        <com.ethan.morephone.widget.MyTextView
-            android:id="@+id/text_item_number_voice_unread"
-            style="@style/ViewCommon"
-            android:text="4"
             android:layout_toLeftOf="@+id/view_2"
             android:layout_margin="8dp"
             android:textColor="@color/colorPink"/>
-
-        <ImageView
-            android:id="@+id/image_voice"
-            style="@style/ImageAction"
-            android:layout_toLeftOf="@+id/view_2"
-            android:paddingLeft="@dimen/activity_vertical_margin"
-            android:paddingRight="@dimen/activity_vertical_margin"
-            android:src="@drawable/ic_voice"
-            android:visibility="visible" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

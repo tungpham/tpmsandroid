@@ -122,7 +122,7 @@
     <string name="my_number_label">My Numbers</string>
 
     <!-- Activity Usage -->
-    <string name="usage_label">Usage</string>
+    <string name="usage_label">\u0020Usage</string>
 
     <!-- Activity Setting -->
     <string name="setting_label">Setting</string>

@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity implements
         setContentView(R.layout.activity_main);
 
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        enableActionBar(mToolbar, getString(R.string.dashboard_label));
+        enableActionBar(mToolbar, MyPreference.getPhoneNumber(getApplicationContext()));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(
