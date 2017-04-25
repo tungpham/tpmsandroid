@@ -3,6 +3,7 @@ package com.android.morephone.data.network;
 import android.content.Context;
 
 import com.android.morephone.data.entity.call.Calls;
+import com.android.morephone.data.entity.record.Records;
 
 import java.util.concurrent.TimeUnit;
 
@@ -86,6 +87,14 @@ public class ApiMorePhone {
                                    String phoneNumber,
                                    Callback<Calls> callback) {
         Call<Calls> call = getApiPath(context).getCallLogs();
+        call.enqueue(callback);
+    }
+
+    public static void getRecords(Context context,
+                                   String accountSid,
+                                   String phoneNumber,
+                                   Callback<Records> callback) {
+        Call<Records> call = getApiPath(context).getRecords();
         call.enqueue(callback);
     }
 }

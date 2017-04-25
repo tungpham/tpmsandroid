@@ -1,13 +1,12 @@
 package com.ethan.morephone.presentation.voice.adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.entity.twilio.voice.VoiceItem;
+import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.Utils;
@@ -22,7 +21,7 @@ import java.util.List;
 
 public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
 
-    private List<VoiceItem> mVoiceItems;
+    private List<Record> mVoiceItems;
     private OnItemVoiceClickListener mOnItemVoiceClickListener;
     private TextDrawable.IBuilder mDrawableBuilder;
     private Context mContext;
@@ -32,7 +31,7 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
     private RecyclerView mRecyclerView;
 
 
-    public VoicesAdapter(Context context, String phoneNumber, List<VoiceItem> conversationEntities, OnItemVoiceClickListener onItemConversationClickListener) {
+    public VoicesAdapter(Context context, String phoneNumber, List<Record> conversationEntities, OnItemVoiceClickListener onItemConversationClickListener) {
         mContext = context;
         mPhoneNumber = phoneNumber;
         mVoiceItems = conversationEntities;
@@ -40,7 +39,7 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         mDrawableBuilder = TextDrawable.builder().round();
     }
 
-    public void replaceData(List<VoiceItem> messageItems) {
+    public void replaceData(List<Record> messageItems) {
         mVoiceItems = messageItems;
         notifyDataSetChanged();
     }
@@ -49,7 +48,7 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         mRecyclerView = recyclerView;
     }
 
-    public List<VoiceItem> getData() {
+    public List<Record> getData() {
         return mVoiceItems;
     }
 
@@ -62,17 +61,15 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
 
     @Override
     public void onBindViewHolder(final VoicesViewHolder holder, final int position) {
-        final VoiceItem callEntity = mVoiceItems.get(position);
-        if (mPhoneNumber.equals(callEntity.from)) {
-            holder.textPhoneNumber.setText(callEntity.to);
-            holder.imageStatus.setImageResource(R.drawable.ic_call_outgoing_holo_dark);
-        } else {
-            holder.textPhoneNumber.setText(callEntity.from);
-            holder.imageStatus.setImageResource(R.drawable.ic_call_incoming_holo_dark);
-        }
+        final Record callEntity = mVoiceItems.get(position);
+//        if (mPhoneNumber.equals(callEntity.callSid)) {
+//            holder.textPhoneNumber.setText(callEntity.to);
+//        } else {
+//            holder.textPhoneNumber.setText(callEntity.from);
+//        }
         holder.textTime.setText(Utils.formatDate(callEntity.dateCreated));
 
-        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(callEntity.from.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
+//        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(callEntity.from.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
 
         holder.expandableLayout.setExpanded(false, false);
         holder.expandableLayout.setTag(holder);
@@ -176,7 +173,7 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
     };
 
     public interface OnItemVoiceClickListener {
-        void onItemClick(VoicesViewHolder holder, int pos, VoiceItem voiceItem);
+        void onItemClick(VoicesViewHolder holder, int pos, Record voiceItem);
 
         void onPauseRecord(VoicesViewHolder holder);
 
@@ -184,9 +181,9 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
 
         void onDeleteRecord(VoicesViewHolder holder);
 
-        void onCall(VoiceItem voiceItem);
+        void onCall(Record voiceItem);
 
-        void onMessage(VoiceItem voiceItem);
+        void onMessage(Record voiceItem);
     }
 
     public interface OnOtherExpandListener {

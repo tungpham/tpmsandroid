@@ -16,10 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.morephone.data.entity.FakeData;
-import com.android.morephone.data.entity.twilio.record.RecordItem;
-import com.android.morephone.data.entity.twilio.voice.VoiceItem;
+import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.log.DebugTool;
+import com.ethan.morephone.Constant;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
@@ -48,10 +47,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -99,7 +94,7 @@ public class VoiceFragment extends BaseFragment implements
 
     private MediaPlayer mMediaPlayer;
 
-    private RecordItem mRecordItem;
+    private Record mRecordItem;
 
     private MyExoPlayer mExoPlayer;
     private VoicesViewHolder mVoicesViewHolder;
@@ -114,7 +109,6 @@ public class VoiceFragment extends BaseFragment implements
         super.onCreate(savedInstanceState);
         new VoicePresenter(this,
                 Injection.providerUseCaseHandler(),
-                Injection.providerGetVoicesIncoming(getContext()),
                 Injection.providerDeleteVoice(getContext()),
                 Injection.providerGetCallRecords(getContext()),
                 Injection.providerDeleteCallRecord(getContext()));
@@ -135,7 +129,7 @@ public class VoiceFragment extends BaseFragment implements
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
-        mVoicesAdapter = new VoicesAdapter(getContext(), mPhoneNumber, new ArrayList<VoiceItem>(), this);
+        mVoicesAdapter = new VoicesAdapter(getContext(), mPhoneNumber, new ArrayList<Record>(), this);
         mRecyclerView.setAdapter(mVoicesAdapter);
         mVoicesAdapter.setRecyclerView(mRecyclerView);
 
@@ -169,33 +163,13 @@ public class VoiceFragment extends BaseFragment implements
         return view;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//
-//            case android.R.id.home:
-//                getActivity().finish();
-//                break;
-//
-//            default:
-//                break;
-//        }
-//        return true;
-//    }
-
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
             mPresenter.clearData();
-            mPresenter.loadVoicesIncoming(mPhoneNumber);
-//            mPresenter.loadVoicesOutgoing(mPhoneNumber);
+            mPresenter.loadRecords(getContext());
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    public void showVoices(List<VoiceItem> voiceItems) {
-        mVoicesAdapter.replaceData(voiceItems);
     }
 
     @Override
@@ -205,8 +179,8 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void initializeRecord(RecordItem recordItem, String url) {
-        mRecordItem = recordItem;
+    public void initializeRecord(Record record, String url) {
+        mRecordItem = record;
 
         String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:40.0) Gecko/20100101 Firefox/40.0";
         Uri uri = Uri.parse(url);
@@ -229,9 +203,8 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void emptyRecord(int position) {
-        VoicesViewHolder holder = getVoicesViewHolder(position);
-        if (holder != null) holder.showLoading(false);
+    public void showRecords(List<Record> records) {
+        mVoicesAdapter.replaceData(records);
     }
 
     @Override
@@ -240,11 +213,11 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onItemClick(VoicesViewHolder holder, int pos, VoiceItem voiceItem) {
+    public void onItemClick(VoicesViewHolder holder, int pos, Record recordItem) {
         holder.expandableLayout.toggleExpansion();
-        if (!holder.expandableLayout.isExpanded()) {
-            mPresenter.loadRecords(voiceItem.sid, pos);
-            holder.showLoading(true);
+        if(!holder.expandableLayout.isExpanded()) {
+            String url = recordItem.uri.replace("json", "mp3");
+            initializeRecord(recordItem, Constant.API_ROOT + url);
         }
         mVoicesViewHolder = holder;
     }
@@ -286,51 +259,33 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onCall(VoiceItem voiceItem) {
+    public void onCall(Record voiceItem) {
         Intent intent = new Intent(getActivity(), InCallActivity.class);
         Bundle bundle = new Bundle();
-        String phoneNumber;
-        if (voiceItem.from.equals(mPhoneNumber)) {
-            phoneNumber = voiceItem.to;
-        } else {
-            phoneNumber = voiceItem.from;
-        }
+        String phoneNumber = "";
+//        if (voiceItem.from.equals(mPhoneNumber)) {
+//            phoneNumber = voiceItem.to;
+//        } else {
+//            phoneNumber = voiceItem.from;
+//        }
         bundle.putString(InCallActivity.BUNDLE_TO_PHONE_NUMBER, phoneNumber);
         intent.putExtras(bundle);
         startActivity(intent);
     }
 
     @Override
-    public void onMessage(VoiceItem voiceItem) {
+    public void onMessage(Record voiceItem) {
         Intent intent = new Intent(getActivity(), ComposeActivity.class);
         Bundle bundle = new Bundle();
-        String phoneNumber;
-        if (voiceItem.from.equals(mPhoneNumber)) {
-            phoneNumber = voiceItem.to;
-        } else {
-            phoneNumber = voiceItem.from;
-        }
+        String phoneNumber = "";
+//        if (voiceItem.from.equals(mPhoneNumber)) {
+//            phoneNumber = voiceItem.to;
+//        } else {
+//            phoneNumber = voiceItem.from;
+//        }
         bundle.putString(ComposeFragment.BUNDLE_TO_PHONE_NUMBER, phoneNumber);
         intent.putExtras(bundle);
         startActivity(intent);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEvent(FakeData fakeData) {
-//        showVoices(fakeData.call_log);
-//        DebugTool.logD("COME: " + fakeData.call_log.size());
     }
 
 
