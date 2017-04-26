@@ -7,6 +7,7 @@ package com.ethan.morephone.presentation.voice.adapter;
 public enum StateRecord {
 
     START,
+    PREPARE,
     PLAY,
     PAUSE,
     RESUME,

@@ -70,11 +70,11 @@ public class VoicesAdapter extends RecyclerView.Adapter<VoicesViewHolder> {
         if(!TextUtils.isEmpty(record.phoneNumber)) {
             holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(record.phoneNumber.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
         }
-
-        holder.expandableLayout.setExpanded(true, false);
-        holder.expandableLayout.setTag(holder);
+        holder.showLoading(false);
+//        holder.expandableLayout.setExpanded(true, false);
+//        holder.expandableLayout.setTag(holder);
 //        holder.expandableLayout.setOnExpandListener(mOnExpandListener);
-        holder.expandableLayout.setPosition(position);
+//        holder.expandableLayout.setPosition(position);
 //        holder.expandableLayout.setAdapter(this);
 
         holder.textCall.setOnClickListener(new View.OnClickListener() {

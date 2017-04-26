@@ -73,7 +73,7 @@ public class VoiceFragment extends BaseFragment implements
 
     private static final long PROGRESS_UPDATE_INTERNAL = 10;
     private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 10;
-    private static final int PROGRESS_MAX = 1000;
+    private static final int PROGRESS_MAX = 500;
 
     public static VoiceFragment getInstance(String phoneNumber) {
         VoiceFragment voiceFragment = new VoiceFragment();
@@ -166,7 +166,7 @@ public class VoiceFragment extends BaseFragment implements
 
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
-            mPresenter.clearData();
+//            mPresenter.clearData();
             mPresenter.loadRecords(getContext());
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
@@ -197,6 +197,7 @@ public class VoiceFragment extends BaseFragment implements
         mExoPlayer = MyExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
         //exoPlayer.addListener(this);
 //        mExoPlayer.setVoicesViewHolder();
+        mExoPlayer.setPlayWhenReady(true);
         mExoPlayer.addListener(this);
         mExoPlayer.prepare(mediaSource);
         mRunnableUpdateProgress = new MyRunnable(this);
@@ -215,7 +216,7 @@ public class VoiceFragment extends BaseFragment implements
 
     @Override
     public void onItemClick(VoicesViewHolder holder, int pos, Record recordItem) {
-        holder.expandableLayout.toggleExpansion();
+//        holder.expandableLayout.toggleExpansion();
 //        if (!holder.expandableLayout.isExpanded()) {
 //            String url = recordItem.uri.replace("json", "mp3");
 //            initializeRecord(recordItem, Constant.API_ROOT + url);
@@ -227,34 +228,44 @@ public class VoiceFragment extends BaseFragment implements
 
     @Override
     public void onPauseRecord(VoicesViewHolder holder, Record recordItem) {
-        if (mVoicesViewHolder != holder) {
-            mVoicesViewHolder.setStateRecord(StateRecord.START);
-            mVoicesViewHolder = holder;
+        DebugTool.logD("STATE: " + holder.getStateRecord());
+
+        if(mVoicesViewHolder != null && mVoicesViewHolder != holder){
+
+            clearVoice();
         }
 
-        switch (holder.getStateRecord()) {
+        mVoicesViewHolder = holder;
+        switch (mVoicesViewHolder.getStateRecord()) {
             case START:
                 String url = recordItem.uri.replace("json", "mp3");
                 initializeRecord(recordItem, Constant.API_ROOT + url);
-                holder.showLoading(true);
+                holder.setStateRecord(StateRecord.PREPARE);
                 break;
             case PLAY:
-                mExoPlayer.setPlayWhenReady(true);
-                holder.uiPause();
-                holder.setStateRecord(StateRecord.PAUSE);
+                if (mExoPlayer != null) {
+                    mExoPlayer.seekTo(0);
+                    mExoPlayer.setPlayWhenReady(true);
+                    playRecord();
+                }
                 break;
             case PAUSE:
                 if (mExoPlayer != null) {
                     mExoPlayer.setPlayWhenReady(false);
-                    holder.uiPlay();
-                    holder.setStateRecord(StateRecord.RESUME);
+                    pauseRecord();
                 }
                 break;
             case RESUME:
                 if (mExoPlayer != null) {
                     mExoPlayer.setPlayWhenReady(true);
-                    holder.uiPause();
-                    holder.setStateRecord(StateRecord.PAUSE);
+                    playRecord();
+                }
+                break;
+            case STOP:
+                if (mExoPlayer != null) {
+                    mExoPlayer.seekTo(0);
+                    mExoPlayer.setPlayWhenReady(true);
+                    playRecord();
                 }
                 break;
             default:
@@ -285,10 +296,10 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onCall(Record voiceItem) {
+    public void onCall(Record record) {
         Intent intent = new Intent(getActivity(), InCallActivity.class);
         Bundle bundle = new Bundle();
-        String phoneNumber = "";
+        String phoneNumber = record.phoneNumber;
 //        if (voiceItem.from.equals(mPhoneNumber)) {
 //            phoneNumber = voiceItem.to;
 //        } else {
@@ -300,10 +311,10 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onMessage(Record voiceItem) {
+    public void onMessage(Record record) {
         Intent intent = new Intent(getActivity(), ComposeActivity.class);
         Bundle bundle = new Bundle();
-        String phoneNumber = "";
+        String phoneNumber = record.phoneNumber;
 //        if (voiceItem.from.equals(mPhoneNumber)) {
 //            phoneNumber = voiceItem.to;
 //        } else {
@@ -337,7 +348,7 @@ public class VoiceFragment extends BaseFragment implements
     public void onLoadingChanged(boolean isLoading) {
         if (!isLoading && mVoicesViewHolder != null) {
 //            mVoicesViewHolder.visiblePlayerControl(true);
-            mExoPlayer.setPlayWhenReady(true);
+            mVoicesViewHolder.imagePause.setEnabled(true);
             mVoicesViewHolder.uiPause();
             mVoicesViewHolder.setStateRecord(StateRecord.PAUSE);
             mVoicesViewHolder.showLoading(false);
@@ -347,6 +358,27 @@ public class VoiceFragment extends BaseFragment implements
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         DebugTool.logD("playWhenReady: " + playWhenReady + " |||    playbackState: " + playbackState);
+        switch (playbackState) {
+            case 2:
+                mVoicesViewHolder.showLoading(true);
+                mVoicesViewHolder.imagePause.setEnabled(false);
+                break;
+            case 3:
+                mVoicesViewHolder.showLoading(false);
+                mVoicesViewHolder.imagePause.setEnabled(true);
+                if (playWhenReady) {
+                    playRecord();
+                } else {
+                    pauseRecord();
+                }
+                break;
+            case 4:
+                mVoicesViewHolder.uiPlay();
+                mVoicesViewHolder.setStateRecord(StateRecord.STOP);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -398,7 +430,10 @@ public class VoiceFragment extends BaseFragment implements
                 if (progress == PROGRESS_MAX) {
                     voiceFragment.stopDonutProgressUpdate();
                 }
-                mVoicesViewHolder.textDuration.setText(DateUtils.formatElapsedTime((duration - currentPosition) / 1000));
+
+                if (duration > 0) {
+                    mVoicesViewHolder.textDuration.setText(DateUtils.formatElapsedTime((duration - currentPosition) / 1000));
+                }
             }
         }
     }
@@ -437,12 +472,27 @@ public class VoiceFragment extends BaseFragment implements
             return Integer.MIN_VALUE;
     }
 
-    private void closeVoice() {
+    private void clearVoice() {
         stopDonutProgressUpdate();
+        mVoicesViewHolder.setStateRecord(StateRecord.START);
+        mVoicesViewHolder.uiPlay();
+        mExoPlayer.stop();
+        mVoicesViewHolder.seekBar.setProgress(0);
+        mVoicesViewHolder.textDuration.setText("");
         mVoicesViewHolder = null;
         mExoPlayer = null;
         mScheduleFuture = null;
 
+    }
+
+    private void playRecord() {
+        mVoicesViewHolder.uiPause();
+        mVoicesViewHolder.setStateRecord(StateRecord.PAUSE);
+    }
+
+    private void pauseRecord() {
+        mVoicesViewHolder.uiPlay();
+        mVoicesViewHolder.setStateRecord(StateRecord.RESUME);
     }
 
     private VoicesViewHolder getVoicesViewHolder(int pos) {

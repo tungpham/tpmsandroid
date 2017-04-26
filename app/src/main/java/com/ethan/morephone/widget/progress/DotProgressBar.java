@@ -356,12 +356,12 @@ public class DotProgressBar extends View {
     }
   }
 
-  private void stopAnimation() {
+  public void stopAnimation() {
     this.clearAnimation();
     postInvalidate();
   }
 
-  private void startAnimation() {
+  public void startAnimation() {
     final BounceAnimation bounceAnimation = new BounceAnimation();
     bounceAnimation.setDuration(animationTime);
     bounceAnimation.setRepeatCount(Animation.INFINITE);

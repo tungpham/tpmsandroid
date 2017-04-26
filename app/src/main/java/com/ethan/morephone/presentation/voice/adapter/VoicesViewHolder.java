@@ -5,10 +5,10 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ethan.morephone.R;
-import com.ethan.morephone.widget.ExpandableLayout;
 import com.ethan.morephone.widget.progress.DotProgressBar;
 
 /**
@@ -21,7 +21,7 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
     public ImageView imageIcon;
     public TextView textPhoneNumber;
     public TextView textTime;
-    public ExpandableLayout expandableLayout;
+//    public ExpandableLayout expandableLayout;
     public ImageView imagePause;
     public ImageView imageDelete;
     public ImageView imageVolume;
@@ -31,6 +31,7 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
     public ImageView imageStatus;
     public TextView textCall;
     public TextView textMessage;
+    public RelativeLayout relativeProgress;
 
     private int mPosition;
     private StateRecord mStateRecord = StateRecord.START;
@@ -41,7 +42,7 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
         imageIcon = (ImageView) itemView.findViewById(R.id.image_avatar);
         textPhoneNumber = (TextView) itemView.findViewById(R.id.text_phone_number);
         textTime = (TextView) itemView.findViewById(R.id.text_time);
-        expandableLayout = (ExpandableLayout) itemView.findViewById(R.id.expandable_layout);
+//        expandableLayout = (ExpandableLayout) itemView.findViewById(R.id.expandable_layout);
         imagePause = (ImageView) itemView.findViewById(R.id.image_item_voice_pause);
         imageDelete = (ImageView) itemView.findViewById(R.id.image_item_voice_delete);
         imageVolume = (ImageView) itemView.findViewById(R.id.image_item_voice_volume);
@@ -52,6 +53,9 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
 
         textCall = (TextView) itemView.findViewById(R.id.text_item_voice_call);
         textMessage = (TextView) itemView.findViewById(R.id.text_item_voice_message);
+        relativeProgress = (RelativeLayout) itemView.findViewById(R.id.relative_item_voice_progress);
+
+        showLoading(false);
 
 //        visiblePlayerControl(false);
     }
@@ -76,9 +80,9 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
 
     public void showLoading(boolean isActive) {
         if (isActive) {
-            dotProgressBar.setVisibility(View.VISIBLE);
+            relativeProgress.setVisibility(View.VISIBLE);
         } else {
-            dotProgressBar.setVisibility(View.GONE);
+            relativeProgress.setVisibility(View.GONE);
         }
     }
 

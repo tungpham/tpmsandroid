@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import com.android.morephone.data.entity.record.Records;
 import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
-import com.android.morephone.data.entity.twilio.voice.VoiceItem;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
@@ -16,9 +15,6 @@ import com.android.morephone.domain.usecase.record.GetCallRecords;
 import com.android.morephone.domain.usecase.voice.DeleteVoice;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyPreference;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +33,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
     private final GetCallRecords mGetCallRecords;
     private final DeleteCallRecord mDeleteCallRecord;
 
-    private List<VoiceItem> mVoiceItems;
+//    private List<VoiceItem> mVoiceItems;
 
     public VoicePresenter(@NonNull VoiceContract.View view,
                           @NonNull UseCaseHandler useCaseHandler,
@@ -50,7 +46,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
         mGetCallRecords = getCallRecords;
         mDeleteCallRecord = deleteCallRecord;
 
-        mVoiceItems = new ArrayList<>();
+//        mVoiceItems = new ArrayList<>();
 
         mView.setPresenter(this);
     }
@@ -118,7 +114,7 @@ public class VoicePresenter implements VoiceContract.Presenter {
 
     @Override
     public void clearData() {
-        mVoiceItems.clear();
+//        mVoiceItems.clear();
     }
 
 }
