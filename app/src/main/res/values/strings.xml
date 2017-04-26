@@ -188,14 +188,17 @@
     <string name="btn_rate_now">RATE NOW</string>
     <string name="btn_not_now">NOT NOW</string>
 
-    <string name="usage_message_total">TOTAL</string>
-    <string name="usage_message_incoming">INCOMING</string>
-    <string name="usage_message_outgoing">OUTGOING</string>
+    <string name="usage_message_total">Total</string>
+    <string name="usage_message_incoming">Incoming</string>
+    <string name="usage_message_outgoing">Outgoing</string>
 
-    <string name="usage_voice_total">TOTAL</string>
-    <string name="usage_voice_incoming">INCOMING</string>
-    <string name="usage_voice_outgoing">OUTGOING</string>
-    <string name="usage_voice_missing">MISSING</string>
+    <string name="usage_message_label">Message</string>
+
+    <string name="usage_voice_label">Voice</string>
+    <string name="usage_voice_total">Total</string>
+    <string name="usage_voice_incoming">Incoming</string>
+    <string name="usage_voice_outgoing">Outgoing</string>
+    <string name="usage_voice_missing">Missing</string>
 
 
     <!-- Toolbar text home-->

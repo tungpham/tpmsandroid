@@ -3,6 +3,7 @@ package com.android.morephone.data.network;
 
 import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.entity.record.Records;
+import com.android.morephone.data.entity.usage.Usage;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,5 +19,8 @@ interface ApiMorePhonePath {
 
     @GET("Accounts/Voices")
     Call<Records> getRecords();
+
+    @GET("Accounts/Usage")
+    Call<Usage> getUsage();
 
 }

@@ -186,7 +186,7 @@
     </style>
 
     <style name="Divider" parent="ViewMatch">
-        <item name="android:layout_marginLeft">@dimen/text_numbers_margin_left</item>
+        <item name="android:layout_marginLeft">@dimen/activity_main_margin</item>
         <item name="android:layout_marginRight">@dimen/activity_main_margin</item>
         <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/colorDivider</item>
@@ -361,5 +361,33 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">13sp</item>
         <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="TextSettingCategory" parent="TextSetting">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:layout_marginTop">36dp</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextUsageValueSpent" parent="ViewCommon">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:textColor">@color/colorPink</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="TextUsageValue" parent="ViewCommon">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="TextUsageTitle" parent="ViewMatch">
+        <item name="android:layout_marginRight">@dimen/activity_main_margin</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>

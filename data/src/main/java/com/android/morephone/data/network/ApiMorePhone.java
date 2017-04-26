@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.entity.record.Records;
+import com.android.morephone.data.entity.usage.Usage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -95,6 +96,14 @@ public class ApiMorePhone {
                                    String phoneNumber,
                                    Callback<Records> callback) {
         Call<Records> call = getApiPath(context).getRecords();
+        call.enqueue(callback);
+    }
+
+    public static void getUsage(Context context,
+                                  String accountSid,
+                                  String phoneNumber,
+                                  Callback<Usage> callback) {
+        Call<Usage> call = getApiPath(context).getUsage();
         call.enqueue(callback);
     }
 }

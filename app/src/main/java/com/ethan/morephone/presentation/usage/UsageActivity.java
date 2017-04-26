@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.utils.ActivityUtils;
@@ -33,7 +32,7 @@ public class UsageActivity extends BaseActivity implements View.OnClickListener 
                 UsageFragment.class.getSimpleName());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        enableHomeActionBar(toolbar, MyPreference.getPhoneNumber(getApplicationContext()) + getString(R.string.usage_label));
+        enableHomeActionBar(toolbar, getString(R.string.usage_label));
 
 //        findViewById(R.id.text_home).setOnClickListener(this);
 //        MyTextView myTextView = (MyTextView) findViewById(R.id.text_toolbar_title);

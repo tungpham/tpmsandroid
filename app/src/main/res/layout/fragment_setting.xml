@@ -41,8 +41,7 @@
                 style="@style/ViewCommon"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_setting_friendly_name"
-                android:layout_marginTop="4dp"
-                android:text="Phone 1" />
+                android:layout_marginTop="4dp" />
         </RelativeLayout>
 
         <View
@@ -145,7 +144,7 @@
                 android:id="@+id/text_setting_phone_summary"
                 style="@style/TextTorrentSettingSummary"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_setting_phone"/>
+                android:layout_below="@+id/text_setting_phone" />
 
         </RelativeLayout>
 
@@ -168,7 +167,7 @@
                 android:id="@+id/text_setting_email_summary"
                 style="@style/TextTorrentSettingSummary"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_setting_email"/>
+                android:layout_below="@+id/text_setting_email" />
 
         </RelativeLayout>
 
