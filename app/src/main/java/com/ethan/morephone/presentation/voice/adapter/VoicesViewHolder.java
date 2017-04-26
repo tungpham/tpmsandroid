@@ -33,6 +33,7 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
     public TextView textMessage;
 
     private int mPosition;
+    private StateRecord mStateRecord = StateRecord.START;
 
     public VoicesViewHolder(View itemView) {
         super(itemView);
@@ -52,26 +53,26 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
         textCall = (TextView) itemView.findViewById(R.id.text_item_voice_call);
         textMessage = (TextView) itemView.findViewById(R.id.text_item_voice_message);
 
-        visiblePlayerControl(false);
+//        visiblePlayerControl(false);
     }
 
-    public void visiblePlayerControl(boolean isVisible) {
-        if (!isVisible) {
-            imagePause.setVisibility(View.INVISIBLE);
-            imageDelete.setVisibility(View.INVISIBLE);
-            imageVolume.setVisibility(View.INVISIBLE);
-            textDuration.setVisibility(View.INVISIBLE);
-            seekBar.setVisibility(View.INVISIBLE);
-            uiPlay();
-            seekBar.setProgress(0);
-        } else {
-            imagePause.setVisibility(View.VISIBLE);
-            imageDelete.setVisibility(View.VISIBLE);
-            imageVolume.setVisibility(View.VISIBLE);
-            textDuration.setVisibility(View.VISIBLE);
-            seekBar.setVisibility(View.VISIBLE);
-        }
-    }
+//    public void visiblePlayerControl(boolean isVisible) {
+//        if (!isVisible) {
+//            imagePause.setVisibility(View.INVISIBLE);
+//            imageDelete.setVisibility(View.INVISIBLE);
+//            imageVolume.setVisibility(View.INVISIBLE);
+//            textDuration.setVisibility(View.INVISIBLE);
+//            seekBar.setVisibility(View.INVISIBLE);
+//            uiPlay();
+//            seekBar.setProgress(0);
+//        } else {
+//            imagePause.setVisibility(View.VISIBLE);
+//            imageDelete.setVisibility(View.VISIBLE);
+//            imageVolume.setVisibility(View.VISIBLE);
+//            textDuration.setVisibility(View.VISIBLE);
+//            seekBar.setVisibility(View.VISIBLE);
+//        }
+//    }
 
     public void showLoading(boolean isActive) {
         if (isActive) {
@@ -97,4 +98,11 @@ public class VoicesViewHolder extends RecyclerView.ViewHolder {
         imagePause.setImageResource(R.drawable.ic_play_arrow_black_24dp);
     }
 
+    public void setStateRecord(StateRecord stateRecord) {
+        mStateRecord = stateRecord;
+    }
+
+    public StateRecord getStateRecord() {
+        return mStateRecord;
+    }
 }

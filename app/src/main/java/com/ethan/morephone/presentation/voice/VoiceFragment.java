@@ -25,6 +25,7 @@ import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.message.compose.ComposeFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.phone.incall.InCallActivity;
+import com.ethan.morephone.presentation.voice.adapter.StateRecord;
 import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
 import com.ethan.morephone.presentation.voice.adapter.VoicesViewHolder;
 import com.ethan.morephone.presentation.voice.dialog.AlertDeleteRecordDialog;
@@ -215,27 +216,52 @@ public class VoiceFragment extends BaseFragment implements
     @Override
     public void onItemClick(VoicesViewHolder holder, int pos, Record recordItem) {
         holder.expandableLayout.toggleExpansion();
-        if(!holder.expandableLayout.isExpanded()) {
-            String url = recordItem.uri.replace("json", "mp3");
-            initializeRecord(recordItem, Constant.API_ROOT + url);
-        }
-        mVoicesViewHolder = holder;
+//        if (!holder.expandableLayout.isExpanded()) {
+//            String url = recordItem.uri.replace("json", "mp3");
+//            initializeRecord(recordItem, Constant.API_ROOT + url);
+//        } else {
+//            closeVoice();
+//        }
+
     }
 
     @Override
-    public void onPauseRecord(VoicesViewHolder holder) {
-        if (mExoPlayer != null) {
-            if (mExoPlayer.getPlayWhenReady()) {
-                mExoPlayer.setPlayWhenReady(false);
-                holder.uiPlay();
-            } else {
+    public void onPauseRecord(VoicesViewHolder holder, Record recordItem) {
+        if (mVoicesViewHolder != holder) {
+            mVoicesViewHolder.setStateRecord(StateRecord.START);
+            mVoicesViewHolder = holder;
+        }
+
+        switch (holder.getStateRecord()) {
+            case START:
+                String url = recordItem.uri.replace("json", "mp3");
+                initializeRecord(recordItem, Constant.API_ROOT + url);
+                holder.showLoading(true);
+                break;
+            case PLAY:
                 mExoPlayer.setPlayWhenReady(true);
                 holder.uiPause();
-            }
-
-            mRunnableUpdateProgress.setVoicesViewHolder(holder);
-            scheduleDonutProgressUpdate();
+                holder.setStateRecord(StateRecord.PAUSE);
+                break;
+            case PAUSE:
+                if (mExoPlayer != null) {
+                    mExoPlayer.setPlayWhenReady(false);
+                    holder.uiPlay();
+                    holder.setStateRecord(StateRecord.RESUME);
+                }
+                break;
+            case RESUME:
+                if (mExoPlayer != null) {
+                    mExoPlayer.setPlayWhenReady(true);
+                    holder.uiPause();
+                    holder.setStateRecord(StateRecord.PAUSE);
+                }
+                break;
+            default:
+                break;
         }
+        mRunnableUpdateProgress.setVoicesViewHolder(holder);
+        scheduleDonutProgressUpdate();
     }
 
     @Override
@@ -252,8 +278,8 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onDeleteRecord(VoicesViewHolder holder) {
-        AlertDeleteRecordDialog recordDialog = AlertDeleteRecordDialog.getInstance(mRecordItem.callSid, mRecordItem.sid);
+    public void onDeleteRecord(VoicesViewHolder holder, int pos) {
+        AlertDeleteRecordDialog recordDialog = AlertDeleteRecordDialog.getInstance(mRecordItem.callSid, mRecordItem.sid, pos);
         recordDialog.show(getChildFragmentManager(), AlertDeleteRecordDialog.class.getSimpleName());
         recordDialog.setAlertDeleteRecordListener(this);
     }
@@ -310,7 +336,10 @@ public class VoiceFragment extends BaseFragment implements
     @Override
     public void onLoadingChanged(boolean isLoading) {
         if (!isLoading && mVoicesViewHolder != null) {
-            mVoicesViewHolder.visiblePlayerControl(true);
+//            mVoicesViewHolder.visiblePlayerControl(true);
+            mExoPlayer.setPlayWhenReady(true);
+            mVoicesViewHolder.uiPause();
+            mVoicesViewHolder.setStateRecord(StateRecord.PAUSE);
             mVoicesViewHolder.showLoading(false);
         }
     }
@@ -337,9 +366,11 @@ public class VoiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onDelete(String callSid, String recordSid) {
+    public void onDelete(String callSid, String recordSid, int position) {
         mPresenter.deleteRecord(callSid, recordSid);
-        mVoicesViewHolder.visiblePlayerControl(false);
+        mVoicesAdapter.getData().remove(position);
+        mVoicesAdapter.notifyDataSetChanged();
+//        mVoicesViewHolder.visiblePlayerControl(false);
     }
 
     private final static class MyRunnable implements Runnable {
@@ -404,6 +435,14 @@ public class VoiceFragment extends BaseFragment implements
             return mExoPlayer.getDuration();
         else
             return Integer.MIN_VALUE;
+    }
+
+    private void closeVoice() {
+        stopDonutProgressUpdate();
+        mVoicesViewHolder = null;
+        mExoPlayer = null;
+        mScheduleFuture = null;
+
     }
 
     private VoicesViewHolder getVoicesViewHolder(int pos) {

@@ -16,6 +16,9 @@ public class Record {
     @SerializedName("call_sid")
     public String callSid;
 
+    @SerializedName("phone_number")
+    public String phoneNumber;
+
     public String duration;
 
     @SerializedName("date_created")

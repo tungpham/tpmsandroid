@@ -19,12 +19,14 @@ public class AlertDeleteRecordDialog extends DialogFragment {
 
     private static final String BUNDLE_RECORD_ID = "BUNDLE_RECORD_ID";
     private static final String BUNDLE_CALL_ID = "BUNDLE_CALL_ID";
+    private static final String BUNDLE_POSITION = "BUNDLE_POSITION";
 
-    public static AlertDeleteRecordDialog getInstance(String callSid, String recordSid) {
+    public static AlertDeleteRecordDialog getInstance(String callSid, String recordSid, int position) {
         AlertDeleteRecordDialog alertDeleteRecordDialog = new AlertDeleteRecordDialog();
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_CALL_ID, callSid);
         bundle.putString(BUNDLE_RECORD_ID, recordSid);
+        bundle.putInt(BUNDLE_POSITION, position);
         alertDeleteRecordDialog.setArguments(bundle);
         return alertDeleteRecordDialog;
     }
@@ -48,6 +50,7 @@ public class AlertDeleteRecordDialog extends DialogFragment {
 
         final String recordSid = getArguments().getString(BUNDLE_RECORD_ID);
         final String callSid = getArguments().getString(BUNDLE_RECORD_ID);
+        final int position = getArguments().getInt(BUNDLE_POSITION);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.alert_delete_record_dialog_title));
@@ -55,7 +58,7 @@ public class AlertDeleteRecordDialog extends DialogFragment {
         builder.setPositiveButton(getString(R.string.alert_delete_record_dialog_delete), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-            if(mAlertDeleteRecordListener != null) mAlertDeleteRecordListener.onDelete(callSid, recordSid);
+            if(mAlertDeleteRecordListener != null) mAlertDeleteRecordListener.onDelete(callSid, recordSid, position);
             }
         });
         builder.setNegativeButton(getString(R.string.alert_delete_record_dialog_cancel), new DialogInterface.OnClickListener() {
@@ -73,7 +76,7 @@ public class AlertDeleteRecordDialog extends DialogFragment {
     }
 
     public interface AlertDeleteRecordListener {
-        void onDelete(String callSid, String recordSid);
+        void onDelete(String callSid, String recordSid, int position);
     }
 
 }
