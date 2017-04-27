@@ -24,6 +24,9 @@ public class MyPreference {
     private static final String PROPERTY_RATE_NOW = "PROPERTY_RATE_NOW";
     private static final String PROPERTY_TIMES_USE = "PROPERTY_TIMES_USE";
 
+    private static final String PROPERTY_MUTE_MICROPHONE = "PROPERTY_MUTE_MICROPHONE";
+    private static final String PROPERTY_SPEAKER_PHONE = "PROPERTY_SPEAKER_PHONE";
+
     private static final String APP_PREF = "MorePhone";
 
     private static SharedPreferences getSharedPreferences(Context context) {
@@ -110,6 +113,10 @@ public class MyPreference {
         preferences.edit().putBoolean(PROPERTY_INBOX, isInbox).commit();
     }
 
+
+
+    /*--------------------------------FOR REVIEW APP------------------------------------*/
+
     public static boolean getNotNow(Context context){
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getBoolean(PROPERTY_NOT_NOW, false);
@@ -139,4 +146,29 @@ public class MyPreference {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putLong(PROPERTY_TIMES_USE, timesUse).commit();
     }
+
+
+    /*-------------------------------FOR PHONE CALL --------------------------------*/
+
+    public static boolean getMuteMicrophone(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(PROPERTY_MUTE_MICROPHONE, false);
+    }
+
+    public static void setMuteMicrophone(Context context, Boolean muteMicrophone) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putBoolean(PROPERTY_MUTE_MICROPHONE, muteMicrophone).commit();
+    }
+
+    public static boolean getSpeakerphone(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(PROPERTY_SPEAKER_PHONE, false);
+    }
+
+    public static void setSpeakerphone(Context context, Boolean speakerPhone){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putBoolean(PROPERTY_SPEAKER_PHONE, speakerPhone).commit();
+    }
+
+
 }

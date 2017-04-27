@@ -46,7 +46,7 @@
             android:layout_below="@+id/image_outgoing_mute"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_in_call_text"
-            android:text="Mute"
+            android:text="@string/outgoing_mute"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>
@@ -70,7 +70,7 @@
             android:layout_below="@+id/image_outgoing_speaker"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_in_call_text"
-            android:text="Speaker"
+            android:text="@string/outgoing_speaker"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>

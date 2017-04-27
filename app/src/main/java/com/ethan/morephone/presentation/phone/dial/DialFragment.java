@@ -22,8 +22,8 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.phone.dial.view.DialpadImageButton;
 import com.ethan.morephone.presentation.phone.dial.view.UnicodeDialerKeyListener;
-import com.ethan.morephone.presentation.phone.incall.InCallActivity;
-import com.ethan.morephone.presentation.phone.incall.InCallFragment;
+import com.ethan.morephone.presentation.phone.PhoneActivity;
+import com.ethan.morephone.presentation.phone.service.PhoneService;
 
 
 /**
@@ -89,7 +89,7 @@ public class DialFragment extends BaseFragment implements
         mEditTextDigits.setOnLongClickListener(this);
         mEditTextDigits.addTextChangedListener(this);
 
-        if(!TextUtils.isEmpty(mToPhoneNumber)){
+        if (!TextUtils.isEmpty(mToPhoneNumber)) {
             mEditTextDigits.setText(mToPhoneNumber);
         }
 
@@ -172,13 +172,12 @@ public class DialFragment extends BaseFragment implements
             }
             case R.id.dialButton: {
                 String toPhoneNumber = mEditTextDigits.getText().toString();
-                Intent intent = new Intent(getActivity(), InCallActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(InCallFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
-                bundle.putString(InCallFragment.BUNDLE_TO_PHONE_NUMBER, toPhoneNumber);
-                intent.putExtras(bundle);
-//                startActivity(intent);
-                if (mDialFragmentListener != null) mDialFragmentListener.onCallNow(toPhoneNumber);
+                Intent intent = new Intent(getActivity(), PhoneActivity.class);
+                intent.putExtra(PhoneService.EXTRA_PHONE_STATE, PhoneService.PHONE_STATE_OUTGOING);
+                intent.putExtra(PhoneService.EXTRA_FROM_PHONE_NUMBER, mPhoneNumber);
+                intent.putExtra(PhoneService.EXTRA_TO_PHONE_NUMBER, toPhoneNumber);
+                startActivity(intent);
+//                if (mDialFragmentListener != null) mDialFragmentListener.onCallNow(toPhoneNumber);
                 return;
             }
             case R.id.digits: {
@@ -513,7 +512,7 @@ public class DialFragment extends BaseFragment implements
 
     }
 
-    public void setDialFragmentListener(DialFragmentListener dialFragmentListener){
+    public void setDialFragmentListener(DialFragmentListener dialFragmentListener) {
         mDialFragmentListener = dialFragmentListener;
     }
 

@@ -1,20 +1,23 @@
 package com.ethan.morephone.presentation.phone.incall;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.phone.dial.view.DialpadImageButton;
+import com.ethan.morephone.presentation.phone.service.PhoneService;
 
 /**
  * Created by Ethan on 4/10/17.
@@ -23,34 +26,38 @@ import com.ethan.morephone.presentation.phone.dial.view.DialpadImageButton;
 public class InCallFragment extends BaseFragment implements View.OnClickListener,
         DialpadImageButton.OnPressedListener {
 
-    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+    public static final String BUNDLE_FROM_PHONE_NUMBER = "BUNDLE_FROM_PHONE_NUMBER";
     public static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
 
     public static InCallFragment getInstance(String fromPhoneNumber, String toPhoneNumber) {
         InCallFragment fragment = new InCallFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_PHONE_NUMBER, fromPhoneNumber);
+        bundle.putString(BUNDLE_FROM_PHONE_NUMBER, fromPhoneNumber);
         bundle.putString(BUNDLE_TO_PHONE_NUMBER, toPhoneNumber);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    private AudioManager audioManager;
+    //    private AudioManager audioManager;
     private int savedAudioMode = AudioManager.MODE_INVALID;
     private boolean speakerPhone;
 
+    private ImageView mImageMute;
     private ImageView mImageSpeaker;
-
-    private InCallListener mInCallListener;
 
     private RelativeLayout mRelativeDialpad;
     private TextView mTextHideDialpad;
+
+    private Chronometer mChronometerTime;
+
+    private String mFromPhoneNumber;
+    private String mToPhoneNumber;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+//        audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
     }
 
     @Nullable
@@ -58,23 +65,39 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_in_call, container, false);
 
-        TextView textToPhoneNumber = (TextView) view.findViewById(R.id.text_in_call_phone_number);
+        TextView textPhoneNumber = (TextView) view.findViewById(R.id.text_in_call_phone_number);
 
-        String toPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
-        textToPhoneNumber.setText(toPhoneNumber);
+        mFromPhoneNumber = getArguments().getString(BUNDLE_FROM_PHONE_NUMBER);
+        mToPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
+
+        if (MyPreference.getPhoneNumber(getContext()).equals(mFromPhoneNumber)) {
+            textPhoneNumber.setText(mToPhoneNumber);
+        } else {
+            textPhoneNumber.setText(mFromPhoneNumber);
+        }
 
         mRelativeDialpad = (RelativeLayout) view.findViewById(R.id.relative_in_call_dialpad);
 
         mImageSpeaker = (ImageView) view.findViewById(R.id.image_in_call_speaker);
         mImageSpeaker.setOnClickListener(this);
 
+        mImageMute = (ImageView) view.findViewById(R.id.image_in_call_mute);
+        mImageMute.setOnClickListener(this);
+
         mTextHideDialpad = (TextView) view.findViewById(R.id.text_in_call_hide_dialpad);
         mTextHideDialpad.setOnClickListener(this);
+
+        mChronometerTime = (Chronometer) view.findViewById(R.id.chronometer_in_call_time);
+        mChronometerTime.setBase(SystemClock.elapsedRealtime());
+        mChronometerTime.start();
 
         view.findViewById(R.id.floating_button_in_call_hang_up).setOnClickListener(this);
         view.findViewById(R.id.image_in_call_dialpad).setOnClickListener(this);
 
-        audioManager.setSpeakerphoneOn(speakerPhone);
+//        audioManager.setSpeakerphoneOn(speakerPhone);
+
+        changeMuteMicrophone();
+        changeSpeakerPhone();
 
         setUpKeypad(view);
 
@@ -86,10 +109,10 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_in_call_speaker:
-                speakerPhone = !speakerPhone;
+//                speakerPhone = !speakerPhone;
 
 //                setAudioFocus(true);
-                audioManager.setSpeakerphoneOn(speakerPhone);
+//                audioManager.setSpeakerphoneOn(speakerPhone);
 
 //                if (speakerPhone) {
 //                    mImageSpeaker.
@@ -97,10 +120,20 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
 //                    mImageSpeaker.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_speaker_off_black_24dp));
 //                }
 
+                MyPreference.setSpeakerphone(getContext(), !MyPreference.getSpeakerphone(getContext()));
+                changeSpeakerPhone();
+                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_SPEAKER_PHONE, mFromPhoneNumber, mToPhoneNumber);
+
+                break;
+
+            case R.id.image_in_call_mute:
+                MyPreference.setMuteMicrophone(getContext(), !MyPreference.getMuteMicrophone(getContext()));
+                changeMuteMicrophone();
+                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_MUTE_MICOPHONE, mFromPhoneNumber, mToPhoneNumber);
                 break;
 
             case R.id.floating_button_in_call_hang_up:
-                if (mInCallListener != null) mInCallListener.hangUp();
+                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_HANG_UP, mFromPhoneNumber, mToPhoneNumber);
                 break;
 
             case R.id.image_in_call_dialpad:
@@ -114,6 +147,12 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mChronometerTime.stop();
+    }
+
     private void changeVisibleDialpad() {
         if (mRelativeDialpad.getVisibility() == View.VISIBLE) {
             mRelativeDialpad.setVisibility(View.GONE);
@@ -124,8 +163,20 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    public void setInCallListener(InCallListener inCallListener) {
-        mInCallListener = inCallListener;
+    private void changeMuteMicrophone() {
+        if (MyPreference.getMuteMicrophone(getContext())) {
+            mImageMute.setImageResource(R.drawable.ic_mic_off);
+        } else {
+            mImageMute.setImageResource(R.drawable.ic_mic_on);
+        }
+    }
+
+    private void changeSpeakerPhone() {
+        if (MyPreference.getSpeakerphone(getContext())) {
+            mImageSpeaker.setImageResource(R.drawable.ic_speaker_on);
+        } else {
+            mImageSpeaker.setImageResource(R.drawable.ic_speaker_off);
+        }
     }
 
     @Override
@@ -133,52 +184,62 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
         if (pressed) {
             switch (view.getId()) {
                 case R.id.one: {
-                    mInCallListener.sendDigit(1);
+                    sendDigit("1");
                     keyPressed(KeyEvent.KEYCODE_1);
                     break;
                 }
                 case R.id.two: {
-                    mInCallListener.sendDigit(2);
+                    sendDigit("2");
                     keyPressed(KeyEvent.KEYCODE_2);
                     break;
                 }
                 case R.id.three: {
+                    sendDigit("3");
                     keyPressed(KeyEvent.KEYCODE_3);
                     break;
                 }
                 case R.id.four: {
+                    sendDigit("4");
                     keyPressed(KeyEvent.KEYCODE_4);
                     break;
                 }
                 case R.id.five: {
+                    sendDigit("5");
                     keyPressed(KeyEvent.KEYCODE_5);
                     break;
                 }
                 case R.id.six: {
+                    sendDigit("6");
                     keyPressed(KeyEvent.KEYCODE_6);
                     break;
                 }
                 case R.id.seven: {
+                    sendDigit("7");
                     keyPressed(KeyEvent.KEYCODE_7);
                     break;
                 }
                 case R.id.eight: {
+                    sendDigit("8");
                     keyPressed(KeyEvent.KEYCODE_8);
                     break;
                 }
                 case R.id.nine: {
+                    sendDigit("9");
                     keyPressed(KeyEvent.KEYCODE_9);
                     break;
                 }
                 case R.id.zero: {
+                    sendDigit("0");
                     keyPressed(KeyEvent.KEYCODE_0);
                     break;
                 }
                 case R.id.pound: {
+                    sendDigit("#");
                     keyPressed(KeyEvent.KEYCODE_POUND);
                     break;
                 }
                 case R.id.star: {
+                    sendDigit("*");
                     keyPressed(KeyEvent.KEYCODE_STAR);
                     break;
                 }
@@ -205,12 +266,16 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void setUpKeypad(View view){
+    private void setUpKeypad(View view) {
         int[] buttonIds = new int[]{R.id.one, R.id.two, R.id.three, R.id.four, R.id.five,
                 R.id.six, R.id.seven, R.id.eight, R.id.nine, R.id.zero, R.id.star, R.id.pound};
         for (int id : buttonIds) {
             ((DialpadImageButton) view.findViewById(id)).setOnPressedListener(this);
         }
+    }
+
+    private void sendDigit(String digit){
+        PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_SEND_DIGITS, mFromPhoneNumber, mToPhoneNumber, String.valueOf(digit));
     }
 
     private void keyPressed(int keyCode) {
@@ -265,12 +330,5 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
 //            mEditTextDigits.setCursorVisible(false);
 //        }
     }
-
-
-    public interface InCallListener {
-        void hangUp();
-        void sendDigit(int digit);
-    }
-
 
 }

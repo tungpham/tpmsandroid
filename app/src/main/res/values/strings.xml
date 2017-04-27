@@ -4,7 +4,7 @@
     <string name="message_progress_dialog">Please wait…</string>
     <string name="message_error_lost_internet">Please check internet!</string>
 
-    <!-- Fragment Authentication -->
+    <!--          Fragment Authentication           -->
     <string name="authentication_text_welcome">Welcome to More Phone.</string>
     <string name="authentication_text_options">More Options</string>
 
@@ -16,22 +16,6 @@
 
     <string name="authentication_text_term_service">By using this app, you are agree to our <b>Terms and Conditions</b></string>
 
-
-    <!-- Fragment Message Conversation -->
-    <string name="action_search">Search</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_bar_title_conversation_label">Conversation</string>
-
-    <!-- Fragment Message List -->
-    <string name="box_sms_edit_text_hint">Write a message</string>
-
-    <string name="title_dialog_message">Message Options</string>
-    <string name="text_button_cancel_dialog_message">Cancel</string>
-
-    <!-- Fragment Message Compose-->
-    <string name="message_compose_label">Compose</string>
-    <string name="message_compose_hint_contacts">Enter recipients</string>
 
     <!-- Fragment Register Name -->
     <string name="text_register_name_title">What\'s your name?</string>
@@ -74,6 +58,24 @@
     <string name="text_login_password">PASSWORD</string>
 
     <string name="menu_login_forgot_password">Forgot password</string>
+
+    <!-- Fragment Message Conversation -->
+    <string name="action_search">Search</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_bar_title_conversation_label">Conversation</string>
+
+    <!-- Fragment Message List -->
+    <string name="box_sms_edit_text_hint">Write a message</string>
+
+    <string name="title_dialog_message">Message Options</string>
+    <string name="text_button_cancel_dialog_message">Cancel</string>
+
+    <!-- Fragment Message Compose-->
+    <string name="message_compose_label">Compose</string>
+    <string name="message_compose_hint_contacts">Enter recipients</string>
+
+
 
     <!-- Title for Latin keyboard  -->
     <string name="ime_name">Sample Soft Keyboard</string>
@@ -162,6 +164,18 @@
     <!-- Fragment Incoming Screen -->
     <string name="incoming_decline">Decline</string>
     <string name="incoming_accept">Accept</string>
+
+    <!-- Fragment Outgoing Screen -->
+    <string name="outgoing_mute">Mute</string>
+    <string name="outgoing_speaker">Speaker</string>
+
+    <!-- Fragment Outgoing Screen -->
+    <string name="in_call_mute">Mute</string>
+    <string name="in_call_speaker">Speaker</string>
+    <string name="in_call_keypad">Keypad</string>
+    <string name="in_call_transfer">Transfer</string>
+
+    <string name="all_call_disconnected">Disconnected</string>
 
     <!-- Delete Fragment Dialog -->
     <string name="delete_phone_number_dialog_title">Delete</string>

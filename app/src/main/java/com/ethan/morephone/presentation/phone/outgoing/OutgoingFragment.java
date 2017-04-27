@@ -5,9 +5,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.widget.MyTextView;
 
 /**
@@ -17,29 +20,45 @@ import com.ethan.morephone.widget.MyTextView;
 public class OutgoingFragment extends BaseFragment implements View.OnClickListener {
 
 
-    public static final String BUNDLE_PHONE_NUMBER_OUTGOING = "BUNDLE_PHONE_NUMBER_OUTGOING";
+    public static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
+    public static final String BUNDLE_FROM_PHONE_NUMBER = "BUNDLE_FROM_PHONE_NUMBER";
 
-    public static OutgoingFragment getInstance(String phoneNumberOutgoing) {
+    public static OutgoingFragment getInstance(String fromPhoneNumber, String toPhoneNumber) {
         OutgoingFragment fragment = new OutgoingFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_PHONE_NUMBER_OUTGOING, phoneNumberOutgoing);
+        bundle.putString(BUNDLE_FROM_PHONE_NUMBER, fromPhoneNumber);
+        bundle.putString(BUNDLE_TO_PHONE_NUMBER, toPhoneNumber);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    private OutgoingFragmentListener mOutgoingFragmentListener;
+    private String mFromPhoneNumber;
+    private String mToPhoneNumber;
+
+    private ImageView mImageMute;
+    private ImageView mImageSpeaker;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_outgoing, container, false);
 
-        String phoneNumberOutgoing = getArguments().getString(BUNDLE_PHONE_NUMBER_OUTGOING);
+        mFromPhoneNumber = getArguments().getString(BUNDLE_FROM_PHONE_NUMBER);
+        mToPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
 
         MyTextView textPhoneNumber = (MyTextView) view.findViewById(R.id.text_outgoing_phone_number);
-        textPhoneNumber.setText(phoneNumberOutgoing);
+        textPhoneNumber.setText(mToPhoneNumber);
 
         view.findViewById(R.id.floating_button_outgoing_hang_up).setOnClickListener(this);
+
+        mImageMute = (ImageView) view.findViewById(R.id.image_outgoing_mute);
+        mImageMute.setOnClickListener(this);
+
+        mImageSpeaker = (ImageView) view.findViewById(R.id.image_outgoing_speaker);
+        mImageSpeaker.setOnClickListener(this);
+
+        changeMuteMicrophone();
+        changeSpeakerPhone();
         return view;
     }
 
@@ -47,18 +66,37 @@ public class OutgoingFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.floating_button_outgoing_hang_up:
-                if(mOutgoingFragmentListener != null) mOutgoingFragmentListener.onHangup();
+                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_HANG_UP, mFromPhoneNumber, mToPhoneNumber);
+                break;
+            case R.id.image_outgoing_mute:
+                MyPreference.setMuteMicrophone(getContext(), !MyPreference.getMuteMicrophone(getContext()));
+                changeMuteMicrophone();
+                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_MUTE_MICOPHONE, mFromPhoneNumber, mToPhoneNumber);
+                break;
+            case R.id.image_outgoing_speaker:
+                MyPreference.setSpeakerphone(getContext(), !MyPreference.getSpeakerphone(getContext()));
+                changeSpeakerPhone();
+                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_SPEAKER_PHONE, mFromPhoneNumber, mToPhoneNumber);
                 break;
             default:
                 break;
         }
     }
 
-    public void setOutGoingFragmentListener(OutgoingFragmentListener outGoingFragmentListener) {
-        mOutgoingFragmentListener = outGoingFragmentListener;
+    private void changeMuteMicrophone() {
+        if (MyPreference.getMuteMicrophone(getContext())) {
+            mImageMute.setImageResource(R.drawable.ic_mic_off);
+        } else {
+            mImageMute.setImageResource(R.drawable.ic_mic_on);
+        }
     }
 
-    public interface OutgoingFragmentListener {
-        void onHangup();
+    private void changeSpeakerPhone() {
+        if (MyPreference.getSpeakerphone(getContext())) {
+            mImageSpeaker.setImageResource(R.drawable.ic_speaker_on);
+        } else {
+            mImageSpeaker.setImageResource(R.drawable.ic_speaker_off);
+        }
     }
+
 }

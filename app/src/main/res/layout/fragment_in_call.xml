@@ -12,13 +12,12 @@
         android:text="+18056624394"
         android:textColor="@android:color/white" />
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_in_call_time"
+    <Chronometer
+        android:id="@+id/chronometer_in_call_time"
         style="@style/ViewCommon"
         android:layout_below="@+id/text_in_call_phone_number"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_in_call_text_time"
-        android:text="04:23"
         android:textColor="@android:color/white" />
 
 
@@ -48,7 +47,7 @@
             android:layout_below="@+id/image_in_call_mute"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_in_call_text"
-            android:text="Mute"
+            android:text="@string/in_call_mute"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>
@@ -72,7 +71,7 @@
             android:layout_below="@+id/image_in_call_speaker"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_in_call_text"
-            android:text="Speaker"
+            android:text="@string/in_call_speaker"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>
@@ -82,7 +81,8 @@
         android:layout_below="@+id/view_in_call_common"
         android:layout_marginLeft="@dimen/margin_in_call_image"
         android:layout_marginTop="@dimen/margin_top_in_call_image"
-        android:layout_toRightOf="@+id/view_in_call_common">
+        android:layout_toRightOf="@+id/view_in_call_common"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/image_in_call_transfer"
@@ -96,7 +96,7 @@
             android:layout_below="@+id/image_in_call_transfer"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_in_call_text"
-            android:text="Transfer"
+            android:text="@string/in_call_transfer"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>
@@ -104,9 +104,9 @@
     <RelativeLayout
         style="@style/ViewCommon"
         android:layout_below="@+id/view_in_call_common"
-        android:layout_marginRight="@dimen/margin_in_call_image"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_top_in_call_image"
-        android:layout_toLeftOf="@+id/view_in_call_common">
+        >
 
         <ImageView
             android:id="@+id/image_in_call_dialpad"
@@ -120,7 +120,7 @@
             android:layout_below="@+id/image_in_call_dialpad"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_in_call_text"
-            android:text="Keypad"
+            android:text="@string/in_call_keypad"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>

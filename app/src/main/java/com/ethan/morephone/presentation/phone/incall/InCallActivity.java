@@ -24,7 +24,6 @@ import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.phone.dial.DialFragment;
 import com.ethan.morephone.presentation.phone.incoming.IncomingFragment;
-import com.ethan.morephone.presentation.phone.outgoing.OutgoingFragment;
 import com.ethan.morephone.utils.ActivityUtils;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -49,9 +48,7 @@ public class InCallActivity extends BaseActivity implements
         ConnectionListener,
         DeviceListener,
         DialFragment.DialFragmentListener,
-        IncomingFragment.IncomingListener,
-        InCallFragment.InCallListener,
-        OutgoingFragment.OutgoingFragmentListener {
+        IncomingFragment.IncomingListener{
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
     public static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
@@ -470,19 +467,18 @@ public class InCallActivity extends BaseActivity implements
                 incomingFragment,
                 R.id.content_frame,
                 InCallFragment.class.getSimpleName());
-        incomingFragment.setInCallListener(this);
     }
 
     private void showOutgoingFragment() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (fragment instanceof IncomingFragment) return;
-        OutgoingFragment outgoingFragment = OutgoingFragment.getInstance(mPhoneNumber);
-        ActivityUtils.replaceFragmentToActivity(
-                getSupportFragmentManager(),
-                outgoingFragment,
-                R.id.content_frame,
-                OutgoingFragment.class.getSimpleName());
-        outgoingFragment.setOutGoingFragmentListener(this);
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+//        if (fragment instanceof IncomingFragment) return;
+//        OutgoingFragment outgoingFragment = OutgoingFragment.getInstance(mPhoneNumber);
+//        ActivityUtils.replaceFragmentToActivity(
+//                getSupportFragmentManager(),
+//                outgoingFragment,
+//                R.id.content_frame,
+//                OutgoingFragment.class.getSimpleName());
+//        outgoingFragment.setOutGoingFragmentListener(this);
     }
 
     private void showIncomingFragment() {
@@ -509,25 +505,25 @@ public class InCallActivity extends BaseActivity implements
         dialFragment.setDialFragmentListener(this);
     }
 
-    @Override
-    public void hangUp() {
-        disconnect();
-        finish();
-//        showDialFragment();
-    }
-
-    @Override
-    public void sendDigit(int digit) {
-        DebugTool.logD("DIGIT: " + digit);
-        if (activeConnection != null) {
-            activeConnection.sendDigits(String.valueOf(digit));
-        }
-    }
-
-    @Override
-    public void onHangup() {
-        disconnect();
-        finish();
-//        showDialFragment();
-    }
+//    @Override
+//    public void hangUp() {
+//        disconnect();
+//        finish();
+////        showDialFragment();
+//    }
+//
+//    @Override
+//    public void sendDigit(int digit) {
+//        DebugTool.logD("DIGIT: " + digit);
+//        if (activeConnection != null) {
+//            activeConnection.sendDigits(String.valueOf(digit));
+//        }
+//    }
+//
+//    @Override
+//    public void onHangup() {
+//        disconnect();
+//        finish();
+////        showDialFragment();
+//    }
 }

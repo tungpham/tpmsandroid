@@ -1,62 +1,187 @@
 package com.ethan.morephone.presentation.phone;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.KeyEvent;
+import android.widget.Toast;
 
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.phone.adapter.PhoneViewPagerAdapter;
-import com.ethan.morephone.widget.NavigationTabStrip;
+import com.ethan.morephone.presentation.phone.dial.DialFragment;
+import com.ethan.morephone.presentation.phone.incall.InCallFragment;
+import com.ethan.morephone.presentation.phone.incoming.IncomingFragment;
+import com.ethan.morephone.presentation.phone.outgoing.OutgoingFragment;
+import com.ethan.morephone.presentation.phone.service.PhoneService;
+import com.ethan.morephone.utils.ActivityUtils;
 
 /**
- * Created by Ethan on 3/21/17.
+ * Created by Ethan on 4/27/17.
  */
 
-public class PhoneActivity extends BaseActivity {
+public class PhoneActivity extends BaseActivity implements
+        DialFragment.DialFragmentListener,
+        IncomingFragment.IncomingListener {
 
-    public static final String EXTRA_PHONE_NUMBER = "EXTRA_PHONE_NUMBER";
+    private PhoneService mPhoneService;
+    private UpdateUIPhoneReceiver mUpdateUIPhoneReceiver = new UpdateUIPhoneReceiver();
 
-    private Toolbar mToolbar;
-
-    private String mPhoneNumber;
+    private String mFromPhoneNumber;
+    private String mToPhoneNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phone);
+        setContentView(R.layout.activity_fragment);
 
-        mPhoneNumber = getIntent().getStringExtra(EXTRA_PHONE_NUMBER);
+        Intent service = new Intent(this, PhoneService.class);
+        bindService(service, mConnection, Context.BIND_AUTO_CREATE);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(PhoneService.ACTION_UPDATE_UI);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateUIPhoneReceiver, intentFilter);
 
-        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSubTitleActionBar(mToolbar, getString(R.string.action_bar_title_phone_label), mPhoneNumber);
+        mFromPhoneNumber = getIntent().getStringExtra(PhoneService.EXTRA_FROM_PHONE_NUMBER);
+        mToPhoneNumber = getIntent().getStringExtra(PhoneService.EXTRA_TO_PHONE_NUMBER);
 
-        setUpViewPager();
+        int phoneState = getIntent().getIntExtra(PhoneService.EXTRA_PHONE_STATE, PhoneService.PHONE_STATE_DEFAULT);
+        if (phoneState == PhoneService.PHONE_STATE_OUTGOING) {
+            showOutgoingFragment(mFromPhoneNumber, mToPhoneNumber);
+            PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_CALL, mFromPhoneNumber, mToPhoneNumber);
+        }
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public void onResume() {
+        super.onResume();
 
-            case android.R.id.home:
-                finish();
-                break;
-
-            default:
-                break;
-        }
-        return true;
+//        startAudio();
     }
 
-    private void setUpViewPager() {
-        NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.tab_strip);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mConnection);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateUIPhoneReceiver);
+    }
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        PhoneViewPagerAdapter myViewPagerAdapter = new PhoneViewPagerAdapter(getSupportFragmentManager(), mPhoneNumber);
-        viewPager.setAdapter(myViewPagerAdapter);
-        navigationTabStrip.setViewPager(viewPager, 0);
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mPhoneService = ((PhoneService.LocalBinder) service).getService();
+            DebugTool.logD("SERVICE CONNECTED PHONE");
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            mPhoneService = null;
+        }
+    };
+
+    private void showInCallFragment(String fromPhoneNumber, String toPhoneNumber) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment instanceof InCallFragment) return;
+        InCallFragment incomingFragment = InCallFragment.getInstance(fromPhoneNumber, toPhoneNumber);
+        ActivityUtils.replaceFragmentToActivity(
+                getSupportFragmentManager(),
+                incomingFragment,
+                R.id.content_frame,
+                InCallFragment.class.getSimpleName());
+    }
+
+    private void showOutgoingFragment(String fromPhoneNumber, String toPhoneNumber) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment instanceof IncomingFragment) return;
+        OutgoingFragment outgoingFragment = OutgoingFragment.getInstance(fromPhoneNumber, toPhoneNumber);
+        ActivityUtils.replaceFragmentToActivity(
+                getSupportFragmentManager(),
+                outgoingFragment,
+                R.id.content_frame,
+                OutgoingFragment.class.getSimpleName());
+    }
+
+    private void showIncomingFragment(String fromPhoneNumber, String toPhoneNumber) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment instanceof IncomingFragment) return;
+        IncomingFragment incomingFragment = IncomingFragment.getInstance(fromPhoneNumber);
+        ActivityUtils.replaceFragmentToActivity(
+                getSupportFragmentManager(),
+                incomingFragment,
+                R.id.content_frame,
+                IncomingFragment.class.getSimpleName());
+        incomingFragment.setIncomingListener(this);
+    }
+
+    private void showDialFragment(String fromPhoneNumber, String toPhoneNumber) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment instanceof DialFragment) return;
+        DialFragment dialFragment = DialFragment.getInstance(fromPhoneNumber, toPhoneNumber);
+        ActivityUtils.replaceFragmentToActivity(
+                getSupportFragmentManager(),
+                dialFragment,
+                R.id.content_frame,
+                DialFragment.class.getSimpleName());
+        dialFragment.setDialFragmentListener(this);
+    }
+
+    @Override
+    public void onCallNow(String toPhoneNumber) {
+
+    }
+
+    @Override
+    public void decline() {
+        PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_DECLINE_INCOMING, mFromPhoneNumber, mToPhoneNumber);
+    }
+
+    @Override
+    public void accept() {
+        PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_ACCEPT_INCOMING, mFromPhoneNumber, mToPhoneNumber);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // your code
+            PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_HANG_UP, mFromPhoneNumber, mToPhoneNumber);
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    class UpdateUIPhoneReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null)
+                return;
+            if (PhoneService.ACTION_UPDATE_UI.equals(intent.getAction())) {
+                //Check type UI
+                int phoneState = intent.getIntExtra(PhoneService.EXTRA_PHONE_STATE, PhoneService.PHONE_STATE_DEFAULT);
+                String fromPhoneNumber = intent.getStringExtra(PhoneService.EXTRA_FROM_PHONE_NUMBER);
+                String toPhoneNumber = intent.getStringExtra(PhoneService.EXTRA_TO_PHONE_NUMBER);
+                if (phoneState == PhoneService.PHONE_STATE_OUTGOING) {
+                    showOutgoingFragment(fromPhoneNumber, toPhoneNumber);
+                } else if (phoneState == PhoneService.PHONE_STATE_IN_CALL) {
+                    showInCallFragment(fromPhoneNumber, toPhoneNumber);
+                } else if (phoneState == PhoneService.PHONE_STATE_INCOMING) {
+                    showIncomingFragment(fromPhoneNumber, toPhoneNumber);
+                } else if (phoneState == PhoneService.PHONE_STATE_DISCONNECTED) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_disconnected), Toast.LENGTH_SHORT).show();
+                    finish();
+                } else if (phoneState == PhoneService.PHONE_STATE_HANG_UP) {
+                    finish();
+                } else if (phoneState == PhoneService.PHONE_STATE_DECLINE) {
+                    finish();
+                }
+            }
+        }
     }
 }
