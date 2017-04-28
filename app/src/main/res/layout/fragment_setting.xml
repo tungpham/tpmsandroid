@@ -8,12 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/tool_bar" />
-
         <com.ethan.morephone.widget.MyTextView
             android:id="@+id/text_setting_phone_number"
             style="@style/TextSettingDisplay"
-            android:layout_below="@+id/tool_bar"
             android:layout_marginTop="?attr/actionBarSize"
             android:text="@string/setting_version" />
 
@@ -116,11 +113,11 @@
             <com.ethan.morephone.widget.MyTextView
                 android:id="@+id/text_setting_configure_sms_forwarding"
                 style="@style/TextTorrentSettingItem"
-                android:layout_toLeftOf="@+id/switch_ip_filtering"
+                android:layout_toLeftOf="@+id/switch_setting_configure_sms_forwarding"
                 android:text="@string/setting_configure_sms_forwarding" />
 
             <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switch_ip_filtering"
+                android:id="@+id/switch_setting_configure_sms_forwarding"
                 style="@style/SwitchSettingItem" />
 
         </RelativeLayout>

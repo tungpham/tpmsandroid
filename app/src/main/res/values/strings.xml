@@ -148,6 +148,16 @@
     <string name="setting_phone">Phone</string>
     <string name="setting_email">Email</string>
 
+    <string name="configure_phone_dialog_title">Configure Phone</string>
+    <string name="configure_phone_dialog_ok">OK</string>
+    <string name="configure_phone_dialog_cancel">CANCEL</string>
+    <string name="configure_phone_dialog_empty">Please enter phone number</string>
+
+    <string name="configure_email_dialog_title">Configure Email</string>
+    <string name="configure_email_dialog_ok">OK</string>
+    <string name="configure_email_dialog_cancel">CANCEL</string>
+    <string name="configure_email_dialog_empty">Please enter email</string>
+
     <!-- Fragment License -->
     <string name="license_label">License</string>
 

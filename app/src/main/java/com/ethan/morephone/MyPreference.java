@@ -15,8 +15,14 @@ public class MyPreference {
     private static final String PROPERTY_USER_PASSWORD = "PROPERTY_USER_PASSWORD";
 
     private static final String PROPERTY_PHONE_NUMBER = "PROPERTY_PHONE_NUMBER";
-    private static final String PROPERTY_FRIENDLY_NAME = "PROPERTY_FRIENDLY_NAME";
+    private static final String PROPERTY_PHONE_FRIENDLY_NAME = "PROPERTY_PHONE_FRIENDLY_NAME";
     private static final String PROPERTY_PHONE_NUMBER_SID = "PROPERTY_PHONE_NUMBER_SID";
+
+    private static final String PROPERTY_SETTING_ENABLE_RECORD = "PROPERTY_SETTING_ENABLE_RECORD";
+    private static final String PROPERTY_SETTING_ENABLE_NOTIFICATION = "PROPERTY_SETTING_ENABLE_NOTIFICATION";
+    private static final String PROPERTY_SETTING_CONFIGURE = "PROPERTY_SETTING_CONFIGURE";
+    private static final String PROPERTY_SETTING_CONFIGURE_PHONE = "PROPERTY_SETTING_CONFIGURE_PHONE";
+    private static final String PROPERTY_SETTING_CONFIGURE_EMAIL = "PROPERTY_SETTING_CONFIGURE_EMAIL";
 
     private static final String PROPERTY_INBOX = "PROPERTY_INBOX";
 
@@ -85,12 +91,12 @@ public class MyPreference {
 
     public static String getFriendlyName(Context context){
         SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getString(PROPERTY_FRIENDLY_NAME, "");
+        return preferences.getString(PROPERTY_PHONE_FRIENDLY_NAME, "");
     }
 
     public static void setFriendlyName(Context context, String phoneNumber){
         SharedPreferences preferences = getSharedPreferences(context);
-        preferences.edit().putString(PROPERTY_FRIENDLY_NAME, phoneNumber).commit();
+        preferences.edit().putString(PROPERTY_PHONE_FRIENDLY_NAME, phoneNumber).commit();
     }
 
     public static String getPhoneNumberSid(Context context){
@@ -171,4 +177,55 @@ public class MyPreference {
     }
 
 
+    /*-----------------------------------SETTING-----------------------------------*/
+
+    public static boolean getSettingEnableRecord(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(PROPERTY_SETTING_ENABLE_RECORD, false);
+    }
+
+    public static void setSettingEnableRecord(Context context, Boolean enableRecord){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putBoolean(PROPERTY_SETTING_ENABLE_RECORD, enableRecord).commit();
+    }
+
+    public static boolean getSettingEnableNotification(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(PROPERTY_SETTING_ENABLE_NOTIFICATION, false);
+    }
+
+    public static void setSettingEnableNotification(Context context, Boolean notification){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putBoolean(PROPERTY_SETTING_ENABLE_NOTIFICATION, notification).commit();
+    }
+
+    public static boolean getSettingConfigure(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(PROPERTY_SETTING_CONFIGURE, false);
+    }
+
+    public static void setSettingConfigure(Context context, Boolean configure){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putBoolean(PROPERTY_SETTING_CONFIGURE, configure).commit();
+    }
+
+    public static String getSettingConfigurePhone(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_SETTING_CONFIGURE_PHONE, "");
+    }
+
+    public static void setSettingConfigurePhone(Context context, String phoneNumber){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_SETTING_CONFIGURE_PHONE, phoneNumber).commit();
+    }
+
+    public static String getSettingConfigureEmail(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_SETTING_CONFIGURE_EMAIL, "");
+    }
+
+    public static void setSettingConfigureEmail(Context context, String email){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_SETTING_CONFIGURE_EMAIL, email).commit();
+    }
 }
