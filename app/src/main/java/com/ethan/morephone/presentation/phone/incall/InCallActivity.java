@@ -484,7 +484,7 @@ public class InCallActivity extends BaseActivity implements
     private void showIncomingFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof IncomingFragment) return;
-        IncomingFragment incomingFragment = IncomingFragment.getInstance(mPhoneNumber);
+        IncomingFragment incomingFragment = IncomingFragment.getInstance(mPhoneNumber, "");
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 incomingFragment,

@@ -16,12 +16,14 @@ import com.ethan.morephone.widget.MyTextView;
 
 public class IncomingFragment extends BaseFragment implements View.OnClickListener {
 
-    private static String BUNDLE_PHONE_NUMBER_INCOMING = "BUNDLE_PHONE_NUMBER_INCOMING";
+    public static final String BUNDLE_TO_PHONE_NUMBER = "BUNDLE_TO_PHONE_NUMBER";
+    public static final String BUNDLE_FROM_PHONE_NUMBER = "BUNDLE_FROM_PHONE_NUMBER";
 
-    public static IncomingFragment getInstance(String phoneNumberIncoming) {
+    public static IncomingFragment getInstance(String fromPhoneNumber, String toPhoneNumber) {
         IncomingFragment incomingFragment = new IncomingFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_PHONE_NUMBER_INCOMING, phoneNumberIncoming);
+        bundle.putString(BUNDLE_FROM_PHONE_NUMBER, fromPhoneNumber);
+        bundle.putString(BUNDLE_TO_PHONE_NUMBER, toPhoneNumber);
         incomingFragment.setArguments(bundle);
         return incomingFragment;
     }
@@ -33,7 +35,7 @@ public class IncomingFragment extends BaseFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_incoming, container, false);
 
-        String phoneNumberIncoming = getArguments().getString(BUNDLE_PHONE_NUMBER_INCOMING);
+        String phoneNumberIncoming = getArguments().getString(BUNDLE_FROM_PHONE_NUMBER);
 
         MyTextView textPhoneNumber = (MyTextView) view.findViewById(R.id.text_incoming_phone_number);
         textPhoneNumber.setText(phoneNumberIncoming);

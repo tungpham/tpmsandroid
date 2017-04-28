@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
-import com.ethan.morephone.presentation.phone.incall.InCallActivity;
+import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.twilio.client.Connection;
@@ -43,7 +43,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 
-    public final static String ACTION_CALL = "com.ethan.morephone.action.CALL";
+    public final static String ACTION_OUTGOING = "com.ethan.morephone.action.OUTGOING";
+    public final static String ACTION_INCOMING = "com.ethan.morephone.action.INCOMING";
     public final static String ACTION_HANG_UP = "com.ethan.morephone.action.HANG_UP";
     public final static String ACTION_ACCEPT_INCOMING = "com.ethan.morephone.action.ACCEPT_INCOMING";
     public final static String ACTION_DECLINE_INCOMING = "com.ethan.morephone.action.DECLINE_INCOMING";
@@ -65,7 +66,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public final static int PHONE_STATE_DISCONNECTED = PHONE_STATE_DECLINE + 1;
     public final static int PHONE_STATE_DEFAULT = PHONE_STATE_DISCONNECTED + 1;
 
-    private Device clientDevice;
+    private Device mClientDevice;
+    private Device mPartnerDevice;
     private ClientProfile clientProfile;
 
     private Connection mActiveConnection;
@@ -83,6 +85,18 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         Intent intent = new Intent(context, PhoneService.class);
         intent.putExtra(EXTRA_FROM_PHONE_NUMBER, fromPhoneNumber);
         intent.putExtra(EXTRA_TO_PHONE_NUMBER, toPhoneNumber);
+        if (action != null) {
+            intent.setAction(action);
+        }
+        context.startService(intent);
+    }
+
+    public static void startServiceWithAction(Context context, String action, String fromPhoneNumber, String toPhoneNumber, Device device, Connection connection) {
+        Intent intent = new Intent(context, PhoneService.class);
+        intent.putExtra(EXTRA_FROM_PHONE_NUMBER, fromPhoneNumber);
+        intent.putExtra(EXTRA_TO_PHONE_NUMBER, toPhoneNumber);
+        intent.putExtra(Device.EXTRA_DEVICE, device);
+        intent.putExtra(Device.EXTRA_CONNECTION, connection);
         if (action != null) {
             intent.setAction(action);
         }
@@ -109,6 +123,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         mAudioManager.setSpeakerphoneOn(MyPreference.getSpeakerphone(getApplicationContext()));
     }
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent == null) return START_NOT_STICKY;
@@ -119,10 +134,15 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             mToPhoneNumber = intent.getStringExtra(EXTRA_TO_PHONE_NUMBER);
             String digit = intent.getStringExtra(EXTRA_SEND_DIGIT);
 
-            if (action.equals(ACTION_CALL)) processCallRequest(mFromPhoneNumber, mToPhoneNumber);
-            else if (action.equals(ACTION_HANG_UP)) processHangUpRequest(mFromPhoneNumber, mToPhoneNumber);
-            else if (action.equals(ACTION_ACCEPT_INCOMING)) processAcceptIncomingRequest(mFromPhoneNumber, mToPhoneNumber);
-            else if (action.equals(ACTION_DECLINE_INCOMING)) processDeclineIncomingRequest(mFromPhoneNumber, mToPhoneNumber);
+            if (action.equals(ACTION_OUTGOING))
+                processOutgoingRequest(mFromPhoneNumber, mToPhoneNumber);
+            else if (action.equals(ACTION_HANG_UP))
+                processHangUpRequest(mFromPhoneNumber, mToPhoneNumber);
+            else if (action.equals(ACTION_ACCEPT_INCOMING))
+                processAcceptIncomingRequest(mFromPhoneNumber, mToPhoneNumber);
+            else if (action.equals(ACTION_INCOMING)) processIncomingRequest(intent);
+            else if (action.equals(ACTION_DECLINE_INCOMING))
+                processDeclineIncomingRequest(mFromPhoneNumber, mToPhoneNumber);
             else if (action.equals(ACTION_SEND_DIGITS)) processSendDigit(digit);
             else if (action.equals(ACTION_MUTE_MICOPHONE)) processMuteMicrophone();
             else if (action.equals(ACTION_SPEAKER_PHONE)) processSpeakerMicrophone();
@@ -147,12 +167,13 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     @Override
     public void onStartListening(Device device) {
-        DebugTool.logD("START LISTENING: " + device.toString());
+        DebugTool.logD("START LISTENING: " + device.getCapabilities().toString());
+        DebugTool.logD("START LISTENING STATE: " + device.getState().name());
     }
 
     @Override
     public void onStopListening(Device device) {
-        DebugTool.logD("STOP LISTENING: " + device.toString());
+        DebugTool.logD("STOP LISTENING: " + device.getState().name());
     }
 
     @Override
@@ -173,7 +194,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     @Override
     public void onConnecting(Connection connection) {
-        DebugTool.logD("CONNECTING : " + connection.isIncoming());
+        DebugTool.logD("CONNECTING : " + connection.toString());
     }
 
     @Override
@@ -186,6 +207,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onDisconnected(Connection connection) {
         DebugTool.logD("DISCONNECTED ");
+        updateUIPhone(PHONE_STATE_DISCONNECTED, mFromPhoneNumber, mToPhoneNumber);
 //        showDialFragment();
         if (connection.getState() == Connection.State.PENDING) {
             DebugTool.logD("PENDING");
@@ -193,6 +215,17 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             DebugTool.logD("CONNECTED");
         } else if (connection.getState() == Connection.State.CONNECTING) {
             DebugTool.logD("CONNECTING");
+        } else if (connection.getState() == Connection.State.DISCONNECTED) {
+            DebugTool.logD("DISCONNECTED");
+        }
+
+        if (mPartnerDevice != null) {
+            if (mPartnerDevice.getState() == Device.State.BUSY) {
+                DebugTool.logD("BUSY");
+            } else if (mPartnerDevice.getState() == Device.State.OFFLINE) {
+                DebugTool.logD("OFFLINE");
+            }
+            DebugTool.logD("DIVECE: "  + mPartnerDevice.getState().name());
         }
     }
 
@@ -261,9 +294,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     private void createDevice(String capabilityToken) {
         try {
-            if (clientDevice == null) {
-                clientDevice = Twilio.createDevice(capabilityToken, this);
-                clientDevice.setIncomingSoundEnabled(true);
+            if (mClientDevice == null) {
+                mClientDevice = Twilio.createDevice(capabilityToken, this);
+                mClientDevice.setIncomingSoundEnabled(true);
 
                 /*
                  * Providing a PendingIntent to the newly created Device, allowing you to receive incoming calls
@@ -275,31 +308,50 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                  *  If you're using a BroadcastReceiver, override BroadcastReceiver.onReceive().
                  */
 
-                Intent intent = new Intent(this, InCallActivity.class);
+                Intent intent = new Intent(this, PhoneActivity.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                clientDevice.setIncomingIntent(pendingIntent);
+                mClientDevice.setIncomingIntent(pendingIntent);
             } else {
-                clientDevice.updateCapabilityToken(capabilityToken);
+                mClientDevice.updateCapabilityToken(capabilityToken);
             }
 
-//            EventBus.getDefault().postSticky(clientDevice);
+//            EventBus.getDefault().postSticky(mClientDevice);
 
         } catch (Exception e) {
             Toast.makeText(getContext(), "Device error", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void processCallRequest(String fromPhoneNumber, String toPhoneNumber) {
+    private void processOutgoingRequest(String fromPhoneNumber, String toPhoneNumber) {
         Map<String, String> params = new HashMap<>();
-        toPhoneNumber = "client:" + toPhoneNumber.trim();
+//        toPhoneNumber = "client:" + toPhoneNumber.trim();
         params.put("To", toPhoneNumber);
-        if (clientDevice != null) {
-            mActiveConnection = clientDevice.connect(params, this);
+        if (mClientDevice != null) {
+            mActiveConnection = mClientDevice.connect(params, this);
             DebugTool.logD("MAKE A CALL : " + toPhoneNumber);
         } else {
             Toast.makeText(getContext(), "No existing device", Toast.LENGTH_SHORT).show();
         }
         updateUIPhone(PHONE_STATE_OUTGOING, fromPhoneNumber, toPhoneNumber);
+    }
+
+    private void processIncomingRequest(Intent intent) {
+        Device device = intent.getParcelableExtra(Device.EXTRA_DEVICE);
+        Connection incomingConnection = intent.getParcelableExtra(Device.EXTRA_CONNECTION);
+
+        if (incomingConnection == null && device == null) {
+            return;
+        } else {
+            intent.removeExtra(Device.EXTRA_DEVICE);
+            intent.removeExtra(Device.EXTRA_CONNECTION);
+
+            mPartnerDevice = device;
+            mPendingConnection = incomingConnection;
+            mPendingConnection.setConnectionListener(this);
+            DebugTool.logD("DEVICE " + device.getCapabilities().toString());
+            DebugTool.logD("INTENT ");
+        }
+
     }
 
     private void processHangUpRequest(String fromPhoneNumber, String toPhoneNumber) {
@@ -328,19 +380,19 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         updateUIPhone(PHONE_STATE_DECLINE, fromPhoneNumber, toPhoneNumber);
     }
 
-    private void processSendDigit(String digit){
+    private void processSendDigit(String digit) {
         if (mActiveConnection != null && !TextUtils.isEmpty(digit)) {
             mActiveConnection.sendDigits(digit);
         }
     }
 
-    private void processMuteMicrophone(){
+    private void processMuteMicrophone() {
         if (mActiveConnection != null) {
             mActiveConnection.setMuted(MyPreference.getMuteMicrophone(getApplicationContext()));
         }
     }
 
-    private void processSpeakerMicrophone(){
+    private void processSpeakerMicrophone() {
         setAudioFocus(true);
         mAudioManager.setSpeakerphoneOn(MyPreference.getSpeakerphone(getApplicationContext()));
     }

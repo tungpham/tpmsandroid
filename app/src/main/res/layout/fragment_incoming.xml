@@ -10,9 +10,16 @@
         style="@style/TextDisplay"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_incoming_text_title"
-        android:text="+18056624394"
         android:textColor="@android:color/white" />
 
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_outgoing_time"
+        style="@style/ViewCommon"
+        android:layout_below="@+id/text_incoming_phone_number"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_in_call_text_time"
+        android:text="@string/incoming_status"
+        android:textColor="@android:color/white" />
 
     <RelativeLayout
         style="@style/ViewCommon"

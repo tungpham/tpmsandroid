@@ -18,7 +18,7 @@
         android:layout_below="@+id/text_outgoing_phone_number"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_in_call_text_time"
-        android:text="Dialing..."
+        android:text="@string/outgoing_dialing"
         android:textColor="@android:color/white" />
 
     <View

@@ -174,8 +174,10 @@
     <!-- Fragment Incoming Screen -->
     <string name="incoming_decline">Decline</string>
     <string name="incoming_accept">Accept</string>
+    <string name="incoming_status">Incoming...</string>
 
     <!-- Fragment Outgoing Screen -->
+    <string name="outgoing_dialing">Dialing...</string>
     <string name="outgoing_mute">Mute</string>
     <string name="outgoing_speaker">Speaker</string>
 

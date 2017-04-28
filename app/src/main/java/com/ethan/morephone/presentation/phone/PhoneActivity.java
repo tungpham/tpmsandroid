@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
-import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
@@ -23,6 +22,8 @@ import com.ethan.morephone.presentation.phone.incoming.IncomingFragment;
 import com.ethan.morephone.presentation.phone.outgoing.OutgoingFragment;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.utils.ActivityUtils;
+import com.twilio.client.Connection;
+import com.twilio.client.Device;
 
 /**
  * Created by Ethan on 4/27/17.
@@ -55,16 +56,46 @@ public class PhoneActivity extends BaseActivity implements
         int phoneState = getIntent().getIntExtra(PhoneService.EXTRA_PHONE_STATE, PhoneService.PHONE_STATE_DEFAULT);
         if (phoneState == PhoneService.PHONE_STATE_OUTGOING) {
             showOutgoingFragment(mFromPhoneNumber, mToPhoneNumber);
-            PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_CALL, mFromPhoneNumber, mToPhoneNumber);
+            PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_OUTGOING, mFromPhoneNumber, mToPhoneNumber);
+        } else if (phoneState == PhoneService.PHONE_STATE_INCOMING) {
+            showIncomingFragment(mFromPhoneNumber, mToPhoneNumber);
         }
 
     }
 
     @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+
+    @Override
     public void onResume() {
         super.onResume();
 
-//        startAudio();
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            /*
+             * Determine if the receiving Intent has an extra for the incoming connection. If so,
+             * remove it from the Intent to prevent handling it again next time the Activity is resumed
+             */
+            Device device = intent.getParcelableExtra(Device.EXTRA_DEVICE);
+            Connection incomingConnection = intent.getParcelableExtra(Device.EXTRA_CONNECTION);
+
+            if (incomingConnection == null && device == null) {
+                return;
+            }
+            intent.removeExtra(Device.EXTRA_DEVICE);
+            intent.removeExtra(Device.EXTRA_CONNECTION);
+
+            mFromPhoneNumber = incomingConnection.getParameters().get(incomingConnection.IncomingParameterFromKey);
+            mToPhoneNumber = incomingConnection.getParameters().get(incomingConnection.IncomingParameterToKey);
+
+            PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_INCOMING, mFromPhoneNumber, mToPhoneNumber, device, incomingConnection);
+            showIncomingFragment(mFromPhoneNumber, mToPhoneNumber);
+        }
     }
 
     @Override
@@ -110,7 +141,7 @@ public class PhoneActivity extends BaseActivity implements
     private void showIncomingFragment(String fromPhoneNumber, String toPhoneNumber) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof IncomingFragment) return;
-        IncomingFragment incomingFragment = IncomingFragment.getInstance(fromPhoneNumber);
+        IncomingFragment incomingFragment = IncomingFragment.getInstance(fromPhoneNumber, toPhoneNumber);
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 incomingFragment,
@@ -174,7 +205,7 @@ public class PhoneActivity extends BaseActivity implements
                 } else if (phoneState == PhoneService.PHONE_STATE_INCOMING) {
                     showIncomingFragment(fromPhoneNumber, toPhoneNumber);
                 } else if (phoneState == PhoneService.PHONE_STATE_DISCONNECTED) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_disconnected), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_disconnected), Toast.LENGTH_SHORT).show();
                     finish();
                 } else if (phoneState == PhoneService.PHONE_STATE_HANG_UP) {
                     finish();
