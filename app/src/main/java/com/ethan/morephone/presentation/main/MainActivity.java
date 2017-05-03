@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity implements
         setContentView(R.layout.activity_main);
 
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        enableActionBar(mToolbar, MyPreference.getPhoneNumber(getApplicationContext()));
+
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -295,5 +295,6 @@ public class MainActivity extends BaseActivity implements
                     R.id.content_frame,
                     DashboardFrag.class.getSimpleName());
         }
+        enableActionBar(mToolbar, MyPreference.getPhoneNumber(getApplicationContext()));
     }
 }
