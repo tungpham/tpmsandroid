@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
+import com.android.morephone.data.log.DebugTool;
+
 /**
  * Created by Ethan on 4/27/17.
  */
@@ -14,5 +16,6 @@ public class PhoneIntervalReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent service = new Intent(context, PhoneService.class);
         startWakefulService(context, service);
+        DebugTool.logD("PhoneIntervalReceiver START");
     }
 }

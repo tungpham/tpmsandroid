@@ -117,6 +117,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onCreate() {
         clientProfile = new ClientProfile(MyPreference.getPhoneNumber(getApplicationContext()), true, true);
+        DebugTool.logD("CREATE SERVICE");
         initializeTwilioClientSDK();
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         setAudioFocus(false);
@@ -324,7 +325,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     private void processOutgoingRequest(String fromPhoneNumber, String toPhoneNumber) {
         Map<String, String> params = new HashMap<>();
-//        toPhoneNumber = "client:" + toPhoneNumber.trim();
+        toPhoneNumber = "client:" + toPhoneNumber.trim();
         params.put("To", toPhoneNumber);
         if (mClientDevice != null) {
             mActiveConnection = mClientDevice.connect(params, this);
@@ -432,6 +433,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         intent.setAction(ACTION_WAKEUP);
         PendingIntent pIntent = PendingIntent.getBroadcast(context, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        DebugTool.logD("ALARM START");
         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             alarm.set(AlarmManager.RTC_WAKEUP, 0, pIntent);
         } else {

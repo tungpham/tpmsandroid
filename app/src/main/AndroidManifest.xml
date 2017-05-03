@@ -64,6 +64,8 @@
         <activity android:name=".presentation.numbers.IncomingPhoneNumbersActivity" />
         <activity android:name=".presentation.buy.SearchPhoneNumberActivity" />
         <activity android:name=".presentation.buy.result.AvailablePhoneNumberActivity" />
+        <activity android:name=".presentation.buy.payment.card.CardActivity" />
+        <activity android:name=".presentation.buy.payment.PaymentActivity" />
 
         <!--<activity android:name=".presentation.phone.CallActivity" />-->
         <activity android:name=".presentation.setting.SettingActivity" />

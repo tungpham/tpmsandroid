@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.buy.result;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +14,7 @@ import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumber;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberFragment;
+import com.ethan.morephone.presentation.buy.payment.PaymentActivity;
 import com.ethan.morephone.presentation.buy.result.adapter.AvailablePhoneNumberAdapter;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 
@@ -23,7 +25,9 @@ import java.util.List;
  * Created by Ethan on 3/31/17.
  */
 
-public class AvailablePhoneNumberFragment extends BaseFragment implements AvailablePhoneNumberContract.View{
+public class AvailablePhoneNumberFragment extends BaseFragment implements
+        AvailablePhoneNumberContract.View,
+        AvailablePhoneNumberAdapter.AvailablePhoneNumberListener {
 
     public static AvailablePhoneNumberFragment getInstance(Bundle bundle) {
         AvailablePhoneNumberFragment availablePhoneNumberFragment = new AvailablePhoneNumberFragment();
@@ -52,6 +56,7 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements Availa
 
         mAvailablePhoneNumberAdapter = new AvailablePhoneNumberAdapter(getContext(), new ArrayList<AvailablePhoneNumber>());
         recyclerView.setAdapter(mAvailablePhoneNumberAdapter);
+        mAvailablePhoneNumberAdapter.setAvailablePhoneNumbers(this);
 
         Bundle bundle = getArguments();
         String countryCode = bundle.getString(SearchPhoneNumberFragment.BUNDLE_COUNTRY_CODE);
@@ -67,7 +72,7 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements Availa
 
     @Override
     public void showLoading(boolean isActive) {
-        if(isActive) showProgress();
+        if (isActive) showProgress();
         else hideProgress();
     }
 
@@ -79,5 +84,10 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements Availa
     @Override
     public void setPresenter(AvailablePhoneNumberContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void onBuyPhoneNumber(AvailablePhoneNumber availablePhoneNumber) {
+        startActivity(new Intent(getActivity(), PaymentActivity.class));
     }
 }

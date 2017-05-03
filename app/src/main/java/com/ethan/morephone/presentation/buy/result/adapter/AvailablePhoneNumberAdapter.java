@@ -19,6 +19,7 @@ public class AvailablePhoneNumberAdapter extends RecyclerView.Adapter<AvailableP
 
     private List<AvailablePhoneNumber> mAvailablePhoneNumbers;
     private Context mContext;
+    private AvailablePhoneNumberListener mAvailablePhoneNumberListener;
 
     public AvailablePhoneNumberAdapter(Context context, List<AvailablePhoneNumber> availablePhoneNumbers) {
         mContext = context;
@@ -28,6 +29,10 @@ public class AvailablePhoneNumberAdapter extends RecyclerView.Adapter<AvailableP
     public void replaceData(List<AvailablePhoneNumber> availablePhoneNumbers) {
         mAvailablePhoneNumbers = availablePhoneNumbers;
         notifyDataSetChanged();
+    }
+
+    public void setAvailablePhoneNumbers(AvailablePhoneNumberListener availablePhoneNumberListener){
+        mAvailablePhoneNumberListener = availablePhoneNumberListener;
     }
 
     @Override
@@ -41,11 +46,21 @@ public class AvailablePhoneNumberAdapter extends RecyclerView.Adapter<AvailableP
         final AvailablePhoneNumber availablePhoneNumber = mAvailablePhoneNumbers.get(position);
         holder.textPhoneNumber.setText(availablePhoneNumber.phoneNumber);
         holder.textRegion.setText(availablePhoneNumber.rateCenter + ", " + availablePhoneNumber.region);
+        holder.imageBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAvailablePhoneNumberListener.onBuyPhoneNumber(availablePhoneNumber);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return mAvailablePhoneNumbers.size();
+    }
+
+    public interface AvailablePhoneNumberListener {
+        void onBuyPhoneNumber(AvailablePhoneNumber availablePhoneNumber);
     }
 
 }
