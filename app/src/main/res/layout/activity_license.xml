@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <RelativeLayout
+    <include layout="@layout/tool_bar" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white">
-
-        <include layout="@layout/tool_bar" />
-
-        <com.ethan.morephone.widget.MyTextView
-            android:id="@+id/text_title"
-            style="@style/TextDisplay"
-            android:layout_below="@+id/tool_bar"
-            android:text="@string/license_label" />
+        android:layout_below="@+id/tool_bar">
 
         <WebView
             android:id="@+id/web_view"
@@ -23,7 +17,6 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/activity_main_margin"
             android:layout_marginRight="@dimen/activity_main_margin"
-            android:background="@android:color/white"
-            android:layout_below="@+id/text_title" />
-    </RelativeLayout>
-</ScrollView>
+            android:background="@android:color/white" />
+    </ScrollView>
+</RelativeLayout>

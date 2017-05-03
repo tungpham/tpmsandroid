@@ -21,10 +21,10 @@ public class LicenseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_license);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        enableActionBar(toolbar, getString(R.string.license_label));
+        enableHomeActionBar(toolbar, getString(R.string.license_label));
 
         WebView webView = (WebView) findViewById(R.id.web_view);
-        webView.loadUrl("file:///android_asset/policy.html");
+        webView.loadUrl("file:///android_asset/license.html");
     }
 
     @Override
