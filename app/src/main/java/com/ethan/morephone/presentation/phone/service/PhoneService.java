@@ -325,7 +325,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     private void processOutgoingRequest(String fromPhoneNumber, String toPhoneNumber) {
         Map<String, String> params = new HashMap<>();
-        toPhoneNumber = "client:" + toPhoneNumber.trim();
+//        toPhoneNumber = "client:" + toPhoneNumber.trim();
         params.put("To", toPhoneNumber);
         if (mClientDevice != null) {
             mActiveConnection = mClientDevice.connect(params, this);

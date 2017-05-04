@@ -1,6 +1,7 @@
 package com.ethan.morephone.presentation.message.compose;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
@@ -18,6 +19,7 @@ import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.widget.AutoCompleteContactView;
 
@@ -96,21 +98,26 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
         switch (view.getId()) {
             case R.id.image_send:
                 String body = mEditTextBody.getEditableText().toString();
-                mEditTextBody.setText("");
-
-                for (String to : getRecipientAddresses()) {
-                    if (!TextUtils.isEmpty(to)) {
-                        mPresenter.createMessage(to, mPhoneNumber, body, 0);
-                    }
-                }
+                Intent intent = new Intent();
+                intent.putExtra(ConversationsFragment.EXTRA_MESSAGE_BODY, body);
+                intent.putExtra(ConversationsFragment.EXTRA_MESSAGE_TO, getRecipientAddresses());
+                getActivity().setResult(Activity.RESULT_OK, intent);
+                getActivity().finish();
+//                mEditTextBody.setText("");
+//
+//                for (String to : getRecipientAddresses()) {
+//                    if (!TextUtils.isEmpty(to)) {
+//                        mPresenter.createMessage(to, mPhoneNumber, body, 0);
+//                    }
+//                }
                 break;
         }
     }
 
     @Override
     public void createMessageSuccess(MessageItem messageItem) {
-        getActivity().setResult(Activity.RESULT_OK);
-        getActivity().finish();
+//        getActivity().setResult(Activity.RESULT_OK);
+//        getActivity().finish();
     }
 
     @Override

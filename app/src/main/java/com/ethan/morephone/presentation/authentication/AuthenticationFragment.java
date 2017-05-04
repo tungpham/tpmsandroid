@@ -21,8 +21,6 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.presentation.authentication.register.RegisterActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
-import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersActivity;
-import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -95,8 +93,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_authentication_facebook:
-                Intent intent = new Intent(getActivity(), IncomingPhoneNumbersActivity.class);
-                intent.putExtra(IncomingPhoneNumbersFragment.BUNDLE_IS_AUTHENTICATE, true);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 break;
 

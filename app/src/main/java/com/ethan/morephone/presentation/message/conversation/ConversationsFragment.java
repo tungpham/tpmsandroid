@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,9 @@ public class ConversationsFragment extends BaseFragment implements
         return conversationsFragment;
     }
 
+    public static final String EXTRA_MESSAGE_BODY = "EXTRA_MESSAGE_BODY";
+    public static final String EXTRA_MESSAGE_TO = "EXTRA_MESSAGE_TO";
+
     private final int REQUEST_COMPOSE = 100;
 
     private ConversationListAdapter mConversationListAdapter;
@@ -72,7 +76,8 @@ public class ConversationsFragment extends BaseFragment implements
                 Injection.providerUseCaseHandler(),
                 Injection.providerGetMessages(getContext()),
                 Injection.providerGetMessagesIncoming(getContext()),
-                Injection.providerGetMessagesOutgoing(getContext()));
+                Injection.providerGetMessagesOutgoing(getContext()),
+                Injection.providerCreateMessage(getContext()));
     }
 
     @Nullable
@@ -242,6 +247,16 @@ public class ConversationsFragment extends BaseFragment implements
     }
 
     @Override
+    public void createMessageSuccess(MessageItem messageItem) {
+        loadData();
+    }
+
+    @Override
+    public void createMessageError() {
+        Toast.makeText(getContext(), "SEND ERROR", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void setPresenter(ConversationsContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -267,8 +282,14 @@ public class ConversationsFragment extends BaseFragment implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_COMPOSE){
-            if(resultCode == Activity.RESULT_OK) {
-                loadData();
+            if(resultCode == Activity.RESULT_OK && data != null) {
+                String body = data.getStringExtra(EXTRA_MESSAGE_BODY);
+                String[] tos = data.getStringArrayExtra(EXTRA_MESSAGE_TO);
+                for (String to : tos) {
+                    if (!TextUtils.isEmpty(to)) {
+                        mPresenter.createMessage(to, mPhoneNumber, body, 0);
+                    }
+                }
             }
         }
     }

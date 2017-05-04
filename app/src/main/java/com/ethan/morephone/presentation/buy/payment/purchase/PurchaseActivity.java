@@ -1,4 +1,4 @@
-package com.ethan.morephone.presentation.buy.payment;
+package com.ethan.morephone.presentation.buy.payment.purchase;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,27 +11,28 @@ import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 
 /**
- * Created by Ethan on 5/3/17.
+ * Created by Ethan on 5/4/17.
  */
 
-public class PaymentActivity extends BaseActivity {
+public class PurchaseActivity extends BaseActivity {
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.activity_normal);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        enableHomeActionBar(mToolbar, getString(R.string.payment_label));
+        setTitleActionBar(mToolbar, getString(R.string.purchase_label));
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (fragment instanceof PaymentFragment) return;
-        PaymentFragment browserFragment = PaymentFragment.getInstance();
+        if (fragment instanceof PurchaseFragment) return;
+        PurchaseFragment browserFragment = PurchaseFragment.getInstance();
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 browserFragment,
                 R.id.content_frame,
-                PaymentFragment.class.getSimpleName());
+                PurchaseFragment.class.getSimpleName());
     }
 
     @Override

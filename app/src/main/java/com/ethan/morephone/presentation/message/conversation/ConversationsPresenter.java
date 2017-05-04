@@ -8,6 +8,7 @@ import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
+import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.GetAllMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
@@ -28,6 +29,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     private final GetAllMessages mGetAllMessages;
     private final GetMessagesIncoming mGetMessagesIncoming;
     private final GetMessagesOutgoing mGetMessagesOutgoing;
+    private final CreateMessage mCreateMessage;
 
     private List<MessageItem> mMessageItems;
     private List<ConversationModel> mConversationModels;
@@ -37,12 +39,14 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
                                   @NonNull UseCaseHandler useCaseHandler,
                                   @NonNull GetAllMessages getAllMessages,
                                   @NonNull GetMessagesIncoming getMessagesIncoming,
-                                  @NonNull GetMessagesOutgoing getMessagesOutgoing) {
+                                  @NonNull GetMessagesOutgoing getMessagesOutgoing,
+                                  @NonNull CreateMessage createMessage) {
         mView = view;
         mUseCaseHandler = useCaseHandler;
         mGetAllMessages = getAllMessages;
         mGetMessagesIncoming = getMessagesIncoming;
         mGetMessagesOutgoing = getMessagesOutgoing;
+        mCreateMessage = createMessage;
 
         mMessageItems = new ArrayList<>();
         mConversationModels = new ArrayList<>();
@@ -236,5 +240,26 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
             }
         }
         return messageItems;
+    }
+
+    @Override
+    public void createMessage(String to, String from, String body, int position) {
+        mView.showLoading(true);
+        CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(to, from, body);
+        mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
+            @Override
+            public void onSuccess(CreateMessage.ResponseValue response) {
+//                mView.showProgress(false, position);
+                mView.showLoading(false);
+                mView.createMessageSuccess(response.getMessageItem());
+            }
+
+            @Override
+            public void onError() {
+//                mView.showProgress(false, position);
+                mView.showLoading(false);
+                mView.createMessageError();
+            }
+        });
     }
 }

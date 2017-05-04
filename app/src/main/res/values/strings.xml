@@ -230,6 +230,9 @@
     <string name="payment_label">Payment</string>
     <string name="payment_methods">Payment Methods</string>
 
+    <!-- Purchase Fragment -->
+    <string name="purchase_label">Purchase</string>
+
     <string name="next">NEXT</string>
     <string name="previous">PREVIOUS</string>
     <string name="done">DONE</string>

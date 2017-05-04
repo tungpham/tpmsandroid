@@ -9,7 +9,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,10 +21,9 @@ import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
-import com.ethan.morephone.presentation.main.MainActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersViewHolder;
@@ -48,15 +46,10 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         View.OnClickListener {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
-    public static final String BUNDLE_IS_AUTHENTICATE = "BUNDLE_IS_AUTHENTICATE";
 
 
-    public static IncomingPhoneNumbersFragment getInstance(boolean isAuthenticate) {
-        IncomingPhoneNumbersFragment numbersFragment = new IncomingPhoneNumbersFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(BUNDLE_IS_AUTHENTICATE, isAuthenticate);
-        numbersFragment.setArguments(bundle);
-        return numbersFragment;
+    public static IncomingPhoneNumbersFragment getInstance() {
+        return new IncomingPhoneNumbersFragment();
     }
 
     private IncomingPhoneNumbersAdapter mIncomingPhoneNumbersAdapter;
@@ -66,8 +59,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     private DrawerLayout mDrawerLayout;
 
     private boolean mIsDelete;
-
-    private boolean mIsAuthenticate = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,15 +71,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_numbers, container, false);
 
-        mIsAuthenticate = getArguments().getBoolean(BUNDLE_IS_AUTHENTICATE);
-
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
-        BaseActivity baseActivity = (BaseActivity) getActivity();
-        if (mIsAuthenticate) {
-            baseActivity.setTitleActionBar(toolbar, getString(R.string.my_number_label));
-        } else {
-            baseActivity.enableHomeActionBar(toolbar, getString(R.string.my_number_label));
-        }
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -153,12 +135,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         storePhoneNumber(incomingPhoneNumber);
         mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
         mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
-        if (mIsAuthenticate) {
-            startActivity(new Intent(getActivity(), MainActivity.class));
-        } else {
-            getActivity().setResult(Activity.RESULT_OK);
-            getActivity().finish();
-        }
+        startActivity(new Intent(getActivity(), DashboardActivity.class));
     }
 
     @Override
@@ -176,16 +153,10 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
         mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
 
-        if (mIsAuthenticate) {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent();
-            intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
-            getActivity().setResult(Activity.RESULT_OK, intent);
-            getActivity().finish();
-        }
+        Intent intent = new Intent(getActivity(), DashboardActivity.class);
+        intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
+        startActivity(intent);
+
     }
 
     @Override
@@ -196,16 +167,9 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
         mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
 
-        if (mIsAuthenticate) {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, true);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent();
-            intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, true);
-            getActivity().setResult(Activity.RESULT_OK, intent);
-            getActivity().finish();
-        }
+        Intent intent = new Intent(getActivity(), DashboardActivity.class);
+        intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, true);
+        startActivity(intent);
     }
 
     @Override
@@ -258,7 +222,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         }
     }
 
-    private void storePhoneNumber(IncomingPhoneNumber incomingPhoneNumber){
+    private void storePhoneNumber(IncomingPhoneNumber incomingPhoneNumber) {
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
         MyPreference.setFriendlyName(getContext(), incomingPhoneNumber.friendlyName);
         MyPreference.setPhoneNumberSid(getContext(), incomingPhoneNumber.sid);

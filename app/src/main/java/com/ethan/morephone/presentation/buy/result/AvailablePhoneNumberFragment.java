@@ -14,7 +14,7 @@ import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumber;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberFragment;
-import com.ethan.morephone.presentation.buy.payment.PaymentActivity;
+import com.ethan.morephone.presentation.buy.payment.purchase.PurchaseActivity;
 import com.ethan.morephone.presentation.buy.result.adapter.AvailablePhoneNumberAdapter;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 
@@ -88,6 +88,6 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements
 
     @Override
     public void onBuyPhoneNumber(AvailablePhoneNumber availablePhoneNumber) {
-        startActivity(new Intent(getActivity(), PaymentActivity.class));
+        startActivity(new Intent(getActivity(), PurchaseActivity.class));
     }
 }

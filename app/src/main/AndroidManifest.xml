@@ -47,6 +47,7 @@
         <activity android:name=".presentation.message.conversation.ConversationsActivity" />
         <activity android:name=".presentation.message.list.MessageListActivity" />
         <activity android:name=".presentation.message.compose.ComposeActivity" />
+        <activity android:name=".presentation.buy.payment.purchase.PurchaseActivity" />
 
         <activity android:name=".presentation.voice.VoiceActivity" />
         <activity android:name=".presentation.voice.TestVoiceActivity" />

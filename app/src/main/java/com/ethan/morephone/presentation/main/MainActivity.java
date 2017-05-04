@@ -1,16 +1,12 @@
 package com.ethan.morephone.presentation.main;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
@@ -19,18 +15,18 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
+import com.ethan.morephone.presentation.buy.payment.PaymentActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.license.LicenseActivity;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersActivity;
-import com.ethan.morephone.presentation.phone.service.PhoneService;
+import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.review.AlertReviewDialog;
 import com.ethan.morephone.presentation.setting.SettingActivity;
 import com.ethan.morephone.presentation.usage.UsageActivity;
@@ -50,7 +46,7 @@ public class MainActivity extends BaseActivity implements
     private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
 
     private final int REQUEST_INCOMING_PHONE = 100;
-    private final int MIC_PERMISSION_REQUEST_CODE = 101;
+
 
     private Toolbar mToolbar;
 
@@ -87,11 +83,6 @@ public class MainActivity extends BaseActivity implements
         MyPreference.setTimesUse(getApplicationContext(), MyPreference.getTimesUse(getApplicationContext()) + 1);
 
 
-        if (!checkPermissionForMicrophone()) {
-            requestPermissionForMicrophone();
-        } else {
-            startService();
-        }
     }
 
     @Override
@@ -131,8 +122,8 @@ public class MainActivity extends BaseActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         mDrawerLayout.closeDrawers();
         switch (item.getItemId()) {
-            case R.id.nav_numbers:
-                startActivityForResult(new Intent(this, IncomingPhoneNumbersActivity.class), REQUEST_INCOMING_PHONE);
+            case R.id.nav_card:
+                startActivityForResult(new Intent(this, PaymentActivity.class), REQUEST_INCOMING_PHONE);
                 break;
             case R.id.nav_buy_number:
                 startActivity(new Intent(this, SearchPhoneNumberActivity.class));
@@ -221,50 +212,6 @@ public class MainActivity extends BaseActivity implements
     }
 
 
-    /*------------------------------------------------PERMISSION MIC ----------------------------------------*/
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        /*
-         * Check if microphone permissions is granted
-         */
-        if (requestCode == MIC_PERMISSION_REQUEST_CODE && permissions.length > 0) {
-            boolean granted = true;
-            if (granted) {
-                startService();
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "Microphone permissions needed. Please allow in App Settings for additional functionality.",
-                        Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    private boolean checkPermissionForMicrophone() {
-        int resultMic = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
-        if (resultMic == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
-    private void requestPermissionForMicrophone() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
-            Toast.makeText(getApplicationContext(),
-                    "Microphone permissions needed. Please allow in App Settings for additional functionality.",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{Manifest.permission.RECORD_AUDIO},
-                    MIC_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    private void startService() {
-        PhoneService.startPhoneService(getApplicationContext());
-    }
-
 //    private ServiceConnection mConnection = new ServiceConnection() {
 //        public void onServiceConnected(ComponentName className, IBinder service) {
 //            mPhoneService = ((PhoneService.LocalBinder) service).getService();
@@ -288,13 +235,15 @@ public class MainActivity extends BaseActivity implements
                     R.id.content_frame,
                     DashboardFrag.class.getSimpleName());
         } else {
-            DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), isVoice);
+            IncomingPhoneNumbersFragment voiceFragment =  IncomingPhoneNumbersFragment.getInstance();
+
+//            DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), isVoice);
             ActivityUtils.replaceFragmentToActivity(
                     getSupportFragmentManager(),
-                    numbersFragment,
+                    voiceFragment,
                     R.id.content_frame,
-                    DashboardFrag.class.getSimpleName());
+                    IncomingPhoneNumbersFragment.class.getSimpleName());
         }
-        enableActionBar(mToolbar, MyPreference.getPhoneNumber(getApplicationContext()));
+        enableActionBar(mToolbar, getString(R.string.my_number_label));
     }
 }

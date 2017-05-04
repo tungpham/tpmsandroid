@@ -15,21 +15,11 @@
 -->
 
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_content"
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:paddingTop="@dimen/activity_vertical_margin" />
 
-    <include layout="@layout/tool_bar" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tool_bar"
-        android:paddingTop="@dimen/activity_vertical_margin" />
-
-</RelativeLayout>
