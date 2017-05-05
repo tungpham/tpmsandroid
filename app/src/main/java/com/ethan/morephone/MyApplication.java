@@ -1,7 +1,9 @@
 package com.ethan.morephone;
 
-import android.app.Application;
+import android.content.Context;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathConfiguration;
@@ -11,7 +13,7 @@ import com.stormpath.sdk.StormpathLogger;
  * Created by Ethan on 2/23/17.
  */
 
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {
@@ -37,5 +39,11 @@ public class MyApplication extends Application {
                     .penaltyLog()
                     .build());
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

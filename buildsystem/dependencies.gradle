@@ -89,6 +89,7 @@ ext {
             firebaseAds         : "com.google.firebase:firebase-ads:${firebaseVersion}",
             firebaseConfig      : "com.google.firebase:firebase-config:${firebaseVersion}",
             servicesAuth        : "com.google.android.gms:play-services-auth:${servicesVersion}",
+            servicesWallet      : "com.google.android.gms:play-services-wallet:${servicesVersion}",
             servicesGcm         : "com.google.android.gms:play-services-gcm:${servicesVersion}",
             servicesLocation    : "com.google.android.gms:play-services-location:${servicesVersion}",
             servicesAnalytics   : "com.google.android.gms:play-services-analytics:${servicesVersion}",

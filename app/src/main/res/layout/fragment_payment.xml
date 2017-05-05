@@ -34,7 +34,7 @@
                 android:layout_below="@+id/text_payment_visa" />
 
             <com.ethan.morephone.widget.MyTextView
-                android:id="@+id/text_payment_credit"
+                android:id="@+id/text_payment_paypal"
                 style="@style/TextPaymentItem"
                 android:layout_below="@+id/view_divider_1"
                 android:text="Paypal"
@@ -44,7 +44,7 @@
             <View
                 android:id="@+id/view_divider_2"
                 style="@style/Divider"
-                android:layout_below="@+id/text_payment_credit" />
+                android:layout_below="@+id/text_payment_paypal" />
 
             <com.ethan.morephone.widget.MyTextView
                 android:id="@+id/text_payment_add"

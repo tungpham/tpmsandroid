@@ -71,6 +71,12 @@ dependencies {
     compile presentationDependencies.cardview
     compile presentationDependencies.firebaseCrash
     compile presentationDependencies.servicesGcm
+    compile presentationDependencies.servicesAuth
+    compile presentationDependencies.servicesWallet
+    compile('com.paypal.sdk:paypal-android-sdk:2.15.3') {
+        exclude group: 'io.card'
+        exclude group:'com.squareup.okhttp3', module:'okhttp'
+    }
     compile 'com.klinkerapps:android-chips:1.0.0'
     compile 'com.stormpath.sdk:stormpath-sdk-android:2.0'
     compile 'com.twilio:voice-android:2.0.0-beta4'
@@ -80,6 +86,7 @@ dependencies {
     compile 'com.google.android.exoplayer:exoplayer:r2.3.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.github.ozodrukh:CircularReveal:1.0.5'
+    compile 'com.android.support:multidex:1.0.1'
     compile project(':domain')
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
