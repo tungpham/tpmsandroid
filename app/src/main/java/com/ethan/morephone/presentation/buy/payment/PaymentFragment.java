@@ -37,7 +37,7 @@ public class PaymentFragment extends BaseFragment implements View.OnClickListene
     private static final int REQUEST_CODE_PAYMENT = 1;
 
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_NO_NETWORK;
-    private static final String CONFIG_CLIENT_ID = "credentials from developer.paypal.com";
+    private static final String CONFIG_CLIENT_ID = "AUOoaumERgukf8fbz6pPyH3e0jqyOBzEjvgdsSagrQB1oVwzdfLqgfgFHEMNZquHUY-gEfrGbtozDUFW";
 
     private static PayPalConfiguration config = new PayPalConfiguration()
             .environment(CONFIG_ENVIRONMENT)

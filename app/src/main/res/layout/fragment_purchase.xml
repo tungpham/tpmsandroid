@@ -1,5 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_purchase_title"
+        style="@style/TextSettingDisplay"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:text="@string/purchase_title" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_purchase_amount"
+        style="@style/ViewCommon"
+        android:layout_below="@+id/text_purchase_title"
+        android:layout_marginLeft="@dimen/activity_main_margin"
+        android:layout_marginRight="@dimen/activity_main_margin"
+        android:layout_marginTop="48dp"
+        android:text="@string/purchase_amount_to_add"
+        android:textSize="18sp" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_purchase_unit"
+        style="@style/ViewCommon"
+        android:layout_below="@+id/text_purchase_amount"
+        android:layout_marginLeft="@dimen/activity_main_margin"
+        android:layout_marginRight="@dimen/activity_main_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="$"
+        android:textSize="18sp" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_purchase_amount"
+        android:layout_marginRight="@dimen/activity_main_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@+id/text_purchase_unit"
+        android:inputType="numberDecimal"
+        android:layout_alignBaseline="@+id/text_purchase_unit"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_purchase_pay_now"
+        style="@style/ButtonBlue"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@string/purchase_add_fund" />
 
 </RelativeLayout>

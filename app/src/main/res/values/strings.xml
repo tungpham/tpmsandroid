@@ -171,6 +171,11 @@
     <string name="buy_number_mms">MMS</string>
     <string name="buy_number_voice">VOICE</string>
 
+    <!-- Fragment Purchase -->
+    <string name="purchase_title">Specify how much to add to your balance.</string>
+    <string name="purchase_amount_to_add">Amount to add</string>
+    <string name="purchase_add_fund">Add Fund</string>
+
     <!-- Fragment Incoming Screen -->
     <string name="incoming_decline">Decline</string>
     <string name="incoming_accept">Accept</string>
