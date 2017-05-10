@@ -1,6 +1,5 @@
 package com.ethan.morephone.presentation.buy.result;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -88,6 +87,6 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements
 
     @Override
     public void onBuyPhoneNumber(AvailablePhoneNumber availablePhoneNumber) {
-        startActivity(new Intent(getActivity(), PurchaseActivity.class));
+        PurchaseActivity.starter(getActivity(), availablePhoneNumber.friendlyName, "$1.00", availablePhoneNumber.capabilities.voice, availablePhoneNumber.capabilities.SMS, availablePhoneNumber.capabilities.MMS, availablePhoneNumber.capabilities.fax);
     }
 }

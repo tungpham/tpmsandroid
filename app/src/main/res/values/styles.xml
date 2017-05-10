@@ -405,5 +405,33 @@
         <item name="android:clickable">true</item>
     </style>
 
+    <style name="TextPurchasePrice" parent="ViewCommon">
+        <item name="android:textColor">@color/colorPink</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginLeft">@dimen/activity_main_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_main_margin</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
+    <style name="TextPurchaseTitle" parent="ViewMatch">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginLeft">@dimen/activity_main_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_main_margin</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:layout_marginTop">@dimen/activity_main_margin</item>
+    </style>
+
+    <style name="TextPurchaseSummary" parent="ViewCommon">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:layout_marginLeft">@dimen/activity_main_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_main_margin</item>
+        <item name="android:layout_marginTop">4dp</item>
+    </style>
+
+    <style name="TextPurchaseImage" parent="ViewCommon">
+        <item name="android:layout_marginLeft">@dimen/activity_main_margin</item>
+        <item name="android:layout_marginTop">@dimen/activity_main_margin</item>
+    </style>
 
 </resources>

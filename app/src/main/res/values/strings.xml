@@ -172,9 +172,24 @@
     <string name="buy_number_voice">VOICE</string>
 
     <!-- Fragment Purchase -->
-    <string name="purchase_title">Specify how much to add to your balance.</string>
-    <string name="purchase_amount_to_add">Amount to add</string>
-    <string name="purchase_add_fund">Add Fund</string>
+
+    <string name="purchase_label">Purchase</string>
+    <string name="purchase_buy_this_number">Buy this number</string>
+    <string name="purchase_per_month">per month</string>
+    <string name="purchase_voice">Voice</string>
+    <string name="purchase_voice_summary">This number can receive incoming calls and make outgoing calls.</string>
+    <string name="purchase_message">SMS</string>
+    <string name="purchase_message_summary">This number can send and receive text messages to and from mobile numbers.</string>
+    <string name="purchase_fax">Fax</string>
+    <string name="purchase_fax_summary">This number can send and receive facsimiles</string>
+    <string name="purchase_mms">MMS</string>
+    <string name="purchase_mms_summary">This number can send and receive multi media messages to and from mobile number</string>
+
+    <!-- Fragment Add Fund -->
+    <string name="add_fund_label">Add Fund</string>
+    <string name="add_fund_title">Specify how much to add to your balance.</string>
+    <string name="add_fund_amount_to_add">Amount to add</string>
+    <string name="add_fund_button">Add Fund</string>
 
     <!-- Fragment Incoming Screen -->
     <string name="incoming_decline">Decline</string>
@@ -235,8 +250,7 @@
     <string name="payment_label">Payment</string>
     <string name="payment_methods">Payment Methods</string>
 
-    <!-- Purchase Fragment -->
-    <string name="purchase_label">Purchase</string>
+
 
     <string name="next">NEXT</string>
     <string name="previous">PREVIOUS</string>

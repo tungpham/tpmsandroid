@@ -20,7 +20,7 @@ import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
-import com.ethan.morephone.presentation.buy.payment.PaymentActivity;
+import com.ethan.morephone.presentation.buy.payment.fund.AddFundActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.license.LicenseActivity;
@@ -123,7 +123,7 @@ public class MainActivity extends BaseActivity implements
         mDrawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.nav_card:
-                startActivityForResult(new Intent(this, PaymentActivity.class), REQUEST_INCOMING_PHONE);
+                startActivityForResult(new Intent(this, AddFundActivity.class), REQUEST_INCOMING_PHONE);
                 break;
             case R.id.nav_buy_number:
                 startActivity(new Intent(this, SearchPhoneNumberActivity.class));

@@ -3,48 +3,139 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_purchase_title"
-        style="@style/TextSettingDisplay"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:text="@string/purchase_title" />
-
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_purchase_amount"
-        style="@style/ViewCommon"
-        android:layout_below="@+id/text_purchase_title"
-        android:layout_marginLeft="@dimen/activity_main_margin"
-        android:layout_marginRight="@dimen/activity_main_margin"
-        android:layout_marginTop="48dp"
-        android:text="@string/purchase_amount_to_add"
-        android:textSize="18sp" />
-
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_purchase_unit"
-        style="@style/ViewCommon"
-        android:layout_below="@+id/text_purchase_amount"
-        android:layout_marginLeft="@dimen/activity_main_margin"
-        android:layout_marginRight="@dimen/activity_main_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="$"
-        android:textSize="18sp" />
-
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/edit_text_amount"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_purchase_amount"
-        android:layout_marginRight="@dimen/activity_main_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_toRightOf="@+id/text_purchase_unit"
-        android:inputType="numberDecimal"
-        android:layout_alignBaseline="@+id/text_purchase_unit"/>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button_purchase_pay_now"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_purchase_phone_number"
+                style="@style/TextSettingDisplay"
+                android:layout_marginTop="@dimen/activity_main_margin"
+                android:text="(201) 733-424" />
+
+            <RelativeLayout
+                android:id="@+id/relative_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_purchase_phone_number"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <com.ethan.morephone.widget.MyTextView
+                    android:id="@+id/text_purchase_price"
+                    style="@style/TextPurchasePrice"
+                    android:text="$1.00" />
+
+                <com.ethan.morephone.widget.MyTextView
+                    android:id="@+id/text_purchase_price_time"
+                    style="@style/ViewCommon"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/text_purchase_price"
+                    android:text="@string/purchase_per_month" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view_divider_1"
+                style="@style/Divider"
+                android:layout_width="@dimen/width_divider_short"
+                android:layout_below="@+id/relative_price"
+                android:layout_marginTop="@dimen/activity_main_margin" />
+
+
+            <ImageView
+                android:id="@+id/image_purchase_voice"
+                style="@style/TextPurchaseImage"
+                android:layout_below="@+id/view_divider_1"
+                android:src="@drawable/phone" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_purchase_voice"
+                style="@style/TextPurchaseTitle"
+                android:layout_below="@+id/view_divider_1"
+                android:layout_toRightOf="@+id/image_purchase_voice"
+                android:text="@string/purchase_voice" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_purchase_voice_summary"
+                style="@style/TextPurchaseSummary"
+                android:layout_below="@+id/text_purchase_voice"
+                android:layout_toRightOf="@+id/image_purchase_voice"
+                android:text="@string/purchase_voice_summary" />
+
+            <ImageView
+                android:id="@+id/image_purchase_message"
+                style="@style/TextPurchaseImage"
+                android:layout_below="@+id/text_purchase_voice_summary"
+                android:src="@drawable/message" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_purchase_message"
+                style="@style/TextPurchaseTitle"
+                android:layout_below="@+id/text_purchase_voice_summary"
+                android:layout_toRightOf="@+id/image_purchase_message"
+                android:text="@string/purchase_message" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_purchase_message_summary"
+                style="@style/TextPurchaseSummary"
+                android:layout_below="@+id/text_purchase_message"
+                android:layout_toRightOf="@+id/image_purchase_voice"
+                android:text="@string/purchase_message_summary" />
+
+            <ImageView
+                android:id="@+id/image_purchase_fax"
+                style="@style/TextPurchaseImage"
+                android:layout_below="@+id/text_purchase_message_summary"
+                android:src="@drawable/ic_fax" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_purchase_fax"
+                style="@style/TextPurchaseTitle"
+                android:layout_below="@+id/text_purchase_message_summary"
+                android:layout_toRightOf="@+id/image_purchase_message"
+                android:text="@string/purchase_fax" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_purchase_fax_summary"
+                style="@style/TextPurchaseSummary"
+                android:layout_below="@+id/text_purchase_fax"
+                android:layout_toRightOf="@+id/image_purchase_fax"
+                android:text="@string/purchase_fax_summary" />
+
+            <ImageView
+                android:id="@+id/image_purchase_mms"
+                style="@style/TextPurchaseImage"
+                android:layout_below="@+id/text_purchase_fax_summary"
+                android:src="@drawable/message" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_purchase_mms"
+                style="@style/TextPurchaseTitle"
+                android:layout_below="@+id/text_purchase_fax_summary"
+                android:layout_toRightOf="@+id/image_purchase_message"
+                android:text="@string/purchase_mms" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_purchase_mms_summary"
+                style="@style/TextPurchaseSummary"
+                android:layout_below="@+id/text_purchase_mms"
+                android:layout_toRightOf="@+id/image_purchase_fax"
+                android:text="@string/purchase_mms_summary" />
+
+
+        </RelativeLayout>
+    </ScrollView>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_purchase_pay_now"
         style="@style/ButtonBlue"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:text="@string/purchase_add_fund" />
-
+        android:text="@string/purchase_buy_this_number" />
 </RelativeLayout>

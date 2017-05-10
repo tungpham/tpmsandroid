@@ -1,4 +1,4 @@
-package com.ethan.morephone.presentation.buy.payment;
+package com.ethan.morephone.presentation.buy.payment.fund;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.buy.payment.card.CardActivity;
+import com.ethan.morephone.presentation.buy.payment.purchase.PaymentMethodsDialog;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -25,14 +25,12 @@ import org.json.JSONException;
 import java.math.BigDecimal;
 
 /**
- * Created by Ethan on 5/3/17.
+ * Created by Ethan on 5/10/17.
  */
 
-public class PaymentFragment extends BaseFragment implements View.OnClickListener {
-
-    public static PaymentFragment getInstance() {
-        return new PaymentFragment();
-    }
+public class AddFundFragment extends BaseFragment implements
+        View.OnClickListener,
+        PaymentMethodsDialog.PaymentMethodsListener{
 
     private static final int REQUEST_CODE_PAYMENT = 1;
 
@@ -47,6 +45,11 @@ public class PaymentFragment extends BaseFragment implements View.OnClickListene
             .merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
             .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
+
+    public static AddFundFragment getInstance(){
+        return new AddFundFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,39 +61,40 @@ public class PaymentFragment extends BaseFragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_payment, container, false);
-
-        view.findViewById(R.id.text_payment_add).setOnClickListener(this);
-        view.findViewById(R.id.text_payment_visa).setOnClickListener(this);
-        view.findViewById(R.id.text_payment_paypal).setOnClickListener(this);
+        View view = inflater.inflate(R.layout.fragment_add_fund, container, false);
+        view.findViewById(R.id.button_purchase_add_fund).setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.text_payment_add:
-                startActivity(new Intent(getActivity(), CardActivity.class));
-                break;
-            case R.id.text_payment_paypal:
-                PayPalPayment thingToBuy = getThingToBuy(PayPalPayment.PAYMENT_INTENT_SALE);
-
-                Intent intent = new Intent(getActivity(), com.paypal.android.sdk.payments.PaymentActivity.class);
-
-                // send the same configuration for restart resiliency
-                intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
-
-                intent.putExtra(com.paypal.android.sdk.payments.PaymentActivity.EXTRA_PAYMENT, thingToBuy);
-
-                startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+        switch (view.getId()){
+            case R.id.button_purchase_add_fund:
+                PaymentMethodsDialog paymentMethodsDialog = PaymentMethodsDialog.getInstance();
+                paymentMethodsDialog.show(getChildFragmentManager(), PaymentMethodsDialog.class.getSimpleName());
+                paymentMethodsDialog.setPaymentMethodsListener(this);
                 break;
             default:
                 break;
         }
     }
 
+    @Override
+    public void onChoosePaymentMethods(int paymentMethods) {
+        PayPalPayment thingToBuy = getThingToBuy(PayPalPayment.PAYMENT_INTENT_SALE);
+
+        Intent intent = new Intent(getActivity(), com.paypal.android.sdk.payments.PaymentActivity.class);
+
+        // send the same configuration for restart resiliency
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+
+        intent.putExtra(com.paypal.android.sdk.payments.PaymentActivity.EXTRA_PAYMENT, thingToBuy);
+
+        startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+    }
+
     private PayPalPayment getThingToBuy(String paymentIntent) {
-        return new PayPalPayment(new BigDecimal("0.01"), "USD", "sample item",
+        return new PayPalPayment(new BigDecimal("0.01"), "USD", "Add Fund",
                 paymentIntent);
     }
 
