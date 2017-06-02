@@ -13,7 +13,7 @@
         android:fitsSystemWindows="true"
         android:minHeight="?attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ToolBarStyle" />
+        app:theme="@style/ToolBarGreen" />
 
     <com.ethan.morephone.widget.MyTextView
         android:id="@+id/text_authentication_title"

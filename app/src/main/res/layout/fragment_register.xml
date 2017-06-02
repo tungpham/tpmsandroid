@@ -1,70 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/coordinator_layout_register_password"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical">
-    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/tool_bar"
+    android:background="@android:color/white">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/white"
-        android:fitsSystemWindows="true"
-        android:minHeight="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ToolBarStyle" />
+        android:layout_height="wrap_content">
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_register_name_title"
-        style="@style/TextAuthenticationTitle"
-        android:layout_below="@+id/tool_bar"
-        android:text="@string/text_register_title"/>
+        <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            android:fitsSystemWindows="true"
+            android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ToolBarGreen" />
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_register_first_name"
-        style="@style/TextAuthenticationField"
-        android:layout_below="@+id/text_register_name_title"
-        android:layout_marginTop="@dimen/text_authentication_field_margin_top"
-        android:text="@string/text_register_email_address"/>
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_register_name_title"
+            style="@style/TextAuthenticationTitle"
+            android:layout_below="@+id/tool_bar"
+            android:text="@string/text_register_title" />
 
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/edit_text_email"
-        style="@style/EditTextAuthentication"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:layout_below="@+id/text_register_first_name"/>
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_register_first_name"
+            style="@style/TextAuthenticationField"
+            android:layout_below="@+id/text_register_name_title"
+            android:layout_marginTop="@dimen/text_authentication_field_margin_top"
+            android:text="@string/text_register_email_address" />
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_register_password"
-        style="@style/TextAuthenticationField"
-        android:layout_below="@+id/edit_text_email"
-        android:layout_marginTop="@dimen/text_authentication_field_margin_top"
-        android:text="@string/text_register_password" />
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text_email"
+            style="@style/EditTextAuthentication"
+            android:layout_below="@+id/text_register_first_name"
+            android:ems="10"
+            android:inputType="textEmailAddress" />
 
-    <com.ethan.morephone.widget.MyTextView
-        android:id="@+id/text_register_password_show"
-        style="@style/TextAuthenticationField"
-        android:layout_alignBottom="@+id/text_register_password"
-        android:layout_alignParentRight="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:text="@string/text_register_password_show"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_register_password"
+            style="@style/TextAuthenticationField"
+            android:layout_below="@+id/edit_text_email"
+            android:layout_marginTop="@dimen/text_authentication_field_margin_top"
+            android:text="@string/text_register_password" />
 
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/edit_text_password"
-        style="@style/EditTextAuthentication"
-        android:layout_below="@+id/text_register_password"
-        android:ems="10"
-        android:inputType="textPassword" />
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_register_password_show"
+            style="@style/TextAuthenticationField"
+            android:layout_alignBottom="@+id/text_register_password"
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/text_register_password_show"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <android.support.design.widget.FloatingActionButton
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text_password"
+            style="@style/EditTextAuthentication"
+            android:layout_below="@+id/text_register_password"
+            android:ems="10"
+            android:inputType="textPassword" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/button_next_step"
         style="@style/ViewCommon"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        app:backgroundTint="@color/colorGray"
         android:layout_margin="@dimen/activity_vertical_margin"
-        android:src="@drawable/ic_arrow_right_green"/>
+        android:src="@drawable/ic_arrow_right_green"
+        android:layout_gravity="end|bottom"
+        app:backgroundTint="@color/colorGray" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

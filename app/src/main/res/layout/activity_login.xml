@@ -3,13 +3,22 @@
     android:id="@+id/coordinator_layout_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackgroundBlue">
+    android:background="@android:color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/tool_bar_blue" />
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:fitsSystemWindows="true"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ToolBarGreen"/>
 
         <com.ethan.morephone.widget.MyTextView
             android:id="@+id/text_log_in_title"
@@ -52,5 +61,5 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:src="@drawable/ic_arrow_right_green"
-        app:backgroundTint="@color/colorMainDark" />
+        app:backgroundTint="@color/colorGray" />
 </android.support.design.widget.CoordinatorLayout>

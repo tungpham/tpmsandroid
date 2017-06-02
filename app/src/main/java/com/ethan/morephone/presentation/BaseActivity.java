@@ -21,7 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setTitle("");
             if (isClear) actionBar.setHomeAsUpIndicator(R.drawable.ab_exit);
-            else actionBar.setHomeAsUpIndicator(R.drawable.ab_back);
+//            else actionBar.setHomeAsUpIndicator(R.drawable.ab_back);
         }
     }
 
