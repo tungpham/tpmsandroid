@@ -4,6 +4,10 @@
     <string name="message_progress_dialog">Please wait…</string>
     <string name="message_error_lost_internet">Please check internet!</string>
 
+    <string name="facebook_app_id">749741551871573</string>
+
+    <string name="fb_login_protocol_scheme">fb749741551871573</string>
+
     <!--          Fragment Authentication           -->
     <string name="authentication_text_welcome">Welcome to More Phone.</string>
     <string name="authentication_text_options">More Options</string>

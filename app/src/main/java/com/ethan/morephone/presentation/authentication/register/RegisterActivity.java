@@ -11,6 +11,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
@@ -28,10 +29,11 @@ public class RegisterActivity extends BaseActivity implements
 
     private AppCompatEditText mEditTextEmail;
     private AppCompatEditText mEditTextPassword;
+    private TextView mShowPassword;
 
     private CoordinatorLayout mCoordinatorLayout;
 
-//    private boolean mIsShow = false;
+    private boolean mIsShow = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,8 +58,8 @@ public class RegisterActivity extends BaseActivity implements
 
         mPresenter.validateInfo(mEditTextEmail, mEditTextPassword);
 
-
-        findViewById(R.id.text_register_password_show).setOnClickListener(this);
+        mShowPassword = (TextView) findViewById(R.id.text_register_password_show);
+        mShowPassword.setOnClickListener(this);
     }
 
     @Override
@@ -128,14 +130,14 @@ public class RegisterActivity extends BaseActivity implements
 
             case R.id.text_register_password_show:
 
-//                if (mIsShow) {
-                mEditTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-//                } else {
-//                    mEditTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-//                }
-//                mIsShow = !mIsShow;
-
-//                DebugTool.logD("");
+                if (!mIsShow) {
+                    mEditTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    mShowPassword.setText(getString(R.string.text_register_password_hide));
+                } else {
+                    mShowPassword.setText(getString(R.string.text_register_password_show));
+                    mEditTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+                mIsShow = !mIsShow;
 
                 break;
 

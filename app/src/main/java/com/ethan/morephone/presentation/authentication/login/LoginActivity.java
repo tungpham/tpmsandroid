@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,10 +33,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
     private AppCompatEditText mEditTextEmail;
     private AppCompatEditText mEditTextPassword;
 
+    private TextView mShowPassword;
+
     private LoginContract.Presenter mPresenter;
     private FloatingActionButton mButtonNextStep;
 
     private CoordinatorLayout mCoordinatorLayout;
+
+    private boolean mIsShow = false;
 
 
     @Override
@@ -66,6 +71,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
                 return false;
             }
         });
+
+        mShowPassword = (TextView) findViewById(R.id.text_register_password_show);
+        mShowPassword.setOnClickListener(this);
 
     }
 
@@ -104,6 +112,20 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
                     Toast.makeText(getApplicationContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
                 }
                 break;
+
+            case R.id.text_register_password_show:
+
+                if (!mIsShow) {
+                    mEditTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    mShowPassword.setText(getString(R.string.text_register_password_hide));
+                } else {
+                    mShowPassword.setText(getString(R.string.text_register_password_show));
+                    mEditTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+                mIsShow = !mIsShow;
+
+                break;
+
             default:
                 break;
         }

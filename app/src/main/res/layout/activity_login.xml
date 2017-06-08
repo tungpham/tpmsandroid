@@ -52,6 +52,18 @@
             android:layout_below="@+id/text_log_in_password"
             android:inputType="textPassword" />
 
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_register_password_show"
+            style="@style/TextAuthenticationField"
+            android:layout_alignBottom="@+id/text_log_in_password"
+            android:layout_marginLeft="0dp"
+            android:paddingLeft="@dimen/activity_main_margin"
+            android:paddingRight="@dimen/activity_main_margin"
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/text_register_password_show"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
 
     </RelativeLayout>
 

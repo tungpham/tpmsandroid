@@ -65,7 +65,7 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
 
         mRecipients = (AutoCompleteContactView) view.findViewById(R.id.auto_complete_recipient);
 
-        if(!TextUtils.isEmpty(mToPhoneNumber)){
+        if (!TextUtils.isEmpty(mToPhoneNumber)) {
             mRecipients.setText(mToPhoneNumber);
         }
 
