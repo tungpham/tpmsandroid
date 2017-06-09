@@ -82,7 +82,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
     }
 
     @Override
-    public void createUser(final Context context, String email, String password) {
+    public void createUser(final Context context, final String email, final String password) {
         mView.setLoading(true);
         MyPreference.setUserEmail(context, email);
         MyPreference.setPassword(context, password);
@@ -93,8 +93,19 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         Stormpath.register(registrationData, new StormpathCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                mView.setLoading(false);
-                mView.registerSuccess();
+
+                Stormpath.login(email, password, new StormpathCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mView.setLoading(false);
+                        mView.registerSuccess();
+                    }
+
+                    @Override
+                    public void onFailure(StormpathError error) {
+                        mView.setLoading(false);
+                    }
+                });
             }
 
             @Override

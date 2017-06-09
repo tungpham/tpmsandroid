@@ -5,10 +5,15 @@ import android.content.Context;
 import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.entity.record.Records;
 import com.android.morephone.data.entity.usage.Usage;
+import com.stormpath.sdk.Stormpath;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,6 +61,15 @@ public class ApiMorePhone {
 //                                            .build();
 //                                }
 //                            })
+                            .addInterceptor(new Interceptor() {
+                                @Override
+                                public Response intercept(Chain chain) throws IOException {
+                                    Request.Builder ongoing = chain.request().newBuilder();
+                                    ongoing.addHeader("Accept", "application/json");
+                                    ongoing.addHeader("Authorization", "Bearer " + Stormpath.getAccessToken());
+                                    return chain.proceed(ongoing.build());
+                                }
+                            })
                             .readTimeout(60, TimeUnit.SECONDS)
                             .connectTimeout(60, TimeUnit.SECONDS)
                             .addInterceptor(logging)
@@ -92,17 +106,17 @@ public class ApiMorePhone {
     }
 
     public static void getRecords(Context context,
-                                   String accountSid,
-                                   String phoneNumber,
-                                   Callback<Records> callback) {
+                                  String accountSid,
+                                  String phoneNumber,
+                                  Callback<Records> callback) {
         Call<Records> call = getApiPath(context).getRecords();
         call.enqueue(callback);
     }
 
     public static void getUsage(Context context,
-                                  String accountSid,
-                                  String phoneNumber,
-                                  Callback<Usage> callback) {
+                                String accountSid,
+                                String phoneNumber,
+                                Callback<Usage> callback) {
         Call<Usage> call = getApiPath(context).getUsage();
         call.enqueue(callback);
     }

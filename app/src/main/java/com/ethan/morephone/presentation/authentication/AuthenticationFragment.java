@@ -17,6 +17,7 @@ import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
 import com.ethan.morephone.R;
+import com.ethan.morephone.model.UserFacebookModel;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.authentication.login.LoginActivity;
@@ -30,6 +31,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -87,7 +89,17 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
 
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        DebugTool.logD("RESPONSE = " + response.toString());
+                        DebugTool.logD("RESPONSE = " + response.getJSONObject().toString());
+                        if (response != null && response.getJSONObject() != null) {
+                            Gson gson = new Gson();
+                            String result = response.getJSONObject().toString();
+                            UserFacebookModel userFacebookModel = gson.fromJson(result, UserFacebookModel.class);
+                            Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                            if(userFacebookModel != null) {
+                                intent.putExtra(RegisterActivity.EXTRA_EMAIL, userFacebookModel.email);
+                            }
+                            startActivityForResult(intent, REQUEST_REGISTER);
+                        }
                         // Get facebook data from login
 //                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
                     }

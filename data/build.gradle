@@ -38,6 +38,7 @@ dependencies {
     compile dataDependencies.appcompat
 
     compile 'com.googlecode.libphonenumber:libphonenumber:6.2'
+    compile 'com.stormpath.sdk:stormpath-sdk-android:2.0'
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

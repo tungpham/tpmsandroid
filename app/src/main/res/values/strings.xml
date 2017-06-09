@@ -29,6 +29,7 @@
     <!-- Fragment Register Email -->
     <string name="text_register_email_title">And, your email?</string>
     <string name="text_register_email_address">EMAIL ADDRESS</string>
+    <string name="text_register_email_address_facebook_empty">Can not get email from Facebook</string>
 
     <!-- Fragment Register -->
     <string name="text_register_title">Sign Up</string>

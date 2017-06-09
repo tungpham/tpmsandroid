@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
@@ -23,6 +24,8 @@ import com.ethan.morephone.presentation.BaseActivity;
 public class RegisterActivity extends BaseActivity implements
         View.OnClickListener,
         RegisterContract.View {
+
+    public static final String EXTRA_EMAIL = "EXTRA_EMAIL";
 
     private FloatingActionButton mButtonNextStep;
     private RegisterContract.Presenter mPresenter;
@@ -53,6 +56,15 @@ public class RegisterActivity extends BaseActivity implements
         mEditTextPassword = (AppCompatEditText) findViewById(R.id.edit_text_password);
 
         mEditTextEmail = (AppCompatEditText) findViewById(R.id.edit_text_email);
+
+        String email = getIntent().getStringExtra(EXTRA_EMAIL);
+
+        if (!TextUtils.isEmpty(email)) {
+            mEditTextEmail.setText(email);
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.text_register_email_address_facebook_empty), Toast.LENGTH_SHORT).show();
+        }
+
 
         mPresenter.checkMissingInfo(mEditTextEmail, mEditTextPassword);
 

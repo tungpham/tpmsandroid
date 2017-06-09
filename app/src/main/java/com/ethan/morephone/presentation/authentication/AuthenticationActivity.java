@@ -1,14 +1,21 @@
 package com.ethan.morephone.presentation.authentication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.main.MainActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.stormpath.sdk.Stormpath;
+import com.stormpath.sdk.StormpathCallback;
+import com.stormpath.sdk.models.Account;
+import com.stormpath.sdk.models.StormpathError;
 
 
 /**
@@ -36,5 +43,19 @@ public class AuthenticationActivity extends BaseActivity {
                 browserFragment,
                 R.id.content_frame,
                 AuthenticationFragment.class.getSimpleName());
+
+        Stormpath.getAccount(new StormpathCallback<Account>() {
+            @Override
+            public void onSuccess(Account account) {
+                DebugTool.logD("Account: " + account.getEmail());
+                startActivity(new Intent(AuthenticationActivity.this, MainActivity.class));
+            }
+
+            @Override
+            public void onFailure(StormpathError error) {
+                DebugTool.logD("error: " + error.message());
+            }
+        });
+
     }
 }

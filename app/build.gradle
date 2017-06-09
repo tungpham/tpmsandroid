@@ -79,7 +79,6 @@ dependencies {
     }
     compile 'com.stripe:stripe-android:4.0.2'
     compile 'com.klinkerapps:android-chips:1.0.0'
-    compile 'com.stormpath.sdk:stormpath-sdk-android:2.0'
     compile 'com.twilio:voice-android:2.0.0-beta4'
     compile 'com.twilio:client-android:1.2.19'
     compile 'org.greenrobot:eventbus:3.0.0'
