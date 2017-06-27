@@ -94,6 +94,7 @@ public class RecordPresenter implements RecordContract.Presenter {
     @Override
     public void loadRecords(Context context) {
         mView.showLoading(true);
+
         ApiMorePhone.getRecords(context, Constant.ACCOUNT_SID, MyPreference.getPhoneNumberSid(context), new Callback<Records>() {
             @Override
             public void onResponse(Call<Records> call, Response<Records> response) {
