@@ -1,21 +1,32 @@
 package com.ethan.morephone.presentation.authentication;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.ApiManager;
+import com.android.morephone.data.utils.CredentialsManager;
+import com.android.morephone.data.utils.TwilioManager;
+import com.auth0.android.Auth0;
+import com.auth0.android.authentication.AuthenticationAPIClient;
+import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.callback.BaseCallback;
+import com.auth0.android.provider.AuthCallback;
+import com.auth0.android.provider.WebAuthProvider;
+import com.auth0.android.result.Credentials;
+import com.auth0.android.result.UserProfile;
 import com.ethan.morephone.R;
 import com.ethan.morephone.model.UserFacebookModel;
 import com.ethan.morephone.presentation.BaseActivity;
@@ -33,14 +44,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
-
-import java.util.Arrays;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -60,6 +64,8 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
 
     CallbackManager callbackManager;
 
+    private Auth0 auth0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,7 +79,34 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         view.findViewById(R.id.button_authentication_facebook).setOnClickListener(this);
         view.findViewById(R.id.button_authentication_create_account).setOnClickListener(this);
 
-        getFakeData(getContext());
+        auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
+        auth0.setOIDCConformant(true);
+
+        String accessToken = "";
+        Credentials credentials = CredentialsManager.getCredentials(getApplicationContext());
+        if (credentials != null) accessToken = credentials.getAccessToken();
+
+        if (!TextUtils.isEmpty(accessToken)) {
+            AuthenticationAPIClient aClient = new AuthenticationAPIClient(auth0);
+            aClient.userInfo(accessToken)
+                    .start(new BaseCallback<UserProfile, AuthenticationException>() {
+                        @Override
+                        public void onSuccess(final UserProfile payload) {
+                            if (payload != null
+                                    && payload.getUserMetadata() != null
+                                    && payload.getUserMetadata().containsKey("sid")
+                                    && payload.getUserMetadata().containsKey("auth_code")) {
+                                TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
+                            }
+                            nextActivity();
+                        }
+
+                        @Override
+                        public void onFailure(AuthenticationException error) {
+                            CredentialsManager.deleteCredentials(getApplicationContext());
+                        }
+                    });
+        }
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -95,7 +128,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
                             String result = response.getJSONObject().toString();
                             UserFacebookModel userFacebookModel = gson.fromJson(result, UserFacebookModel.class);
                             Intent intent = new Intent(getActivity(), RegisterActivity.class);
-                            if(userFacebookModel != null) {
+                            if (userFacebookModel != null) {
                                 intent.putExtra(RegisterActivity.EXTRA_EMAIL, userFacebookModel.email);
                             }
                             startActivityForResult(intent, REQUEST_REGISTER);
@@ -162,8 +195,8 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
 //                Intent intent = new Intent(getActivity(), MainActivity.class);
 //                startActivity(intent);
 
-                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "user_photos", "public_profile"));
-
+//                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "user_photos", "public_profile"));
+                doLogin();
                 break;
 
             case R.id.button_authentication_create_account:
@@ -186,25 +219,44 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    public void getFakeData(final Context context) {
-//        showLoading(true);
-        ApiManager.fakeData(context, new Callback<FakeData>() {
-            @Override
-            public void onResponse(Call<FakeData> call, Response<FakeData> response) {
-//                mView.showLoading(false);
-                if (response.isSuccessful()) {
-                    FakeData fakeData = response.body();
-                    EventBus.getDefault().postSticky(fakeData);
-//                    mView.showFakeData(fakeData);
-//                    mView.showPhoneNumbers(fakeData.list_number);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FakeData> call, Throwable t) {
-//                mView.showLoading(false);
-            }
-        });
-
+    private void doLogin() {
+        WebAuthProvider.init(auth0)
+                .withScheme("https")
+                .withScope("openid offline_access")
+                .start(getActivity(), callback);
     }
+
+    private final AuthCallback callback = new AuthCallback() {
+        @Override
+        public void onFailure(@NonNull final Dialog dialog) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.show();
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(AuthenticationException exception) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Log In - Error Occurred", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        @Override
+        public void onSuccess(@NonNull Credentials credentials) {
+            CredentialsManager.saveCredentials(getApplicationContext(), credentials);
+            nextActivity();
+        }
+    };
+
+    private void nextActivity() {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        getActivity().finish();
+    }
+
 }

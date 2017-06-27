@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.morephone.data.entity.call.Call;
 import com.android.morephone.data.entity.call.Calls;
@@ -18,6 +19,8 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.phone.incall.InCallActivity;
 import com.ethan.morephone.presentation.phone.log.adapter.CallLogAdapter;
+import com.ethan.morephone.utils.Injection;
+import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -49,7 +52,7 @@ public class CallLogFragment extends BaseFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new CallLogPresenter(this);
+        new CallLogPresenter(this, Injection.providerUseCaseHandler(), Injection.providerGetCallsIncoming(getContext()), Injection.providerGetCallsOutgoing(getContext()));
     }
 
     @Nullable
@@ -79,7 +82,7 @@ public class CallLogFragment extends BaseFragment implements
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            mPresenter.loadCallLogs(getContext());
+                            loadData();
                         }
                     });
 
@@ -89,7 +92,8 @@ public class CallLogFragment extends BaseFragment implements
 
         mCallLogAdapter = new CallLogAdapter(getContext(), mPhoneNumber, new ArrayList<Call>(), this);
         recyclerView.setAdapter(mCallLogAdapter);
-        mPresenter.loadCallLogs(getContext());
+
+        loadData();
         return view;
     }
 
@@ -122,5 +126,15 @@ public class CallLogFragment extends BaseFragment implements
         bundle.putString(InCallActivity.BUNDLE_TO_PHONE_NUMBER, phoneNumber);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    public void loadData() {
+        if (Utils.isNetworkAvailable(getActivity())) {
+//            mPresenter.clearData();
+            mPresenter.loadCallsIncoming(mPhoneNumber);
+            mPresenter.loadCallsOutgoing(mPhoneNumber);
+        } else {
+            Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
+        }
     }
 }

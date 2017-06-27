@@ -3,6 +3,7 @@ package com.android.morephone.data.network;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
 import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
 import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
@@ -11,8 +12,6 @@ import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
-import com.android.morephone.data.entity.twilio.voice.VoiceItem;
-import com.android.morephone.data.entity.twilio.voice.VoiceListResourceResponse;
 
 import java.util.List;
 
@@ -100,30 +99,30 @@ interface ApiPath {
     @DELETE("Accounts/{accountsid}/Recordings/{recordingsid}.json")
     Call<Void> deleteRecord(@Path("accountsid") String accountSid, @Path("recordingsid") String recordingSid);
 
-    /*-----------------------------------------VOICE-----------------------------------------*/
+    /*-----------------------------------------CALL-----------------------------------------*/
     @FormUrlEncoded
     @POST("Accounts/{accountsid}/Calls.json")
-    Call<VoiceItem> createVoice(@Path("accountsid") String accountsid,
-                                @Field("From") String phoneNumberOutgoing,
-                                @Field("To") String phoneNumberIncoming,
-                                @Field("ApplicationSid") String applicationSid,
-                                @Field("SipAuthUsername") String sipAuthUsername,
-                                @Field("SipAuthPassword") String sipAuthPassword);
+    Call<com.android.morephone.data.entity.call.Call> createVoice(@Path("accountsid") String accountsid,
+                                                                  @Field("From") String phoneNumberOutgoing,
+                                                                  @Field("To") String phoneNumberIncoming,
+                                                                  @Field("ApplicationSid") String applicationSid,
+                                                                  @Field("SipAuthUsername") String sipAuthUsername,
+                                                                  @Field("SipAuthPassword") String sipAuthPassword);
 
     @GET("Accounts/{accountsid}/Calls.json")
-    Call<VoiceListResourceResponse> getAllVoiceListResource(@Path("accountsid") String accountsid);
+    Call<Calls> getAllCalls(@Path("accountsid") String accountsid);
 
     @GET("Accounts/{accountsid}/Calls.json")
-    Call<VoiceListResourceResponse> getVoices(@Path("accountsid") String accountsid, @Query("To") String phoneNumberIncoming, @Query("From") String phoneNumberOutgoing);
+    Call<Calls> getCalls(@Path("accountsid") String accountsid, @Query("To") String phoneNumberIncoming, @Query("From") String phoneNumberOutgoing);
 
     @GET("Accounts/{accountsid}/Calls.json")
-    Call<VoiceListResourceResponse> getVoiceByIncoming(@Path("accountsid") String accountsid, @Query("To") String phoneNumberIncoming);
+    Call<Calls> getCallsIncoming(@Path("accountsid") String accountsid, @Query("To") String phoneNumberIncoming);
 
     @GET("Accounts/{accountsid}/Calls.json")
-    Call<VoiceListResourceResponse> getVoicesOutgoing(@Path("accountsid") String accountsid, @Query("From") String phoneNumberOutgoing);
+    Call<Calls> getCallsOutgoing(@Path("accountsid") String accountsid, @Query("From") String phoneNumberOutgoing);
 
     @DELETE("Accounts/{accountsid}/Calls/{callsid}.json")
-    Call<Void> deleteVoice(@Path("accountsid") String accountsid, @Path("callsid") String callsid);
+    Call<Void> deleteCall(@Path("accountsid") String accountsid, @Path("callsid") String callsid);
 
 
     @GET("Accounts/{accountsid}/Calls{callsid}/Recordings/{recordingsid}.json")

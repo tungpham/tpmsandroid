@@ -6,9 +6,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.stormpath.sdk.Stormpath;
-import com.stormpath.sdk.StormpathCallback;
-import com.stormpath.sdk.models.StormpathError;
 
 
 /**
@@ -62,18 +59,18 @@ public class ForgotPasswordPresenter implements ForgotPasswordContract.Presenter
     @Override
     public void resetPassword(String email) {
         mView.setLoading(true);
-        Stormpath.resetPassword(email, new StormpathCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                mView.setLoading(false);
-                mView.showResultResetPassword(true);
-            }
-
-            @Override
-            public void onFailure(StormpathError error) {
-                mView.setLoading(false);
-                mView.showResultResetPassword(false);
-            }
-        });
+//        Stormpath.resetPassword(email, new StormpathCallback<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                mView.setLoading(false);
+//                mView.showResultResetPassword(true);
+//            }
+//
+//            @Override
+//            public void onFailure(StormpathError error) {
+//                mView.setLoading(false);
+//                mView.showResultResetPassword(false);
+//            }
+//        });
     }
 }

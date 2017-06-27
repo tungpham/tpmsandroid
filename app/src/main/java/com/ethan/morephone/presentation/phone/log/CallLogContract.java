@@ -24,5 +24,9 @@ public interface CallLogContract {
 
         void loadCallLogs(Context context);
 
+        void loadCallsIncoming(String phoneNumberIncoming);
+
+        void loadCallsOutgoing(String phoneNumberOutgoing);
+
     }
 }

@@ -73,6 +73,7 @@ dependencies {
     compile presentationDependencies.servicesGcm
     compile presentationDependencies.servicesAuth
     compile presentationDependencies.servicesWallet
+
     compile('com.paypal.sdk:paypal-android-sdk:2.15.3') {
         exclude group: 'io.card'
         exclude group:'com.squareup.okhttp3', module:'okhttp'

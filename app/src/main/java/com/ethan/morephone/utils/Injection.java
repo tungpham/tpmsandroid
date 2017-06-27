@@ -9,8 +9,8 @@ import com.android.morephone.data.repository.phonenumbers.incoming.IncomingPhone
 import com.android.morephone.data.repository.phonenumbers.incoming.source.remote.IncomingPhoneNumberRemoteDataSource;
 import com.android.morephone.data.repository.record.RecordRepository;
 import com.android.morephone.data.repository.record.source.remote.RecordRemoteDataSource;
-import com.android.morephone.data.repository.voice.VoiceRepository;
-import com.android.morephone.data.repository.voice.source.remote.VoiceRemoteDataSource;
+import com.android.morephone.data.repository.call.CallRepository;
+import com.android.morephone.data.repository.call.source.remote.CallRemoteDataSource;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.DeleteMessage;
@@ -21,14 +21,14 @@ import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
 import com.android.morephone.domain.usecase.number.DeleteIncomingPhoneNumber;
 import com.android.morephone.domain.usecase.number.GetAvailableCountries;
 import com.android.morephone.domain.usecase.number.incoming.ChangeFriendlyName;
-import com.android.morephone.domain.usecase.record.DeleteCallRecord;
-import com.android.morephone.domain.usecase.record.GetCallRecords;
-import com.android.morephone.domain.usecase.voice.CreateVoice;
-import com.android.morephone.domain.usecase.voice.DeleteVoice;
-import com.android.morephone.domain.usecase.voice.GetAllVoices;
-import com.android.morephone.domain.usecase.voice.GetVoices;
-import com.android.morephone.domain.usecase.voice.GetVoicesIncoming;
-import com.android.morephone.domain.usecase.voice.GetVoicesOutgoing;
+import com.android.morephone.domain.usecase.record.DeleteRecord;
+import com.android.morephone.domain.usecase.record.GetRecords;
+import com.android.morephone.domain.usecase.call.CreateCall;
+import com.android.morephone.domain.usecase.call.DeleteCall;
+import com.android.morephone.domain.usecase.call.GetAllCalls;
+import com.android.morephone.domain.usecase.call.GetCalls;
+import com.android.morephone.domain.usecase.call.GetCallsIncoming;
+import com.android.morephone.domain.usecase.call.GetCallsOutgoing;
 
 /**
  * Created by Ethan on 3/3/17.
@@ -71,34 +71,34 @@ public class Injection {
         return new DeleteMessage(providerMessageRepository(context));
     }
 
-    /*-----------------------------------------VOICE-----------------------------------------*/
+    /*-----------------------------------------CALLS-----------------------------------------*/
 
-    private static VoiceRepository providerVoiceRepository(@NonNull Context context) {
-        return VoiceRepository.getInstance(VoiceRemoteDataSource.getInstance(context));
+    private static CallRepository providerVoiceRepository(@NonNull Context context) {
+        return CallRepository.getInstance(CallRemoteDataSource.getInstance(context));
     }
 
-    public static GetAllVoices providerGetAllVoice(@NonNull Context context) {
-        return new GetAllVoices(providerVoiceRepository(context));
+    public static GetAllCalls providerGetAllCalls(@NonNull Context context) {
+        return new GetAllCalls(providerVoiceRepository(context));
     }
 
-    public static GetVoices providerGetVoices(@NonNull Context context) {
-        return new GetVoices(providerVoiceRepository(context));
+    public static GetCalls providerGetCalls(@NonNull Context context) {
+        return new GetCalls(providerVoiceRepository(context));
     }
 
-    public static GetVoicesIncoming providerGetVoicesIncoming(@NonNull Context context) {
-        return new GetVoicesIncoming(providerVoiceRepository(context));
+    public static GetCallsIncoming providerGetCallsIncoming(@NonNull Context context) {
+        return new GetCallsIncoming(providerVoiceRepository(context));
     }
 
-    public static GetVoicesOutgoing providerGetVoicesOutgoing(@NonNull Context context) {
-        return new GetVoicesOutgoing(providerVoiceRepository(context));
+    public static GetCallsOutgoing providerGetCallsOutgoing(@NonNull Context context) {
+        return new GetCallsOutgoing(providerVoiceRepository(context));
     }
 
-    public static DeleteVoice providerDeleteVoice(@NonNull Context context) {
-        return new DeleteVoice(providerVoiceRepository(context));
+    public static DeleteCall providerDeleteCall(@NonNull Context context) {
+        return new DeleteCall(providerVoiceRepository(context));
     }
 
-    public static CreateVoice providerCreateVoice(@NonNull Context context) {
-        return new CreateVoice(providerVoiceRepository(context));
+    public static CreateCall providerCreateCall(@NonNull Context context) {
+        return new CreateCall(providerVoiceRepository(context));
     }
 
 
@@ -126,12 +126,12 @@ public class Injection {
         return RecordRepository.getInstance(RecordRemoteDataSource.getInstance(context));
     }
 
-    public static GetCallRecords providerGetCallRecords(@NonNull Context context) {
-        return new GetCallRecords(providerRecordRepository(context));
+    public static GetRecords providerGetCallRecords(@NonNull Context context) {
+        return new GetRecords(providerRecordRepository(context));
     }
 
-    public static DeleteCallRecord providerDeleteCallRecord(@NonNull Context context) {
-        return new DeleteCallRecord(providerRecordRepository(context));
+    public static DeleteRecord providerDeleteCallRecord(@NonNull Context context) {
+        return new DeleteRecord(providerRecordRepository(context));
     }
 
 }

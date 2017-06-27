@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
 import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
 import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
@@ -11,8 +12,7 @@ import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
-import com.android.morephone.data.entity.twilio.voice.VoiceItem;
-import com.android.morephone.data.entity.twilio.voice.VoiceListResourceResponse;
+import com.android.morephone.data.utils.TwilioManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -63,9 +63,7 @@ public class ApiManager {
                             .authenticator(new Authenticator() {
                                 @Override
                                 public Request authenticate(Route route, Response response) throws IOException {
-//                                    System.out.println("Authenticating for response: " + response);
-//                                    System.out.println("Challenges: " + response.challenges());
-                                    String credential = Credentials.basic("ACebd7d3a78e2fdda9e51239bad6b09f97", "8d2af0937ed2a581dbb19f70dd1dd43b");
+                                    String credential = Credentials.basic(TwilioManager.getSid(context), TwilioManager.getAuthCode(context));
                                     return response.request().newBuilder()
                                             .header("Authorization", credential)
                                             .build();
@@ -103,15 +101,13 @@ public class ApiManager {
                                      String from,
                                      String body,
                                      Callback<MessageItem> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<MessageItem> call = getApiPath(context).createMessage(accountsid, from, to, body);
+        Call<MessageItem> call = getApiPath(context).createMessage(TwilioManager.getSid(context), from, to, body);
         call.enqueue(callback);
     }
 
     public static void getAllMessages(Context context,
                                       Callback<MessageListResourceResponse> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<MessageListResourceResponse> call = getApiPath(context).getAllMessageListResource(accountsid);
+        Call<MessageListResourceResponse> call = getApiPath(context).getAllMessageListResource(TwilioManager.getSid(context));
         call.enqueue(callback);
     }
 
@@ -119,30 +115,26 @@ public class ApiManager {
                                    String phoneNumberIncoming,
                                    String phoneNumberOutgoing,
                                    Callback<MessageListResourceResponse> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<MessageListResourceResponse> call = getApiPath(context).getMessages(accountsid, phoneNumberIncoming, phoneNumberOutgoing);
+        Call<MessageListResourceResponse> call = getApiPath(context).getMessages(TwilioManager.getSid(context), phoneNumberIncoming, phoneNumberOutgoing);
         call.enqueue(callback);
     }
 
     public static void getMessagesIncoming(Context context,
                                            String phoneNumberIncoming,
                                            Callback<MessageListResourceResponse> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<MessageListResourceResponse> call = getApiPath(context).getMessagesIncoming(accountsid, phoneNumberIncoming);
+        Call<MessageListResourceResponse> call = getApiPath(context).getMessagesIncoming(TwilioManager.getSid(context), phoneNumberIncoming);
         call.enqueue(callback);
     }
 
     public static void getMessagesOutgoing(Context context,
                                            String phoneNumberOutgoing,
                                            Callback<MessageListResourceResponse> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<MessageListResourceResponse> call = getApiPath(context).getMessagesOutgoing(accountsid, phoneNumberOutgoing);
+        Call<MessageListResourceResponse> call = getApiPath(context).getMessagesOutgoing(TwilioManager.getSid(context), phoneNumberOutgoing);
         call.enqueue(callback);
     }
 
     public static void deleteMessage(Context context, String messagesid) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<Void> call = getApiPath(context).deleteMessage(accountsid, messagesid);
+        Call<Void> call = getApiPath(context).deleteMessage(TwilioManager.getSid(context), messagesid);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
@@ -165,47 +157,41 @@ public class ApiManager {
                                    String applicationSid,
                                    String sipAuthUsername,
                                    String sipAuthPassword,
-                                   Callback<VoiceItem> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<VoiceItem> call = getApiPath(context).createVoice(accountsid, phoneNumberOutgoing, phoneNumberIncoming, applicationSid, sipAuthUsername, sipAuthPassword);
+                                   Callback<com.android.morephone.data.entity.call.Call> callback) {
+        Call<com.android.morephone.data.entity.call.Call> call = getApiPath(context).createVoice(TwilioManager.getSid(context), phoneNumberOutgoing, phoneNumberIncoming, applicationSid, sipAuthUsername, sipAuthPassword);
         call.enqueue(callback);
     }
 
-    public static void getAllVoice(Context context,
-                                   Callback<VoiceListResourceResponse> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<VoiceListResourceResponse> call = getApiPath(context).getAllVoiceListResource(accountsid);
+    public static void getAllCalls(Context context,
+                                   Callback<Calls> callback) {
+        Call<Calls> call = getApiPath(context).getAllCalls(TwilioManager.getSid(context));
         call.enqueue(callback);
     }
 
-    public static void getVoices(Context context,
-                                 String phoneNumberIncoming,
-                                 String phoneNumberOutgoing,
-                                 Callback<VoiceListResourceResponse> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<VoiceListResourceResponse> call = getApiPath(context).getVoices(accountsid, phoneNumberIncoming, phoneNumberOutgoing);
+    public static void getCalls(Context context,
+                                String phoneNumberIncoming,
+                                String phoneNumberOutgoing,
+                                Callback<Calls> callback) {
+        Call<Calls> call = getApiPath(context).getCalls(TwilioManager.getSid(context), phoneNumberIncoming, phoneNumberOutgoing);
         call.enqueue(callback);
     }
 
-    public static void getVoicesIncoming(Context context,
-                                         String phoneNumberIncoming,
-                                         Callback<VoiceListResourceResponse> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<VoiceListResourceResponse> call = getApiPath(context).getVoiceByIncoming(accountsid, phoneNumberIncoming);
+    public static void getCallsIncoming(Context context,
+                                        String phoneNumberIncoming,
+                                        Callback<Calls> callback) {
+        Call<Calls> call = getApiPath(context).getCallsIncoming(TwilioManager.getSid(context), phoneNumberIncoming);
         call.enqueue(callback);
     }
 
-    public static void getVoicesOutgoing(Context context,
-                                         String phoneNumberOutgoing,
-                                         Callback<VoiceListResourceResponse> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<VoiceListResourceResponse> call = getApiPath(context).getVoicesOutgoing(accountsid, phoneNumberOutgoing);
+    public static void getCallsOutgoing(Context context,
+                                        String phoneNumberOutgoing,
+                                        Callback<Calls> callback) {
+        Call<Calls> call = getApiPath(context).getCallsOutgoing(TwilioManager.getSid(context), phoneNumberOutgoing);
         call.enqueue(callback);
     }
 
     public static void deleteVoice(Context context, String callsid) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<Void> call = getApiPath(context).deleteVoice(accountsid, callsid);
+        Call<Void> call = getApiPath(context).deleteCall(TwilioManager.getSid(context), callsid);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
@@ -234,8 +220,7 @@ public class ApiManager {
     }
 
     public static void getAvailableCountries(Context context, Callback<AvailableCountries> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<AvailableCountries> call = getApiPath(context).getAvailableCountries(accountsid);
+        Call<AvailableCountries> call = getApiPath(context).getAvailableCountries(TwilioManager.getSid(context));
         call.enqueue(callback);
     }
 
@@ -246,15 +231,13 @@ public class ApiManager {
                                                 boolean mmsEnabled,
                                                 boolean voiceEnabled,
                                                 Callback<AvailablePhoneNumbers> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<AvailablePhoneNumbers> call = getApiPath(context).getAvailablePhoneNumbers(accountsid, countryCode, contains, smsEnabled, mmsEnabled, voiceEnabled);
+        Call<AvailablePhoneNumbers> call = getApiPath(context).getAvailablePhoneNumbers(TwilioManager.getSid(context), countryCode, contains, smsEnabled, mmsEnabled, voiceEnabled);
         call.enqueue(callback);
     }
 
     public static void getIncomingPhoneNumbers(Context context,
                                                Callback<IncomingPhoneNumbers> callback) {
-        String accountsid = "ACebd7d3a78e2fdda9e51239bad6b09f97";
-        Call<IncomingPhoneNumbers> call = getApiPath(context).getIncomingPhoneNumbers(accountsid);
+        Call<IncomingPhoneNumbers> call = getApiPath(context).getIncomingPhoneNumbers(TwilioManager.getSid(context));
         call.enqueue(callback);
     }
 
@@ -278,7 +261,7 @@ public class ApiManager {
                                           String incomingPhoneNumberSid,
                                           String friendlyName,
                                           Callback<IncomingPhoneNumber> callback) {
-        Call<IncomingPhoneNumber> call = getApiPath(context).changeFriendlyName(accountSid, incomingPhoneNumberSid, friendlyName);
+        Call<IncomingPhoneNumber> call = getApiPath(context).changeFriendlyName(TwilioManager.getSid(context), incomingPhoneNumberSid, friendlyName);
         call.enqueue(callback);
     }
 
@@ -289,14 +272,14 @@ public class ApiManager {
                                              String accountSid,
                                              String callSid,
                                              Callback<RecordListResourceResponse> callback) {
-        Call<RecordListResourceResponse> call = getApiPath(context).getRecordListResource(accountSid, callSid);
+        Call<RecordListResourceResponse> call = getApiPath(context).getRecordListResource(TwilioManager.getSid(context), callSid);
         call.enqueue(callback);
     }
 
     public static void deleteRecord(Context context,
                                     String accountSid,
                                     String recordSid) {
-        Call<Void> call = getApiPath(context).deleteRecord(accountSid, recordSid);
+        Call<Void> call = getApiPath(context).deleteRecord(TwilioManager.getSid(context), recordSid);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
@@ -314,7 +297,7 @@ public class ApiManager {
                                         String accountSid,
                                         String callSid,
                                         String recordSid) {
-        Call<Void> call = getApiPath(context).deleteCallRecoding(accountSid, callSid, recordSid);
+        Call<Void> call = getApiPath(context).deleteCallRecoding(TwilioManager.getSid(context), callSid, recordSid);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {

@@ -7,12 +7,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
-import com.stormpath.sdk.Stormpath;
-import com.stormpath.sdk.StormpathCallback;
-import com.stormpath.sdk.models.RegistrationForm;
-import com.stormpath.sdk.models.StormpathError;
 
 /**
  * Created by Ethan on 6/2/17.
@@ -86,40 +81,40 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         mView.setLoading(true);
         MyPreference.setUserEmail(context, email);
         MyPreference.setPassword(context, password);
-        RegistrationForm registrationData = new RegistrationForm(email, password);
-
-//        registrationData.setGivenName(MyPreference.getFirstName(context))
-//                .setSurname(MyPreference.getLastName(context));
-        Stormpath.register(registrationData, new StormpathCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-
-                Stormpath.login(email, password, new StormpathCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        mView.setLoading(false);
-                        mView.registerSuccess();
-                    }
-
-                    @Override
-                    public void onFailure(StormpathError error) {
-                        mView.setLoading(false);
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(StormpathError error) {
-                DebugTool.logD("CODE: " + error.code());
-                DebugTool.logD("MSG: " + error.message());
-                DebugTool.logD("STATUS: " + error.status());
-                if(error.status() == -1){
-                    mView.registerSuccess();
-                }else {
-                    mView.registerFailure(error.status(), error.message());
-                }
-                mView.setLoading(false);
-            }
-        });
+//        RegistrationForm registrationData = new RegistrationForm(email, password);
+//
+////        registrationData.setGivenName(MyPreference.getFirstName(context))
+////                .setSurname(MyPreference.getLastName(context));
+//        Stormpath.register(registrationData, new StormpathCallback<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//
+//                Stormpath.login(email, password, new StormpathCallback<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        mView.setLoading(false);
+//                        mView.registerSuccess();
+//                    }
+//
+//                    @Override
+//                    public void onFailure(StormpathError error) {
+//                        mView.setLoading(false);
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onFailure(StormpathError error) {
+//                DebugTool.logD("CODE: " + error.code());
+//                DebugTool.logD("MSG: " + error.message());
+//                DebugTool.logD("STATUS: " + error.status());
+//                if(error.status() == -1){
+//                    mView.registerSuccess();
+//                }else {
+//                    mView.registerFailure(error.status(), error.message());
+//                }
+//                mView.setLoading(false);
+//            }
+//        });
     }
 }

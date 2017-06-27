@@ -1,11 +1,8 @@
 package com.ethan.morephone.presentation.authentication.login;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,10 +10,6 @@ import android.widget.EditText;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.authentication.StormActivity;
 import com.ethan.morephone.presentation.authentication.register.RegisterActivity;
-import com.stormpath.sdk.Provider;
-import com.stormpath.sdk.Stormpath;
-import com.stormpath.sdk.StormpathCallback;
-import com.stormpath.sdk.models.StormpathError;
 
 /**
  * Created by Ethan on 2/23/17.
@@ -32,57 +25,57 @@ public class LoginStormActivity extends AppCompatActivity implements View.OnClic
     private Button forgotPasswordButton;
     private Button registerButton;
 
-    private StormpathCallback<Void> loginCallback = new StormpathCallback<Void>() {
-        @Override
-        public void onSuccess(Void aVoid) {
-            navigateToHome();
-        }
+//    private StormpathCallback<Void> loginCallback = new StormpathCallback<Void>() {
+//        @Override
+//        public void onSuccess(Void aVoid) {
+//            navigateToHome();
+//        }
+//
+//        @Override
+//        public void onFailure(StormpathError error) {
+//            new AlertDialog.Builder(LoginStormActivity.this)
+//                    .setTitle("Error")
+//                    .setMessage(error.message())
+//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//
+//                        }
+//                    })
+//                    .show();
+//        }
+//    };
 
-        @Override
-        public void onFailure(StormpathError error) {
-            new AlertDialog.Builder(LoginStormActivity.this)
-                    .setTitle("Error")
-                    .setMessage(error.message())
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    })
-                    .show();
-        }
-    };
-
-
-    private StormpathCallback<Void> forgotPasswordCallback = new StormpathCallback<Void>() {
-        @Override
-        public void onSuccess(Void aVoid) {
-            new AlertDialog.Builder(LoginStormActivity.this)
-                    .setTitle("Password Reset Sent!")
-                    .setMessage("Please check your email for the password reset email!")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .show();
-        }
-
-        @Override
-        public void onFailure(StormpathError error) {
-            new AlertDialog.Builder(LoginStormActivity.this)
-                    .setTitle("Error")
-                    .setMessage(error.message())
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .show();
-        }
-    };
+//    private StormpathCallback<Void> forgotPasswordCallback = new StormpathCallback<Void>() {
+//        @Override
+//        public void onSuccess(Void aVoid) {
+//            new AlertDialog.Builder(LoginStormActivity.this)
+//                    .setTitle("Password Reset Sent!")
+//                    .setMessage("Please check your email for the password reset email!")
+//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//
+//                        }
+//                    })
+//                    .show();
+//        }
+//
+//        @Override
+//        public void onFailure(StormpathError error) {
+//            new AlertDialog.Builder(LoginStormActivity.this)
+//                    .setTitle("Error")
+//                    .setMessage(error.message())
+//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//
+//                        }
+//                    })
+//                    .show();
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +91,10 @@ public class LoginStormActivity extends AppCompatActivity implements View.OnClic
         forgotPasswordButton = (Button) findViewById(R.id.button_forgot_password);
         registerButton = (Button) findViewById(R.id.button_register);
 
-        if (!TextUtils.isEmpty(Stormpath.getAccessToken())) {
-            // if we already have an accessToken saved, the user should be logged in
-            navigateToHome();
-        }
+//        if (!TextUtils.isEmpty(Stormpath.getAccessToken())) {
+//            // if we already have an accessToken saved, the user should be logged in
+//            navigateToHome();
+//        }
 
         loginButton.setOnClickListener(this);
         loginWithFacebookButton.setOnClickListener(this);
@@ -117,13 +110,13 @@ public class LoginStormActivity extends AppCompatActivity implements View.OnClic
                 onLoginButtonClicked();
                 break;
             case R.id.button_login_facebook:
-                Stormpath.loginWithProvider(Provider.FACEBOOK, this, loginCallback);
+//                Stormpath.loginWithProvider(Provider.FACEBOOK, this, loginCallback);
                 break;
             case R.id.button_login_google:
-                Stormpath.loginWithProvider(Provider.GOOGLE, this, loginCallback);
+//                Stormpath.loginWithProvider(Provider.GOOGLE, this, loginCallback);
                 break;
             case R.id.button_forgot_password:
-                Stormpath.resetPassword(usernameInput.getText().toString(), forgotPasswordCallback);
+//                Stormpath.resetPassword(usernameInput.getText().toString(), forgotPasswordCallback);
                 break;
             case R.id.button_register:
                 startActivity(new Intent(this, RegisterActivity.class));
@@ -132,7 +125,7 @@ public class LoginStormActivity extends AppCompatActivity implements View.OnClic
     }
 
     protected void onLoginButtonClicked() {
-        Stormpath.login(usernameInput.getText().toString(), passwordInput.getText().toString(), loginCallback);
+//        Stormpath.login(usernameInput.getText().toString(), passwordInput.getText().toString(), loginCallback);
     }
 
     private void navigateToHome() {

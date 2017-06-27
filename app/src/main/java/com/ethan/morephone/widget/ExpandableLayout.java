@@ -18,13 +18,13 @@ import android.widget.LinearLayout;
 
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.voice.adapter.VoicesAdapter;
+import com.ethan.morephone.presentation.record.adapter.RecordAdapter;
 
 /**
  * Created by Ethan on 3/21/17.
  */
 
-public class ExpandableLayout extends LinearLayout implements VoicesAdapter.OnOtherExpandListener {
+public class ExpandableLayout extends LinearLayout implements RecordAdapter.OnOtherExpandListener {
     private int mWidthMeasureSpec;
     private int mHeightMeasureSpec;
     private boolean mAttachedToWindow;
@@ -33,7 +33,7 @@ public class ExpandableLayout extends LinearLayout implements VoicesAdapter.OnOt
     private ObjectAnimator mExpandAnimator;
     private OnExpandListener mListener;
     private int mPosition;
-    private VoicesAdapter mAdater;
+    private RecordAdapter mAdater;
 
     public ExpandableLayout(Context context) {
         super(context);
@@ -140,7 +140,7 @@ public class ExpandableLayout extends LinearLayout implements VoicesAdapter.OnOt
         return mPosition;
     }
 
-    public void setAdapter(VoicesAdapter adapter) {
+    public void setAdapter(RecordAdapter adapter) {
         mAdater = adapter;
         mAdater.setOnOtherExpandListener(this);
     }

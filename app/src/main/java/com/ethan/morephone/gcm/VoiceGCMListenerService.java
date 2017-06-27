@@ -15,7 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.voice.TestVoiceActivity;
+import com.ethan.morephone.presentation.record.TestVoiceActivity;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.twilio.voice.CallInvite;
 

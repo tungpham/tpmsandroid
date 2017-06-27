@@ -11,7 +11,7 @@ import com.ethan.morephone.presentation.message.conversation.ConversationsFragme
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.phone.dial.DialFragment;
 import com.ethan.morephone.presentation.phone.log.CallLogFragment;
-import com.ethan.morephone.presentation.voice.VoiceFragment;
+import com.ethan.morephone.presentation.record.RecordFragment;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -42,7 +42,7 @@ public class DashboardViewPagerAdapter extends FragmentPagerAdapter {
                 bundle.putString(IncomingPhoneNumbersFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
                 return ConversationsFragment.getInstance(bundle);
             case 1:
-                return VoiceFragment.getInstance(mPhoneNumber);
+                return RecordFragment.getInstance(mPhoneNumber);
             case 2:
                 return CallLogFragment.getInstance(mPhoneNumber);
             case 3:

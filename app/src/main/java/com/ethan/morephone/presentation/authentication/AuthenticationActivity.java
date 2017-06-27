@@ -4,18 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.MenuItem;
 
-import com.android.morephone.data.log.DebugTool;
+import com.auth0.android.provider.WebAuthProvider;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.main.MainActivity;
+import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.stormpath.sdk.Stormpath;
-import com.stormpath.sdk.StormpathCallback;
-import com.stormpath.sdk.models.Account;
-import com.stormpath.sdk.models.StormpathError;
 
 
 /**
@@ -24,8 +20,7 @@ import com.stormpath.sdk.models.StormpathError;
 
 public class AuthenticationActivity extends BaseActivity {
 
-    public static final String EXTRA_LINK = "EXTRA_LINK";
-
+    private final int REQUEST_LOGIN = 100;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,7 +28,6 @@ public class AuthenticationActivity extends BaseActivity {
         setContentView(R.layout.activity_fragment);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof AuthenticationFragment) return;
@@ -44,18 +38,41 @@ public class AuthenticationActivity extends BaseActivity {
                 R.id.content_frame,
                 AuthenticationFragment.class.getSimpleName());
 
-        Stormpath.getAccount(new StormpathCallback<Account>() {
-            @Override
-            public void onSuccess(Account account) {
-                DebugTool.logD("Account: " + account.getEmail());
-                startActivity(new Intent(AuthenticationActivity.this, MainActivity.class));
-            }
-
-            @Override
-            public void onFailure(StormpathError error) {
-                DebugTool.logD("error: " + error.message());
-            }
-        });
 
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (WebAuthProvider.resume(intent)) {
+            return;
+        }
+        super.onNewIntent(intent);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                finish();
+                break;
+
+            case R.id.menu_login:
+                startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
+                break;
+
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
+
+
 }

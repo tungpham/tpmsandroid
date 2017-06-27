@@ -15,10 +15,18 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.morephone.data.utils.CredentialsManager;
+import com.auth0.android.Auth0;
+import com.auth0.android.authentication.AuthenticationAPIClient;
+import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.callback.BaseCallback;
+import com.auth0.android.result.Credentials;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.buy.payment.fund.AddFundActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
@@ -245,5 +253,44 @@ public class MainActivity extends BaseActivity implements
                     IncomingPhoneNumbersFragment.class.getSimpleName());
         }
         enableActionBar(mToolbar, getString(R.string.my_number_label));
+    }
+
+    private AuthenticationAPIClient authenticationClient;
+
+    private void setUpAuthentication(){
+        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
+        auth0.setLoggingEnabled(true);
+        auth0.setOIDCConformant(true);
+        authenticationClient = new AuthenticationAPIClient(auth0);
+    }
+
+    private void renewAuthentication() {
+        String refreshToken = CredentialsManager.getCredentials(this).getRefreshToken();
+        authenticationClient.renewAuth(refreshToken).start(new BaseCallback<Credentials, AuthenticationException>() {
+            @Override
+            public void onSuccess(final Credentials payload) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "New access_token: " + payload.getAccessToken(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(AuthenticationException error) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Failed to get the new access_token", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+
+    private void logout() {
+        CredentialsManager.deleteCredentials(this);
+        startActivity(new Intent(this, AuthenticationActivity.class));
+        finish();
     }
 }

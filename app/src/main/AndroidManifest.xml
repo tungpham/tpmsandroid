@@ -36,15 +36,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <activity android:name=".presentation.authentication.AuthenticationActivity">
+        <activity android:name=".presentation.authentication.AuthenticationActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/auth0_domain"
+                    android:pathPrefix="/android/com.android.morephone/callback"
+                    android:scheme="https" />
+            </intent-filter>
+
         </activity>
 
         <activity android:name=".presentation.main.MainActivity" />
@@ -53,8 +68,8 @@
         <activity android:name=".presentation.message.compose.ComposeActivity" />
         <activity android:name=".presentation.buy.payment.purchase.PurchaseActivity" />
 
-        <activity android:name=".presentation.voice.VoiceActivity" />
-        <activity android:name=".presentation.voice.TestVoiceActivity" />
+        <activity android:name=".presentation.record.RecordActivity" />
+        <activity android:name=".presentation.record.TestVoiceActivity" />
 
         <activity android:name=".presentation.authentication.register.RegisterActivity" />
         <activity android:name=".presentation.authentication.register.name.RegisterNameActivity" />
@@ -79,7 +94,8 @@
         <activity android:name=".presentation.license.LicenseActivity" />
         <activity android:name=".presentation.usage.UsageActivity" />
         <activity android:name=".presentation.phone.PhoneActivity" />
-        <activity android:name=".presentation.phone.incall.InCallActivity"
+        <activity
+            android:name=".presentation.phone.incall.InCallActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity android:name=".presentation.phone.callingscreen.CallingScreenActivity" />
@@ -123,7 +139,7 @@
 
         <service
             android:name=".gcm.GCMRegistrationService"
-            android:exported="false"/>
+            android:exported="false" />
 
         <service android:name=".presentation.phone.service.PhoneService">
             <intent-filter>
@@ -134,15 +150,16 @@
 
         <receiver android:name=".presentation.phone.service.BootCompleteReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".presentation.phone.service.PhoneIntervalReceiver"
+        <receiver
+            android:name=".presentation.phone.service.PhoneIntervalReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="com.ethan.morephone.action.WAKE_UP"/>
+                <action android:name="com.ethan.morephone.action.WAKE_UP" />
             </intent-filter>
         </receiver>
 
@@ -150,9 +167,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
 
         <activity
@@ -160,8 +177,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>

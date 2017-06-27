@@ -6,9 +6,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.stormpath.sdk.Stormpath;
-import com.stormpath.sdk.StormpathCallback;
-import com.stormpath.sdk.models.StormpathError;
 
 /**
  * Created by truongnguyen on 10/15/16.
@@ -27,19 +24,6 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void doLogin(String email, String password) {
         mView.setLoading(true);
-        Stormpath.login(email, password, new StormpathCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                mView.setLoading(false);
-                mView.loginSuccess();
-            }
-
-            @Override
-            public void onFailure(StormpathError error) {
-                mView.loginError(error.status(), error.message());
-                mView.setLoading(false);
-            }
-        });
     }
 
     @Override

@@ -5,7 +5,6 @@ import android.content.Context;
 import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.entity.record.Records;
 import com.android.morephone.data.entity.usage.Usage;
-import com.stormpath.sdk.Stormpath;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -66,7 +65,6 @@ public class ApiMorePhone {
                                 public Response intercept(Chain chain) throws IOException {
                                     Request.Builder ongoing = chain.request().newBuilder();
                                     ongoing.addHeader("Accept", "application/json");
-                                    ongoing.addHeader("Authorization", "Bearer " + Stormpath.getAccessToken());
                                     return chain.proceed(ongoing.build());
                                 }
                             })

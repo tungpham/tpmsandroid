@@ -8,6 +8,9 @@
 
     <string name="fb_login_protocol_scheme">fb749741551871573</string>
 
+    <string name="auth0_client_id">F4yBiH4tGmxuPd0WaE4IASazuvAFHgdx</string>
+    <string name="auth0_domain">morephone.auth0.com</string>
+
     <!--          Fragment Authentication           -->
     <string name="authentication_text_welcome">Welcome to More Phone.</string>
     <string name="authentication_text_options">More Options</string>
