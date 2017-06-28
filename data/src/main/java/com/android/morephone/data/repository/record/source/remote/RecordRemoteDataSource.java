@@ -34,8 +34,27 @@ public class RecordRemoteDataSource implements RecordDataSource {
 
 
     @Override
-    public void getRecords(String accountSid, @NonNull LoadRecordsCallback callback) {
+    public void getRecords(final @NonNull LoadRecordsCallback callback) {
+        ApiManager.getRecords(mContext, new Callback<RecordListResourceResponse>() {
+            @Override
+            public void onResponse(Call<RecordListResourceResponse> call, Response<RecordListResourceResponse> response) {
+                if(response.isSuccessful()) {
+                    RecordListResourceResponse recordListResourceResponse = response.body();
+                    if (recordListResourceResponse != null) {
+                        callback.onRecordsLoaded(recordListResourceResponse);
+                    } else {
+                        callback.onDataNotAvailable();
+                    }
+                } else {
+                    callback.onDataNotAvailable();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<RecordListResourceResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

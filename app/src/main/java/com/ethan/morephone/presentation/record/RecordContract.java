@@ -28,7 +28,7 @@ public interface RecordContract {
 
         void deleteRecord(String callSid, String recordSid);
 
-        void loadRecords(String callSid);
+        void loadRecords(String phoneNumber);
 
         void loadRecords(Context context);
 

@@ -25,9 +25,9 @@ import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.message.compose.ComposeFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.phone.incall.InCallActivity;
+import com.ethan.morephone.presentation.record.adapter.RecordAdapter;
 import com.ethan.morephone.presentation.record.adapter.RecordsViewHolder;
 import com.ethan.morephone.presentation.record.adapter.StateRecord;
-import com.ethan.morephone.presentation.record.adapter.RecordAdapter;
 import com.ethan.morephone.presentation.record.dialog.AlertDeleteRecordDialog;
 import com.ethan.morephone.presentation.record.player.MyExoPlayer;
 import com.ethan.morephone.presentation.record.player.MyExoPlayerFactory;
@@ -64,7 +64,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RecordFragment extends BaseFragment implements
         RecordContract.View,
-        RecordAdapter.OnItemVoiceClickListener,
+        RecordAdapter.OnItemRecordClickListener,
         View.OnClickListener,
         ExoPlayer.EventListener,
         AlertDeleteRecordDialog.AlertDeleteRecordListener {
@@ -111,6 +111,7 @@ public class RecordFragment extends BaseFragment implements
         new RecordPresenter(this,
                 Injection.providerUseCaseHandler(),
                 Injection.providerGetCallRecords(getContext()),
+                Injection.providerGetCall(getContext()),
                 Injection.providerDeleteCallRecord(getContext()));
 
         mExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -165,8 +166,8 @@ public class RecordFragment extends BaseFragment implements
 
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
-//            mPresenter.clearData();
-            mPresenter.loadRecords(getContext());
+            mPresenter.clearData();
+            mPresenter.loadRecords(mPhoneNumber);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }
@@ -298,13 +299,13 @@ public class RecordFragment extends BaseFragment implements
     public void onCall(Record record) {
         Intent intent = new Intent(getActivity(), InCallActivity.class);
         Bundle bundle = new Bundle();
-        String phoneNumber = record.phoneNumber;
+//        String phoneNumber = record.phoneNumber;
 //        if (voiceItem.from.equals(mPhoneNumber)) {
 //            phoneNumber = voiceItem.to;
 //        } else {
 //            phoneNumber = voiceItem.from;
 //        }
-        bundle.putString(InCallActivity.BUNDLE_TO_PHONE_NUMBER, phoneNumber);
+        bundle.putString(InCallActivity.BUNDLE_TO_PHONE_NUMBER, record.phoneNumber);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -313,13 +314,13 @@ public class RecordFragment extends BaseFragment implements
     public void onMessage(Record record) {
         Intent intent = new Intent(getActivity(), ComposeActivity.class);
         Bundle bundle = new Bundle();
-        String phoneNumber = record.phoneNumber;
+//        String phoneNumber = record.phoneNumber;
 //        if (voiceItem.from.equals(mPhoneNumber)) {
 //            phoneNumber = voiceItem.to;
 //        } else {
 //            phoneNumber = voiceItem.from;
 //        }
-        bundle.putString(ComposeFragment.BUNDLE_TO_PHONE_NUMBER, phoneNumber);
+        bundle.putString(ComposeFragment.BUNDLE_TO_PHONE_NUMBER, record.phoneNumber);
         intent.putExtras(bundle);
         startActivity(intent);
     }

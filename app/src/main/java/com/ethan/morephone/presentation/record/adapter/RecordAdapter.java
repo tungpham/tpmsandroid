@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.domain.UseCaseHandler;
+import com.android.morephone.domain.usecase.call.GetCall;
 import com.ethan.morephone.R;
+import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.ExpandableLayout;
 import com.ethan.morephone.widget.TextDrawable;
@@ -23,8 +26,8 @@ import java.util.List;
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
 
-    private List<Record> mVoiceItems;
-    private OnItemVoiceClickListener mOnItemVoiceClickListener;
+    private List<Record> mRecords;
+    private OnItemRecordClickListener mOnItemRecordClickListener;
     private TextDrawable.IBuilder mDrawableBuilder;
     private Context mContext;
     private String mPhoneNumber;
@@ -32,17 +35,23 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
 
     private RecyclerView mRecyclerView;
 
+    private UseCaseHandler mUseCaseHandler;
+    private GetCall mGetCall;
 
-    public RecordAdapter(Context context, String phoneNumber, List<Record> conversationEntities, OnItemVoiceClickListener onItemConversationClickListener) {
+
+    public RecordAdapter(Context context, String phoneNumber, List<Record> conversationEntities, OnItemRecordClickListener onItemConversationClickListener) {
         mContext = context;
         mPhoneNumber = phoneNumber;
-        mVoiceItems = conversationEntities;
-        mOnItemVoiceClickListener = onItemConversationClickListener;
+        mRecords = conversationEntities;
+        mOnItemRecordClickListener = onItemConversationClickListener;
         mDrawableBuilder = TextDrawable.builder().round();
+
+        mUseCaseHandler = Injection.providerUseCaseHandler();
+        mGetCall = Injection.providerGetCall(context);
     }
 
     public void replaceData(List<Record> messageItems) {
-        mVoiceItems = messageItems;
+        mRecords = messageItems;
         notifyDataSetChanged();
     }
 
@@ -51,7 +60,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
     }
 
     public List<Record> getData() {
-        return mVoiceItems;
+        return mRecords;
     }
 
     @Override
@@ -63,59 +72,55 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
 
     @Override
     public void onBindViewHolder(final RecordsViewHolder holder, final int position) {
-        final Record record = mVoiceItems.get(position);
+        final Record record = mRecords.get(position);
         holder.textPhoneNumber.setText(record.phoneNumber);
         holder.textTime.setText(Utils.formatDate(record.dateCreated));
 
-        if(!TextUtils.isEmpty(record.phoneNumber)) {
+        if (!TextUtils.isEmpty(record.phoneNumber)) {
             holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(record.phoneNumber.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
         }
+
         holder.showLoading(false);
-//        holder.expandableLayout.setExpanded(true, false);
-//        holder.expandableLayout.setTag(holder);
-//        holder.expandableLayout.setOnExpandListener(mOnExpandListener);
-//        holder.expandableLayout.setPosition(position);
-//        holder.expandableLayout.setAdapter(this);
 
         holder.textCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onCall(record);
+                mOnItemRecordClickListener.onCall(record);
             }
         });
 
         holder.textMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onMessage(record);
+                mOnItemRecordClickListener.onMessage(record);
             }
         });
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onItemClick(holder, position, record);
+                mOnItemRecordClickListener.onItemClick(holder, position, record);
             }
         });
 
         holder.imagePause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onPauseRecord(holder, record);
+                mOnItemRecordClickListener.onPauseRecord(holder, record);
             }
         });
 
         holder.imageDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onDeleteRecord(holder, position);
+                mOnItemRecordClickListener.onDeleteRecord(holder, position);
             }
         });
 
         holder.imageVolume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemVoiceClickListener.onVolumeRecord(holder);
+                mOnItemRecordClickListener.onVolumeRecord(holder);
             }
         });
 
@@ -127,7 +132,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mVoiceItems.size();
+        return mRecords.size();
     }
 
     private ExpandableLayout.OnExpandListener mOnExpandListener = new ExpandableLayout.OnExpandListener() {
@@ -172,7 +177,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
         }
     };
 
-    public interface OnItemVoiceClickListener {
+    public interface OnItemRecordClickListener {
         void onItemClick(RecordsViewHolder holder, int pos, Record record);
 
         void onPauseRecord(RecordsViewHolder holder, Record record);

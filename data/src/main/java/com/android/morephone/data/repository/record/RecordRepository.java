@@ -31,8 +31,8 @@ public class RecordRepository implements RecordDataSource {
 
 
     @Override
-    public void getRecords(String accountSid, @NonNull LoadRecordsCallback callback) {
-
+    public void getRecords(@NonNull LoadRecordsCallback callback) {
+        mRecordRemoteDataSource.getRecords(callback);
     }
 
     @Override

@@ -30,7 +30,6 @@ import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.buy.payment.fund.AddFundActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
-import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.license.LicenseActivity;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersActivity;
@@ -39,7 +38,6 @@ import com.ethan.morephone.presentation.review.AlertReviewDialog;
 import com.ethan.morephone.presentation.setting.SettingActivity;
 import com.ethan.morephone.presentation.usage.UsageActivity;
 import com.ethan.morephone.utils.ActivityUtils;
-import com.twilio.client.Device;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -51,20 +49,12 @@ public class MainActivity extends BaseActivity implements
         View.OnClickListener,
         RequirePhoneNumberDialog.RequirePhoneNumberListener {
 
-    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
-
     private final int REQUEST_INCOMING_PHONE = 100;
-
 
     private Toolbar mToolbar;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-
-    private Device clientDevice;
-    private ClientProfile clientProfile;
-
-//    private PhoneService mPhoneService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,22 +81,6 @@ public class MainActivity extends BaseActivity implements
         MyPreference.setTimesUse(getApplicationContext(), MyPreference.getTimesUse(getApplicationContext()) + 1);
 
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        Intent service = new Intent(this, PhoneService.class);
-//        bindService(service, mConnection, Context.BIND_AUTO_CREATE);
-//        registerReceiver(mMessageReceiver, new IntentFilter(MusicPlayerService.ACTION_UPDATE_UI));
-//        startAudio();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        unbindService(mConnection);
-//        unregisterReceiver(mMessageReceiver);
     }
 
     @Override
@@ -145,8 +119,8 @@ public class MainActivity extends BaseActivity implements
             case R.id.nav_share:
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Share more get nothing!");
-                startActivity(Intent.createChooser(sharingIntent, "More phone more girl!"));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Anonymously own one or many phone numbers");
+                startActivity(Intent.createChooser(sharingIntent, "Share now"));
                 break;
             case R.id.nav_review:
                 AlertReviewDialog alertReviewDialog = AlertReviewDialog.getInstance();
@@ -154,6 +128,11 @@ public class MainActivity extends BaseActivity implements
                 break;
             case R.id.nav_usage:
                 startActivity(new Intent(this, UsageActivity.class));
+                break;
+            case R.id.nav_logout:
+                CredentialsManager.deleteCredentials(this);
+                startActivity(new Intent(this, AuthenticationActivity.class));
+                finish();
                 break;
             default:
                 break;
@@ -243,7 +222,7 @@ public class MainActivity extends BaseActivity implements
                     R.id.content_frame,
                     DashboardFrag.class.getSimpleName());
         } else {
-            IncomingPhoneNumbersFragment voiceFragment =  IncomingPhoneNumbersFragment.getInstance();
+            IncomingPhoneNumbersFragment voiceFragment = IncomingPhoneNumbersFragment.getInstance();
 
 //            DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), isVoice);
             ActivityUtils.replaceFragmentToActivity(
@@ -257,7 +236,7 @@ public class MainActivity extends BaseActivity implements
 
     private AuthenticationAPIClient authenticationClient;
 
-    private void setUpAuthentication(){
+    private void setUpAuthentication() {
         Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
         auth0.setLoggingEnabled(true);
         auth0.setOIDCConformant(true);

@@ -12,10 +12,10 @@ public class CallRepository implements CallDataSource {
 
     private static CallRepository INSTANCE = null;
 
-    private final CallDataSource mVoiceRemoteDataSource;
+    private final CallDataSource mCallRemoteDataSource;
 
     private CallRepository(@NonNull CallDataSource voiceRemoteDataSource) {
-        mVoiceRemoteDataSource = voiceRemoteDataSource;
+        mCallRemoteDataSource = voiceRemoteDataSource;
     }
 
     public static CallRepository getInstance(CallDataSource voiceRemoteDataSource) {
@@ -31,27 +31,27 @@ public class CallRepository implements CallDataSource {
 
     @Override
     public void getCalls(@NonNull LoadCallCallback callback) {
-        mVoiceRemoteDataSource.getCalls(callback);
+        mCallRemoteDataSource.getCalls(callback);
     }
 
     @Override
     public void getCalls(String phoneNumberIncoming, String phoneNumberOutgoing, @NonNull LoadCallCallback callback) {
-        mVoiceRemoteDataSource.getCalls(phoneNumberIncoming, phoneNumberOutgoing, callback);
+        mCallRemoteDataSource.getCalls(phoneNumberIncoming, phoneNumberOutgoing, callback);
     }
 
     @Override
     public void getCallsIncoming(String phoneNumber, @NonNull LoadCallCallback callback) {
-        mVoiceRemoteDataSource.getCallsIncoming(phoneNumber, callback);
+        mCallRemoteDataSource.getCallsIncoming(phoneNumber, callback);
     }
 
     @Override
     public void getCallsOutgoing(String phoneNumber, @NonNull LoadCallCallback callback) {
-        mVoiceRemoteDataSource.getCallsOutgoing(phoneNumber, callback);
+        mCallRemoteDataSource.getCallsOutgoing(phoneNumber, callback);
     }
 
     @Override
-    public void getCall(String messageSid, @NonNull GetCallCallback callback) {
-
+    public void getCall(String callSid, @NonNull GetCallCallback callback) {
+        mCallRemoteDataSource.getCall(callSid, callback);
     }
 
     @Override
@@ -61,11 +61,11 @@ public class CallRepository implements CallDataSource {
                            String sipAuthUsername,
                            String sipAuthPassword,
                            @NonNull GetCallCallback callback) {
-        mVoiceRemoteDataSource.createCall(phoneNumberIncoming, phoneNumberOutgoing, applicationSid, sipAuthUsername, sipAuthPassword, callback);
+        mCallRemoteDataSource.createCall(phoneNumberIncoming, phoneNumberOutgoing, applicationSid, sipAuthUsername, sipAuthPassword, callback);
     }
 
     @Override
     public void deleteCall(String callsid) {
-        mVoiceRemoteDataSource.deleteCall(callsid);
+        mCallRemoteDataSource.deleteCall(callsid);
     }
 }

@@ -11,18 +11,18 @@ import com.android.morephone.domain.UseCase;
  * Created by Ethan on 3/3/17.
  */
 
-public class GetRecords extends UseCase<GetRecords.RequestValue, GetRecords.ResponseValue>{
+public class GetRecordsByCall extends UseCase<GetRecordsByCall.RequestValue, GetRecordsByCall.ResponseValue>{
 
     private final RecordRepository mRecordRepository;
 
-    public GetRecords(@NonNull RecordRepository recordRepository) {
+    public GetRecordsByCall(@NonNull RecordRepository recordRepository) {
         mRecordRepository = recordRepository;
     }
 
 
     @Override
     protected void executeUseCase(RequestValue requestValue) {
-        mRecordRepository.getRecords(new RecordDataSource.LoadRecordsCallback() {
+        mRecordRepository.getRecords(requestValue.getAccountSid(), requestValue.getCallSid(), new RecordDataSource.LoadRecordsCallback() {
             @Override
             public void onRecordsLoaded(RecordListResourceResponse recordListResourceResponse) {
                 getUseCaseCallback().onSuccess(new ResponseValue(recordListResourceResponse));
@@ -37,9 +37,21 @@ public class GetRecords extends UseCase<GetRecords.RequestValue, GetRecords.Resp
 
     public static final class RequestValue implements UseCase.RequestValue {
 
-        public RequestValue() {
+        private final String mAccountSid;
+        private final String mCallSid;
+
+        public RequestValue(String accountSid, String callSid) {
+            this.mAccountSid = accountSid;
+            this.mCallSid = callSid;
         }
 
+        public String getAccountSid() {
+            return mAccountSid;
+        }
+
+        public String getCallSid() {
+            return mCallSid;
+        }
     }
 
     public static final class ResponseValue implements UseCase.ResponseValue {

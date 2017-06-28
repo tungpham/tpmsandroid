@@ -32,7 +32,6 @@ public class CallRemoteDataSource implements CallDataSource {
         return INSTANCE;
     }
 
-
     @Override
     public void getCalls(@NonNull final LoadCallCallback callback) {
         ApiManager.getAllCalls(mContext, new Callback<Calls>() {
@@ -131,8 +130,27 @@ public class CallRemoteDataSource implements CallDataSource {
     }
 
     @Override
-    public void getCall(String messageSid, @NonNull GetCallCallback callback) {
+    public void getCall(String callSid, final @NonNull GetCallCallback callback) {
+        ApiManager.getCall(mContext, callSid, new Callback<com.android.morephone.data.entity.call.Call>() {
+            @Override
+            public void onResponse(Call<com.android.morephone.data.entity.call.Call> callResponse, Response<com.android.morephone.data.entity.call.Call> response) {
+                if (response.isSuccessful()) {
+                    com.android.morephone.data.entity.call.Call call = response.body();
+                    if (call != null) {
+                        callback.onCallLoaded(call);
+                    } else {
+                        callback.onDataNotAvailable();
+                    }
+                } else {
+                    callback.onDataNotAvailable();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<com.android.morephone.data.entity.call.Call> call, Throwable t) {
+                callback.onDataNotAvailable();
+            }
+        });
     }
 
     @Override

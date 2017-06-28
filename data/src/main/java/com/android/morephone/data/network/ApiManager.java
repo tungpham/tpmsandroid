@@ -176,6 +176,13 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    public static void getCall(Context context,
+                                String callSid,
+                                Callback<com.android.morephone.data.entity.call.Call> callback) {
+        Call<com.android.morephone.data.entity.call.Call> call = getApiPath(context).getCall(TwilioManager.getSid(context), callSid);
+        call.enqueue(callback);
+    }
+
     public static void getCallsIncoming(Context context,
                                         String phoneNumberIncoming,
                                         Callback<Calls> callback) {
@@ -273,6 +280,12 @@ public class ApiManager {
                                              String callSid,
                                              Callback<RecordListResourceResponse> callback) {
         Call<RecordListResourceResponse> call = getApiPath(context).getRecordListResource(TwilioManager.getSid(context), callSid);
+        call.enqueue(callback);
+    }
+
+    public static void getRecords(Context context,
+                                  Callback<RecordListResourceResponse> callback) {
+        Call<RecordListResourceResponse> call = getApiPath(context).getRecords(TwilioManager.getSid(context));
         call.enqueue(callback);
     }
 

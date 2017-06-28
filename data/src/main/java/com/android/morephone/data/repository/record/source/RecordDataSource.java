@@ -27,7 +27,7 @@ public interface RecordDataSource {
         void onResult(boolean isResult);
     }
 
-    void getRecords(String accountSid, @NonNull LoadRecordsCallback callback);
+    void getRecords(@NonNull LoadRecordsCallback callback);
 
     void getRecords(String accountSid, String callSid, @NonNull LoadRecordsCallback callback);
 
