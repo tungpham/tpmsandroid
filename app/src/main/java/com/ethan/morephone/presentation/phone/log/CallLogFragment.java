@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.call.Call;
-import com.android.morephone.data.entity.call.Calls;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
@@ -24,6 +23,7 @@ import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ethan on 3/21/17.
@@ -109,8 +109,8 @@ public class CallLogFragment extends BaseFragment implements
     }
 
     @Override
-    public void showCallLog(Calls calls) {
-        mCallLogAdapter.replaceData(calls.calls);
+    public void showCallLog(List<Call> calls) {
+        mCallLogAdapter.replaceData(calls);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class CallLogFragment extends BaseFragment implements
 
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
-//            mPresenter.clearData();
+            mPresenter.clearData();
             mPresenter.loadCallsIncoming(mPhoneNumber);
             mPresenter.loadCallsOutgoing(mPhoneNumber);
         } else {

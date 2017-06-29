@@ -16,14 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.R;
+import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.message.compose.ComposeActivity;
-import com.ethan.morephone.presentation.message.compose.ComposeFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
+import com.ethan.morephone.presentation.message.list.MessageListActivity;
+import com.ethan.morephone.presentation.message.list.MessageListFragment;
 import com.ethan.morephone.presentation.phone.incall.InCallActivity;
 import com.ethan.morephone.presentation.record.adapter.RecordAdapter;
 import com.ethan.morephone.presentation.record.adapter.RecordsViewHolder;
@@ -48,6 +50,8 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -312,15 +316,12 @@ public class RecordFragment extends BaseFragment implements
 
     @Override
     public void onMessage(Record record) {
-        Intent intent = new Intent(getActivity(), ComposeActivity.class);
+        ConversationModel conversationModel = new ConversationModel(record.phoneNumber, new ArrayList<MessageItem>());
+
+        EventBus.getDefault().postSticky(conversationModel);
+        Intent intent = new Intent(getActivity(), MessageListActivity.class);
         Bundle bundle = new Bundle();
-//        String phoneNumber = record.phoneNumber;
-//        if (voiceItem.from.equals(mPhoneNumber)) {
-//            phoneNumber = voiceItem.to;
-//        } else {
-//            phoneNumber = voiceItem.from;
-//        }
-        bundle.putString(ComposeFragment.BUNDLE_TO_PHONE_NUMBER, record.phoneNumber);
+        bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
         intent.putExtras(bundle);
         startActivity(intent);
     }

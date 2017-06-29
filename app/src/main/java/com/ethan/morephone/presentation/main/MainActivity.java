@@ -31,7 +31,6 @@ import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.buy.payment.fund.AddFundActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.license.LicenseActivity;
-import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.review.AlertReviewDialog;
@@ -168,7 +167,6 @@ public class MainActivity extends BaseActivity implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_new_compose:
-                startActivity(new Intent(this, ComposeActivity.class));
                 break;
             default:
                 break;

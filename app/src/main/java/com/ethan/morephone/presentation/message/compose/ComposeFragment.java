@@ -111,6 +111,8 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
 //                    }
 //                }
                 break;
+            default:
+                break;
         }
     }
 

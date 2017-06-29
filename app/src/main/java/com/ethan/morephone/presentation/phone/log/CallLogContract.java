@@ -1,10 +1,10 @@
 package com.ethan.morephone.presentation.phone.log;
 
-import android.content.Context;
-
-import com.android.morephone.data.entity.call.Calls;
+import com.android.morephone.data.entity.call.Call;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
+
+import java.util.List;
 
 /**
  * Created by Ethan on 3/21/17.
@@ -16,17 +16,17 @@ public interface CallLogContract {
 
         void showLoading(boolean isActive);
 
-        void showCallLog(Calls calls);
+        void showCallLog(List<Call> calls);
 
     }
 
     interface Presenter extends BasePresenter {
 
-        void loadCallLogs(Context context);
-
         void loadCallsIncoming(String phoneNumberIncoming);
 
         void loadCallsOutgoing(String phoneNumberOutgoing);
+
+        void clearData();
 
     }
 }

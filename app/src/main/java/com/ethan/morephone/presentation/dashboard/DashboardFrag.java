@@ -22,6 +22,8 @@ public class DashboardFrag extends BaseFragment {
 
     public static final String BUNDLE_CHOOSE_VOICE = "BUNDLE_CHOOSE_VOICE";
 
+    public static final int REQUEST_COMPOSE = 100;
+
     public static DashboardFrag getInstance(String phoneNumber, boolean isVoice) {
         DashboardFrag dashboardFragment = new DashboardFrag();
         Bundle bundle = new Bundle();
@@ -62,4 +64,5 @@ public class DashboardFrag extends BaseFragment {
             mViewPager.setCurrentItem(0);
         }
     }
+
 }

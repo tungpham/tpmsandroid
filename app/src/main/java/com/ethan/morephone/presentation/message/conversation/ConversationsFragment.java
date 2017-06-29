@@ -21,6 +21,7 @@ import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.ConversationListAdapter;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
@@ -57,8 +58,6 @@ public class ConversationsFragment extends BaseFragment implements
 
     public static final String EXTRA_MESSAGE_BODY = "EXTRA_MESSAGE_BODY";
     public static final String EXTRA_MESSAGE_TO = "EXTRA_MESSAGE_TO";
-
-    private final int REQUEST_COMPOSE = 100;
 
     private ConversationListAdapter mConversationListAdapter;
 
@@ -228,7 +227,7 @@ public class ConversationsFragment extends BaseFragment implements
                 Bundle bundle = new Bundle();
                 bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
                 intent.putExtras(bundle);
-                startActivityForResult(intent, REQUEST_COMPOSE);
+                startActivityForResult(intent, DashboardFrag.REQUEST_COMPOSE);
                 break;
             default:
                 break;
@@ -281,7 +280,7 @@ public class ConversationsFragment extends BaseFragment implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_COMPOSE){
+        if(requestCode == DashboardFrag.REQUEST_COMPOSE){
             if(resultCode == Activity.RESULT_OK && data != null) {
                 String body = data.getStringExtra(EXTRA_MESSAGE_BODY);
                 String[] tos = data.getStringArrayExtra(EXTRA_MESSAGE_TO);
