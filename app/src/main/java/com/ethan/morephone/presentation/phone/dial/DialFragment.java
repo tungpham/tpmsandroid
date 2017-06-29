@@ -265,7 +265,7 @@ public class DialFragment extends BaseFragment implements
             }
             case R.id.zero: {
                 // Remove tentative input ('0') done by onTouch().
-//                removePreviousDigitIfPossible();
+                removePreviousDigitIfPossible();
                 keyPressed(KeyEvent.KEYCODE_PLUS);
 
                 // Stop tone immediately and decrease the press count, so that possible subsequent
@@ -472,9 +472,19 @@ public class DialFragment extends BaseFragment implements
             }
 
             // Start the new tone (will stop any playing tone)
-            mToneGenerator.startTone(tone, durationMs);
+//            mToneGenerator.startTone(tone, durationMs);
         }
     }
+
+    private void removePreviousDigitIfPossible() {
+        final Editable editable = mEditTextDigits.getText();
+        final int currentPosition = mEditTextDigits.getSelectionStart();
+        if (currentPosition > 0) {
+            mEditTextDigits.setSelection(currentPosition);
+            mEditTextDigits.getText().delete(currentPosition - 1, currentPosition);
+        }
+    }
+
 
     /**
      * Stop the tone if it is played.

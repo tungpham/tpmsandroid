@@ -37,6 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -236,6 +237,7 @@ public class ConversationsFragment extends BaseFragment implements
 
     @Override
     public void showListMessage(List<ConversationModel> conversationModels) {
+        Collections.sort(conversationModels);
         mConversationListAdapter.replaceData(conversationModels);
     }
 

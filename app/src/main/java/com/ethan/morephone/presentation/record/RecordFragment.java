@@ -316,7 +316,7 @@ public class RecordFragment extends BaseFragment implements
 
     @Override
     public void onMessage(Record record) {
-        ConversationModel conversationModel = new ConversationModel(record.phoneNumber, new ArrayList<MessageItem>());
+        ConversationModel conversationModel = new ConversationModel(record.phoneNumber, "", new ArrayList<MessageItem>());
 
         EventBus.getDefault().postSticky(conversationModel);
         Intent intent = new Intent(getActivity(), MessageListActivity.class);

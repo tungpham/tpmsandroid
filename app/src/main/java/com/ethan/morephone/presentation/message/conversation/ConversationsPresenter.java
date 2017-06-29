@@ -157,7 +157,12 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         }
         mConversationModels.clear();
         for (Map.Entry entry : mArrayMap.entrySet()) {
-            mConversationModels.add(new ConversationModel(entry.getKey().toString(), mArrayMap.get(entry.getKey())));
+            List<MessageItem> items = mArrayMap.get(entry.getKey());
+            if (items != null && !items.isEmpty()) {
+                String dateCreated = items.get(items.size() - 1).dateCreated;
+                mConversationModels.add(new ConversationModel(entry.getKey().toString(), dateCreated, items));
+            }
+
         }
         mView.showListMessage(mConversationModels);
     }
