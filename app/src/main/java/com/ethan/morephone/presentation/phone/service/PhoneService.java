@@ -39,7 +39,8 @@ import static com.twilio.client.impl.TwilioImpl.getContext;
 
 public class PhoneService extends Service implements DeviceListener, ConnectionListener {
 
-    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
+//    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
+    private static final String TOKEN_SERVICE_URL = "https://thawing-beyond-50622.herokuapp.com/twilio/create/token";
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 
@@ -179,12 +180,12 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     @Override
     public void onStopListening(Device device, int i, String s) {
-        DebugTool.logD("STOP LISTENING2 : " + s + " |||| " + device.toString());
+        DebugTool.logD("STOP LISTENING2 : " + s + " |||| " + device.getCapabilities().toString());
     }
 
     @Override
     public boolean receivePresenceEvents(Device device) {
-        DebugTool.logD("RECEIVE PRESENCE EVENTS: " + device.toString());
+        DebugTool.logD("RECEIVE PRESENCE EVENTS: " + device.getCapabilities().toString());
         return false;
     }
 
@@ -195,7 +196,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     @Override
     public void onConnecting(Connection connection) {
-        DebugTool.logD("CONNECTING : " + connection.toString());
+        DebugTool.logD("CONNECTING : " + connection.getParameters().toString());
     }
 
     @Override
@@ -255,7 +256,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
                 @Override
                 public void onError(Exception e) {
-                    Toast.makeText(getContext(), "Failed to initialize the Twilio Client SDK", Toast.LENGTH_LONG).show();
+                    DebugTool.logD("Failed to initialize the Twilio Client SDK");
+//                    Toast.makeText(getContext(), "Failed to initialize the Twilio Client SDK", Toast.LENGTH_LONG).show();
                 }
             });
         } else {
@@ -268,9 +270,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
         // Correlate desired properties of the Device (from ClientProfile) to properties of the Capability Token
         Uri.Builder b = Uri.parse(TOKEN_SERVICE_URL).buildUpon();
-        if (newClientProfile.isAllowOutgoing()) {
-            b.appendQueryParameter("allowOutgoing", newClientProfile.isAllowOutgoing() ? "true" : "false");
-        }
+//        if (newClientProfile.isAllowOutgoing()) {
+//            b.appendQueryParameter("allowOutgoing", newClientProfile.isAllowOutgoing() ? "true" : "false");
+//        }
         if (newClientProfile.isAllowIncoming() && newClientProfile.getName() != null) {
             b.appendQueryParameter("client", newClientProfile.getName());
         }
@@ -287,7 +289,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                             DebugTool.logD("NEW: " + clientProfile.getName());
                             createDevice(capabilityToken);
                         } else {
-                            Toast.makeText(getContext(), "Error retrieving token", Toast.LENGTH_SHORT).show();
+                            DebugTool.logD("Error retrieving token");
                         }
                     }
                 });
@@ -429,6 +431,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     }
 
     public static void startPhoneService(Context context) {
+        context.stopService(new Intent(context, PhoneService.class));
+
         Intent intent = new Intent(context, PhoneIntervalReceiver.class);
         intent.setAction(ACTION_WAKEUP);
         PendingIntent pIntent = PendingIntent.getBroadcast(context, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
