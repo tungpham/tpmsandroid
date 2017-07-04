@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
@@ -79,6 +80,7 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
     @Override
     public void loadIncomingPhoneNumbers(Context context) {
         mView.showLoading(true);
+        DebugTool.logD("LOAD INCOMING PHONE");
         ApiManager.getIncomingPhoneNumbers(context, new Callback<IncomingPhoneNumbers>() {
             @Override
             public void onResponse(Call<IncomingPhoneNumbers> call, Response<IncomingPhoneNumbers> response) {
@@ -87,6 +89,8 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
                     if (incomingPhoneNumbers != null && incomingPhoneNumbers.incomingPhoneNumbers != null && !incomingPhoneNumbers.incomingPhoneNumbers.isEmpty()) {
                         mView.showPhoneNumbers(response.body().incomingPhoneNumbers);
                     }
+                }else{
+                    mView.emptyPhoneNumber();
                 }
                 mView.showLoading(false);
             }

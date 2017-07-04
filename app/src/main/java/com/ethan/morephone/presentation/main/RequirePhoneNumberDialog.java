@@ -28,13 +28,7 @@ public class RequirePhoneNumberDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.require_phone_number_dialog_title));
         builder.setMessage(getString(R.string.require_phone_number_dialog_message));
-        builder.setPositiveButton(getString(R.string.require_phone_number_dialog_choose), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if(mRequirePhoneNumberListener != null) mRequirePhoneNumberListener.onChoosePhone();
-            }
-        });
-        builder.setNegativeButton(getString(R.string.require_phone_number_dialog_buy), new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.require_phone_number_dialog_buy), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(mRequirePhoneNumberListener != null) mRequirePhoneNumberListener.onBuyPhone();
@@ -49,7 +43,6 @@ public class RequirePhoneNumberDialog extends DialogFragment {
     }
 
     public interface RequirePhoneNumberListener {
-        void onChoosePhone();
         void onBuyPhone();
     }
 }

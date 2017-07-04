@@ -250,7 +250,8 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         @Override
         public void onSuccess(@NonNull Credentials credentials) {
             CredentialsManager.saveCredentials(getApplicationContext(), credentials);
-            nextActivity();
+            DebugTool.logD("SUCCESS NOW");
+//            nextActivity();
         }
     };
 

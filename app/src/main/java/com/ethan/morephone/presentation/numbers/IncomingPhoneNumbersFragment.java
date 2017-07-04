@@ -22,8 +22,10 @@ import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
+import com.ethan.morephone.presentation.main.RequirePhoneNumberDialog;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersViewHolder;
@@ -43,7 +45,8 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         NavigationView.OnNavigationItemSelectedListener,
         IncomingPhoneNumbersContract.View,
         DeletePhoneNumberDialog.DeletePhoneNumberListener,
-        View.OnClickListener {
+        View.OnClickListener,
+        RequirePhoneNumberDialog.RequirePhoneNumberListener {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
@@ -184,6 +187,13 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     }
 
     @Override
+    public void emptyPhoneNumber() {
+        RequirePhoneNumberDialog requirePhoneNumberDialog = RequirePhoneNumberDialog.getInstance();
+        requirePhoneNumberDialog.show(getChildFragmentManager(), RequirePhoneNumberDialog.class.getSimpleName());
+        requirePhoneNumberDialog.setRequirePhoneNumberListener(this);
+    }
+
+    @Override
     public void showFakeData(FakeData fakeData) {
         EventBus.getDefault().postSticky(fakeData);
     }
@@ -226,5 +236,15 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
         MyPreference.setFriendlyName(getContext(), incomingPhoneNumber.friendlyName);
         MyPreference.setPhoneNumberSid(getContext(), incomingPhoneNumber.sid);
+    }
+
+//    @Override
+//    public void onChoosePhone() {
+////        startActivity(new Intent(this, IncomingPhoneNumbersActivity.class));
+//    }
+
+    @Override
+    public void onBuyPhone() {
+        startActivity(new Intent(getActivity(), SearchPhoneNumberActivity.class));
     }
 }

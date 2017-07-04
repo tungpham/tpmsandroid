@@ -21,6 +21,8 @@ public interface IncomingPhoneNumbersContract {
 
         void showPhoneNumbers(List<IncomingPhoneNumber> incomingPhoneNumbers);
 
+        void emptyPhoneNumber();
+
         void showFakeData(FakeData fakeData);
     }
 

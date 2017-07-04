@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +29,6 @@ import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.buy.payment.fund.AddFundActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.license.LicenseActivity;
-import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.review.AlertReviewDialog;
 import com.ethan.morephone.presentation.setting.SettingActivity;
@@ -45,8 +42,7 @@ import com.ethan.morephone.utils.ActivityUtils;
 public class MainActivity extends BaseActivity implements
         SearchView.OnQueryTextListener,
         NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener,
-        RequirePhoneNumberDialog.RequirePhoneNumberListener {
+        View.OnClickListener{
 
     private final int REQUEST_INCOMING_PHONE = 100;
 
@@ -186,16 +182,6 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-    @Override
-    public void onChoosePhone() {
-        startActivity(new Intent(this, IncomingPhoneNumbersActivity.class));
-    }
-
-    @Override
-    public void onBuyPhone() {
-        startActivity(new Intent(this, SearchPhoneNumberActivity.class));
-    }
-
 
 //    private ServiceConnection mConnection = new ServiceConnection() {
 //        public void onServiceConnected(ComponentName className, IBinder service) {
@@ -210,25 +196,25 @@ public class MainActivity extends BaseActivity implements
 
 
     private void checkRequirePhoneNumber(boolean isVoice) {
-        if (TextUtils.isEmpty(MyPreference.getPhoneNumber(getApplicationContext()))) {
-            RequirePhoneNumberDialog requirePhoneNumberDialog = RequirePhoneNumberDialog.getInstance();
-            requirePhoneNumberDialog.show(getSupportFragmentManager(), RequirePhoneNumberDialog.class.getSimpleName());
-            requirePhoneNumberDialog.setRequirePhoneNumberListener(this);
-            ActivityUtils.replaceFragmentToActivity(
-                    getSupportFragmentManager(),
-                    new Fragment(),
-                    R.id.content_frame,
-                    DashboardFrag.class.getSimpleName());
-        } else {
-            IncomingPhoneNumbersFragment voiceFragment = IncomingPhoneNumbersFragment.getInstance();
+//        if (TextUtils.isEmpty(MyPreference.getPhoneNumber(getApplicationContext()))) {
+//            RequirePhoneNumberDialog requirePhoneNumberDialog = RequirePhoneNumberDialog.getInstance();
+//            requirePhoneNumberDialog.show(getSupportFragmentManager(), RequirePhoneNumberDialog.class.getSimpleName());
+//            requirePhoneNumberDialog.setRequirePhoneNumberListener(this);
+//            ActivityUtils.replaceFragmentToActivity(
+//                    getSupportFragmentManager(),
+//                    new Fragment(),
+//                    R.id.content_frame,
+//                    DashboardFrag.class.getSimpleName());
+//        } else {
+            IncomingPhoneNumbersFragment incomingPhoneNumbersFragment = IncomingPhoneNumbersFragment.getInstance();
 
 //            DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), isVoice);
             ActivityUtils.replaceFragmentToActivity(
                     getSupportFragmentManager(),
-                    voiceFragment,
+                    incomingPhoneNumbersFragment,
                     R.id.content_frame,
                     IncomingPhoneNumbersFragment.class.getSimpleName());
-        }
+//        }
         enableActionBar(mToolbar, getString(R.string.my_number_label));
     }
 
