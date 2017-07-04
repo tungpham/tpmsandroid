@@ -40,7 +40,7 @@ import static com.twilio.client.impl.TwilioImpl.getContext;
 public class PhoneService extends Service implements DeviceListener, ConnectionListener {
 
 //    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
-    private static final String TOKEN_SERVICE_URL = "https://thawing-beyond-50622.herokuapp.com/twilio/create/token";
+    private static final String TOKEN_SERVICE_URL = "https://serene-retreat-83757.herokuapp.com/twilio/create/token";
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 
