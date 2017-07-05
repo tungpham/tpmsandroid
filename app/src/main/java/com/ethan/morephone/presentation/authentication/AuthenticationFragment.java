@@ -34,6 +34,7 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.presentation.authentication.register.RegisterActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
+import com.ethan.morephone.presentation.splash.SplashActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -86,27 +87,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         Credentials credentials = CredentialsManager.getCredentials(getApplicationContext());
         if (credentials != null) accessToken = credentials.getAccessToken();
 
-        if (!TextUtils.isEmpty(accessToken)) {
-            AuthenticationAPIClient aClient = new AuthenticationAPIClient(auth0);
-            aClient.userInfo(accessToken)
-                    .start(new BaseCallback<UserProfile, AuthenticationException>() {
-                        @Override
-                        public void onSuccess(final UserProfile payload) {
-                            if (payload != null
-                                    && payload.getUserMetadata() != null
-                                    && payload.getUserMetadata().containsKey("sid")
-                                    && payload.getUserMetadata().containsKey("auth_code")) {
-                                TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
-                            }
-                            nextActivity();
-                        }
-
-                        @Override
-                        public void onFailure(AuthenticationException error) {
-                            CredentialsManager.deleteCredentials(getApplicationContext());
-                        }
-                    });
-        }
+        checkAccessToken(accessToken);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -161,7 +142,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_authentication, menu);
+//        inflater.inflate(R.menu.menu_authentication, menu);
     }
 
     @Override
@@ -250,7 +231,10 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         @Override
         public void onSuccess(@NonNull Credentials credentials) {
             CredentialsManager.saveCredentials(getApplicationContext(), credentials);
-            DebugTool.logD("SUCCESS NOW");
+            startActivity(new Intent(getActivity(), SplashActivity.class));
+            getActivity().finish();
+//            checkAccessToken(credentials.getAccessToken());
+//            DebugTool.logD("SUCCESS NOW");
 //            nextActivity();
         }
     };
@@ -258,6 +242,33 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     private void nextActivity() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         getActivity().finish();
+    }
+
+    private void checkAccessToken(String accessToken){
+        if (!TextUtils.isEmpty(accessToken)) {
+//            showProgress();
+            AuthenticationAPIClient aClient = new AuthenticationAPIClient(auth0);
+            aClient.userInfo(accessToken)
+                    .start(new BaseCallback<UserProfile, AuthenticationException>() {
+                        @Override
+                        public void onSuccess(final UserProfile payload) {
+                            if (payload != null
+                                    && payload.getUserMetadata() != null
+                                    && payload.getUserMetadata().containsKey("sid")
+                                    && payload.getUserMetadata().containsKey("auth_code")) {
+                                TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
+                            }
+//                            hideProgress();
+                            nextActivity();
+                        }
+
+                        @Override
+                        public void onFailure(AuthenticationException error) {
+                            CredentialsManager.deleteCredentials(getApplicationContext());
+//                            hideProgress();
+                        }
+                    });
+        }
     }
 
 }

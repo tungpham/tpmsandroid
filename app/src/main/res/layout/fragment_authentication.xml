@@ -27,7 +27,7 @@
         style="@style/ButtonWhite"
         android:layout_below="@+id/text_authentication_title"
         android:layout_marginTop="@dimen/text_message_margin_top"
-        android:text="@string/authentication_button_facebook" />
+        android:text="@string/authentication_button_google" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_authentication_create_account"
@@ -41,7 +41,8 @@
         android:layout_below="@+id/button_authentication_create_account"
         android:layout_marginTop="@dimen/text_more_option_margin_top"
         android:background="?android:attr/selectableItemBackground"
-        android:text="@string/authentication_text_options" />
+        android:text="@string/authentication_text_options"
+        android:visibility="gone"/>
 
     <com.ethan.morephone.widget.MyTextView
         android:id="@+id/text_terms_services"
