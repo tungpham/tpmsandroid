@@ -172,6 +172,9 @@
     <!-- Fragment License -->
     <string name="license_label">License</string>
 
+    <!-- Available Phone Number -->
+    <string name="available_phone_number_empty">We couldn\'t find any numbers that matched your search criteria.</string>
+
     <!-- Fragment Buy a number -->
     <string name="buy_number_label">Buy a number</string>
     <string name="buy_number_country">Country</string>
@@ -195,6 +198,7 @@
     <string name="purchase_fax_summary">This number can send and receive facsimiles</string>
     <string name="purchase_mms">MMS</string>
     <string name="purchase_mms_summary">This number can send and receive multi media messages to and from mobile number</string>
+    <string name="purchase_fail">Purchase fail</string>
 
     <!-- Fragment Add Fund -->
     <string name="add_fund_label">Add Fund</string>

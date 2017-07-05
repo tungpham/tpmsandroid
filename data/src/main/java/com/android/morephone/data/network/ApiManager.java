@@ -272,6 +272,12 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    public static void buyIncomingPhoneNumber(Context context,
+                                          String phoneNumber,
+                                          Callback<IncomingPhoneNumber> callback) {
+        Call<IncomingPhoneNumber> call = getApiPath(context).buyIncomingPhoneNumber(TwilioManager.getSid(context), phoneNumber);
+        call.enqueue(callback);
+    }
 
     /*-----------------------------------------RECORDINGS-----------------------------------------*/
 

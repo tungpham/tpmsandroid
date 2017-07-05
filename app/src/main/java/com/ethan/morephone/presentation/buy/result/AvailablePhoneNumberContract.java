@@ -19,6 +19,8 @@ public interface AvailablePhoneNumberContract {
         void showLoading(boolean isActive);
 
         void showResultSearchNumber(List<AvailablePhoneNumber> availablePhoneNumbers);
+
+        void emptyPhoneNumberAvailable();
     }
 
     interface Presenter extends BasePresenter {

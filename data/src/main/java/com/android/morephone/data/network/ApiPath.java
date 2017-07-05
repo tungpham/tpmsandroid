@@ -64,6 +64,11 @@ interface ApiPath {
                                                  @Path("incomingPhoneNumberSid") String incomingPhoneNumberSid,
                                                  @Field("FriendlyName") String friendlyName);
 
+    @FormUrlEncoded
+    @POST("Accounts/{accountsid}/IncomingPhoneNumbers.json")
+    Call<IncomingPhoneNumber> buyIncomingPhoneNumber(@Path("accountsid") String accountSid,
+                                                 @Field("PhoneNumber") String phoneNumber);
+
     /*-----------------------------------------MESSAGE-----------------------------------------*/
 
     @FormUrlEncoded

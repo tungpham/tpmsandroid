@@ -1,5 +1,7 @@
 package com.ethan.morephone.presentation.buy.result;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumber;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberFragment;
@@ -81,12 +85,27 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements
     }
 
     @Override
+    public void emptyPhoneNumberAvailable() {
+        Toast.makeText(getContext(), getString(R.string.available_phone_number_empty), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void setPresenter(AvailablePhoneNumberContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
     @Override
     public void onBuyPhoneNumber(AvailablePhoneNumber availablePhoneNumber) {
-        PurchaseActivity.starter(getActivity(), availablePhoneNumber.friendlyName, "$1.00", availablePhoneNumber.capabilities.voice, availablePhoneNumber.capabilities.SMS, availablePhoneNumber.capabilities.MMS, availablePhoneNumber.capabilities.fax);
+        DebugTool.logD("availablePhoneNumber.capabilities.voice: " + availablePhoneNumber.capabilities.voice);
+        PurchaseActivity.starter(getActivity(), availablePhoneNumber.friendlyName, availablePhoneNumber.phoneNumber, "$1.00", availablePhoneNumber.capabilities.voice, availablePhoneNumber.capabilities.SMS, availablePhoneNumber.capabilities.MMS, availablePhoneNumber.capabilities.fax);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PurchaseActivity.REQUEST_PURCHASE_ACTIVITY && resultCode == Activity.RESULT_OK) {
+            getActivity().setResult(Activity.RESULT_OK);
+            getActivity().finish();
+        }
     }
 }

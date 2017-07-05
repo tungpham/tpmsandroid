@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
 
 import retrofit2.Call;
@@ -27,6 +28,7 @@ public class AvailablePhoneNumberPresenter implements AvailablePhoneNumberContra
     @Override
     public void searchPhoneNumber(Context context, String countryCode, String phoneNumber, boolean smsEnabled, boolean mmsEnabled, boolean voiceEnabled) {
         mView.showLoading(true);
+        DebugTool.logD("RESULT: " + smsEnabled + "    ||   mmsEnabled: " + mmsEnabled + "   ||   voiceEnabled: " + voiceEnabled);
         ApiManager.getAvailablePhoneNumbers(context,
                 countryCode,
                 phoneNumber,
@@ -34,19 +36,22 @@ public class AvailablePhoneNumberPresenter implements AvailablePhoneNumberContra
                 mmsEnabled,
                 voiceEnabled,
                 new Callback<AvailablePhoneNumbers>() {
-            @Override
-            public void onResponse(Call<AvailablePhoneNumbers> call, Response<AvailablePhoneNumbers> response) {
-                if(response.isSuccessful()){
-                    mView.showResultSearchNumber(response.body().availableAvailablePhoneNumbers);
-                }
-                mView.showLoading(false);
-            }
+                    @Override
+                    public void onResponse(Call<AvailablePhoneNumbers> call, Response<AvailablePhoneNumbers> response) {
+                        if (response.isSuccessful() && response.body().availableAvailablePhoneNumbers != null && !response.body().availableAvailablePhoneNumbers.isEmpty()) {
+                            mView.showResultSearchNumber(response.body().availableAvailablePhoneNumbers);
+                        } else {
+                            mView.emptyPhoneNumberAvailable();
+                        }
+                        mView.showLoading(false);
+                    }
 
-            @Override
-            public void onFailure(Call<AvailablePhoneNumbers> call, Throwable t) {
-                mView.showLoading(false);
-            }
-        });
+                    @Override
+                    public void onFailure(Call<AvailablePhoneNumbers> call, Throwable t) {
+                        mView.showLoading(false);
+                        mView.emptyPhoneNumberAvailable();
+                    }
+                });
     }
 
     @Override

@@ -71,4 +71,23 @@ public class IncomingPhoneNumberRemoteDataSource implements IncomingPhoneNumberD
             }
         });
     }
+
+    @Override
+    public void buyIncomingPhoneNumber(String phoneNumber, @NonNull final GetIncomingPhoneNumberCallback callback) {
+        ApiManager.buyIncomingPhoneNumber(mContext, phoneNumber, new Callback<IncomingPhoneNumber>() {
+            @Override
+            public void onResponse(Call<IncomingPhoneNumber> call, Response<IncomingPhoneNumber> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onIncomingPhoneNumberLoaded(response.body());
+                } else {
+                    callback.onDataNotAvailable();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IncomingPhoneNumber> call, Throwable t) {
+                callback.onDataNotAvailable();
+            }
+        });
+    }
 }

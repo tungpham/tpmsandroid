@@ -31,4 +31,5 @@ public interface IncomingPhoneNumberDataSource {
 
     void changeFriendlyName(String accountSid, String incomingPhoneNumberSid, String friendlyName, @NonNull GetIncomingPhoneNumberCallback callback);
 
+    void buyIncomingPhoneNumber(String phoneNumber, @NonNull GetIncomingPhoneNumberCallback callback);
 }

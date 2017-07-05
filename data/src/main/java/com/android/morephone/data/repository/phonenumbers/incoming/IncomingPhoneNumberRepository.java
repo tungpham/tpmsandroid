@@ -38,4 +38,9 @@ public class IncomingPhoneNumberRepository implements IncomingPhoneNumberDataSou
     public void changeFriendlyName(String accountSid, String incomingPhoneNumberSid, String friendlyName, @NonNull GetIncomingPhoneNumberCallback callback) {
         mIncomingPhoneNumberDataSource.changeFriendlyName(accountSid, incomingPhoneNumberSid, friendlyName, callback);
     }
+
+    @Override
+    public void buyIncomingPhoneNumber(String phoneNumber, @NonNull IncomingPhoneNumberDataSource.GetIncomingPhoneNumberCallback callback) {
+        mIncomingPhoneNumberDataSource.buyIncomingPhoneNumber(phoneNumber, callback);
+    }
 }

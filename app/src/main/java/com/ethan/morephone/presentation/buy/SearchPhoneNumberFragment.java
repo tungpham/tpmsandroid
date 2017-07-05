@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.buy;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,6 +37,8 @@ public class SearchPhoneNumberFragment extends BaseFragment implements
     public static final String BUNDLE_SMS_ENABLE = "BUNDLE_SMS_ENABLE";
     public static final String BUNDLE_MMS_ENABLE = "BUNDLE_MMS_ENABLE";
     public static final String BUNDLE_VOICE_ENABLE = "BUNDLE_VOICE_ENABLE";
+
+    private final int REQUEST_AVAILABLE_PHONE_NUMBER = 100;
 
 
     public static SearchPhoneNumberFragment getInstance() {
@@ -83,15 +86,17 @@ public class SearchPhoneNumberFragment extends BaseFragment implements
 
     @Override
     public void onClick(View view) {
+
         switch (view.getId()) {
+
             case R.id.button_buy_number_search:
 
-                String countryName = ((AvailableCountry)mSpinnerCountry.getSelectedItem()).country;
-                String countryCode = ((AvailableCountry)mSpinnerCountry.getSelectedItem()).countryCode;
+                String countryName = ((AvailableCountry) mSpinnerCountry.getSelectedItem()).country;
+                String countryCode = ((AvailableCountry) mSpinnerCountry.getSelectedItem()).countryCode;
                 String phoneNumber = mEditTextPhoneNumber.getText().toString();
-                boolean smsEnabled = mSwitchSms.isEnabled();
-                boolean mmsEnabled = mSwitchMms.isEnabled();
-                boolean voiceEnabled = mSwitchVoice.isEnabled();
+                boolean smsEnabled = mSwitchSms.isChecked();
+                boolean mmsEnabled = mSwitchMms.isChecked();
+                boolean voiceEnabled = mSwitchVoice.isChecked();
 
                 Intent intent = new Intent(getActivity(), AvailablePhoneNumberActivity.class);
                 Bundle bundle = new Bundle();
@@ -103,8 +108,9 @@ public class SearchPhoneNumberFragment extends BaseFragment implements
                 bundle.putBoolean(BUNDLE_VOICE_ENABLE, voiceEnabled);
                 intent.putExtras(bundle);
 
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_AVAILABLE_PHONE_NUMBER);
                 break;
+
             default:
                 break;
         }
@@ -122,7 +128,7 @@ public class SearchPhoneNumberFragment extends BaseFragment implements
 
     @Override
     public void showLoading(boolean isActive) {
-        if(isActive) showProgress();
+        if (isActive) showProgress();
         else hideProgress();
     }
 
@@ -134,5 +140,14 @@ public class SearchPhoneNumberFragment extends BaseFragment implements
     @Override
     public void setPresenter(SearchPhoneNumberContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_AVAILABLE_PHONE_NUMBER && resultCode == Activity.RESULT_OK) {
+            getActivity().setResult(Activity.RESULT_OK);
+            getActivity().finish();
+        }
     }
 }

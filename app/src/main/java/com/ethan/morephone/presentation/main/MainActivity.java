@@ -15,6 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.morephone.data.entity.price.PricePhoneNumber;
+import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.ApiPriceManager;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.auth0.android.Auth0;
 import com.auth0.android.authentication.AuthenticationAPIClient;
@@ -27,13 +30,16 @@ import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.buy.payment.fund.AddFundActivity;
-import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.license.LicenseActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.review.AlertReviewDialog;
 import com.ethan.morephone.presentation.setting.SettingActivity;
 import com.ethan.morephone.presentation.usage.UsageActivity;
 import com.ethan.morephone.utils.ActivityUtils;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -42,9 +48,10 @@ import com.ethan.morephone.utils.ActivityUtils;
 public class MainActivity extends BaseActivity implements
         SearchView.OnQueryTextListener,
         NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener{
+        View.OnClickListener {
 
     private final int REQUEST_INCOMING_PHONE = 100;
+    private final int REQUEST_BUY_PHONE_NUMBER = REQUEST_INCOMING_PHONE + 1;
 
     private Toolbar mToolbar;
 
@@ -67,15 +74,23 @@ public class MainActivity extends BaseActivity implements
 
         setUpNavigation();
 
-        boolean isVoice = false;
-        if (getIntent() != null) {
-            isVoice = getIntent().getBooleanExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
-        }
-        checkRequirePhoneNumber(isVoice);
+        checkRequirePhoneNumber();
 
         MyPreference.setTimesUse(getApplicationContext(), MyPreference.getTimesUse(getApplicationContext()) + 1);
 
+        ApiPriceManager.getPrice(getApplicationContext(), new Callback<PricePhoneNumber>() {
+            @Override
+            public void onResponse(Call<PricePhoneNumber> call, Response<PricePhoneNumber> response) {
+                if (response.isSuccessful()) {
+                    DebugTool.logD("RESPONSE");
+                }
+            }
 
+            @Override
+            public void onFailure(Call<PricePhoneNumber> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -100,10 +115,10 @@ public class MainActivity extends BaseActivity implements
         mDrawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.nav_card:
-                startActivityForResult(new Intent(this, AddFundActivity.class), REQUEST_INCOMING_PHONE);
+                startActivity(new Intent(this, AddFundActivity.class));
                 break;
             case R.id.nav_buy_number:
-                startActivity(new Intent(this, SearchPhoneNumberActivity.class));
+                startActivityForResult(new Intent(this, SearchPhoneNumberActivity.class), REQUEST_BUY_PHONE_NUMBER);
                 break;
             case R.id.nav_setting:
                 startActivity(new Intent(this, SettingActivity.class));
@@ -172,49 +187,27 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_INCOMING_PHONE && resultCode == RESULT_OK) {
 
-            boolean isVoice = false;
-            if (data != null) {
-                isVoice = data.getBooleanExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
-            }
-            checkRequirePhoneNumber(isVoice);
+        switch (requestCode) {
+            case REQUEST_BUY_PHONE_NUMBER:
+                if (resultCode == RESULT_OK) {
+                    checkRequirePhoneNumber();
+                }
+                break;
+
+            default:
+                break;
         }
+
     }
 
-
-//    private ServiceConnection mConnection = new ServiceConnection() {
-//        public void onServiceConnected(ComponentName className, IBinder service) {
-//            mPhoneService = ((PhoneService.LocalBinder) service).getService();
-//            DebugTool.logD("SERVICE CONNECTED ");
-//        }
-//
-//        public void onServiceDisconnected(ComponentName className) {
-//            mPhoneService = null;
-//        }
-//    };
-
-
-    private void checkRequirePhoneNumber(boolean isVoice) {
-//        if (TextUtils.isEmpty(MyPreference.getPhoneNumber(getApplicationContext()))) {
-//            RequirePhoneNumberDialog requirePhoneNumberDialog = RequirePhoneNumberDialog.getInstance();
-//            requirePhoneNumberDialog.show(getSupportFragmentManager(), RequirePhoneNumberDialog.class.getSimpleName());
-//            requirePhoneNumberDialog.setRequirePhoneNumberListener(this);
-//            ActivityUtils.replaceFragmentToActivity(
-//                    getSupportFragmentManager(),
-//                    new Fragment(),
-//                    R.id.content_frame,
-//                    DashboardFrag.class.getSimpleName());
-//        } else {
-            IncomingPhoneNumbersFragment incomingPhoneNumbersFragment = IncomingPhoneNumbersFragment.getInstance();
-
-//            DashboardFrag numbersFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), isVoice);
-            ActivityUtils.replaceFragmentToActivity(
-                    getSupportFragmentManager(),
-                    incomingPhoneNumbersFragment,
-                    R.id.content_frame,
-                    IncomingPhoneNumbersFragment.class.getSimpleName());
-//        }
+    private void checkRequirePhoneNumber() {
+        IncomingPhoneNumbersFragment incomingPhoneNumbersFragment = IncomingPhoneNumbersFragment.getInstance();
+        ActivityUtils.replaceFragmentToActivity(
+                getSupportFragmentManager(),
+                incomingPhoneNumbersFragment,
+                R.id.content_frame,
+                IncomingPhoneNumbersFragment.class.getSimpleName());
         enableActionBar(mToolbar, getString(R.string.my_number_label));
     }
 

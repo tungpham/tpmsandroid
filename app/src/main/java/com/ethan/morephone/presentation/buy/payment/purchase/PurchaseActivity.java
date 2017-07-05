@@ -1,6 +1,6 @@
 package com.ethan.morephone.presentation.buy.payment.purchase;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +18,7 @@ import com.ethan.morephone.utils.ActivityUtils;
 
 public class PurchaseActivity extends BaseActivity {
 
+    public static final String BUNDLE_FRIENDLY_PHONE_NUMBER = "BUNDLE_FRIENDLY_PHONE_NUMBER";
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
     public static final String BUNDLE_PRICE = "BUNDLE_PRICE";
     public static final String BUNDLE_IS_VOICE = "BUNDLE_IS_VOICE";
@@ -25,9 +26,12 @@ public class PurchaseActivity extends BaseActivity {
     public static final String BUNDLE_IS_MMS = "BUNDLE_IS_MMS";
     public static final String BUNDLE_IS_FAX = "BUNDLE_IS_FAX";
 
-    public static void starter(Context context, String phoneNumber, String price, boolean isVoice, boolean isSms, boolean isMms, boolean isFax) {
-        Intent intent = new Intent(context, PurchaseActivity.class);
+    public static final int REQUEST_PURCHASE_ACTIVITY = 100;
+
+    public static void starter(Activity activity, String friendlyPhoneNumber, String phoneNumber, String price, boolean isVoice, boolean isSms, boolean isMms, boolean isFax) {
+        Intent intent = new Intent(activity, PurchaseActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_FRIENDLY_PHONE_NUMBER, friendlyPhoneNumber);
         bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
         bundle.putString(BUNDLE_PRICE, price);
         bundle.putBoolean(BUNDLE_IS_VOICE, isVoice);
@@ -35,7 +39,7 @@ public class PurchaseActivity extends BaseActivity {
         bundle.putBoolean(BUNDLE_IS_MMS, isMms);
         bundle.putBoolean(BUNDLE_IS_FAX, isFax);
         intent.putExtras(bundle);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, REQUEST_PURCHASE_ACTIVITY);
     }
 
     @Override

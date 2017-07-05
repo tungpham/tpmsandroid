@@ -25,6 +25,7 @@ import com.android.morephone.domain.usecase.message.GetAllMessages;
 import com.android.morephone.domain.usecase.message.GetMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
+import com.android.morephone.domain.usecase.number.BuyIncomingPhoneNumber;
 import com.android.morephone.domain.usecase.number.DeleteIncomingPhoneNumber;
 import com.android.morephone.domain.usecase.number.GetAvailableCountries;
 import com.android.morephone.domain.usecase.number.incoming.ChangeFriendlyName;
@@ -123,6 +124,10 @@ public class Injection {
 
     public static ChangeFriendlyName providerChangeFriendlyName(@NonNull Context context) {
         return new ChangeFriendlyName(providerIncomingPhoneNumberRepository(context));
+    }
+
+    public static BuyIncomingPhoneNumber providerBuyIncomingPhoneNumber(@NonNull Context context) {
+        return new BuyIncomingPhoneNumber(providerIncomingPhoneNumberRepository(context));
     }
 
     /*-----------------------------------------RECORD-----------------------------------------*/
