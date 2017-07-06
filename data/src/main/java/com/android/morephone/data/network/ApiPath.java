@@ -124,10 +124,10 @@ interface ApiPath {
     Call<Calls> getCalls(@Path("accountsid") String accountsid, @Query("To") String phoneNumberIncoming, @Query("From") String phoneNumberOutgoing);
 
     @GET("Accounts/{accountsid}/Calls.json")
-    Call<Calls> getCallsIncoming(@Path("accountsid") String accountsid, @Query("To") String phoneNumberIncoming);
+    Call<Calls> getCallsIncoming(@Path("accountsid") String accountsid, @Query("To") String phoneNumberIncoming, @Query("PageSize") int pageSize, @Query("Page") int page);
 
     @GET("Accounts/{accountsid}/Calls.json")
-    Call<Calls> getCallsOutgoing(@Path("accountsid") String accountsid, @Query("From") String phoneNumberOutgoing);
+    Call<Calls> getCallsOutgoing(@Path("accountsid") String accountsid, @Query("From") String phoneNumberOutgoing, @Query("PageSize") int pageSize, @Query("Page") int page);
 
     @GET("Accounts/{accountsid}/Calls/{callsid}.json")
     Call<com.android.morephone.data.entity.call.Call> getCall(@Path("accountsid") String accountsid, @Path("callsid") String callsid);

@@ -32,6 +32,7 @@ public class PurchaseFragment extends BaseFragment implements
     }
 
     private PurchaseContract.Presenter mPresenter;
+
     private String mPhoneNumber;
 
     @Override

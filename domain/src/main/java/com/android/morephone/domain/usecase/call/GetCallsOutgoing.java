@@ -22,7 +22,7 @@ public class GetCallsOutgoing extends UseCase<GetCallsOutgoing.RequestValue, Get
 
     @Override
     protected void executeUseCase(RequestValue requestValue) {
-        mVoiceRepository.getCallsOutgoing(requestValue.getPhoneNumberOutgoing(), new CallDataSource.LoadCallCallback() {
+        mVoiceRepository.getCallsOutgoing(requestValue.getPhoneNumberOutgoing(), requestValue.getPage(), new CallDataSource.LoadCallCallback() {
             @Override
             public void onCallLoaded(Calls calls) {
                 getUseCaseCallback().onSuccess(new ResponseValue(calls));
@@ -38,13 +38,19 @@ public class GetCallsOutgoing extends UseCase<GetCallsOutgoing.RequestValue, Get
     public static final class RequestValue implements UseCase.RequestValue {
 
         private final String mPhoneNumberOutgoing;
+        private final int mPage;
 
-        public RequestValue(String phoneNumberOutgoing) {
+        public RequestValue(String phoneNumberOutgoing, int page) {
             this.mPhoneNumberOutgoing = phoneNumberOutgoing;
+            this.mPage = page;
         }
 
         public String getPhoneNumberOutgoing() {
             return mPhoneNumberOutgoing;
+        }
+
+        public int getPage(){
+            return mPage;
         }
     }
 

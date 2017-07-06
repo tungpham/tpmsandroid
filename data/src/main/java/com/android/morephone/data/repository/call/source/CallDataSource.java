@@ -31,9 +31,9 @@ public interface CallDataSource {
 
     void getCalls(String phoneNumberIncoming, String phoneNumberOutgoing, @NonNull LoadCallCallback callback);
 
-    void getCallsIncoming(String phoneNumber, @NonNull LoadCallCallback callback);
+    void getCallsIncoming(String phoneNumber, int page, @NonNull LoadCallCallback callback);
 
-    void getCallsOutgoing(String phoneNumber, @NonNull LoadCallCallback callback);
+    void getCallsOutgoing(String phoneNumber, int page, @NonNull LoadCallCallback callback);
 
     void getCall(String callSid, @NonNull GetCallCallback callback);
 

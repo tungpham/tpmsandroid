@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.call.Call;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TextDrawable;
@@ -18,7 +19,9 @@ import java.util.List;
  * Created by Ethan on 3/16/17.
  */
 
-public class CallLogAdapter extends RecyclerView.Adapter<CallLogViewHolder> {
+public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private final int VIEW_TYPE_LOADING = 1;
 
     private List<Call> mCalls;
     private TextDrawable.IBuilder mDrawableBuilder;
@@ -43,35 +46,52 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogViewHolder> {
         return mCalls;
     }
 
+
     @Override
-    public CallLogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_call_log, parent, false);
-        return new CallLogViewHolder(itemView);
+    public int getItemViewType(int position) {
+        int VIEW_TYPE_ITEM = 0;
+        return mCalls.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+    }
+
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_LOADING) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more, parent, false);
+            DebugTool.logD("LOADING....");
+            return new LoadingViewHolder(view);
+        } else {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_call_log, parent, false);
+            return new CallLogViewHolder(itemView);
+        }
     }
 
     @Override
-    public void onBindViewHolder(final CallLogViewHolder holder, final int position) {
-        final Call callEntity = mCalls.get(position);
-        if (mPhoneNumber.equals(callEntity.from)) {
-            holder.textPhoneNumber.setText(callEntity.to);
-            holder.imageStatus.setImageResource(R.drawable.ic_call_outgoing_holo_dark);
-        } else {
-            holder.textPhoneNumber.setText(callEntity.from);
-            holder.imageStatus.setImageResource(R.drawable.ic_call_incoming_holo_dark);
-        }
-        holder.textTime.setText(Utils.formatDate(callEntity.dateCreated));
-
-        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(callEntity.from.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
-
-
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnItemCallLogClickListener.onCall(callEntity);
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final int position) {
+        if (viewHolder instanceof CallLogViewHolder) {
+            CallLogViewHolder holder = (CallLogViewHolder) viewHolder;
+            final Call callEntity = mCalls.get(position);
+            if (callEntity.direction.endsWith("outbound-dial")) {
+                holder.textPhoneNumber.setText(callEntity.toFormatted);
+                holder.imageStatus.setImageResource(R.drawable.ic_call_outgoing_holo_dark);
+            } else if (callEntity.direction.endsWith("inbound")) {
+                holder.textPhoneNumber.setText(callEntity.fromFormatted);
+                holder.imageStatus.setImageResource(R.drawable.ic_call_incoming_holo_dark);
+            } else {
+                DebugTool.logD("COME NOW");
             }
-        });
+            holder.textTime.setText(Utils.formatDate(callEntity.dateCreated));
 
+            holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(callEntity.from.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
+
+
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnItemCallLogClickListener.onCall(callEntity);
+                }
+            });
+        }
 
     }
 
@@ -81,7 +101,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogViewHolder> {
         return mCalls.size();
     }
 
-    public interface OnItemCallLogClickListener{
+    public interface OnItemCallLogClickListener {
         void onCall(Call call);
     }
 }

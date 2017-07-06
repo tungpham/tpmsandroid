@@ -1,6 +1,5 @@
 package com.ethan.morephone.presentation.phone.log;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -13,10 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.call.Call;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
-import com.ethan.morephone.presentation.phone.incall.InCallActivity;
+import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.presentation.phone.log.adapter.CallLogAdapter;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
@@ -31,11 +31,11 @@ import java.util.List;
 
 public class CallLogFragment extends BaseFragment implements
         CallLogContract.View,
-        CallLogAdapter.OnItemCallLogClickListener{
+        CallLogAdapter.OnItemCallLogClickListener {
 
     private static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
 
-    public static CallLogFragment getInstance(String phoneNumber){
+    public static CallLogFragment getInstance(String phoneNumber) {
         CallLogFragment callLogFragment = new CallLogFragment();
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
@@ -48,6 +48,11 @@ public class CallLogFragment extends BaseFragment implements
     private String mPhoneNumber;
 
     private CallLogContract.Presenter mPresenter;
+
+    private int mPageOutgoing = 0;
+    private int mPageIncoming = 0;
+    private boolean isLoading = true;
+    private int lastVisibleItem, totalItemCount;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +72,30 @@ public class CallLogFragment extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (linearLayoutManager != null) {
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    linearLayoutManager.findFirstVisibleItemPosition();
+                }
+
+                if (!isLoading && totalItemCount <= (lastVisibleItem + 5)) {
+                    isLoading = true;
+                    mPageIncoming++;
+                    mPageOutgoing++;
+                    DebugTool.logD("PAGE: " + mPageOutgoing);
+                    loadData();
+//                    mPresenter.getTasks(mCurrPage);
+                }
+            }
+        });
+
 
         mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 
@@ -82,6 +111,9 @@ public class CallLogFragment extends BaseFragment implements
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
+                            mPageIncoming = 0;
+                            mPageOutgoing = 0;
+                            mCallLogAdapter.getData().clear();
                             loadData();
                         }
                     });
@@ -110,29 +142,30 @@ public class CallLogFragment extends BaseFragment implements
 
     @Override
     public void showCallLog(List<Call> calls) {
-        mCallLogAdapter.replaceData(calls);
+        if (isAdded()) {
+            mCallLogAdapter.getData().addAll(calls);
+            mCallLogAdapter.replaceData(mCallLogAdapter.getData());
+            isLoading = false;
+        }
     }
 
     @Override
     public void onCall(Call call) {
-        Intent intent = new Intent(getActivity(), InCallActivity.class);
-        Bundle bundle = new Bundle();
         String phoneNumber;
         if (call.from.equals(mPhoneNumber)) {
             phoneNumber = call.to;
         } else {
             phoneNumber = call.from;
         }
-        bundle.putString(InCallActivity.BUNDLE_TO_PHONE_NUMBER, phoneNumber);
-        intent.putExtras(bundle);
-        startActivity(intent);
+
+        PhoneActivity.starterOutgoing(getActivity(), mPhoneNumber, phoneNumber);
     }
 
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
             mPresenter.clearData();
-            mPresenter.loadCallsIncoming(mPhoneNumber);
-            mPresenter.loadCallsOutgoing(mPhoneNumber);
+            mPresenter.loadCallsIncoming(mPhoneNumber, mPageIncoming);
+            mPresenter.loadCallsOutgoing(mPhoneNumber, mPageOutgoing);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }

@@ -22,9 +22,9 @@ public interface CallLogContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadCallsIncoming(String phoneNumberIncoming);
+        void loadCallsIncoming(String phoneNumberIncoming, int pageIncoming);
 
-        void loadCallsOutgoing(String phoneNumberOutgoing);
+        void loadCallsOutgoing(String phoneNumberOutgoing, int pageOutgoing);
 
         void clearData();
 

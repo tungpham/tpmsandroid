@@ -40,13 +40,13 @@ public class CallRepository implements CallDataSource {
     }
 
     @Override
-    public void getCallsIncoming(String phoneNumber, @NonNull LoadCallCallback callback) {
-        mCallRemoteDataSource.getCallsIncoming(phoneNumber, callback);
+    public void getCallsIncoming(String phoneNumber, int page, @NonNull LoadCallCallback callback) {
+        mCallRemoteDataSource.getCallsIncoming(phoneNumber, page, callback);
     }
 
     @Override
-    public void getCallsOutgoing(String phoneNumber, @NonNull LoadCallCallback callback) {
-        mCallRemoteDataSource.getCallsOutgoing(phoneNumber, callback);
+    public void getCallsOutgoing(String phoneNumber, int page, @NonNull LoadCallCallback callback) {
+        mCallRemoteDataSource.getCallsOutgoing(phoneNumber, page, callback);
     }
 
     @Override

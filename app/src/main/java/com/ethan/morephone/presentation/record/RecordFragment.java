@@ -26,7 +26,7 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
 import com.ethan.morephone.presentation.message.list.MessageListFragment;
-import com.ethan.morephone.presentation.phone.incall.InCallActivity;
+import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.presentation.record.adapter.RecordAdapter;
 import com.ethan.morephone.presentation.record.adapter.RecordsViewHolder;
 import com.ethan.morephone.presentation.record.adapter.StateRecord;
@@ -301,17 +301,7 @@ public class RecordFragment extends BaseFragment implements
 
     @Override
     public void onCall(Record record) {
-        Intent intent = new Intent(getActivity(), InCallActivity.class);
-        Bundle bundle = new Bundle();
-//        String phoneNumber = record.phoneNumber;
-//        if (voiceItem.from.equals(mPhoneNumber)) {
-//            phoneNumber = voiceItem.to;
-//        } else {
-//            phoneNumber = voiceItem.from;
-//        }
-        bundle.putString(InCallActivity.BUNDLE_TO_PHONE_NUMBER, record.phoneNumber);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        PhoneActivity.starterOutgoing(getActivity(), mPhoneNumber, record.phoneNumber);
     }
 
     @Override

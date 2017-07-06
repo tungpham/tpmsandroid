@@ -47,9 +47,9 @@ public class CallLogPresenter implements CallLogContract.Presenter {
     }
 
     @Override
-    public void loadCallsIncoming(String phoneNumberIncoming) {
+    public void loadCallsIncoming(String phoneNumberIncoming, int pageIncoming) {
         mView.showLoading(true);
-        GetCallsIncoming.RequestValue requestValue = new GetCallsIncoming.RequestValue(phoneNumberIncoming);
+        GetCallsIncoming.RequestValue requestValue = new GetCallsIncoming.RequestValue(phoneNumberIncoming, pageIncoming);
         mUseCaseHandler.execute(mGetCallsIncoming, requestValue, new UseCase.UseCaseCallback<GetCallsIncoming.ResponseValue>() {
             @Override
             public void onSuccess(GetCallsIncoming.ResponseValue response) {
@@ -65,9 +65,9 @@ public class CallLogPresenter implements CallLogContract.Presenter {
     }
 
     @Override
-    public void loadCallsOutgoing(String phoneNumberOutgoing) {
+    public void loadCallsOutgoing(String phoneNumberOutgoing, int pageOutcoming) {
         mView.showLoading(true);
-        GetCallsOutgoing.RequestValue requestValue = new GetCallsOutgoing.RequestValue(phoneNumberOutgoing);
+        GetCallsOutgoing.RequestValue requestValue = new GetCallsOutgoing.RequestValue(phoneNumberOutgoing, pageOutcoming);
         mUseCaseHandler.execute(mGetCallsOutgoing, requestValue, new UseCase.UseCaseCallback<GetCallsOutgoing.ResponseValue>() {
             @Override
             public void onSuccess(GetCallsOutgoing.ResponseValue response) {

@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.phone;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -38,6 +39,14 @@ public class PhoneActivity extends BaseActivity implements
 
     private String mFromPhoneNumber;
     private String mToPhoneNumber;
+
+    public static void starterOutgoing(Activity activity, String fromPhoneNumber, String toPhoneNumber){
+        Intent intent = new Intent(activity, PhoneActivity.class);
+        intent.putExtra(PhoneService.EXTRA_PHONE_STATE, PhoneService.PHONE_STATE_OUTGOING);
+        intent.putExtra(PhoneService.EXTRA_FROM_PHONE_NUMBER, fromPhoneNumber);
+        intent.putExtra(PhoneService.EXTRA_TO_PHONE_NUMBER, toPhoneNumber);
+        activity.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +104,7 @@ public class PhoneActivity extends BaseActivity implements
 
             PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_INCOMING, mFromPhoneNumber, mToPhoneNumber, device, incomingConnection);
             showIncomingFragment(mFromPhoneNumber, mToPhoneNumber);
+            DebugTool.logD("RESUME INCOMING");
         }
     }
 
@@ -204,6 +214,7 @@ public class PhoneActivity extends BaseActivity implements
                     showInCallFragment(fromPhoneNumber, toPhoneNumber);
                 } else if (phoneState == PhoneService.PHONE_STATE_INCOMING) {
                     showIncomingFragment(fromPhoneNumber, toPhoneNumber);
+                    DebugTool.logD("UPDATE INCOMING");
                 } else if (phoneState == PhoneService.PHONE_STATE_DISCONNECTED) {
 //                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_disconnected), Toast.LENGTH_SHORT).show();
                     finish();

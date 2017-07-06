@@ -38,6 +38,8 @@ public class ApiManager {
     //    private static final String BASE_URL = "https://raw.githubusercontent.com/tungpham/tpmsservices/";
     private static final String BASE_URL = "https://api.twilio.com/2010-04-01/";
 
+    private static final int PAGE_SIZE = 5;
+
     private static ApiPath mApiPath;
 
     private static volatile Retrofit mRetrofit;
@@ -185,15 +187,17 @@ public class ApiManager {
 
     public static void getCallsIncoming(Context context,
                                         String phoneNumberIncoming,
+                                        int page,
                                         Callback<Calls> callback) {
-        Call<Calls> call = getApiPath(context).getCallsIncoming(TwilioManager.getSid(context), phoneNumberIncoming);
+        Call<Calls> call = getApiPath(context).getCallsIncoming(TwilioManager.getSid(context), phoneNumberIncoming, PAGE_SIZE, page);
         call.enqueue(callback);
     }
 
     public static void getCallsOutgoing(Context context,
                                         String phoneNumberOutgoing,
+                                        int page,
                                         Callback<Calls> callback) {
-        Call<Calls> call = getApiPath(context).getCallsOutgoing(TwilioManager.getSid(context), phoneNumberOutgoing);
+        Call<Calls> call = getApiPath(context).getCallsOutgoing(TwilioManager.getSid(context), phoneNumberOutgoing, PAGE_SIZE, page);
         call.enqueue(callback);
     }
 

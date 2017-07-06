@@ -82,8 +82,8 @@ public class CallRemoteDataSource implements CallDataSource {
     }
 
     @Override
-    public void getCallsIncoming(String phoneNumberIncoming, @NonNull final LoadCallCallback callback) {
-        ApiManager.getCallsIncoming(mContext, phoneNumberIncoming, new Callback<Calls>() {
+    public void getCallsIncoming(String phoneNumberIncoming, int page, @NonNull final LoadCallCallback callback) {
+        ApiManager.getCallsIncoming(mContext, phoneNumberIncoming, page, new Callback<Calls>() {
             @Override
             public void onResponse(Call<Calls> call, Response<Calls> response) {
                 if (response.isSuccessful()) {
@@ -106,8 +106,8 @@ public class CallRemoteDataSource implements CallDataSource {
     }
 
     @Override
-    public void getCallsOutgoing(String phoneNumberOutgoing, @NonNull final LoadCallCallback callback) {
-        ApiManager.getCallsOutgoing(mContext, phoneNumberOutgoing, new Callback<Calls>() {
+    public void getCallsOutgoing(String phoneNumberOutgoing, int page, @NonNull final LoadCallCallback callback) {
+        ApiManager.getCallsOutgoing(mContext, phoneNumberOutgoing, page, new Callback<Calls>() {
             @Override
             public void onResponse(Call<Calls> call, Response<Calls> response) {
                 if (response.isSuccessful()) {
