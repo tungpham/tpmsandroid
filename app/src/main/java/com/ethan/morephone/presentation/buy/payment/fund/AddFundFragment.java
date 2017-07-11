@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.buy.payment.card.CardActivity;
+import com.ethan.morephone.presentation.buy.payment.card.CreditCardUtils;
 import com.ethan.morephone.presentation.buy.payment.purchase.PaymentMethodsDialog;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -30,9 +32,10 @@ import java.math.BigDecimal;
 
 public class AddFundFragment extends BaseFragment implements
         View.OnClickListener,
-        PaymentMethodsDialog.PaymentMethodsListener{
+        PaymentMethodsDialog.PaymentMethodsListener {
 
     private static final int REQUEST_CODE_PAYMENT = 1;
+    private static final int REQUEST_CODE_PAYMENT_VISA = 2;
 
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
     private static final String CONFIG_CLIENT_ID = "AUOoaumERgukf8fbz6pPyH3e0jqyOBzEjvgdsSagrQB1oVwzdfLqgfgFHEMNZquHUY-gEfrGbtozDUFW";
@@ -46,7 +49,7 @@ public class AddFundFragment extends BaseFragment implements
             .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
 
-    public static AddFundFragment getInstance(){
+    public static AddFundFragment getInstance() {
         return new AddFundFragment();
     }
 
@@ -68,7 +71,7 @@ public class AddFundFragment extends BaseFragment implements
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_purchase_add_fund:
                 PaymentMethodsDialog paymentMethodsDialog = PaymentMethodsDialog.getInstance();
                 paymentMethodsDialog.show(getChildFragmentManager(), PaymentMethodsDialog.class.getSimpleName());
@@ -81,21 +84,25 @@ public class AddFundFragment extends BaseFragment implements
 
     @Override
     public void onChoosePaymentMethods(int paymentMethods) {
-        PayPalPayment thingToBuy = getThingToBuy(PayPalPayment.PAYMENT_INTENT_SALE);
+        if (paymentMethods == PaymentMethodsDialog.PAYMENT_VIA_PAYPAL) {
+            PayPalPayment thingToBuy = getThingToBuy(PayPalPayment.PAYMENT_INTENT_SALE);
 
-        Intent intent = new Intent(getActivity(), com.paypal.android.sdk.payments.PaymentActivity.class);
+            Intent intent = new Intent(getActivity(), com.paypal.android.sdk.payments.PaymentActivity.class);
 
-        // send the same configuration for restart resiliency
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+            // send the same configuration for restart resiliency
+            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
 
-        intent.putExtra(com.paypal.android.sdk.payments.PaymentActivity.EXTRA_PAYMENT, thingToBuy);
+            intent.putExtra(com.paypal.android.sdk.payments.PaymentActivity.EXTRA_PAYMENT, thingToBuy);
 
-        startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+            startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+
+        } else if (paymentMethods == PaymentMethodsDialog.PAYMENT_VIA_CREDIT) {
+            startActivityForResult(new Intent(getActivity(), CardActivity.class), REQUEST_CODE_PAYMENT_VISA);
+        }
     }
 
     private PayPalPayment getThingToBuy(String paymentIntent) {
-        return new PayPalPayment(new BigDecimal("0.01"), "USD", "Add Fund",
-                paymentIntent);
+        return new PayPalPayment(new BigDecimal("0.01"), "USD", "Add Fund", paymentIntent);
     }
 
     @Override
@@ -131,6 +138,22 @@ public class AddFundFragment extends BaseFragment implements
             } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
                 DebugTool.logD("An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
             }
+        } else if (requestCode == REQUEST_CODE_PAYMENT_VISA) {
+            String cardNumber = data.getStringExtra(CreditCardUtils.EXTRA_CARD_NUMBER);
+            String cardCvv = data.getStringExtra(CreditCardUtils.EXTRA_CARD_CVV);
+            String cardExpiry = data.getStringExtra(CreditCardUtils.EXTRA_CARD_EXPIRY);
+            String cardHolderName = data.getStringExtra(CreditCardUtils.EXTRA_CARD_HOLDER_NAME);
+
+            DebugTool.logD("CardNumber: " + cardNumber);
+            DebugTool.logD("cardHolderName: " + cardHolderName);
+            DebugTool.logD("cardExpiry: " + cardExpiry);
+            DebugTool.logD("cardCvv: " + cardCvv);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().stopService(new Intent(getActivity(), PayPalService.class));
+        super.onDestroy();
     }
 }

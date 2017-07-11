@@ -75,9 +75,10 @@ dependencies {
     compile presentationDependencies.servicesWallet
 
     compile('com.paypal.sdk:paypal-android-sdk:2.15.3') {
-        exclude group: 'io.card'
         exclude group:'com.squareup.okhttp3', module:'okhttp'
     }
+    compile 'com.google.android.gms:play-services-wallet:10.0.1'
+
     compile 'com.stripe:stripe-android:4.0.2'
     compile 'com.klinkerapps:android-chips:1.0.0'
     compile 'com.twilio:voice-android:2.0.0-beta4'

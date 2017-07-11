@@ -54,6 +54,16 @@ public class PaymentMethodsDialog extends DialogFragment {
             }
         });
 
+        dialog.findViewById(R.id.text_payment_add).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mPaymentMethodsListener != null){
+                    mPaymentMethodsListener.onChoosePaymentMethods(PAYMENT_VIA_CREDIT);
+                }
+                dialog.dismiss();
+            }
+        });
+
         return dialog;
     }
 

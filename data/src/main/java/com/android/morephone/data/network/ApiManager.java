@@ -12,6 +12,7 @@ import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.TwilioManager;
 
 import java.io.IOException;
@@ -248,6 +249,7 @@ public class ApiManager {
 
     public static void getIncomingPhoneNumbers(Context context,
                                                Callback<IncomingPhoneNumbers> callback) {
+        DebugTool.logD("SID: " + TwilioManager.getSid(context));
         Call<IncomingPhoneNumbers> call = getApiPath(context).getIncomingPhoneNumbers(TwilioManager.getSid(context));
         call.enqueue(callback);
     }

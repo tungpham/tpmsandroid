@@ -15,9 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.morephone.data.entity.price.PricePhoneNumber;
-import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.ApiPriceManager;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.auth0.android.Auth0;
 import com.auth0.android.authentication.AuthenticationAPIClient;
@@ -36,10 +33,6 @@ import com.ethan.morephone.presentation.review.AlertReviewDialog;
 import com.ethan.morephone.presentation.setting.SettingActivity;
 import com.ethan.morephone.presentation.usage.UsageActivity;
 import com.ethan.morephone.utils.ActivityUtils;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -78,19 +71,6 @@ public class MainActivity extends BaseActivity implements
 
         MyPreference.setTimesUse(getApplicationContext(), MyPreference.getTimesUse(getApplicationContext()) + 1);
 
-        ApiPriceManager.getPrice(getApplicationContext(), new Callback<PricePhoneNumber>() {
-            @Override
-            public void onResponse(Call<PricePhoneNumber> call, Response<PricePhoneNumber> response) {
-                if (response.isSuccessful()) {
-                    DebugTool.logD("RESPONSE");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PricePhoneNumber> call, Throwable t) {
-
-            }
-        });
     }
 
     @Override

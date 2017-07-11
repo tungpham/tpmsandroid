@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.auth0.android.Auth0;
@@ -49,9 +50,11 @@ public class SplashActivity extends BaseActivity {
                                     && payload.getUserMetadata().containsKey("sid")
                                     && payload.getUserMetadata().containsKey("auth_code")) {
                                 TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
+                            } else {
+                                DebugTool.logD("NULL PROFILE");
                             }
                             startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                            finish();
+//                            finish();
                         }
 
                         @Override
