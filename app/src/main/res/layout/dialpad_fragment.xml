@@ -46,7 +46,7 @@
     <RelativeLayout
         android:id="@+id/dialpad_smartdial_container"
         android:layout_width="match_parent"
-        android:layout_height="50sp"
+        android:layout_height="@dimen/relative_dialpad_height"
         android:layout_marginTop="@dimen/dialpad_vertical_margin">
 
         <View

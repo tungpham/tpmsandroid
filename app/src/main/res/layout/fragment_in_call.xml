@@ -9,7 +9,6 @@
         style="@style/TextDisplay"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_incoming_text_title"
-        android:text="+18056624394"
         android:textColor="@android:color/white" />
 
     <Chronometer
@@ -156,7 +155,7 @@
         android:layout_marginBottom="@dimen/margin__bottom_in_call_text_hide_dialpad"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/margin__bottom_in_call_text_hide_dialpad"
-        android:text="Hide"
+        android:text="@string/in_call_hide_key_pad"
         android:textColor="@android:color/white"
         android:visibility="gone"/>
 

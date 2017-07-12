@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.auth0.android.Auth0;
@@ -14,6 +13,7 @@ import com.auth0.android.authentication.AuthenticationException;
 import com.auth0.android.callback.BaseCallback;
 import com.auth0.android.result.Credentials;
 import com.auth0.android.result.UserProfile;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
@@ -50,8 +50,11 @@ public class SplashActivity extends BaseActivity {
                                     && payload.getUserMetadata().containsKey("sid")
                                     && payload.getUserMetadata().containsKey("auth_code")) {
                                 TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
-                            } else {
-                                DebugTool.logD("NULL PROFILE");
+                            } else if(payload != null){
+                                MyPreference.setUserEmail(getApplicationContext(), payload.getEmail());
+                                MyPreference.setUserName(getApplicationContext(), payload.getName());
+                                MyPreference.setGivenName(getApplicationContext(), payload.getGivenName());
+                                MyPreference.setNickName(getApplicationContext(), payload.getNickname());
                             }
                             startActivity(new Intent(SplashActivity.this, MainActivity.class));
 //                            finish();

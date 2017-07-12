@@ -13,6 +13,9 @@ public class MyPreference {
     private static final String PROPERTY_USER_FIRST_NAME = "PROPERTY_USER_FIRST_NAME";
     private static final String PROPERTY_USER_LAST_NAME = "PROPERTY_USER_LAST_NAME";
     private static final String PROPERTY_USER_PASSWORD = "PROPERTY_USER_PASSWORD";
+    private static final String PROPERTY_USER_NAME = "PROPERTY_USER_NAME";
+    private static final String PROPERTY_USER_GIVEN_NAME = "PROPERTY_USER_GIVEN_NAME";
+    private static final String PROPERTY_USER_NICK_NAME = "PROPERTY_USER_NICK_NAME";
 
     private static final String PROPERTY_PHONE_NUMBER = "PROPERTY_PHONE_NUMBER";
     private static final String PROPERTY_PHONE_FRIENDLY_NAME = "PROPERTY_PHONE_FRIENDLY_NAME";
@@ -39,82 +42,114 @@ public class MyPreference {
         return context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
     }
 
-    public static String getUserEmail(Context context){
+    public static String getUserEmail(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(PROPERTY_USER_EMAIL, "");
     }
 
-    public static void setUserEmail(Context context, String email){
+    public static void setUserEmail(Context context, String email) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_USER_EMAIL, email).commit();
     }
 
-    public static String getFirstName(Context context){
+    public static String getUserName(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_USER_NAME, "");
+    }
+
+    public static void setUserName(Context context, String name) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_USER_NAME, name).commit();
+    }
+
+    public static String getGivenName(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_USER_GIVEN_NAME, "");
+    }
+
+    public static void setGivenName(Context context, String givenName) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_USER_GIVEN_NAME, givenName).commit();
+    }
+
+    public static String getNickName(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_USER_NICK_NAME, "");
+    }
+
+    public static void setNickName(Context context, String nickName) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_USER_NICK_NAME, nickName).commit();
+    }
+
+
+
+    public static String getFirstName(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(PROPERTY_USER_FIRST_NAME, "");
     }
 
-    public static void setFirstName(Context context, String firstName){
+    public static void setFirstName(Context context, String firstName) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_USER_FIRST_NAME, firstName).commit();
     }
 
-    public static String getLastName(Context context){
+    public static String getLastName(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(PROPERTY_USER_LAST_NAME, "");
     }
 
-    public static void setLastName(Context context, String lastName){
+    public static void setLastName(Context context, String lastName) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_USER_LAST_NAME, lastName).commit();
     }
 
-    public static String getPassword(Context context){
+    public static String getPassword(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(PROPERTY_USER_PASSWORD, "");
     }
 
-    public static void setPassword(Context context, String password){
+    public static void setPassword(Context context, String password) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_USER_PASSWORD, password).commit();
     }
 
-    public static String getPhoneNumber(Context context){
+    public static String getPhoneNumber(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(PROPERTY_PHONE_NUMBER, "");
     }
 
-    public static void setPhoneNumber(Context context, String phoneNumber){
+    public static void setPhoneNumber(Context context, String phoneNumber) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_PHONE_NUMBER, phoneNumber).commit();
     }
 
-    public static String getFriendlyName(Context context){
+    public static String getFriendlyName(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(PROPERTY_PHONE_FRIENDLY_NAME, "");
     }
 
-    public static void setFriendlyName(Context context, String phoneNumber){
+    public static void setFriendlyName(Context context, String phoneNumber) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_PHONE_FRIENDLY_NAME, phoneNumber).commit();
     }
 
-    public static String getPhoneNumberSid(Context context){
+    public static String getPhoneNumberSid(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(PROPERTY_PHONE_NUMBER_SID, "");
     }
 
-    public static void setPhoneNumberSid(Context context, String phoneNumber){
+    public static void setPhoneNumberSid(Context context, String phoneNumber) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_PHONE_NUMBER_SID, phoneNumber).commit();
     }
 
-    public static boolean getInbox(Context context){
+    public static boolean getInbox(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getBoolean(PROPERTY_INBOX, true);
     }
 
-    public static void setInbox(Context context, boolean isInbox){
+    public static void setInbox(Context context, boolean isInbox) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putBoolean(PROPERTY_INBOX, isInbox).commit();
     }
@@ -123,7 +158,7 @@ public class MyPreference {
 
     /*--------------------------------FOR REVIEW APP------------------------------------*/
 
-    public static boolean getNotNow(Context context){
+    public static boolean getNotNow(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getBoolean(PROPERTY_NOT_NOW, false);
     }
@@ -133,7 +168,7 @@ public class MyPreference {
         preferences.edit().putBoolean(PROPERTY_NOT_NOW, notNow).commit();
     }
 
-    public static boolean getRateNow(Context context){
+    public static boolean getRateNow(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getBoolean(PROPERTY_RATE_NOW, false);
     }
@@ -143,12 +178,12 @@ public class MyPreference {
         preferences.edit().putBoolean(PROPERTY_RATE_NOW, rateNow).commit();
     }
 
-    public static long getTimesUse(Context context){
+    public static long getTimesUse(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getLong(PROPERTY_TIMES_USE, 0);
     }
 
-    public static void setTimesUse(Context context, long timesUse){
+    public static void setTimesUse(Context context, long timesUse) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putLong(PROPERTY_TIMES_USE, timesUse).commit();
     }
@@ -156,7 +191,7 @@ public class MyPreference {
 
     /*-------------------------------FOR PHONE CALL --------------------------------*/
 
-    public static boolean getMuteMicrophone(Context context){
+    public static boolean getMuteMicrophone(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getBoolean(PROPERTY_MUTE_MICROPHONE, false);
     }
@@ -166,12 +201,12 @@ public class MyPreference {
         preferences.edit().putBoolean(PROPERTY_MUTE_MICROPHONE, muteMicrophone).commit();
     }
 
-    public static boolean getSpeakerphone(Context context){
+    public static boolean getSpeakerphone(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getBoolean(PROPERTY_SPEAKER_PHONE, false);
     }
 
-    public static void setSpeakerphone(Context context, Boolean speakerPhone){
+    public static void setSpeakerphone(Context context, Boolean speakerPhone) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putBoolean(PROPERTY_SPEAKER_PHONE, speakerPhone).commit();
     }
@@ -179,52 +214,52 @@ public class MyPreference {
 
     /*-----------------------------------SETTING-----------------------------------*/
 
-    public static boolean getSettingEnableRecord(Context context){
+    public static boolean getSettingEnableRecord(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getBoolean(PROPERTY_SETTING_ENABLE_RECORD, false);
     }
 
-    public static void setSettingEnableRecord(Context context, Boolean enableRecord){
+    public static void setSettingEnableRecord(Context context, Boolean enableRecord) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putBoolean(PROPERTY_SETTING_ENABLE_RECORD, enableRecord).commit();
     }
 
-    public static boolean getSettingEnableNotification(Context context){
+    public static boolean getSettingEnableNotification(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getBoolean(PROPERTY_SETTING_ENABLE_NOTIFICATION, false);
     }
 
-    public static void setSettingEnableNotification(Context context, Boolean notification){
+    public static void setSettingEnableNotification(Context context, Boolean notification) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putBoolean(PROPERTY_SETTING_ENABLE_NOTIFICATION, notification).commit();
     }
 
-    public static boolean getSettingConfigure(Context context){
+    public static boolean getSettingConfigure(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getBoolean(PROPERTY_SETTING_CONFIGURE, false);
     }
 
-    public static void setSettingConfigure(Context context, Boolean configure){
+    public static void setSettingConfigure(Context context, Boolean configure) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putBoolean(PROPERTY_SETTING_CONFIGURE, configure).commit();
     }
 
-    public static String getSettingConfigurePhone(Context context){
+    public static String getSettingConfigurePhone(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(PROPERTY_SETTING_CONFIGURE_PHONE, "");
     }
 
-    public static void setSettingConfigurePhone(Context context, String phoneNumber){
+    public static void setSettingConfigurePhone(Context context, String phoneNumber) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_SETTING_CONFIGURE_PHONE, phoneNumber).commit();
     }
 
-    public static String getSettingConfigureEmail(Context context){
+    public static String getSettingConfigureEmail(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(PROPERTY_SETTING_CONFIGURE_EMAIL, "");
     }
 
-    public static void setSettingConfigureEmail(Context context, String email){
+    public static void setSettingConfigureEmail(Context context, String email) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_SETTING_CONFIGURE_EMAIL, email).commit();
     }

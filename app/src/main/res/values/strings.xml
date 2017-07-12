@@ -13,6 +13,31 @@
 
     <string name="auth0_client_id">JYPws2eLK9Re7Ff5iZlN9T7tQ2sRcN40</string>
     <string name="auth0_domain">coderdaudat.auth0.com</string>
+    
+    <!--       Menu         -->
+    <string name="menu_buy_a_phone">Buy a phone</string>
+    <string name="menu_add_fund">Add fund</string>
+    <string name="menu_setting">Setting</string>
+    <string name="menu_usage">Usage</string>
+    <string name="menu_group_settings">Settings</string>
+    <string name="menu_review">Review</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_license">License</string>
+    <string name="menu_logout">Logout</string>
+
+    <!-- Fragment Dialog Payment Methods -->
+    <string name="dialog_payment_visa">VISA ***** 0011</string>
+    <string name="dialog_payment_paypal">Paypal</string>
+    <string name="dialog_payment_add_card">Add Card</string>
+
+    <string name="add_fund_purchase_unit">$</string>
+
+    <!-- Fragment Card CVV -->
+    <string name="card_cvv_text_cvv">CVV</string>
+    <string name="card_cvv_edit_text_hint">XXX</string>
+
+    <!-- Fragment In Call -->
+    <string name="in_call_hide_key_pad">Hide</string>
 
     <!--          Fragment Authentication           -->
     <string name="authentication_text_welcome">Welcome to More Phone.</string>

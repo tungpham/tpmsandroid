@@ -15,9 +15,9 @@
         android:layout_below="@+id/text_purchase_phone_number"
         android:layout_marginLeft="@dimen/activity_main_margin"
         android:layout_marginRight="@dimen/activity_main_margin"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="@dimen/text_add_fund_purchase_amount_margin_top"
         android:text="@string/add_fund_amount_to_add"
-        android:textSize="18sp" />
+        android:textSize="@dimen/text_add_fund_purchase_amount_size" />
 
     <com.ethan.morephone.widget.MyTextView
         android:id="@+id/text_purchase_unit"
@@ -26,8 +26,8 @@
         android:layout_marginLeft="@dimen/activity_main_margin"
         android:layout_marginRight="@dimen/activity_main_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="$"
-        android:textSize="18sp" />
+        android:text="@string/add_fund_purchase_unit"
+        android:textSize="@dimen/text_add_fund_purchase_unit_size" />
 
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/edit_text_amount"

@@ -24,7 +24,7 @@
                 style="@style/TextPaymentItem"
                 android:layout_below="@+id/text_payment_methods"
                 android:layout_marginTop="36dp"
-                android:text="VISA ***** 0011"
+                android:text="@string/dialog_payment_visa"
                 android:drawableLeft="@drawable/ic_credit_card"
                 android:drawablePadding="@dimen/activity_vertical_margin"/>
 
@@ -37,7 +37,7 @@
                 android:id="@+id/text_payment_paypal"
                 style="@style/TextPaymentItem"
                 android:layout_below="@+id/view_divider_1"
-                android:text="Paypal"
+                android:text="@string/dialog_payment_paypal"
                 android:drawableLeft="@drawable/ic_credit_card"
                 android:drawablePadding="@dimen/activity_vertical_margin"/>
 
@@ -50,7 +50,7 @@
                 android:id="@+id/text_payment_add"
                 style="@style/TextPaymentItem"
                 android:layout_below="@+id/view_divider_2"
-                android:text="Add Card"
+                android:text="@string/dialog_payment_add_card"
                 android:drawableLeft="@drawable/ic_credit_card"
                 android:drawablePadding="@dimen/activity_vertical_margin"/>
 

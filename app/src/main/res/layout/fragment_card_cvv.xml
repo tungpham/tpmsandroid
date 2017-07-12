@@ -28,17 +28,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CVV" />
+                android:text="@string/card_cvv_text_cvv" />
 
             <EditText
                 android:id="@+id/card_cvv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:hint="XXX"
+                android:hint="@string/card_cvv_edit_text_hint"
                 android:inputType="number"
-                android:maxLength="3"
-                android:text="" />
+                android:maxLength="3"/>
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

@@ -73,9 +73,10 @@ public class AddFundFragment extends BaseFragment implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_purchase_add_fund:
-                PaymentMethodsDialog paymentMethodsDialog = PaymentMethodsDialog.getInstance();
-                paymentMethodsDialog.show(getChildFragmentManager(), PaymentMethodsDialog.class.getSimpleName());
-                paymentMethodsDialog.setPaymentMethodsListener(this);
+//                PaymentMethodsDialog paymentMethodsDialog = PaymentMethodsDialog.getInstance();
+//                paymentMethodsDialog.show(getChildFragmentManager(), PaymentMethodsDialog.class.getSimpleName());
+//                paymentMethodsDialog.setPaymentMethodsListener(this);
+                onChoosePaymentMethods(PaymentMethodsDialog.PAYMENT_VIA_PAYPAL);
                 break;
             default:
                 break;

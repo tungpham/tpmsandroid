@@ -16,8 +16,7 @@
             <com.ethan.morephone.widget.MyTextView
                 android:id="@+id/text_purchase_phone_number"
                 style="@style/TextSettingDisplay"
-                android:layout_marginTop="@dimen/activity_main_margin"
-                android:text="(201) 733-424" />
+                android:layout_marginTop="@dimen/activity_main_margin" />
 
             <RelativeLayout
                 android:id="@+id/relative_price"

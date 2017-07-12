@@ -6,47 +6,47 @@
         <item
             android:id="@+id/nav_buy_number"
             android:icon="@drawable/ic_add_black_24dp"
-            android:title="Buy a phone" />
+            android:title="@string/menu_buy_a_phone" />
 
         <item
             android:id="@+id/nav_card"
             android:icon="@drawable/ic_credit_card_black_24dp"
-            android:title="Add Card" />
+            android:title="@string/menu_add_fund" />
 
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Setting" />
+            android:title="@string/menu_setting" />
 
         <item
             android:id="@+id/nav_usage"
             android:icon="@drawable/ic_data_usage_black_24dp"
-            android:title="Usage" />
+            android:title="@string/menu_usage" />
 
 
     </group>
 
-    <item android:title="Settings">
+    <item android:title="@string/menu_group_settings">
         <menu>
 
             <item
                 android:id="@+id/nav_review"
                 android:icon="@drawable/ic_rate_review_black_24dp"
-                android:title="Review" />
+                android:title="@string/menu_review" />
 
             <item
                 android:id="@+id/nav_share"
                 android:actionProviderClass="android.widget.ShareActionProvider"
                 android:icon="@drawable/ic_share_black_24dp"
-                android:title="Share" />
+                android:title="@string/menu_share" />
             <item
                 android:id="@+id/nav_license"
                 android:icon="@drawable/ic_android_black_24dp"
-                android:title="License" />
+                android:title="@string/menu_license" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/logout"
-                android:title="Logout" />
+                android:title="@string/menu_logout" />
         </menu>
     </item>
 

@@ -92,6 +92,27 @@
 
     <dimen name="card_radius">2dp</dimen>
     <dimen name="cardview_default_elevation">1dp</dimen>
+    <dimen name="card_edit_min_height">120dp</dimen>
+    <dimen name="card_back_width">300dp</dimen>
+    <dimen name="card_back_height">180dp</dimen>
+    <dimen name="card_back_view_height">36dp</dimen>
+    <dimen name="card_back_view_margin_top">15dp</dimen>
+
+    <dimen name="card_back_cvv_height">36dp</dimen>
+    <dimen name="card_back_cvv_padding_right">12dp</dimen>
+    <dimen name="card_back_cvv_logo_width_height">48dp</dimen>
+    <dimen name="card_back_cvv_logo_margin_right">16dp</dimen>
+
+    <dimen name="table_dialpad_padding_bottom">10dip</dimen>
+    <dimen name="table_dialpad_padding_end">5dip</dimen>
+    <dimen name="table_dialpad_padding_start">5dip</dimen>
+
+    <dimen name="relative_dialpad_height">50dp</dimen>
+
+    <dimen name="text_add_fund_purchase_amount_margin_top">48dp</dimen>
+    <dimen name="text_add_fund_purchase_amount_size">18sp</dimen>
+
+    <dimen name="text_add_fund_purchase_unit_size">18sp</dimen>
 
 
     <dimen name="card_width_normal">300dp</dimen>

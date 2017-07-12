@@ -39,7 +39,7 @@ public class ApiManager {
     //    private static final String BASE_URL = "https://raw.githubusercontent.com/tungpham/tpmsservices/";
     private static final String BASE_URL = "https://api.twilio.com/2010-04-01/";
 
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 50;
 
     private static ApiPath mApiPath;
 

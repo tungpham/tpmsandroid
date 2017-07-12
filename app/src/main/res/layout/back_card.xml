@@ -2,36 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/back_card_container"
-    android:layout_width="300dp"
-    android:layout_height="180dp"
+    android:layout_width="@dimen/card_back_width"
+    android:layout_height="@dimen/card_back_height"
     android:visibility="gone"
     tools:background="@drawable/card_color_round_rect_pink">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="@dimen/card_back_view_height"
+        android:layout_marginTop="@dimen/card_back_view_margin_top"
         android:background="@android:color/black" />
 
     <TextView
         android:id="@+id/back_card_cvv"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/card_back_cvv_height"
         android:layout_centerVertical="true"
         android:layout_margin="@dimen/margin_small"
         android:background="@drawable/sign_strip"
         android:gravity="center|right"
-        android:paddingRight="12dp"
-        android:textColor="@android:color/black"
-        tools:text="522" />
+        android:paddingRight="@dimen/card_back_cvv_padding_right"
+        android:textColor="@android:color/black" />
 
     <ImageView
         android:id="@+id/logo_img"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/card_back_cvv_logo_width_height"
+        android:layout_height="@dimen/card_back_cvv_logo_width_height"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="@dimen/card_back_cvv_logo_margin_right"
         android:src="@drawable/ic_billing_mastercard_logo" />
 
 </RelativeLayout>

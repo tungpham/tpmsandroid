@@ -14,7 +14,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <com.ethan.morephone.presentation.buy.payment.card.view.CreditCardView
                 android:id="@+id/credit_card_view"
                 android:layout_width="wrap_content"
@@ -25,9 +24,8 @@
                 android:id="@+id/card_field_container_pager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="120dp"
+                android:minHeight="@dimen/card_edit_min_height"
                 android:orientation="horizontal"/>
-
 
         </LinearLayout>
     </ScrollView>
