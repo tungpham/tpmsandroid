@@ -129,10 +129,13 @@ public class RecordFragment extends BaseFragment implements
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
+
+        layoutManager.setReverseLayout(true);
+//        layoutManager.setStackFromEnd(true);
 
         mRecordAdapter = new RecordAdapter(getContext(), mPhoneNumber, new ArrayList<Record>(), this);
         mRecyclerView.setAdapter(mRecordAdapter);

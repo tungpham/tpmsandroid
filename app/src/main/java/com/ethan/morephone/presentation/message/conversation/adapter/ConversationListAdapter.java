@@ -36,11 +36,12 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
     }
 
     public void replaceData(List<ConversationModel> conversationModels) {
+        Collections.sort(conversationModels);
         mConversationModels = conversationModels;
         notifyDataSetChanged();
     }
 
-    public List<ConversationModel> getData(){
+    public List<ConversationModel> getData() {
         return mConversationModels;
     }
 

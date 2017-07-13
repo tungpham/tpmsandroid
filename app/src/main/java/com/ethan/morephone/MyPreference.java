@@ -16,6 +16,7 @@ public class MyPreference {
     private static final String PROPERTY_USER_NAME = "PROPERTY_USER_NAME";
     private static final String PROPERTY_USER_GIVEN_NAME = "PROPERTY_USER_GIVEN_NAME";
     private static final String PROPERTY_USER_NICK_NAME = "PROPERTY_USER_NICK_NAME";
+    private static final String PROPERTY_USER_PICTURE = "PROPERTY_USER_PICTURE";
 
     private static final String PROPERTY_PHONE_NUMBER = "PROPERTY_PHONE_NUMBER";
     private static final String PROPERTY_PHONE_FRIENDLY_NAME = "PROPERTY_PHONE_FRIENDLY_NAME";
@@ -82,6 +83,15 @@ public class MyPreference {
         preferences.edit().putString(PROPERTY_USER_NICK_NAME, nickName).commit();
     }
 
+    public static String getUserPicture(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_USER_PICTURE, "");
+    }
+
+    public static void setUserPicture(Context context, String picture) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_USER_PICTURE, picture).commit();
+    }
 
 
     public static String getFirstName(Context context) {

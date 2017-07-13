@@ -13,6 +13,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TextDrawable;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,6 +39,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void replaceData(List<Call> calls) {
+        Collections.sort(calls);
         mCalls = calls;
         notifyDataSetChanged();
     }

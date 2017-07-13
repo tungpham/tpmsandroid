@@ -242,7 +242,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                 mActiveConnection = null;
                 updateUIPhone(PHONE_STATE_DISCONNECTED, mFromPhoneNumber, mToPhoneNumber);
             }
-            DebugTool.logD("Disconnect");
+            DebugTool.logD("Disconnect:  " + s + " || " + connection.getParameters().toString() + " STATE " + connection.getState().toString());
         }
     }
 

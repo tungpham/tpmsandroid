@@ -114,16 +114,20 @@
 
     <dimen name="text_add_fund_purchase_unit_size">18sp</dimen>
 
-
     <dimen name="card_width_normal">300dp</dimen>
     <dimen name="card_height_normal">180dp</dimen>
+
     <dimen name="chip_width_normal">54dp</dimen>
     <dimen name="chip_height_normal">36dp</dimen>
+
     <dimen name="inner_chip_width_normal">28dp</dimen>
     <dimen name="inner_chip_height_normal">16dp</dimen>
+
     <dimen name="logo_width_normal">48dp</dimen>
     <dimen name="logo_height_normal">48dp</dimen>
     <dimen name="center_image_width">75dp</dimen>
     <dimen name="center_image_height">75dp</dimen>
+
+    <dimen name="image_nav_header_width_height">96dp</dimen>
 
 </resources>

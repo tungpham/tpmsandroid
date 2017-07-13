@@ -2,6 +2,10 @@ package com.ethan.morephone.presentation.main;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,9 +14,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.morephone.data.utils.CredentialsManager;
@@ -33,6 +40,8 @@ import com.ethan.morephone.presentation.review.AlertReviewDialog;
 import com.ethan.morephone.presentation.setting.SettingActivity;
 import com.ethan.morephone.presentation.usage.UsageActivity;
 import com.ethan.morephone.utils.ActivityUtils;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -88,6 +97,27 @@ public class MainActivity extends BaseActivity implements
     private void setUpNavigation() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+
+        TextView textName = (TextView) header.findViewById(R.id.text_header_main_name);
+        TextView textEmail = (TextView) header.findViewById(R.id.text_header_main_email);
+
+        if (!TextUtils.isEmpty(MyPreference.getUserName(getApplicationContext()))) {
+            textName.setText(MyPreference.getUserName(getApplicationContext()));
+        } else if (!TextUtils.isEmpty(MyPreference.getGivenName(getApplicationContext()))) {
+            textName.setText(MyPreference.getGivenName(getApplicationContext()));
+        }
+
+        textEmail.setText(MyPreference.getUserEmail(getApplicationContext()));
+
+        ImageView imagePicture = (ImageView) header.findViewById(R.id.image_picture);
+        if(!TextUtils.isEmpty(MyPreference.getUserPicture(getApplicationContext()))){
+            Picasso.with(getApplicationContext())
+                    .load(MyPreference.getUserPicture(getApplicationContext()))
+                    .transform(new CircleTransform())
+                    .into(imagePicture);
+        }
     }
 
     @Override
@@ -228,5 +258,41 @@ public class MainActivity extends BaseActivity implements
         CredentialsManager.deleteCredentials(this);
         startActivity(new Intent(this, AuthenticationActivity.class));
         finish();
+    }
+
+
+    public class CircleTransform implements Transformation {
+
+        @Override
+        public Bitmap transform(Bitmap source) {
+            int size = Math.min(source.getWidth(), source.getHeight());
+
+            int x = (source.getWidth() - size) / 2;
+            int y = (source.getHeight() - size) / 2;
+
+            Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+            if (squaredBitmap != source) {
+                source.recycle();
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
+
+            Canvas canvas = new Canvas(bitmap);
+            Paint paint = new Paint();
+            BitmapShader shader = new BitmapShader(squaredBitmap, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+            paint.setShader(shader);
+            paint.setAntiAlias(true);
+
+            float r = size/2f;
+            canvas.drawCircle(r, r, r, paint);
+
+            squaredBitmap.recycle();
+            return bitmap;
+        }
+
+        @Override
+        public String key() {
+            return "circle";
+        }
     }
 }

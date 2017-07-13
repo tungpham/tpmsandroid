@@ -68,9 +68,11 @@ public class CallLogFragment extends BaseFragment implements
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
+        layoutManager.setReverseLayout(true);
+//        layoutManager.setStackFromEnd(true);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 

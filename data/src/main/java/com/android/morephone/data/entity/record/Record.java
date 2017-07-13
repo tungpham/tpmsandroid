@@ -1,12 +1,17 @@
 package com.android.morephone.data.entity.record;
 
+import android.support.annotation.NonNull;
+
+import com.android.morephone.data.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
 
 /**
  * Created by Ethan on 4/5/17.
  */
 
-public class Record {
+public class Record implements Comparable<Record> {
 
     public String sid;
 
@@ -61,5 +66,20 @@ public class Record {
         this.priceUnit = priceUnit;
         this.uri = uri;
         this.isComing = isComing;
+    }
+
+    @Override
+    public int compareTo(@NonNull Record record) {
+        Date current = DateUtils.getDate(this.dateCreated);
+        Date now = DateUtils.getDate(record.dateCreated);
+        if (current != null && now != null) {
+            if (current.after(now)) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } else {
+            return 0;
+        }
     }
 }

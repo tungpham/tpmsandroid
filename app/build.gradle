@@ -89,6 +89,7 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.github.ozodrukh:CircularReveal:1.0.5'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:multidex:1.0.1'
     compile project(':domain')
 

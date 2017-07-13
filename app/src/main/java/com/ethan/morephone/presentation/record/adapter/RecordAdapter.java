@@ -18,6 +18,7 @@ import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.ExpandableLayout;
 import com.ethan.morephone.widget.TextDrawable;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,8 +51,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
         mGetCall = Injection.providerGetCall(context);
     }
 
-    public void replaceData(List<Record> messageItems) {
-        mRecords = messageItems;
+    public void replaceData(List<Record> records) {
+        Collections.sort(records);
+        mRecords = records;
         notifyDataSetChanged();
     }
 

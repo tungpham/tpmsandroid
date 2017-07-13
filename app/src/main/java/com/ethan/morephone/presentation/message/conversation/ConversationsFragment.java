@@ -37,7 +37,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -94,10 +93,13 @@ public class ConversationsFragment extends BaseFragment implements
 //        mToolbar.setVisibility(View.GONE);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
+
+        layoutManager.setReverseLayout(true);
+//        layoutManager.setStackFromEnd(true);
 
         mConversationListAdapter = new ConversationListAdapter(getContext(), new ArrayList<ConversationModel>(), this);
         recyclerView.setAdapter(mConversationListAdapter);
@@ -237,7 +239,7 @@ public class ConversationsFragment extends BaseFragment implements
 
     @Override
     public void showListMessage(List<ConversationModel> conversationModels) {
-        Collections.sort(conversationModels);
+
         mConversationListAdapter.replaceData(conversationModels);
     }
 

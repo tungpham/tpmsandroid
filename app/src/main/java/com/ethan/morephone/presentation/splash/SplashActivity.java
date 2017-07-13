@@ -45,19 +45,25 @@ public class SplashActivity extends BaseActivity {
                     .start(new BaseCallback<UserProfile, AuthenticationException>() {
                         @Override
                         public void onSuccess(final UserProfile payload) {
-                            if (payload != null
-                                    && payload.getUserMetadata() != null
-                                    && payload.getUserMetadata().containsKey("sid")
-                                    && payload.getUserMetadata().containsKey("auth_code")) {
-                                TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
-                            } else if(payload != null){
+                            if (payload != null) {
+
+                                if (payload.getUserMetadata() != null
+                                        && payload.getUserMetadata().containsKey("sid")
+                                        && payload.getUserMetadata().containsKey("auth_code")) {
+                                    TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
+                                }
+
+                                payload.getPictureURL();
+
                                 MyPreference.setUserEmail(getApplicationContext(), payload.getEmail());
                                 MyPreference.setUserName(getApplicationContext(), payload.getName());
                                 MyPreference.setGivenName(getApplicationContext(), payload.getGivenName());
                                 MyPreference.setNickName(getApplicationContext(), payload.getNickname());
+                                MyPreference.setUserPicture(getApplicationContext(), payload.getPictureURL());
                             }
+
                             startActivity(new Intent(SplashActivity.this, MainActivity.class));
-//                            finish();
+                            finish();
                         }
 
                         @Override
