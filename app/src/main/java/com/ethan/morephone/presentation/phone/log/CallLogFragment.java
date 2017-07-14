@@ -72,7 +72,7 @@ public class CallLogFragment extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
         layoutManager.setReverseLayout(true);
-//        layoutManager.setStackFromEnd(true);
+        layoutManager.setStackFromEnd(true);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 

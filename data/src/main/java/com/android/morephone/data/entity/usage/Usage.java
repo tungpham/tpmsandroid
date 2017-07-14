@@ -2,37 +2,33 @@ package com.android.morephone.data.entity.usage;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by Ethan on 4/26/17.
  */
 
 public class Usage {
 
-    @SerializedName("usage_message_total")
-    public int usageMessageTotal;
+    @SerializedName("first_page_uri")
+    public String firstPageUri;
 
-    @SerializedName("usage_message_spent")
-    public String usageMessageSpent;
+    public int end;
 
-    @SerializedName("usage_message_incoming")
-    public int usageMessageIncoming;
+    @SerializedName("previous_page_uri")
+    public String previousPageUri;
 
-    @SerializedName("usage_message_outgoing")
-    public int usageMessageOutgoing;
+    public String uri;
 
-    @SerializedName("usage_voice_total")
-    public int usageVoiceTotal;
+    public int pageSize;
 
-    @SerializedName("usage_voice_spent")
-    public String usageVoiceSpent;
+    public int start;
 
-    @SerializedName("usage_voice_incoming")
-    public int usageVoiceIncoming;
+    @SerializedName("usage_records")
+    public List<UsageRecord> usageRecords;
 
-    @SerializedName("usage_voice_outgoing")
-    public int usageVoiceOutgoing;
+    @SerializedName("next_page_uri")
+    public  String nextPageUri;
 
-    @SerializedName("usage_voice_missing")
-    public int usageVoiceMissing;
-
+    public int page;
 }

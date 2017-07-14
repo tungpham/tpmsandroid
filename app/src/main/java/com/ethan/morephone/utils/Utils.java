@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -44,7 +45,7 @@ public class Utils {
         return formatter.format(new Date(time));
     }
 
-    public static String formatDate(String date){
+    public static String formatDate(String date) {
         SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
         SimpleDateFormat out = new SimpleDateFormat("dd-MM HH:mm:ss");
 
@@ -188,5 +189,23 @@ public class Utils {
         }
         return false;
     }
+
+    public static String getPageToken(String uri) {
+        if (!TextUtils.isEmpty(uri)) {
+            String[] splitAnd = uri.split("&");
+            if (splitAnd != null && splitAnd.length > 0) {
+                for (String str : splitAnd) {
+                    if (str.startsWith("PageToken")) {
+                        String[] splitEqual = str.split("=");
+                        if (splitEqual != null && splitEqual.length > 0) {
+                            return splitEqual[1];
+                        }
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
 
 }

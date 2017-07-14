@@ -11,6 +11,8 @@ import com.android.morephone.data.repository.phonenumbers.incoming.IncomingPhone
 import com.android.morephone.data.repository.phonenumbers.incoming.source.remote.IncomingPhoneNumberRemoteDataSource;
 import com.android.morephone.data.repository.record.RecordRepository;
 import com.android.morephone.data.repository.record.source.remote.RecordRemoteDataSource;
+import com.android.morephone.data.repository.usage.UsageRepository;
+import com.android.morephone.data.repository.usage.source.remote.UsageRemoteDataSource;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.call.CreateCall;
 import com.android.morephone.domain.usecase.call.DeleteCall;
@@ -31,6 +33,7 @@ import com.android.morephone.domain.usecase.number.GetAvailableCountries;
 import com.android.morephone.domain.usecase.number.incoming.ChangeFriendlyName;
 import com.android.morephone.domain.usecase.record.DeleteRecord;
 import com.android.morephone.domain.usecase.record.GetRecords;
+import com.android.morephone.domain.usecase.usage.GetUsageAllTime;
 
 /**
  * Created by Ethan on 3/3/17.
@@ -144,4 +147,13 @@ public class Injection {
         return new DeleteRecord(providerRecordRepository(context));
     }
 
+    /*-------------------------------------------USAGE-----------------------------------------*/
+
+    private static UsageRepository providerUsageRepository(@NonNull Context context) {
+        return UsageRepository.getInstance(UsageRemoteDataSource.getInstance(context));
+    }
+
+    public static GetUsageAllTime providerGetUsageAllTime(@NonNull Context context) {
+        return new GetUsageAllTime(providerUsageRepository(context));
+    }
 }

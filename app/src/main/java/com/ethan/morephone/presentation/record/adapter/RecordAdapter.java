@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.record.Record;
-import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.call.GetCall;
 import com.ethan.morephone.R;
@@ -145,7 +144,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
         @Override
         public void onToggle(ExpandableLayout view, View child,
                              boolean isExpanded) {
-            DebugTool.logD("bol: " + isExpanded);
 //            if (view.getTag() instanceof RecordsViewHolder) {
 //                final RecordsViewHolder holder = (RecordsViewHolder) view.getTag();
 //                if (!isExpanded) {

@@ -12,6 +12,7 @@ import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
+import com.android.morephone.data.entity.usage.Usage;
 
 import java.util.List;
 
@@ -145,5 +146,16 @@ interface ApiPath {
                                   @Path("callsid") String callsid,
                                   @Path("recordingsid") String recordingsid);
 
+
+    /*-----------------------------------------USAGE-----------------------------------------*/
+
+    @GET("Accounts/{accountsid}/Usage/Records/AllTime.json")
+    Call<Usage> getUsageAllTime(@Path("accountsid") String accountsid);
+
+    @GET("Accounts/{accountsid}/Usage/Records/AllTime.json")
+    Call<Usage> getUsageAllTime(@Path("accountsid") String accountsid, @Query("PageSize") int pageSize, @Query("Page") int page, @Query("PageToken") String pageToken);
+
+    @GET("Accounts/{accountsid}/Usage/Records/AllTime.json")
+    Call<Usage> getUsageAllTime(@Path("accountsid") String accountsid, @Query("Category") String category, @Query("PageSize") int pageSize, @Query("Page") int page, @Query("PageToken") String pageToken);
 
 }

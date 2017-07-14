@@ -17,18 +17,6 @@
     <RelativeLayout style="@style/ViewMatch">
 
         <com.ethan.morephone.widget.MyTextView
-            android:id="@+id/text_usage_phone_number"
-            style="@style/TextSettingDisplay"
-            android:layout_marginTop="?attr/actionBarSize" />
-
-        <View
-            android:id="@+id/view_divider_1"
-            style="@style/Divider"
-            android:layout_width="@dimen/width_divider_short"
-            android:layout_below="@+id/text_usage_phone_number"
-            android:layout_marginTop="@dimen/activity_main_margin" />
-
-        <com.ethan.morephone.widget.MyTextView
             android:id="@+id/text_usage_message"
             style="@style/TextSettingCategory"
             android:layout_below="@+id/view_divider_1"
@@ -181,27 +169,6 @@
 
             <com.ethan.morephone.widget.MyTextView
                 android:id="@+id/text_usage_voice_outgoing_set"
-                style="@style/TextUsageValue" />
-
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/view_divider_8"
-            style="@style/Divider"
-            android:layout_below="@+id/relative_usage_voice_outgoing" />
-
-        <RelativeLayout
-            android:id="@+id/relative_usage_voice_missing"
-            style="@style/RelativeSetting"
-            android:layout_below="@+id/view_divider_8">
-
-            <com.ethan.morephone.widget.MyTextView
-                android:id="@+id/text_usage_voice_missing"
-                style="@style/TextUsageTitle"
-                android:text="@string/usage_voice_missing" />
-
-            <com.ethan.morephone.widget.MyTextView
-                android:id="@+id/text_usage_voice_missing_set"
                 style="@style/TextUsageValue" />
 
         </RelativeLayout>

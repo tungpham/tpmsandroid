@@ -1,6 +1,7 @@
 package com.android.morephone.data.network;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
@@ -12,6 +13,7 @@ import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
+import com.android.morephone.data.entity.usage.Usage;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.TwilioManager;
 
@@ -180,8 +182,8 @@ public class ApiManager {
     }
 
     public static void getCall(Context context,
-                                String callSid,
-                                Callback<com.android.morephone.data.entity.call.Call> callback) {
+                               String callSid,
+                               Callback<com.android.morephone.data.entity.call.Call> callback) {
         Call<com.android.morephone.data.entity.call.Call> call = getApiPath(context).getCall(TwilioManager.getSid(context), callSid);
         call.enqueue(callback);
     }
@@ -279,8 +281,8 @@ public class ApiManager {
     }
 
     public static void buyIncomingPhoneNumber(Context context,
-                                          String phoneNumber,
-                                          Callback<IncomingPhoneNumber> callback) {
+                                              String phoneNumber,
+                                              Callback<IncomingPhoneNumber> callback) {
         Call<IncomingPhoneNumber> call = getApiPath(context).buyIncomingPhoneNumber(TwilioManager.getSid(context), phoneNumber);
         call.enqueue(callback);
     }
@@ -337,4 +339,19 @@ public class ApiManager {
     }
 
 
+    /*----------------------------------------- USAGE -----------------------------------------*/
+
+    public static void getUsageAllTime(Context context,
+                                       String category,
+                                       int page,
+                                       String pageToken,
+                                       Callback<Usage> callback) {
+        if (TextUtils.isEmpty(category)) {
+            Call<Usage> call = getApiPath(context).getUsageAllTime(TwilioManager.getSid(context), PAGE_SIZE, page, pageToken);
+            call.enqueue(callback);
+        } else {
+            Call<Usage> call = getApiPath(context).getUsageAllTime(TwilioManager.getSid(context), category, PAGE_SIZE, page, pageToken);
+            call.enqueue(callback);
+        }
+    }
 }

@@ -6,7 +6,7 @@ allprojects {
 
 ext {
     //Android
-    androidApplicationId = "com.android.morephone"
+    androidApplicationId = "com.morephone.tpms"
     androidBuildToolsVersion = "25.0.1"
     androidMinSdkVersion = 16
     androidTargetSdkVersion = 25

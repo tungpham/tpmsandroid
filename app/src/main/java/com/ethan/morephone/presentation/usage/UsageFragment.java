@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.morephone.data.entity.usage.Usage;
-import com.ethan.morephone.MyPreference;
+import com.android.morephone.data.entity.usage.UsageRecord;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.widget.NavigationTabStrip;
+
+import java.util.List;
 
 /**
  * Created by Ethan on 4/22/17.
@@ -23,6 +26,14 @@ public class UsageFragment extends BaseFragment implements View.OnClickListener,
     public static UsageFragment getInstance() {
         return new UsageFragment();
     }
+
+    public static final String CATEGORY_SMS = "sms";
+    public static final String CATEGORY_SMS_INBOUND = "sms-inbound";
+    public static final String CATEGORY_SMS_OUTBOUND = "sms-outbound";
+
+    public static final String CATEGORY_CALL = "calls";
+    public static final String CATEGORY_CALL_INBOUND = "calls-inbound";
+    public static final String CATEGORY_CALL_OUTBOUND = "calls-outbound";
 
     private ViewPager mViewPager;
 
@@ -35,23 +46,27 @@ public class UsageFragment extends BaseFragment implements View.OnClickListener,
     private TextView mTextVoiceSpent;
     private TextView mTextVoiceIncoming;
     private TextView mTextVoiceOutgoing;
-    private TextView mTextVoiceMissing;
+
+    private int mPage = 0;
+    private String mPageToken = "";
+
+    private int mTotalCalls = 0;
+    private int mInboundCalls = 0;
+    private int mTotalMessage = 0;
+    private int mInboundMessage = 0;
 
     private UsageContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new UsagePresenter(this);
+        new UsagePresenter(this, Injection.providerUseCaseHandler(), Injection.providerGetUsageAllTime(getContext()));
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_usage, container, false);
-
-        TextView textPhoneNumber = (TextView) view.findViewById(R.id.text_usage_phone_number);
-        textPhoneNumber.setText(MyPreference.getPhoneNumber(getContext()));
 
         mTextMessageTotal = (TextView) view.findViewById(R.id.text_usage_message_total_set);
         mTextMessageSpent = (TextView) view.findViewById(R.id.text_usage_message_total_spent);
@@ -62,9 +77,8 @@ public class UsageFragment extends BaseFragment implements View.OnClickListener,
         mTextVoiceSpent = (TextView) view.findViewById(R.id.text_usage_voice_total_spent);
         mTextVoiceIncoming = (TextView) view.findViewById(R.id.text_usage_voice_incoming_set);
         mTextVoiceOutgoing = (TextView) view.findViewById(R.id.text_usage_voice_outgoing_set);
-        mTextVoiceMissing = (TextView) view.findViewById(R.id.text_usage_voice_missing_set);
 
-        mPresenter.loadUsage(getContext());
+        mPresenter.loadUsage(getContext(), mPage, mPageToken);
         return view;
     }
 
@@ -83,22 +97,69 @@ public class UsageFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void showLoading(boolean isActive) {
-        if(isActive) showProgress();
+        if (isActive) showProgress();
         else hideProgress();
     }
 
     @Override
     public void showUsage(Usage usage) {
-        mTextMessageTotal.setText(String.valueOf(usage.usageMessageTotal));
-        mTextMessageSpent.setText(usage.usageMessageSpent);
-        mTextMessageIncoming.setText(String.valueOf(usage.usageMessageIncoming));
-        mTextMessageOutgoing.setText(String.valueOf(usage.usageMessageOutgoing));
 
-        mTextVoiceTotal.setText(String.valueOf(usage.usageVoiceTotal));
-        mTextVoiceSpent.setText(usage.usageVoiceSpent);
-        mTextVoiceIncoming.setText(String.valueOf(usage.usageVoiceIncoming));
-        mTextVoiceOutgoing.setText(String.valueOf(usage.usageVoiceOutgoing));
-        mTextVoiceMissing.setText(String.valueOf(usage.usageVoiceMissing));
+//        if (!TextUtils.isEmpty(usage.nextPageUri)) {
+//            String pageToken = Utils.getPageToken(usage.nextPageUri);
+//            mPresenter.loadUsage(getContext(), mPage + 1, pageToken);
+//        }
+
+
+        List<UsageRecord> usageRecords = usage.usageRecords;
+
+        if (usageRecords != null && !usageRecords.isEmpty()) {
+            for (UsageRecord usageRecord : usageRecords) {
+                if (usageRecord.category.equals(CATEGORY_SMS)) {
+                    mTextMessageSpent.setText(usageRecord.price + usageRecord.priceUnit);
+                    mTextMessageTotal.setText(usageRecord.count + " " + usageRecord.countUnit);
+                    mTotalMessage = Integer.parseInt(usageRecord.count);
+                    if(mInboundMessage > 0){
+                        int outboundMessage = mTotalMessage - mInboundMessage;
+                        mTextMessageOutgoing.setText(String.valueOf(outboundMessage));
+                    }
+
+                }
+
+                if (usageRecord.category.equals(CATEGORY_SMS_INBOUND)) {
+                    mTextMessageIncoming.setText(usageRecord.count + " " + usageRecord.countUnit);
+                    mTextMessageOutgoing.setText(usageRecord.count + " " + usageRecord.countUnit);
+                    mInboundMessage = Integer.parseInt(usageRecord.count);
+                    if(mTotalMessage > 0){
+                        int outboundMessage = mTotalMessage - mInboundMessage;
+                        mTextMessageOutgoing.setText(String.valueOf(outboundMessage));
+                    }
+                }
+
+                if (usageRecord.category.equals(CATEGORY_CALL)) {
+                    mTextVoiceTotal.setText(usageRecord.count + " " + usageRecord.countUnit);
+                    mTextVoiceSpent.setText(usageRecord.priceUnit + " " + usageRecord.price);
+
+                    mTotalCalls = Integer.parseInt(usageRecord.count);
+                    if(mInboundCalls > 0){
+                        int outboundMessage = mTotalCalls - mInboundCalls;
+                        mTextVoiceOutgoing.setText(String.valueOf(outboundMessage));
+                    }
+                }
+
+                if (usageRecord.category.equals(CATEGORY_CALL_INBOUND)) {
+                    mTextVoiceIncoming.setText(usageRecord.count + " " + usageRecord.countUnit);
+
+                    mInboundCalls = Integer.parseInt(usageRecord.count);
+                    if(mTotalCalls > 0){
+                        int outboundMessage = mTotalCalls - mInboundCalls;
+                        mTextVoiceOutgoing.setText(String.valueOf(outboundMessage));
+                    }
+                }
+
+
+            }
+        }
+
     }
 
     @Override

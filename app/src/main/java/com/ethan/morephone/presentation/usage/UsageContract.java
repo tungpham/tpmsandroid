@@ -22,7 +22,7 @@ public interface UsageContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadUsage(Context context);
+        void loadUsage(Context context, int page, String pageToken);
 
     }
 }

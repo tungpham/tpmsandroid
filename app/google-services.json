@@ -1,39 +1,35 @@
 {
   "project_info": {
-    "project_number": "25395780229",
-    "firebase_url": "https://fir-morephone.firebaseio.com",
-    "project_id": "firebase-morephone",
-    "storage_bucket": "firebase-morephone.appspot.com"
+    "project_number": "230496209510",
+    "firebase_url": "https://tpms-android.firebaseio.com",
+    "project_id": "tpms-android",
+    "storage_bucket": "tpms-android.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:25395780229:android:a77b53172f0906f9",
+        "mobilesdk_app_id": "1:230496209510:android:1e4d45eb02cc27d4",
         "android_client_info": {
-          "package_name": "com.android.morephone"
+          "package_name": "com.morephone.tpms"
         }
       },
       "oauth_client": [
         {
-          "client_id": "25395780229-jesk2288cakg5kgvf3jf2eoe974klqa5.apps.googleusercontent.com",
+          "client_id": "230496209510-8up8rl4dtov97ne01lp30ut0ps87mn8g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.android.morephone",
-            "certificate_hash": "768b5b344d03bc38be36830d2c5f188221c6c2a5"
+            "package_name": "com.morephone.tpms",
+            "certificate_hash": "e603971400a09ac5e02a1890b7047a59f8edf849"
           }
         },
         {
-          "client_id": "25395780229-r0pstpi363iv6sjppag3j9kp8ah7cn1j.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "25395780229-4as41kvak8q6o6qp3mopeab3pesf6v8j.apps.googleusercontent.com",
+          "client_id": "230496209510-qjkddjer55ha4keblauapsaor4ri6hrn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyABlvU0WECBuJ5IN-gCjU6tXz9TRZ3a4MY"
+          "current_key": "AIzaSyB3IlOnTkIGiwFFgtwEqUPI_EfWJR5SHuI"
         }
       ],
       "services": {
@@ -41,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230496209510-qjkddjer55ha4keblauapsaor4ri6hrn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

@@ -135,7 +135,7 @@ public class RecordFragment extends BaseFragment implements
         mRecyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
         layoutManager.setReverseLayout(true);
-//        layoutManager.setStackFromEnd(true);
+        layoutManager.setStackFromEnd(true);
 
         mRecordAdapter = new RecordAdapter(getContext(), mPhoneNumber, new ArrayList<Record>(), this);
         mRecyclerView.setAdapter(mRecordAdapter);

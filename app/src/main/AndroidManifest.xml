@@ -61,7 +61,7 @@
 
                 <data
                     android:host="@string/auth0_domain"
-                    android:pathPrefix="/android/com.android.morephone/callback"
+                    android:pathPrefix="/android/com.morephone.tpms/callback"
                     android:scheme="https" />
             </intent-filter>
 
