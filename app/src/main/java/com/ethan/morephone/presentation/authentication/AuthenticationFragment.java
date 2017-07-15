@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.auth0.android.Auth0;
@@ -28,26 +27,23 @@ import com.auth0.android.provider.WebAuthProvider;
 import com.auth0.android.result.Credentials;
 import com.auth0.android.result.UserProfile;
 import com.ethan.morephone.R;
-import com.ethan.morephone.model.UserFacebookModel;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.presentation.authentication.register.RegisterActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
 import com.ethan.morephone.presentation.splash.SplashActivity;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.google.gson.Gson;
 
-import org.json.JSONObject;
+//import com.facebook.CallbackManager;
+//import com.facebook.FacebookCallback;
+//import com.facebook.FacebookException;
+//import com.facebook.FacebookSdk;
+//import com.facebook.GraphRequest;
+//import com.facebook.GraphResponse;
+//import com.facebook.login.LoginManager;
+//import com.facebook.login.LoginResult;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
+//import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 /**
@@ -63,7 +59,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     private final int REQUEST_LOGIN = 100;
     private final int REQUEST_REGISTER = REQUEST_LOGIN + 1;
 
-    CallbackManager callbackManager;
+//    CallbackManager callbackManager;
 
     private Auth0 auth0;
 
@@ -84,58 +80,58 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         auth0.setOIDCConformant(true);
 
         String accessToken = "";
-        Credentials credentials = CredentialsManager.getCredentials(getApplicationContext());
+        Credentials credentials = CredentialsManager.getCredentials(getContext());
         if (credentials != null) accessToken = credentials.getAccessToken();
 
         checkAccessToken(accessToken);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-
-                String accessToken = loginResult.getAccessToken().getToken();
-                DebugTool.logD("ACCESS TOKEN = " + accessToken);
-
-                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        DebugTool.logD("RESPONSE = " + response.getJSONObject().toString());
-                        if (response != null && response.getJSONObject() != null) {
-                            Gson gson = new Gson();
-                            String result = response.getJSONObject().toString();
-                            UserFacebookModel userFacebookModel = gson.fromJson(result, UserFacebookModel.class);
-                            Intent intent = new Intent(getActivity(), RegisterActivity.class);
-                            if (userFacebookModel != null) {
-                                intent.putExtra(RegisterActivity.EXTRA_EMAIL, userFacebookModel.email);
-                            }
-                            startActivityForResult(intent, REQUEST_REGISTER);
-                        }
-                        // Get facebook data from login
-//                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                    }
-
-                });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
-                request.setParameters(parameters);
-                request.executeAsync();
-            }
-
-            @Override
-            public void onCancel() {
-                DebugTool.logE("CANCEL");
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                DebugTool.printStackTrace(exception);
-                DebugTool.logE("ERROR");
-            }
-        });
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+//        callbackManager = CallbackManager.Factory.create();
+//        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+//
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//
+//                String accessToken = loginResult.getAccessToken().getToken();
+//                DebugTool.logD("ACCESS TOKEN = " + accessToken);
+//
+//                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+//
+//                    @Override
+//                    public void onCompleted(JSONObject object, GraphResponse response) {
+//                        DebugTool.logD("RESPONSE = " + response.getJSONObject().toString());
+//                        if (response != null && response.getJSONObject() != null) {
+//                            Gson gson = new Gson();
+//                            String result = response.getJSONObject().toString();
+//                            UserFacebookModel userFacebookModel = gson.fromJson(result, UserFacebookModel.class);
+//                            Intent intent = new Intent(getActivity(), RegisterActivity.class);
+//                            if (userFacebookModel != null) {
+//                                intent.putExtra(RegisterActivity.EXTRA_EMAIL, userFacebookModel.email);
+//                            }
+//                            startActivityForResult(intent, REQUEST_REGISTER);
+//                        }
+//                        // Get facebook data from login
+////                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+//                    }
+//
+//                });
+//                Bundle parameters = new Bundle();
+//                parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
+//                request.setParameters(parameters);
+//                request.executeAsync();
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                DebugTool.logE("CANCEL");
+//            }
+//
+//            @Override
+//            public void onError(FacebookException exception) {
+//                DebugTool.printStackTrace(exception);
+//                DebugTool.logE("ERROR");
+//            }
+//        });
         return view;
     }
 
@@ -192,7 +188,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+//        callbackManager.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_LOGIN || requestCode == REQUEST_REGISTER) {
             if (resultCode == Activity.RESULT_OK) {
                 startActivity(new Intent(getActivity(), MainActivity.class));
@@ -223,14 +219,14 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), "Log In - Error Occurred", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Log In - Error Occurred", Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
         @Override
         public void onSuccess(@NonNull Credentials credentials) {
-            CredentialsManager.saveCredentials(getApplicationContext(), credentials);
+            CredentialsManager.saveCredentials(getContext(), credentials);
             startActivity(new Intent(getActivity(), SplashActivity.class));
             getActivity().finish();
 //            checkAccessToken(credentials.getAccessToken());
@@ -240,7 +236,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     };
 
     private void nextActivity() {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        startActivity(new Intent(getContext(), MainActivity.class));
         getActivity().finish();
     }
 
@@ -256,7 +252,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
                                     && payload.getUserMetadata() != null
                                     && payload.getUserMetadata().containsKey("sid")
                                     && payload.getUserMetadata().containsKey("auth_code")) {
-                                TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
+                                TwilioManager.saveTwilio(getContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
                             }
 //                            hideProgress();
                             nextActivity();
@@ -264,7 +260,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
 
                         @Override
                         public void onFailure(AuthenticationException error) {
-                            CredentialsManager.deleteCredentials(getApplicationContext());
+                            CredentialsManager.deleteCredentials(getContext());
 //                            hideProgress();
                         }
                     });

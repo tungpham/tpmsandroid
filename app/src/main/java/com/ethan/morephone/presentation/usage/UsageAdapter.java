@@ -4,9 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.ethan.morephone.presentation.usage.message.MessageUsageFragment;
-import com.ethan.morephone.presentation.usage.voice.VoiceUsageFragment;
-
 /**
  * Created by Ethan on 3/4/17.
  */
@@ -21,10 +18,10 @@ public class UsageAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0:
-                return MessageUsageFragment.getInstance();
-            case 1:
-                return VoiceUsageFragment.getInstance();
+//            case 0:
+//                return MessageUsageFragment.getInstance();
+//            case 1:
+//                return VoiceUsageFragment.getInstance();
             default:
                 return null;
         }

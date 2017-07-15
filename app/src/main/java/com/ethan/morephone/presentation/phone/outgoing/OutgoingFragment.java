@@ -71,7 +71,7 @@ public class OutgoingFragment extends BaseFragment implements View.OnClickListen
             case R.id.image_outgoing_mute:
                 MyPreference.setMuteMicrophone(getContext(), !MyPreference.getMuteMicrophone(getContext()));
                 changeMuteMicrophone();
-                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_MUTE_MICOPHONE, mFromPhoneNumber, mToPhoneNumber);
+                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_MUTE_MICROPHONE, mFromPhoneNumber, mToPhoneNumber);
                 break;
             case R.id.image_outgoing_speaker:
                 MyPreference.setSpeakerphone(getContext(), !MyPreference.getSpeakerphone(getContext()));

@@ -69,26 +69,21 @@ dependencies {
     compile presentationDependencies.appcompat
     compile presentationDependencies.design
     compile presentationDependencies.cardview
-    compile presentationDependencies.firebaseCrash
     compile presentationDependencies.servicesGcm
     compile presentationDependencies.servicesAuth
     compile presentationDependencies.servicesWallet
 
     compile('com.paypal.sdk:paypal-android-sdk:2.15.3') {
-        exclude group:'com.squareup.okhttp3', module:'okhttp'
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
-    compile 'com.google.android.gms:play-services-wallet:10.0.1'
-
     compile 'com.stripe:stripe-android:4.0.2'
     compile 'com.klinkerapps:android-chips:1.0.0'
-    compile 'com.twilio:voice-android:2.0.0-beta4'
-    compile 'com.twilio:client-android:1.2.19'
+    compile 'com.twilio:voice-android:2.0.0-beta14'
+    compile 'com.twilio:client-android:1.2.20'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.koushikdutta.ion:ion:2.1.8'
     compile 'com.google.android.exoplayer:exoplayer:r2.3.1'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.github.ozodrukh:CircularReveal:1.0.5'
-    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:multidex:1.0.1'
     compile project(':domain')

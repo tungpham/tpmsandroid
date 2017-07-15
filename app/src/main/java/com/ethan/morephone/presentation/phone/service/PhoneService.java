@@ -19,6 +19,7 @@ import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
+import com.ethan.morephone.utils.EnumUtil;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.twilio.client.Connection;
@@ -39,7 +40,7 @@ import static com.twilio.client.impl.TwilioImpl.getContext;
 
 public class PhoneService extends Service implements DeviceListener, ConnectionListener {
 
-//    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
+    //    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
     private static final String TOKEN_SERVICE_URL = "https://serene-retreat-83757.herokuapp.com/twilio/create/token";
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
@@ -50,9 +51,13 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public final static String ACTION_ACCEPT_INCOMING = "com.ethan.morephone.action.ACCEPT_INCOMING";
     public final static String ACTION_DECLINE_INCOMING = "com.ethan.morephone.action.DECLINE_INCOMING";
     public final static String ACTION_SEND_DIGITS = "com.ethan.morephone.action.SEND_DIGITS";
-    public final static String ACTION_MUTE_MICOPHONE = "com.ethan.morephone.action.MUTE_MICROPHONE";
+    public final static String ACTION_MUTE_MICROPHONE = "com.ethan.morephone.action.MUTE_MICROPHONE";
     public final static String ACTION_SPEAKER_PHONE = "com.ethan.morephone.action.SPEAKER_PHONE";
-    public final static String ACTION_UPDATE_UI = "com.ethan.morephonet.action.ACTION_UPDATE_UI";
+    public final static String ACTION_UPDATE_UI = "com.ethan.morephone.action.ACTION_UPDATE_UI";
+    public final static String ACTION_UPDATE_DEVICE_STATE = "com.ethan.morephone.action.ACTION_UPDATE_DEVICE_STATE";
+    public final static String ACTION_UPDATE_DEVICE_PARTNER_STATE = "com.ethan.morephone.action.ACTION_UPDATE_DEVICE_PARTNER_STATE";
+
+    public final static String EXTRA_DEVICE_STATE = "EXTRA_DEVICE_STATE";
 
     public final static String EXTRA_PHONE_STATE = "EXTRA_PHONE_STATE";
     public final static String EXTRA_FROM_PHONE_NUMBER = "EXTRA_FROM_PHONE_NUMBER";
@@ -146,7 +151,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             else if (action.equals(ACTION_DECLINE_INCOMING))
                 processDeclineIncomingRequest(mFromPhoneNumber, mToPhoneNumber);
             else if (action.equals(ACTION_SEND_DIGITS)) processSendDigit(digit);
-            else if (action.equals(ACTION_MUTE_MICOPHONE)) processMuteMicrophone();
+            else if (action.equals(ACTION_MUTE_MICROPHONE)) processMuteMicrophone();
             else if (action.equals(ACTION_SPEAKER_PHONE)) processSpeakerMicrophone();
         } else {
             return START_NOT_STICKY;
@@ -171,15 +176,19 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public void onStartListening(Device device) {
         DebugTool.logD("START LISTENING: " + device.getCapabilities().toString());
         DebugTool.logD("START LISTENING STATE: " + device.getState().name());
+        updateDeviceState(device.getState());
     }
 
     @Override
     public void onStopListening(Device device) {
         DebugTool.logD("STOP LISTENING: " + device.getState().name());
+        updateDeviceState(device.getState());
     }
 
     @Override
     public void onStopListening(Device device, int i, String s) {
+        updateDeviceState(device.getState());
+        DebugTool.logD("STOP LISTENING2: " + device.getState().name());
         DebugTool.logD("STOP LISTENING2 : " + s + " |||| " + device.getCapabilities().toString());
     }
 
@@ -191,43 +200,28 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     @Override
     public void onPresenceChanged(Device device, PresenceEvent presenceEvent) {
-        DebugTool.logD("PRESENCE CHANGE: " + device.toString());
+        DebugTool.logD("PRESENCE CHANGE: " + device.toString() + "  |||| " + device.getState().name());
     }
 
     @Override
     public void onConnecting(Connection connection) {
-        DebugTool.logD("CONNECTING : " + connection.getParameters().toString());
+        DebugTool.logD("onConnecting: " + connection.getParameters().toString() + " |||| " + connection.getState().name());
     }
 
     @Override
     public void onConnected(Connection connection) {
-        DebugTool.logD("CONNECTED");
+        DebugTool.logD("onConnected: " + connection.getParameters().toString() + " |||| " + connection.getState().name());
         updateUIPhone(PHONE_STATE_IN_CALL, mFromPhoneNumber, mToPhoneNumber);
-//        showInCallFragment();
     }
 
     @Override
     public void onDisconnected(Connection connection) {
-        DebugTool.logD("DISCONNECTED ");
+        DebugTool.logD("onDisconnected: " + connection.getParameters().toString() + " |||| " + connection.getState().name());
         updateUIPhone(PHONE_STATE_DISCONNECTED, mFromPhoneNumber, mToPhoneNumber);
-//        showDialFragment();
-        if (connection.getState() == Connection.State.PENDING) {
-            DebugTool.logD("PENDING");
-        } else if (connection.getState() == Connection.State.CONNECTED) {
-            DebugTool.logD("CONNECTED");
-        } else if (connection.getState() == Connection.State.CONNECTING) {
-            DebugTool.logD("CONNECTING");
-        } else if (connection.getState() == Connection.State.DISCONNECTED) {
-            DebugTool.logD("DISCONNECTED");
-        }
 
         if (mPartnerDevice != null) {
-            if (mPartnerDevice.getState() == Device.State.BUSY) {
-                DebugTool.logD("BUSY");
-            } else if (mPartnerDevice.getState() == Device.State.OFFLINE) {
-                DebugTool.logD("OFFLINE");
-            }
-            DebugTool.logD("DIVECE: "  + mPartnerDevice.getState().name());
+            updateDevicePartnerState(mPartnerDevice.getState());
+            DebugTool.logD("mPartnerDevice: " + mPartnerDevice.getState().name());
         }
     }
 
@@ -407,6 +401,19 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         intent.putExtra(EXTRA_TO_PHONE_NUMBER, toPhoneNumber);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
+    private void updateDeviceState(Device.State deviceState) {
+        Intent intent = new Intent(PhoneService.ACTION_UPDATE_DEVICE_STATE);
+        EnumUtil.serialize(deviceState).to(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void updateDevicePartnerState(Device.State deviceState) {
+        Intent intent = new Intent(PhoneService.ACTION_UPDATE_DEVICE_PARTNER_STATE);
+        EnumUtil.serialize(deviceState).to(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
 
     private void setAudioFocus(boolean setFocus) {
         if (mAudioManager != null) {

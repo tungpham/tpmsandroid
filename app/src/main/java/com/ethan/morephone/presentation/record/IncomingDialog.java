@@ -26,14 +26,14 @@ public class IncomingDialog extends DialogFragment {
                 .setPositiveButton("Accept",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                ((TestVoiceActivity)getActivity()).doPositiveClick();
+//                                ((TestVoiceActivity)getActivity()).doPositiveClick();
                             }
                         }
                 )
                 .setNegativeButton("Reject",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                ((TestVoiceActivity)getActivity()).doNegativeClick();
+//                                ((TestVoiceActivity)getActivity()).doNegativeClick();
                             }
                         }
                 )

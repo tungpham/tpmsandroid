@@ -11,16 +11,16 @@ ext {
     androidMinSdkVersion = 16
     androidTargetSdkVersion = 25
     androidCompileSdkVersion = 25
-    androidVersionCode = 1
+    androidVersionCode = 2
     androidVersionName = "1.0.0"
 
     //Google Libraries
     supportVersion = '25.0.1'
-    servicesVersion = '10.0.1'
-    firebaseVersion = '10.0.1'
-    mapVersion = '10.0.1'
+    servicesVersion = '11.0.1'
+    firebaseVersion = '11.0.1'
+    mapVersion = '11.0.1'
     guavaVersion = '18.0'
-    multidexVersion = '1.0.0'
+    multidexVersion = '1.0.1'
     gsonVersion = '2.7'
 
     //Other Libraries

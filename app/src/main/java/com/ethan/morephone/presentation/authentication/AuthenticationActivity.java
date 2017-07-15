@@ -11,7 +11,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.utils.ActivityUtils;
-import com.facebook.FacebookSdk;
+//import com.facebook.FacebookSdk;
 
 
 /**
@@ -27,7 +27,7 @@ public class AuthenticationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
+//        FacebookSdk.sdkInitialize(getApplicationContext());
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof AuthenticationFragment) return;

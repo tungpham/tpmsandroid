@@ -129,7 +129,7 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
             case R.id.image_in_call_mute:
                 MyPreference.setMuteMicrophone(getContext(), !MyPreference.getMuteMicrophone(getContext()));
                 changeMuteMicrophone();
-                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_MUTE_MICOPHONE, mFromPhoneNumber, mToPhoneNumber);
+                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_MUTE_MICROPHONE, mFromPhoneNumber, mToPhoneNumber);
                 break;
 
             case R.id.floating_button_in_call_hang_up:
