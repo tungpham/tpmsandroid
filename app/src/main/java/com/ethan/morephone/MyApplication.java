@@ -1,10 +1,17 @@
 package com.ethan.morephone;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.widget.Toast;
+
+import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
+import com.ethan.morephone.presentation.buy.payment.checkout.PlayStoreListener;
+
+import javax.annotation.Nonnull;
 
 
 /**
@@ -12,6 +19,21 @@ import android.support.multidex.MultiDexApplication;
  */
 
 public class MyApplication extends MultiDexApplication {
+
+    @Nonnull
+    private final Billing mBilling = new Billing(this, new Billing.DefaultConfiguration() {
+        @Nonnull
+        @Override
+        public String getPublicKey() {
+            // encrypted public key of the app. Plain version can be found in Google Play's Developer
+            // Console in Service & APIs section under "YOUR LICENSE KEY FOR THIS APPLICATION" title.
+            // A naive encryption algorithm is used to "protect" the key. See more about key protection
+            // here: https://developer.android.com/google/play/billing/billing_best_practices.html#key
+            final String s = "";
+            return Encryption.decrypt(s, "morephone@gmail.com");
+        }
+    });
+
 
     private static final String USER_PREFS = "com.google.android.gms.samples.wallet.USER_PREFS";
     private static final String KEY_USERNAME = "com.google.android.gms.samples.wallet.KEY_USERNAME";
@@ -40,12 +62,33 @@ public class MyApplication extends MultiDexApplication {
 
         mPrefs = getSharedPreferences(USER_PREFS, MODE_PRIVATE);
         mUserName = mPrefs.getString(KEY_USERNAME, null);
+
+        mBilling.addPlayStoreListener(new PlayStoreListener() {
+            @Override
+            public void onPurchasesChanged() {
+                Toast.makeText(MyApplication.this, R.string.purchases_changed, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+
+
+
+    /**
+     * Returns an instance of {@link MyApplication} attached to the passed activity.
+     */
+    public static MyApplication get(Activity activity) {
+        return (MyApplication) activity.getApplication();
+    }
+
+    @Nonnull
+    public Billing getBilling() {
+        return mBilling;
     }
 
     public boolean isLoggedIn() {

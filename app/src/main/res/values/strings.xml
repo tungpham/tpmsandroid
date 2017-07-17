@@ -289,8 +289,7 @@
     <!-- Payment Fragment -->
     <string name="payment_label">Payment</string>
     <string name="payment_methods">Payment Methods</string>
-
-
+    <string name="purchases_changed">Play Store: purchases have changed!</string>
 
     <string name="next">NEXT</string>
     <string name="previous">PREVIOUS</string>

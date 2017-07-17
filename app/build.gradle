@@ -72,10 +72,12 @@ dependencies {
     compile presentationDependencies.servicesGcm
     compile presentationDependencies.servicesAuth
     compile presentationDependencies.servicesWallet
+    compile presentationDependencies.supportV4
 
     compile('com.paypal.sdk:paypal-android-sdk:2.15.3') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
+    compile 'com.google.code.findbugs:jsr305:2.0.3'
     compile 'com.stripe:stripe-android:4.0.2'
     compile 'com.klinkerapps:android-chips:1.0.0'
     compile 'com.twilio:voice-android:2.0.0-beta14'
@@ -90,6 +92,7 @@ dependencies {
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
     })
     testCompile 'junit:junit:4.12'
 }

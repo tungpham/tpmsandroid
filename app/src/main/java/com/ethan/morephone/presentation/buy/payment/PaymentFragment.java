@@ -36,14 +36,14 @@ public class PaymentFragment extends BaseFragment implements View.OnClickListene
 
     private static final int REQUEST_CODE_PAYMENT = 1;
 
-    private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
-    private static final String CONFIG_CLIENT_ID = "AUOoaumERgukf8fbz6pPyH3e0jqyOBzEjvgdsSagrQB1oVwzdfLqgfgFHEMNZquHUY-gEfrGbtozDUFW";
+    private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_PRODUCTION;
+    private static final String CONFIG_CLIENT_ID = "AeyY3-oFAor-ELi0jPGQXWAAvWlj-0FlS1gn9mJ4BCpADKgFeqzGucmJwJGeUOcTT5T8lRQObZPdQQGm";
 
     private static PayPalConfiguration config = new PayPalConfiguration()
             .environment(CONFIG_ENVIRONMENT)
             .clientId(CONFIG_CLIENT_ID)
             // The following are only used in PayPalFuturePaymentActivity.
-            .merchantName("Example Merchant")
+            .merchantName("More Phone Merchant")
             .merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
             .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
@@ -90,8 +90,7 @@ public class PaymentFragment extends BaseFragment implements View.OnClickListene
     }
 
     private PayPalPayment getThingToBuy(String paymentIntent) {
-        return new PayPalPayment(new BigDecimal("0.01"), "USD", "sample item",
-                paymentIntent);
+        return new PayPalPayment(new BigDecimal("0.01"), "USD", "Add fund More Phone", paymentIntent);
     }
 
     @Override
