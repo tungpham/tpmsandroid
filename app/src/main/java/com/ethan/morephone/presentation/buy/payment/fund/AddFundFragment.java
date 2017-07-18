@@ -2,19 +2,38 @@ package com.ethan.morephone.presentation.buy.payment.fund;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
+import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.payment.card.CardActivity;
 import com.ethan.morephone.presentation.buy.payment.card.CreditCardUtils;
+import com.ethan.morephone.presentation.buy.payment.checkout.ActivityCheckout;
+import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
+import com.ethan.morephone.presentation.buy.payment.checkout.BillingRequests;
+import com.ethan.morephone.presentation.buy.payment.checkout.Checkout;
+import com.ethan.morephone.presentation.buy.payment.checkout.Inventory;
+import com.ethan.morephone.presentation.buy.payment.checkout.Purchase;
+import com.ethan.morephone.presentation.buy.payment.checkout.PurchaseFlow;
+import com.ethan.morephone.presentation.buy.payment.checkout.RequestListener;
+import com.ethan.morephone.presentation.buy.payment.checkout.Sku;
+import com.ethan.morephone.presentation.buy.payment.fund.adapter.AvailableSkusAdapter;
+import com.ethan.morephone.presentation.buy.payment.fund.adapter.PurchasedSkusAdapter;
+import com.ethan.morephone.presentation.buy.payment.fund.adapter.TargetSkusAdapter;
+import com.ethan.morephone.presentation.buy.payment.fund.model.SkuItem;
 import com.ethan.morephone.presentation.buy.payment.purchase.PaymentMethodsDialog;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -25,6 +44,14 @@ import com.paypal.android.sdk.payments.PaymentConfirmation;
 import org.json.JSONException;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+
+import static com.ethan.morephone.presentation.buy.payment.checkout.ProductTypes.SUBSCRIPTION;
 
 /**
  * Created by Ethan on 5/10/17.
@@ -48,6 +75,12 @@ public class AddFundFragment extends BaseFragment implements
             .merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
             .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
+    private static final List<String> SKUS = Arrays.asList("sub_01", "sub_02");
+    private ActivityCheckout mCheckout;
+    private RecyclerView mPurchasedSkus;
+    private Spinner mTargetSkus;
+    private Spinner mAvailableSkus;
+    private final List<Inventory.Callback> mInventoryCallbacks = new ArrayList<>();
 
     public static AddFundFragment getInstance() {
         return new AddFundFragment();
@@ -61,11 +94,32 @@ public class AddFundFragment extends BaseFragment implements
         getActivity().startService(intent);
     }
 
+    private PurchasedSkusAdapter mPurchasedSkusAdapter;
+    private TargetSkusAdapter mTargetSkusAdapter;
+//    private AppCompatButton mButtonAddFund;
+    private Button mBuy;
+    private Button mChange;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_fund, container, false);
-        view.findViewById(R.id.button_purchase_add_fund).setOnClickListener(this);
+        View view = inflater.inflate(R.layout.activity_subscriptions, container, false);
+//        view.findViewById(R.id.button_purchase_add_fund).setOnClickListener(this);
+        mBuy = (Button) view.findViewById(R.id.buy);
+        mChange = (Button) view.findViewById(R.id.change);
+        mPurchasedSkus = (RecyclerView) view.findViewById(R.id.purchased_skus);
+        mTargetSkus = (Spinner) view.findViewById(R.id.target_skus);
+        mAvailableSkus = (Spinner) view.findViewById(R.id.available_skus);
+
+        initAvailableSkus();
+        initPurchasedSkus();
+        initTargetSkus();
+
+        final Billing billing = MyApplication.get(getActivity()).getBilling();
+        mCheckout = Checkout.forActivity(getActivity(), billing);
+        mCheckout.start();
+        reloadInventory();
+
         return view;
     }
 
@@ -156,5 +210,129 @@ public class AddFundFragment extends BaseFragment implements
     public void onDestroy() {
         getActivity().stopService(new Intent(getActivity(), PayPalService.class));
         super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle out) {
+        mPurchasedSkusAdapter.saveSate(out);
+        super.onSaveInstanceState(out);
+    }
+
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        mPurchasedSkusAdapter.restoreState(savedInstanceState);
+    }
+
+    private void initPurchasedSkus() {
+        mPurchasedSkusAdapter = new PurchasedSkusAdapter(getActivity(), new PurchasedSkusAdapter.Listener() {
+            @Override
+            public void onCheckedChanged() {
+                updateTargetSkusVisibility();
+            }
+        });
+        mPurchasedSkus.setAdapter(mPurchasedSkusAdapter);
+        mPurchasedSkus.setLayoutManager(new LinearLayoutManager(getContext()));
+        mInventoryCallbacks.add(mPurchasedSkusAdapter);
+    }
+
+    private void initAvailableSkus() {
+        final AvailableSkusAdapter adapter = new AvailableSkusAdapter(getContext());
+        mAvailableSkus.setAdapter(adapter);
+        adapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                mBuy.setEnabled(adapter.getCount() > 0);
+            }
+        });
+        mBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int position = mAvailableSkus.getSelectedItemPosition();
+                if (position >= 0 && position < adapter.getCount()) {
+                    final SkuItem item = adapter.getItem(position);
+                    if (item != null) {
+                        purchase(item.getSku());
+                    }
+                }
+            }
+        });
+        mInventoryCallbacks.add(adapter);
+    }
+
+    private void reloadInventory() {
+        final Inventory.Request request = Inventory.Request.create();
+        request.loadPurchases(SUBSCRIPTION);
+        request.loadSkus(SUBSCRIPTION, SKUS);
+        mCheckout.loadInventory(request, new Inventory.Callback() {
+            @Override
+            public void onLoaded(@Nonnull Inventory.Products products) {
+                for (Inventory.Callback callback : mInventoryCallbacks) {
+                    DebugTool.logD("CALLBACK: " + products.size());
+                    callback.onLoaded(products);
+                }
+            }
+        });
+    }
+
+    private void initTargetSkus() {
+        mTargetSkusAdapter = new TargetSkusAdapter(getContext());
+        mTargetSkus.setAdapter(mTargetSkusAdapter);
+        mTargetSkusAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                updateTargetSkusVisibility();
+            }
+        });
+        mChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Set<Sku> checked = mPurchasedSkusAdapter.getChecked();
+                if (checked.isEmpty()) {
+                    return;
+                }
+                final int position = mTargetSkus.getSelectedItemPosition();
+                if (position >= 0 && position < mTargetSkusAdapter.getCount()) {
+                    final SkuItem item = mTargetSkusAdapter.getItem(position);
+                    if (item != null) {
+                        change(checked, item.getSku());
+                    }
+                }
+            }
+        });
+        mInventoryCallbacks.add(mTargetSkusAdapter);
+    }
+
+    private void updateTargetSkusVisibility() {
+        final boolean enabled = mTargetSkusAdapter.getCount() > 0 && mPurchasedSkusAdapter.getChecked().size() > 0;
+//        mChange.setEnabled(enabled);
+        mTargetSkus.setEnabled(enabled);
+    }
+
+    private void purchase(Sku sku) {
+        mCheckout.startPurchaseFlow(sku, null, new PurchaseListener());
+    }
+
+    private void change(final Set<Sku> old, final Sku sku) {
+        mCheckout.whenReady(new Checkout.EmptyListener() {
+            @Override
+            public void onReady(@Nonnull BillingRequests requests) {
+                final PurchaseFlow flow = mCheckout.createOneShotPurchaseFlow(new PurchaseListener());
+                requests.changeSubscription(new ArrayList<>(old), sku, null, flow);
+            }
+        });
+    }
+
+    private class PurchaseListener implements RequestListener<Purchase> {
+        @Override
+        public void onSuccess(@Nonnull Purchase result) {
+            reloadInventory();
+        }
+
+        @Override
+        public void onError(int response, @Nonnull Exception e) {
+            reloadInventory();
+        }
     }
 }

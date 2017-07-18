@@ -29,8 +29,8 @@ public class MyApplication extends MultiDexApplication {
             // Console in Service & APIs section under "YOUR LICENSE KEY FOR THIS APPLICATION" title.
             // A naive encryption algorithm is used to "protect" the key. See more about key protection
             // here: https://developer.android.com/google/play/billing/billing_best_practices.html#key
-            final String s = "";
-            return Encryption.decrypt(s, "morephone@gmail.com");
+            final String s = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhziPq0YT4evePmkFel/p8/paiABLGTbCCRqc9rSU1OypyOqpSD851o6VeeC7hDJyyYPbQnGtB/7sHYP+brFNr2Nqrlmb90aVh0FO/40DQO0/aMuhgyECpLJ7IJXZ9MLuqOscZ2qnatVBbpTHy7sJb/a8ZCXOXlMHpPlcYI7kaCJ+0nm2t16ltDF0CxMz5FUoUyb6KfqFkHMe/48HcGfQVoxP3JOpDe5tP3KITAXDsOEXCLWpYVNFtvM0wImOYmAc6BqRHvNL2WTIex87DWtnQfxt3qrRfn0jv/rDv8t5hguutsToHC9pr/DWEY4wPkkGFdU308tMe+l9HkWpxK/jqQIDAQAB";
+            return s;
         }
     });
 
