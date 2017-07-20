@@ -25,8 +25,8 @@ public class AddFundActivity extends BaseActivity {
         enableHomeActionBar(mToolbar, getString(R.string.add_fund_label));
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (fragment instanceof AddFundFragment) return;
-        AddFundFragment browserFragment = AddFundFragment.getInstance();
+        if (fragment instanceof AddFundFrag) return;
+        AddFundFrag browserFragment = AddFundFrag.getInstance();
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 browserFragment,

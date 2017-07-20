@@ -28,11 +28,11 @@ public class AvailableSkusAdapter extends ArrayAdapter<SkuItem> implements Inven
     public void onLoaded(@Nonnull Inventory.Products products) {
         final Inventory.Product product = products.get(SUBSCRIPTION);
         for (Inventory.Product pro : products) {
-            for(Purchase purchase : pro.getPurchases()){
+            for (Purchase purchase : pro.getPurchases()) {
                 DebugTool.logD("purchase: " + purchase.sku);
             }
 
-            for(Sku sku : pro.getSkus()){
+            for (Sku sku : pro.getSkus()) {
                 DebugTool.logD("SKU: " + sku.getDisplayTitle());
             }
 
@@ -42,10 +42,7 @@ public class AvailableSkusAdapter extends ArrayAdapter<SkuItem> implements Inven
         DebugTool.logD("PRODUCT:" + product.toString());
         for (Sku sku : product.getSkus()) {
             DebugTool.logD("ALL: " + sku.getDisplayTitle());
-            if (!product.isPurchased(sku)) {
-                DebugTool.logD("SKU: " + sku.getDisplayTitle());
-                add(new SkuItem(sku));
-            }
+            add(new SkuItem(sku));
         }
         notifyDataSetChanged();
     }

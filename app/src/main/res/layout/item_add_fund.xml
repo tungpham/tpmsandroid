@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative_purchase_add_fund"
+    style="@style/RelativeSetting">
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_purchase_title"
+        style="@style/TextTorrentSettingItem" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_purchase_description"
+        style="@style/TextTorrentSettingSummary"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_purchase_title" />
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_purchase_price"
+        style="@style/TextTorrentSettingSummary"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:gravity="right"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

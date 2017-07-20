@@ -75,7 +75,7 @@ public class AddFundFragment extends BaseFragment implements
             .merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
             .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
-    private static final List<String> SKUS = Arrays.asList("sub_01", "sub_02");
+    private static final List<String> SKUS = Arrays.asList("sub_01");
     private ActivityCheckout mCheckout;
     private RecyclerView mPurchasedSkus;
     private Spinner mTargetSkus;
@@ -162,6 +162,7 @@ public class AddFundFragment extends BaseFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCheckout.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
@@ -327,6 +328,7 @@ public class AddFundFragment extends BaseFragment implements
     private class PurchaseListener implements RequestListener<Purchase> {
         @Override
         public void onSuccess(@Nonnull Purchase result) {
+            DebugTool.logD("Purchase: " + result.toJson());
             reloadInventory();
         }
 
