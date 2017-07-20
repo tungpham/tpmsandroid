@@ -13,8 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.ApiPurchaseManager;
 import com.ethan.morephone.MyApplication;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.payment.checkout.ActivityCheckout;
@@ -37,6 +40,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.ethan.morephone.presentation.buy.payment.checkout.ProductTypes.IN_APP;
 
@@ -170,7 +177,7 @@ public class AddFundFrag extends BaseFragment implements
 
         private Sku mSku;
 
-        public ConsumeListener(Sku sku){
+        public ConsumeListener(Sku sku) {
             mSku = sku;
         }
 
@@ -187,6 +194,27 @@ public class AddFundFrag extends BaseFragment implements
         @Override
         public void onSuccess(@Nonnull Purchase purchase) {
             mPurchase = purchase;
+
+            MorePhonePurchase morePhonePurchase = new MorePhonePurchase(
+                    MyPreference.getUserEmail(getContext()),
+                    purchase.packageName,
+                    purchase.token,
+                    purchase.state.id,
+                    purchase.orderId,
+                    purchase.time,
+                    purchase.sku);
+
+            ApiPurchaseManager.purchase(getContext(), morePhonePurchase, new Callback<MorePhonePurchase>() {
+                @Override
+                public void onResponse(Call<MorePhonePurchase> call, Response<MorePhonePurchase> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<MorePhonePurchase> call, Throwable t) {
+
+                }
+            });
             DebugTool.logD("PURCHASE SUCCESS + " + purchase.toJson());
         }
     }
@@ -195,7 +223,7 @@ public class AddFundFrag extends BaseFragment implements
 
         private Sku mSku;
 
-        public InventoryCallback(Sku sku){
+        public InventoryCallback(Sku sku) {
             mSku = sku;
         }
 
