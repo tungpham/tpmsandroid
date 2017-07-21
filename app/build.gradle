@@ -73,6 +73,7 @@ dependencies {
     compile presentationDependencies.servicesAuth
     compile presentationDependencies.servicesWallet
     compile presentationDependencies.supportV4
+    compile presentationDependencies.firebaseMessage
 
     compile('com.paypal.sdk:paypal-android-sdk:2.15.3') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'

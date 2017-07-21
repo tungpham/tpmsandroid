@@ -24,13 +24,13 @@
     <!-- needed to receive audio from microphone during a call -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="com.twilio.voice.quickstart.permission.C2D_MESSAGE" />
 
-    <permission
-        android:name="com.twilio.voice.quickstart.permission.C2D_MESSAGE"
+
+    <permission android:name="com.morephone.tpms.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.morephone.tpms.permission.C2D_MESSAGE" />
 
     <application
         android:name=".MyApplication"
@@ -64,7 +64,7 @@
 
                 <data
                     android:host="@string/auth0_domain"
-                    android:pathPrefix="/android/com.morephone.tpms/callback"
+                    android:pathPrefix="/android/com.android.tpms/callback"
                     android:scheme="https" />
             </intent-filter>
 
@@ -150,6 +150,37 @@
         <service
             android:name=".gcm.GCMRegistrationService"
             android:exported="false" />
+
+        <!-- [START fcm_listener] -->
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/blue_color" />
+
+        <service
+            android:name=".RegistrationIntentService"
+            android:exported="false">
+        </service>
+
+        <service
+            android:name=".fcm.VoiceFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- [END fcm_listener] -->
+        <!-- [START instanceId_listener] -->
+        <service
+            android:name=".fcm.VoiceFirebaseInstanceIDService" >
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- [END instanceId_listener] -->
+
 
         <service android:name=".presentation.phone.service.PhoneService">
             <intent-filter>
