@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.application.Applications;
 import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
 import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
@@ -353,5 +354,14 @@ public class ApiManager {
             Call<Usage> call = getApiPath(context).getUsageAllTime(TwilioManager.getSid(context), category, PAGE_SIZE, page, pageToken);
             call.enqueue(callback);
         }
+    }
+
+
+    /*----------------------------------------- APPLICATIONS -----------------------------------------*/
+
+    public static void getApplications(Context context,
+                                       Callback<Applications> callback) {
+        Call<Applications> call = getApiPath(context).getApplications(TwilioManager.getSid(context));
+        call.enqueue(callback);
     }
 }

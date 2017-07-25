@@ -2,17 +2,13 @@ package com.android.morephone.data.network;
 
 import android.content.Context;
 
-import com.android.morephone.data.entity.call.Calls;
-import com.android.morephone.data.entity.record.Records;
-import com.android.morephone.data.entity.usage.Usage;
+import com.android.morephone.data.BaseUrl;
+import com.android.morephone.data.entity.Response;
+import com.android.morephone.data.entity.register.BindingRequest;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,7 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiMorePhone {
 
     //    private static final String BASE_URL = "https://raw.githubusercontent.com/tungpham/tpmsservices/";
-    private static final String BASE_URL = "https://private-091c0-morephone.apiary-mock.com/";
 
     private static ApiMorePhonePath mApiPath;
 
@@ -60,20 +55,20 @@ public class ApiMorePhone {
 //                                            .build();
 //                                }
 //                            })
-                            .addInterceptor(new Interceptor() {
-                                @Override
-                                public Response intercept(Chain chain) throws IOException {
-                                    Request.Builder ongoing = chain.request().newBuilder();
-                                    ongoing.addHeader("Accept", "application/json");
-                                    return chain.proceed(ongoing.build());
-                                }
-                            })
+//                            .addInterceptor(new Interceptor() {
+//                                @Override
+//                                public Response intercept(Chain chain) throws IOException {
+//                                    Request.Builder ongoing = chain.request().newBuilder();
+//                                    ongoing.addHeader("Accept", "application/json");
+//                                    return chain.proceed(ongoing.build());
+//                                }
+//                            })
                             .readTimeout(60, TimeUnit.SECONDS)
                             .connectTimeout(60, TimeUnit.SECONDS)
                             .addInterceptor(logging)
                             .build();
                     mRetrofit = new Retrofit.Builder()
-                            .baseUrl(BASE_URL)
+                            .baseUrl(BaseUrl.BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create())
                             .client(okHttpClient).build();
                 }
@@ -95,27 +90,18 @@ public class ApiMorePhone {
         return mApiPath;
     }
 
-    public static void getCallLogs(Context context,
-                                   String accountSid,
-                                   String phoneNumber,
-                                   Callback<Calls> callback) {
-        Call<Calls> call = getApiPath(context).getCallLogs();
+    public static void registerApplication(Context context,
+                                           String incomingPhoneNumberSid,
+                                           Callback<Response> callback) {
+        Call<Response> call = getApiPath(context).registerApplication(incomingPhoneNumberSid);
         call.enqueue(callback);
     }
 
-    public static void getRecords(Context context,
-                                  String accountSid,
-                                  String phoneNumber,
-                                  Callback<Records> callback) {
-        Call<Records> call = getApiPath(context).getRecords();
+    public static void binding(Context context,
+                               BindingRequest bindingRequest,
+                               Callback<Response> callback) {
+        Call<Response> call = getApiPath(context).binding(bindingRequest);
         call.enqueue(callback);
     }
 
-    public static void getUsage(Context context,
-                                String accountSid,
-                                String phoneNumber,
-                                Callback<Usage> callback) {
-        Call<Usage> call = getApiPath(context).getUsage();
-        call.enqueue(callback);
-    }
 }

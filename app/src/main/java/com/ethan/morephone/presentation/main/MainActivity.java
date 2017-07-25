@@ -79,7 +79,6 @@ public class MainActivity extends BaseActivity implements
         checkRequirePhoneNumber();
 
         MyPreference.setTimesUse(getApplicationContext(), MyPreference.getTimesUse(getApplicationContext()) + 1);
-
     }
 
     @Override

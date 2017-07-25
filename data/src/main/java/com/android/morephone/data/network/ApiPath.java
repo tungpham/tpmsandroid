@@ -3,6 +3,7 @@ package com.android.morephone.data.network;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.application.Applications;
 import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.entity.phonenumbers.AvailableCountries;
 import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
@@ -157,5 +158,15 @@ interface ApiPath {
 
     @GET("Accounts/{accountsid}/Usage/Records/AllTime.json")
     Call<Usage> getUsageAllTime(@Path("accountsid") String accountsid, @Query("Category") String category, @Query("PageSize") int pageSize, @Query("Page") int page, @Query("PageToken") String pageToken);
+
+
+    /*-----------------------------------------APPLICATION-----------------------------------------*/
+
+    @GET("Accounts/{accountsid}/Applications.json")
+    Call<Applications> getApplications(@Path("accountsid") String accountsid);
+
+    @DELETE("Accounts/{accountsid}/Applications/{applicationSid}.json")
+    Call<Void> deleteApplications(@Path("accountsid") String accountsid, String applicationSid);
+
 
 }

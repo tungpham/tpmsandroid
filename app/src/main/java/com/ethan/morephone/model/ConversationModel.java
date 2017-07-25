@@ -3,7 +3,6 @@ package com.ethan.morephone.model;
 import android.text.TextUtils;
 
 import com.android.morephone.data.entity.MessageItem;
-import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.DateUtils;
 
 import java.util.Date;
@@ -58,10 +57,8 @@ public class ConversationModel implements Comparable<ConversationModel> {
             Date now = DateUtils.getDate(conversationModel.getDateCreated());
             if (current != null && now != null) {
                 if (current.after(now)) {
-                    DebugTool.logD("COMPARE");
                     return 1;
                 } else {
-                    DebugTool.logD("COM");
                     return -1;
                 }
             } else {

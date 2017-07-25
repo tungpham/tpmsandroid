@@ -64,7 +64,7 @@
 
                 <data
                     android:host="@string/auth0_domain"
-                    android:pathPrefix="/android/com.android.tpms/callback"
+                    android:pathPrefix="/android/com.morephone.tpms/callback"
                     android:scheme="https" />
             </intent-filter>
 
@@ -161,12 +161,11 @@
             android:resource="@color/blue_color" />
 
         <service
-            android:name=".RegistrationIntentService"
-            android:exported="false">
-        </service>
+            android:name=".fcm.BindingIntentService"
+            android:exported="false" />
 
         <service
-            android:name=".fcm.VoiceFirebaseMessagingService">
+            android:name=".fcm.NotifyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -174,7 +173,7 @@
         <!-- [END fcm_listener] -->
         <!-- [START instanceId_listener] -->
         <service
-            android:name=".fcm.VoiceFirebaseInstanceIDService" >
+            android:name=".fcm.NotifyFirebaseInstanceIDService" >
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

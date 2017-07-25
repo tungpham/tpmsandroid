@@ -1,11 +1,15 @@
 package com.ethan.morephone.presentation.numbers;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,9 +22,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.FakeData;
+import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
+import com.android.morephone.data.network.ApiMorePhone;
+import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
+import com.ethan.morephone.fcm.BindingIntentService;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
@@ -36,6 +44,9 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 /**
  * Created by Ethan on 3/16/17.
  */
@@ -48,8 +59,10 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         View.OnClickListener,
         RequirePhoneNumberDialog.RequirePhoneNumberListener {
 
-    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+    public static final String BINDING_REGISTRATION = "BINDING_REGISTRATION";
 
+    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+    private static final String FCM_BINDING_TYPE = "fcm";
 
     public static IncomingPhoneNumbersFragment getInstance() {
         return new IncomingPhoneNumbersFragment();
@@ -67,6 +80,8 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new IncomingPhoneNumbersPresenter(this, Injection.providerUseCaseHandler(), Injection.providerDeleteIncomingPhoneNumber(getContext()));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(bindingBroadcastReceiver,
+                new IntentFilter(BINDING_REGISTRATION));
     }
 
     @Nullable
@@ -183,7 +198,31 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
     @Override
     public void showPhoneNumbers(List<IncomingPhoneNumber> numberEntities) {
-        mIncomingPhoneNumbersAdapter.replaceData(numberEntities);
+        if (isAdded()) {
+//            if (!MyPreference.getRegisterPhoneNumber(getContext())) {
+                if (numberEntities != null && !numberEntities.isEmpty()) {
+                    for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
+                        ApiMorePhone.registerApplication(getContext(), incomingPhoneNumber.sid, new Callback<Response>() {
+                            @Override
+                            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+
+                                Intent intent = new Intent(getActivity(), BindingIntentService.class);
+                                intent.putExtra(Constant.EXTRA_IDENTITY, incomingPhoneNumber.sid);
+                                getActivity().startService(intent);
+                            }
+
+                            @Override
+                            public void onFailure(Call<Response> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                    MyPreference.setRegsiterPhoneNumber(getContext(), true);
+//                }
+
+            }
+            mIncomingPhoneNumbersAdapter.replaceData(numberEntities);
+        }
     }
 
     @Override
@@ -231,6 +270,27 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
                 break;
         }
     }
+
+    private WakefulBroadcastReceiver bindingBroadcastReceiver = new WakefulBroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            boolean succeeded = intent.getBooleanExtra(BINDING_SUCCEEDED, false);
+//            String message = intent.getStringExtra(BINDING_RESPONSE);
+//            if (message == null) {
+//                message = "";
+//            }
+//
+//            if (succeeded) {
+//                resultTextView.setText("Binding registered. " + message);
+//            } else {
+//                resultTextView.setText("Binding failed: " + message);
+//            }
+//
+//            resultTextView.setVisibility(View.VISIBLE);
+//            progressDialog.dismiss();
+//            registerBindingButton.setEnabled(true);
+        }
+    };
 
     private void storePhoneNumber(IncomingPhoneNumber incomingPhoneNumber) {
         MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);

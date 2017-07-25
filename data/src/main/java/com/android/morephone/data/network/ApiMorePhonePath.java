@@ -1,12 +1,13 @@
 package com.android.morephone.data.network;
 
 
-import com.android.morephone.data.entity.call.Calls;
-import com.android.morephone.data.entity.record.Records;
-import com.android.morephone.data.entity.usage.Usage;
+import com.android.morephone.data.entity.Response;
+import com.android.morephone.data.entity.register.BindingRequest;
 
 import retrofit2.Call;
-import retrofit2.http.GET;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Created by AnPEthan on 8/11/2016.
@@ -14,13 +15,10 @@ import retrofit2.http.GET;
 interface ApiMorePhonePath {
 
     /*-----------------------------------------CALL LOGS-----------------------------------------*/
-    @GET("Accounts/CallLogs")
-    Call<Calls> getCallLogs();
+    @POST("phone/register-application")
+    Call<Response> registerApplication(@Query("incoming_phone_number_sid") String incomingPhoneNumberSid);
 
-    @GET("Accounts/Voices")
-    Call<Records> getRecords();
-
-    @GET("Accounts/Usage")
-    Call<Usage> getUsage();
+    @POST("phone/binding")
+    Call<Response> binding(@Body BindingRequest bindingRequest);
 
 }

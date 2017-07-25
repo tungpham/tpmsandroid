@@ -22,6 +22,8 @@ public class MyPreference {
     private static final String PROPERTY_PHONE_FRIENDLY_NAME = "PROPERTY_PHONE_FRIENDLY_NAME";
     private static final String PROPERTY_PHONE_NUMBER_SID = "PROPERTY_PHONE_NUMBER_SID";
 
+    private static final String PROPERTY_REGISTER_PHONE_NUMBER = "PROPERTY_REGISTER_PHONE_NUMBER";
+
     private static final String PROPERTY_SETTING_ENABLE_RECORD = "PROPERTY_SETTING_ENABLE_RECORD";
     private static final String PROPERTY_SETTING_ENABLE_NOTIFICATION = "PROPERTY_SETTING_ENABLE_NOTIFICATION";
     private static final String PROPERTY_SETTING_CONFIGURE = "PROPERTY_SETTING_CONFIGURE";
@@ -36,6 +38,11 @@ public class MyPreference {
 
     private static final String PROPERTY_MUTE_MICROPHONE = "PROPERTY_MUTE_MICROPHONE";
     private static final String PROPERTY_SPEAKER_PHONE = "PROPERTY_SPEAKER_PHONE";
+
+
+    private static final String PROPERTY_IDENTITY = "PROPERTY_IDENTITY";
+    private static final String PROPERTY_ENDPOINT = "PROPERTY_ENDPOINT";
+    private static final String PROPERTY_ADDRESS = "PROPERTY_ADDRESS";
 
     private static final String APP_PREF = "MorePhone";
 
@@ -272,5 +279,65 @@ public class MyPreference {
     public static void setSettingConfigureEmail(Context context, String email) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_SETTING_CONFIGURE_EMAIL, email).commit();
+    }
+
+
+    public static boolean getRegisterPhoneNumber(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(PROPERTY_REGISTER_PHONE_NUMBER, false);
+    }
+
+    public static void setRegsiterPhoneNumber(Context context, Boolean registerPhoneNumber) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putBoolean(PROPERTY_REGISTER_PHONE_NUMBER, registerPhoneNumber).commit();
+    }
+
+/*------------------------------------BINDING----------------------------------------*/
+
+    public static String getIdentity(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_IDENTITY, "");
+    }
+
+    public static void setIdentity(Context context, String identity) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_IDENTITY, identity).commit();
+    }
+
+
+    public static String getAddress(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_ADDRESS, "");
+    }
+
+    public static void setAddress(Context context, String address) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_ADDRESS, address).commit();
+    }
+
+
+    public static String getEndpoint(Context context, String identity) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_ENDPOINT + identity, null);
+    }
+
+    public static void setEndpoint(Context context, String endpoint, String identity) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_ENDPOINT + identity, endpoint).commit();
+    }
+
+    public static void removeIdentity(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().remove(PROPERTY_IDENTITY).commit();
+    }
+
+    public static void removeAddress(Context context){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().remove(PROPERTY_ADDRESS).commit();
+    }
+
+    public static void removeEndpoint(Context context, String identity){
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().remove(PROPERTY_ENDPOINT + identity).commit();
     }
 }
