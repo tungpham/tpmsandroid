@@ -43,7 +43,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".presentation.splash.SplashActivity">
+        <activity android:name=".presentation.record.TestVoiceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,7 +79,7 @@
         <activity android:name=".presentation.buy.payment.purchase.PurchaseActivity" />
 
         <activity android:name=".presentation.record.RecordActivity" />
-        <activity android:name=".presentation.record.TestVoiceActivity" />
+        <!--<activity android:name=".presentation.record.TestVoiceActivity" />-->
 
         <activity android:name=".presentation.authentication.register.RegisterActivity" />
         <activity android:name=".presentation.authentication.register.name.RegisterNameActivity" />

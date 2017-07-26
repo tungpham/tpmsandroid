@@ -21,7 +21,6 @@ import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
-import com.ethan.morephone.presentation.buy.payment.checkout.BillingRequests;
 import com.ethan.morephone.presentation.buy.payment.checkout.Checkout;
 import com.ethan.morephone.presentation.buy.payment.checkout.EmptyRequestListener;
 import com.ethan.morephone.presentation.buy.payment.checkout.IntentStarter;
@@ -150,20 +149,20 @@ public class PurchaseFragment extends BaseFragment implements
         switch (view.getId()) {
             case R.id.button_purchase_pay_now:
                 DebugTool.logD("PHONE NUMBER: " + mPhoneNumber);
-//                mPresenter.buyIncomingPhoneNumber(getContext(), "abcdef");
-                final Purchase purchase = mPurchase;
-                if (purchase == null) {
-                    DebugTool.logD("purchase: NULL");
-                    mCheckout.startPurchaseFlow(ProductTypes.IN_APP, SKUS, null, new PurchaseListener());
-                } else {
-                    DebugTool.logD("purchase: OK");
-                    mCheckout.whenReady(new Checkout.EmptyListener() {
-                        @Override
-                        public void onReady(@Nonnull BillingRequests requests) {
-                            requests.consume(purchase.token, new ConsumeListener());
-                        }
-                    });
-                }
+                mPresenter.buyIncomingPhoneNumber(getContext(), "abcdef");
+//                final Purchase purchase = mPurchase;
+//                if (purchase == null) {
+//                    DebugTool.logD("purchase: NULL");
+//                    mCheckout.startPurchaseFlow(ProductTypes.IN_APP, SKUS, null, new PurchaseListener());
+//                } else {
+//                    DebugTool.logD("purchase: OK");
+//                    mCheckout.whenReady(new Checkout.EmptyListener() {
+//                        @Override
+//                        public void onReady(@Nonnull BillingRequests requests) {
+//                            requests.consume(purchase.token, new ConsumeListener());
+//                        }
+//                    });
+//                }
                 break;
             default:
                 break;
@@ -225,6 +224,7 @@ public class PurchaseFragment extends BaseFragment implements
             mPurchase = purchase;
             onPurchaseChanged();
             DebugTool.logD("PurchaseListener Success");
+
         }
     }
 

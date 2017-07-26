@@ -44,6 +44,34 @@ public class SplashActivity extends BaseActivity {
         auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
         auth0.setOIDCConformant(true);
 
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        DebugTool.logD( "Refreshed token: " + refreshedToken);
+
+        if (!TextUtils.isEmpty(MyPreference.getUserId(getApplicationContext()))) {
+            ApiMorePhone.updateFcmToken(getApplicationContext(), MyPreference.getUserId(getApplicationContext()), refreshedToken, new Callback<BaseResponse<User>>() {
+                @Override
+                public void onResponse(Call<BaseResponse<User>> call, Response<BaseResponse<User>> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().getStatus() == 200) {
+                            DebugTool.logD("TOKEN UPDATE SUCCESS");
+                        } else {
+                            DebugTool.logD("TOKEN UPDATE ERROR");
+                        }
+                    } else {
+                        DebugTool.logD("TOKEN UPDATE ERROR");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BaseResponse<User>> call, Throwable t) {
+                    DebugTool.logD("TOKEN UPDATE ERROR");
+                }
+            });
+        } else {
+            DebugTool.logD("USER NOT REGISTER");
+        }
+
+
         String accessToken = "";
         Credentials credentials = CredentialsManager.getCredentials(getApplicationContext());
         if (credentials != null) accessToken = credentials.getAccessToken();

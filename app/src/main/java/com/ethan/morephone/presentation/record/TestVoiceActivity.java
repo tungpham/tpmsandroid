@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
 
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -41,12 +42,15 @@ import java.util.HashMap;
 
 public class TestVoiceActivity extends BaseActivity {
 
-    private static final String TAG = "TestVoiceActivity";
+    /*
+     * You must provide a Twilio Access Token to connect to the Voice service
+     */
+    private static final String TWILIO_ACCESS_TOKEN = "eyJjdHkiOiAidHdpbGlvLWZwYTt2PTEiLCAidHlwIjogIkpXVCIsICJhbGciOiAiSFMyNTYifQ.eyJzdWIiOiAiQUNlYmQ3ZDNhNzhlMmZkZGE5ZTUxMjM5YmFkNmIwOWY5NyIsICJqdGkiOiAiU0swMjhlNWJiYjNkMGIxOWNiMzMzZGZlOTliYTEwYzM1Zi0xNTAxMDYwNTc4IiwgImV4cCI6IDE1MDEwNjQxNzgsICJpc3MiOiAiU0swMjhlNWJiYjNkMGIxOWNiMzMzZGZlOTliYTEwYzM1ZiIsICJncmFudHMiOiB7ImlkZW50aXR5IjogInZvaWNlX3Rlc3QiLCAidm9pY2UiOiB7InB1c2hfY3JlZGVudGlhbF9zaWQiOiAiQ1JmYjM1MGU2YWQ5NzE1Njk0MzNkYjA4ZWNmZjI5ZjYzNiIsICJvdXRnb2luZyI6IHsiYXBwbGljYXRpb25fc2lkIjogIkFQYmRiZjA1MzgyYTU1NmQ2NmJjODQxOWYzNmU1MWE2ZDYifX19fQ.vSV_aF3KdXWoSsMC50yxkwBAsym_3DeKN8f_3Q5WyrI";
+    private static final String TAG = "VoiceActivity";
 
     /*
      * You must provide a Twilio Access Token to connect to the Voice service
      */
-    private static final String TWILIO_ACCESS_TOKEN = "eyJjdHkiOiAidHdpbGlvLWZwYTt2PTEiLCAidHlwIjogIkpXVCIsICJhbGciOiAiSFMyNTYifQ.eyJqdGkiOiAiU0s5YWJhMjc1ZTk0ODllNjM5NWJiZmM1NGY0YTM5OTZlMy0xNDkyMDc4Njg0IiwgImdyYW50cyI6IHsiaWRlbnRpdHkiOiAidm9pY2VfdGVzdCIsICJ2b2ljZSI6IHsib3V0Z29pbmciOiB7ImFwcGxpY2F0aW9uX3NpZCI6ICJBUGJkYmYwNTM4MmE1NTZkNjZiYzg0MTlmMzZlNTFhNmQ2In0sICJwdXNoX2NyZWRlbnRpYWxfc2lkIjogIkNSNDQ1OTljNjkzODkyNzcwYjg2ZTU4M2NjZDVjM2UzNTAifX0sICJleHAiOiAxNDkyMDgyMjg0LCAiaXNzIjogIlNLOWFiYTI3NWU5NDg5ZTYzOTViYmZjNTRmNGEzOTk2ZTMiLCAic3ViIjogIkFDZWJkN2QzYTc4ZTJmZGRhOWU1MTIzOWJhZDZiMDlmOTcifQ.35ctLzJsaLVDAr7zeZ1PXJbZs75Ry4DSmgh1gbiKs4A";
 
     private static final int MIC_PERMISSION_REQUEST_CODE = 1;
     private static final int SNACKBAR_DURATION = 4000;
@@ -145,13 +149,13 @@ public class TestVoiceActivity extends BaseActivity {
         return new RegistrationListener() {
             @Override
             public void onRegistered(String accessToken, String fcmToken) {
-                Log.d(TAG, "Successfully registered FCM " + fcmToken);
+                DebugTool.logD("Successfully registered FCM " + fcmToken);
             }
 
             @Override
             public void onError(RegistrationException error, String accessToken, String fcmToken) {
                 String message = String.format("Registration Error: %d, %s", error.getErrorCode(), error.getMessage());
-                Log.e(TAG, message);
+                DebugTool.logD( "ERROR REGISTER: "+  message);
                 Snackbar.make(coordinatorLayout, message, SNACKBAR_DURATION).show();
             }
         };
