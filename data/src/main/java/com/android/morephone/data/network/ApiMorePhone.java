@@ -3,8 +3,11 @@ package com.android.morephone.data.network;
 import android.content.Context;
 
 import com.android.morephone.data.BaseUrl;
+import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.Response;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.register.BindingRequest;
+import com.android.morephone.data.entity.user.User;
 
 import java.util.concurrent.TimeUnit;
 
@@ -89,6 +92,39 @@ public class ApiMorePhone {
         }
         return mApiPath;
     }
+
+
+    /*-----------------------------------------USER-----------------------------------------*/
+
+    public static void createUser(Context context,
+                                  User user,
+                                  Callback<BaseResponse<User>> callback) {
+        Call<BaseResponse<User>> call = getApiPath(context).createUser(user);
+        call.enqueue(callback);
+    }
+
+    public static void updateFcmToken(Context context,
+                                  String id,
+                                  String token,
+                                  Callback<BaseResponse<User>> callback) {
+        Call<BaseResponse<User>> call = getApiPath(context).updateFcmToken(id, token);
+        call.enqueue(callback);
+    }
+
+
+
+    /*-----------------------------------------PHONE NUMBER-----------------------------------------*/
+
+    public static void createPhoneNumber(Context context,
+                                         PhoneNumber phoneNumber,
+                                         Callback<BaseResponse<PhoneNumber>> callback) {
+        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).createPhoneNumber(phoneNumber);
+        call.enqueue(callback);
+    }
+
+
+
+    /*-----------------------------------------PHONE REGISTER-----------------------------------------*/
 
     public static void registerApplication(Context context,
                                            String incomingPhoneNumberSid,

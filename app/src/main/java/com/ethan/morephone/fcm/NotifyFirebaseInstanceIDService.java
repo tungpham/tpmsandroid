@@ -1,10 +1,18 @@
 package com.ethan.morephone.fcm;
 
-import android.content.Intent;
-import android.util.Log;
+import android.text.TextUtils;
 
+import com.android.morephone.data.entity.BaseResponse;
+import com.android.morephone.data.entity.user.User;
+import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.ApiMorePhone;
+import com.ethan.morephone.MyPreference;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotifyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
@@ -20,7 +28,7 @@ public class NotifyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
+        DebugTool.logD( "Refreshed token: " + refreshedToken);
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
@@ -58,8 +66,32 @@ public class NotifyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 //            }
 //        });
 
-        Intent intent = new Intent(this, BindingIntentService.class);
-        startService(intent);
+//        Intent intent = new Intent(this, BindingIntentService.class);
+//        startService(intent);
+
+        if (!TextUtils.isEmpty(MyPreference.getUserId(getApplicationContext()))) {
+            ApiMorePhone.updateFcmToken(getApplicationContext(), MyPreference.getUserId(getApplicationContext()), token, new Callback<BaseResponse<User>>() {
+                @Override
+                public void onResponse(Call<BaseResponse<User>> call, Response<BaseResponse<User>> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().getStatus() == 200) {
+                            DebugTool.logD("FCM TOKEN UPDATE SUCCESS");
+                        } else {
+                            DebugTool.logD("FCM TOKEN UPDATE ERROR");
+                        }
+                    } else {
+                        DebugTool.logD("FCM TOKEN UPDATE ERROR");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BaseResponse<User>> call, Throwable t) {
+                    DebugTool.logD("FCM TOKEN UPDATE ERROR");
+                }
+            });
+        } else {
+            DebugTool.logD("USER NOT REGISTER");
+        }
     }
 
 }

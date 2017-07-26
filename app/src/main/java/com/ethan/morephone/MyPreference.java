@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 
 public class MyPreference {
 
+    private static final String PROPERTY_USER_ID = "PROPERTY_USER_ID";
     private static final String PROPERTY_USER_EMAIL = "PROPERTY_USER_EMAIL";
     private static final String PROPERTY_USER_FIRST_NAME = "PROPERTY_USER_FIRST_NAME";
     private static final String PROPERTY_USER_LAST_NAME = "PROPERTY_USER_LAST_NAME";
@@ -48,6 +49,16 @@ public class MyPreference {
 
     private static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
+    }
+
+    public static String getUserId(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PROPERTY_USER_ID, "");
+    }
+
+    public static void setUserId(Context context, String id) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(PROPERTY_USER_ID, id).commit();
     }
 
     public static String getUserEmail(Context context) {

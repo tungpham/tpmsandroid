@@ -21,14 +21,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.FakeData;
-import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
-import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
-import com.ethan.morephone.fcm.BindingIntentService;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
@@ -46,6 +46,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Ethan on 3/16/17.
@@ -199,26 +200,50 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void showPhoneNumbers(List<IncomingPhoneNumber> numberEntities) {
         if (isAdded()) {
-//            if (!MyPreference.getRegisterPhoneNumber(getContext())) {
+            if (!MyPreference.getRegisterPhoneNumber(getContext())) {
                 if (numberEntities != null && !numberEntities.isEmpty()) {
                     for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
-                        ApiMorePhone.registerApplication(getContext(), incomingPhoneNumber.sid, new Callback<Response>() {
-                            @Override
-                            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+//                        ApiMorePhone.registerApplication(getContext(), incomingPhoneNumber.sid, new Callback<Response>() {
+//                            @Override
+//                            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+//
+//                                Intent intent = new Intent(getActivity(), BindingIntentService.class);
+//                                intent.putExtra(Constant.EXTRA_IDENTITY, incomingPhoneNumber.sid);
+//                                getActivity().startService(intent);
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<Response> call, Throwable t) {
+//
+//                            }
+//                        });
 
-                                Intent intent = new Intent(getActivity(), BindingIntentService.class);
-                                intent.putExtra(Constant.EXTRA_IDENTITY, incomingPhoneNumber.sid);
-                                getActivity().startService(intent);
+                        PhoneNumber phoneNumber = PhoneNumber.getBuilder()
+                                .phoneNumber(incomingPhoneNumber.phoneNumber)
+                                .sid(incomingPhoneNumber.sid)
+                                .friendlyName(incomingPhoneNumber.friendlyName)
+                                .userId(MyPreference.getUserId(getContext()))
+                                .build();
+
+                        ApiMorePhone.createPhoneNumber(getContext(), phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
+                            @Override
+                            public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+                                if(response.isSuccessful() && response.body() != null && response.body().getStatus() == 201){
+                                    DebugTool.logD("CREATE PHONE NUMBER SUCCESS");
+                                    MyPreference.setRegsiterPhoneNumber(getContext(), true);
+                                }else{
+                                    DebugTool.logD("CREATE PHONE NUMBER ERROR");
+                                }
                             }
 
                             @Override
-                            public void onFailure(Call<Response> call, Throwable t) {
-
+                            public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
+                                DebugTool.logD("CREATE PHONE NUMBER ERROR");
                             }
                         });
                     }
-                    MyPreference.setRegsiterPhoneNumber(getContext(), true);
-//                }
+
+                }
 
             }
             mIncomingPhoneNumbersAdapter.replaceData(numberEntities);

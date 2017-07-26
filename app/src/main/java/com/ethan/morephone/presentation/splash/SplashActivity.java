@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.android.morephone.data.entity.BaseResponse;
+import com.android.morephone.data.entity.user.User;
+import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.auth0.android.Auth0;
@@ -18,6 +22,11 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Ethan on 6/27/17.
@@ -53,13 +62,38 @@ public class SplashActivity extends BaseActivity {
                                     TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
                                 }
 
-                                payload.getPictureURL();
 
-                                MyPreference.setUserEmail(getApplicationContext(), payload.getEmail());
-                                MyPreference.setUserName(getApplicationContext(), payload.getName());
-                                MyPreference.setGivenName(getApplicationContext(), payload.getGivenName());
-                                MyPreference.setNickName(getApplicationContext(), payload.getNickname());
-                                MyPreference.setUserPicture(getApplicationContext(), payload.getPictureURL());
+                                if (!MyPreference.getUserEmail(getApplicationContext()).equals(payload.getEmail())) {
+                                    MyPreference.setUserEmail(getApplicationContext(), payload.getEmail());
+                                    MyPreference.setUserName(getApplicationContext(), payload.getName());
+                                    MyPreference.setGivenName(getApplicationContext(), payload.getGivenName());
+                                    MyPreference.setNickName(getApplicationContext(), payload.getNickname());
+                                    MyPreference.setUserPicture(getApplicationContext(), payload.getPictureURL());
+
+                                    User user = User.getBuilder()
+                                            .email(payload.getEmail())
+                                            .token(FirebaseInstanceId.getInstance().getToken())
+                                            .platform("Android")
+                                            .build();
+                                    DebugTool.logD("TOKEN FCM: " + FirebaseInstanceId.getInstance().getToken());
+
+                                    ApiMorePhone.createUser(getApplicationContext(), user, new Callback<BaseResponse<User>>() {
+                                        @Override
+                                        public void onResponse(Call<BaseResponse<User>> call, Response<BaseResponse<User>> response) {
+                                            if (response.isSuccessful()) {
+                                                BaseResponse<User> baseResponse = response.body();
+                                                if (baseResponse != null && baseResponse.getResponse() != null) {
+                                                    MyPreference.setUserId(getApplicationContext(), baseResponse.getResponse().getId());
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<BaseResponse<User>> call, Throwable t) {
+
+                                        }
+                                    });
+                                }
                             }
 
                             startActivity(new Intent(SplashActivity.this, MainActivity.class));
