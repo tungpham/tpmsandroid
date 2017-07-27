@@ -9,6 +9,7 @@ import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.user.User;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -96,17 +97,22 @@ public class ApiMorePhone {
 
     /*-----------------------------------------USER-----------------------------------------*/
 
-    public static void createUser(Context context,
-                                  User user,
-                                  Callback<BaseResponse<User>> callback) {
+    public static BaseResponse<User> createUser(Context context,
+                                                User user) {
         Call<BaseResponse<User>> call = getApiPath(context).createUser(user);
-        call.enqueue(callback);
+        try {
+            BaseResponse<User> baseResponse = call.execute().body();
+            return baseResponse;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void updateFcmToken(Context context,
-                                  String id,
-                                  String token,
-                                  Callback<BaseResponse<User>> callback) {
+                                      String id,
+                                      String token,
+                                      Callback<BaseResponse<User>> callback) {
         Call<BaseResponse<User>> call = getApiPath(context).updateFcmToken(id, token);
         call.enqueue(callback);
     }

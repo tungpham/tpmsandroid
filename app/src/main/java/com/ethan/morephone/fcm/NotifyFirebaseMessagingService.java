@@ -71,6 +71,16 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
         DebugTool.logD("From: " + from);
         DebugTool.logD("TO: " + message.getTo());
 
+        Map<String,String> dataTest = message.getData();
+        if(dataTest != null){
+            String title = dataTest.get(NOTIFY_TITLE_DATA_KEY);
+            DebugTool.logD("TITLE: " + title);
+            String body = dataTest.get(NOTIFY_BODY_DATA_KEY);
+            DebugTool.logD("body: " + body);
+            sendSmsNotification(title, body);
+        }
+
+
         if (message.getData().size() > 0) {
             Map<String, String> data = message.getData();
             DebugTool.logD("DATA: " + data.toString());

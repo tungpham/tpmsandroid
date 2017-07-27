@@ -139,7 +139,7 @@ public class BindingIntentService extends IntentService {
 //                    bindingResultIntent.putExtra(MainActivity.BINDING_RESPONSE, message);
                 }
 
-                // Notify the MainActivity that the registration ended
+                // Notify the MainActivity that the registration endedro
                 LocalBroadcastManager.getInstance(BindingIntentService.this)
                         .sendBroadcast(bindingResultIntent);
             }

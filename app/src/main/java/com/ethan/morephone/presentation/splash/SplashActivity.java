@@ -1,6 +1,7 @@
 package com.ethan.morephone.presentation.splash;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -22,7 +23,10 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
+import com.ethan.morephone.utils.Utils;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.lang.ref.WeakReference;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,7 +49,7 @@ public class SplashActivity extends BaseActivity {
         auth0.setOIDCConformant(true);
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        DebugTool.logD( "Refreshed token: " + refreshedToken);
+        DebugTool.logD("Refreshed token: " + refreshedToken);
 
         if (!TextUtils.isEmpty(MyPreference.getUserId(getApplicationContext()))) {
             ApiMorePhone.updateFcmToken(getApplicationContext(), MyPreference.getUserId(getApplicationContext()), refreshedToken, new Callback<BaseResponse<User>>() {
@@ -104,23 +108,7 @@ public class SplashActivity extends BaseActivity {
                                             .platform("Android")
                                             .build();
                                     DebugTool.logD("TOKEN FCM: " + FirebaseInstanceId.getInstance().getToken());
-
-                                    ApiMorePhone.createUser(getApplicationContext(), user, new Callback<BaseResponse<User>>() {
-                                        @Override
-                                        public void onResponse(Call<BaseResponse<User>> call, Response<BaseResponse<User>> response) {
-                                            if (response.isSuccessful()) {
-                                                BaseResponse<User> baseResponse = response.body();
-                                                if (baseResponse != null && baseResponse.getResponse() != null) {
-                                                    MyPreference.setUserId(getApplicationContext(), baseResponse.getResponse().getId());
-                                                }
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<BaseResponse<User>> call, Throwable t) {
-
-                                        }
-                                    });
+                                    new ApiAsync(SplashActivity.this, user).execute();
                                 }
                             }
 
@@ -141,4 +129,42 @@ public class SplashActivity extends BaseActivity {
         }
 
     }
+
+    private static class ApiAsync extends AsyncTask<Void, Integer, Void> {
+        private final WeakReference<SplashActivity> mWeakReference;
+        private final User mUser;
+
+        public ApiAsync(SplashActivity splashActivity, User user) {
+            mWeakReference = new WeakReference<>(splashActivity);
+            this.mUser = user;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SplashActivity activity = mWeakReference.get();
+            if (activity != null) {
+                if (Utils.isInternetAvailable(activity.getApplicationContext())) {
+                    BaseResponse<User> baseResponse = ApiMorePhone.createUser(activity.getApplicationContext(), mUser);
+                    if (baseResponse != null && baseResponse.getResponse() != null) {
+                        MyPreference.setUserId(activity.getApplicationContext(), baseResponse.getResponse().getId());
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            SplashActivity activity = mWeakReference.get();
+            DebugTool.logD("POST EXECUTE");
+        }
+    }
+
 }

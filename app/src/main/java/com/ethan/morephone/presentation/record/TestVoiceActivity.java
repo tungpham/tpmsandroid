@@ -45,7 +45,7 @@ public class TestVoiceActivity extends BaseActivity {
     /*
      * You must provide a Twilio Access Token to connect to the Voice service
      */
-    private static final String TWILIO_ACCESS_TOKEN = "eyJjdHkiOiAidHdpbGlvLWZwYTt2PTEiLCAidHlwIjogIkpXVCIsICJhbGciOiAiSFMyNTYifQ.eyJzdWIiOiAiQUNlYmQ3ZDNhNzhlMmZkZGE5ZTUxMjM5YmFkNmIwOWY5NyIsICJqdGkiOiAiU0swMjhlNWJiYjNkMGIxOWNiMzMzZGZlOTliYTEwYzM1Zi0xNTAxMDYwNTc4IiwgImV4cCI6IDE1MDEwNjQxNzgsICJpc3MiOiAiU0swMjhlNWJiYjNkMGIxOWNiMzMzZGZlOTliYTEwYzM1ZiIsICJncmFudHMiOiB7ImlkZW50aXR5IjogInZvaWNlX3Rlc3QiLCAidm9pY2UiOiB7InB1c2hfY3JlZGVudGlhbF9zaWQiOiAiQ1JmYjM1MGU2YWQ5NzE1Njk0MzNkYjA4ZWNmZjI5ZjYzNiIsICJvdXRnb2luZyI6IHsiYXBwbGljYXRpb25fc2lkIjogIkFQYmRiZjA1MzgyYTU1NmQ2NmJjODQxOWYzNmU1MWE2ZDYifX19fQ.vSV_aF3KdXWoSsMC50yxkwBAsym_3DeKN8f_3Q5WyrI";
+    private static final String TWILIO_ACCESS_TOKEN = "eyJjdHkiOiJ0d2lsaW8tZnBhO3Y9MSIsInR5cCI6IkpXVCIsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJTSzAyOGU1YmJiM2QwYjE5Y2IzMzNkZmU5OWJhMTBjMzVmIiwiZXhwIjoxNTAxMTQyMzYwLCJncmFudHMiOnsidm9pY2UiOnsib3V0Z29pbmciOnsiYXBwbGljYXRpb25fc2lkIjoiQVA1ZDQ2YmY2NzU1NTdlYzBmNzNiMWQwOGFmY2ZjZGM3NSJ9LCJwdXNoX2NyZWRlbnRpYWxfc2lkIjoiQ1JmYjM1MGU2YWQ5NzE1Njk0MzNkYjA4ZWNmZjI5ZjYzNiIsImVuZHBvaW50X2lkIjpudWxsfSwiaWRlbnRpdHkiOiJ2b2ljZV90ZXN0In0sImp0aSI6IlNLMDI4ZTViYmIzZDBiMTljYjMzM2RmZTk5YmExMGMzNWYtMTUwMTEzODgxNiIsInN1YiI6IkFDZWJkN2QzYTc4ZTJmZGRhOWU1MTIzOWJhZDZiMDlmOTcifQ.9-aTjP_yjsdqoWKV3QJ5bkPYKG1Y65DgUNXT6H_mo1w";
     private static final String TAG = "VoiceActivity";
 
     /*
@@ -344,7 +344,10 @@ public class TestVoiceActivity extends BaseActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                twiMLParams.put("To", "+18008066453");
+                twiMLParams.put("From", "+17606215500");
                 activeCall = Voice.call(TestVoiceActivity.this, TWILIO_ACCESS_TOKEN, twiMLParams, callListener);
+
                 setCallUI();
             }
         };
