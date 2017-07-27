@@ -127,7 +127,7 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void startService() {
-        PhoneService.startPhoneService(getApplicationContext());
+//        PhoneService.startPhoneService(getApplicationContext());
     }
 
     @Override

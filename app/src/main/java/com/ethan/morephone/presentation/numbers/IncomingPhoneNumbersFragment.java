@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.util.ArraySet;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,12 +34,14 @@ import com.ethan.morephone.presentation.main.RequirePhoneNumberDialog;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersViewHolder;
+import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.utils.Injection;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -198,6 +201,8 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
                 if (numberEntities != null && !numberEntities.isEmpty()) {
                     for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
 
+                        PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
+
                         PhoneNumber phoneNumber = PhoneNumber.getBuilder()
                                 .phoneNumber(incomingPhoneNumber.phoneNumber)
                                 .sid(incomingPhoneNumber.sid)
@@ -208,10 +213,10 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
                         ApiMorePhone.createPhoneNumber(getContext(), phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
                             @Override
                             public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
-                                if(response.isSuccessful() && response.body() != null && response.body().getStatus() == 201){
+                                if (response.isSuccessful() && response.body() != null && response.body().getStatus() == 201) {
                                     DebugTool.logD("CREATE PHONE NUMBER SUCCESS");
                                     MyPreference.setRegsiterPhoneNumber(getContext(), true);
-                                }else{
+                                } else {
                                     DebugTool.logD("CREATE PHONE NUMBER ERROR");
                                 }
                             }
@@ -226,6 +231,18 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
                 }
 
             }
+
+            Set<String> phoneNumberUsages = new ArraySet<>();
+            for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
+
+                phoneNumberUsages.add(incomingPhoneNumber.phoneNumber);
+
+                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
+
+            }
+
+            MyPreference.setPhoneNumberUsage(getContext(), phoneNumberUsages);
+
             mIncomingPhoneNumbersAdapter.replaceData(numberEntities);
         }
     }

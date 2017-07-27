@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -18,7 +19,6 @@ import android.widget.Toast;
 import com.android.morephone.data.BaseUrl;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
-import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.utils.EnumUtil;
 import com.koushikdutta.async.future.FutureCallback;
@@ -32,6 +32,7 @@ import com.twilio.client.Twilio;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static com.twilio.client.impl.TwilioImpl.getContext;
 
@@ -45,6 +46,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     private static final String TOKEN_SERVICE_URL = BaseUrl.BASE_URL + "call/token";
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
+
+    public final static String ACTION_REGISTER_PHONE_NUMBER = "com.ethan.morephone.action.ACTION_REGISTER_PHONE_NUMBER";
 
     public final static String ACTION_OUTGOING = "com.ethan.morephone.action.OUTGOING";
     public final static String ACTION_INCOMING = "com.ethan.morephone.action.INCOMING";
@@ -73,9 +76,12 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public final static int PHONE_STATE_DISCONNECTED = PHONE_STATE_DECLINE + 1;
     public final static int PHONE_STATE_DEFAULT = PHONE_STATE_DISCONNECTED + 1;
 
-    private Device mClientDevice;
+    //    private Device mClientDevice;
     private Device mPartnerDevice;
-    private ClientProfile clientProfile;
+//    private ClientProfile clientProfile;
+
+    private Map<String, Device> mDevices;
+//    private List<ClientProfile> mClientProfiles;
 
     private Connection mActiveConnection;
     private Connection mPendingConnection;
@@ -123,9 +129,44 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     @Override
     public void onCreate() {
-        clientProfile = new ClientProfile(MyPreference.getPhoneNumber(getApplicationContext()), true, true);
+
+        mDevices = new HashMap<>();
+//        mClientProfiles = new ArrayList<>();
+
+//        clientProfile = new ClientProfile(MyPreference.getPhoneNumber(getApplicationContext()), true, true);
         DebugTool.logD("CREATE SERVICE");
-        initializeTwilioClientSDK();
+
+
+        final Set<String> phoneNumberUsages = MyPreference.getPhoneNumberUsage(getApplicationContext());
+        if (phoneNumberUsages != null) {
+
+            if (Twilio.isInitialized()) {
+                for (String phone : phoneNumberUsages) {
+                    retrieveCapabilityToken(phone);
+                }
+
+            } else {
+                Twilio.initialize(getApplicationContext(), new Twilio.InitListener() {
+                    @Override
+                    public void onInitialized() {
+                        for (String phone : phoneNumberUsages) {
+                            retrieveCapabilityToken(phone);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        DebugTool.logD("Failed to initialize the Twilio Client SDK");
+                    }
+                });
+
+                DebugTool.logD("TWILIO DO NOT INIT");
+            }
+
+
+        }
+
+//        initializeTwilioClientSDK();
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         setAudioFocus(false);
         mAudioManager.setSpeakerphoneOn(MyPreference.getSpeakerphone(getApplicationContext()));
@@ -134,7 +175,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent == null) return START_NOT_STICKY;
+        if (intent == null) return START_STICKY;
 
         String action = intent.getAction();
         if (!TextUtils.isEmpty(action)) {
@@ -142,7 +183,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             mToPhoneNumber = intent.getStringExtra(EXTRA_TO_PHONE_NUMBER);
             String digit = intent.getStringExtra(EXTRA_SEND_DIGIT);
 
-            if (action.equals(ACTION_OUTGOING))
+            if (action.equals(ACTION_REGISTER_PHONE_NUMBER))
+                registerDevicePhoneNumber(mFromPhoneNumber);
+            else if (action.equals(ACTION_OUTGOING))
                 processOutgoingRequest(mFromPhoneNumber, mToPhoneNumber);
             else if (action.equals(ACTION_HANG_UP))
                 processHangUpRequest(mFromPhoneNumber, mToPhoneNumber);
@@ -154,18 +197,15 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             else if (action.equals(ACTION_SEND_DIGITS)) processSendDigit(digit);
             else if (action.equals(ACTION_MUTE_MICROPHONE)) processMuteMicrophone();
             else if (action.equals(ACTION_SPEAKER_PHONE)) processSpeakerMicrophone();
+
         } else {
-            return START_NOT_STICKY;
+            return START_STICKY;
         }
 
-        return START_NOT_STICKY; // Means we started the service, but don't want it to
+        return START_STICKY; // Means we started the service, but don't want it to
         // restart in case it's killed.
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     @Nullable
     @Override
@@ -241,38 +281,11 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         }
     }
 
-    private void initializeTwilioClientSDK() {
-        if (!Twilio.isInitialized()) {
-            Twilio.initialize(getApplicationContext(), new Twilio.InitListener() {
-                @Override
-                public void onInitialized() {
-                    retrieveCapabilityToken(clientProfile);
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    DebugTool.logD("Failed to initialize the Twilio Client SDK");
-//                    Toast.makeText(getContext(), "Failed to initialize the Twilio Client SDK", Toast.LENGTH_LONG).show();
-                }
-            });
-        } else {
-            retrieveCapabilityToken(clientProfile);
-            DebugTool.logD("INITED");
-        }
-    }
-
-    private void retrieveCapabilityToken(final ClientProfile newClientProfile) {
-
-        // Correlate desired properties of the Device (from ClientProfile) to properties of the Capability Token
+    private void retrieveCapabilityToken(final String phoneNumber) {
+        DebugTool.logD("REGISTER DEVICE NUMER");
         Uri.Builder b = Uri.parse(TOKEN_SERVICE_URL).buildUpon();
-//        if (newClientProfile.isAllowOutgoing()) {
-//            b.appendQueryParameter("allowOutgoing", newClientProfile.isAllowOutgoing() ? "true" : "false");
-//        }
-        if (newClientProfile.isAllowIncoming() && newClientProfile.getName() != null) {
-            b.appendQueryParameter("client", newClientProfile.getName());
-        }
+        b.appendQueryParameter("client", phoneNumber);
 
-        DebugTool.logD("NAME PHONE: " + newClientProfile.getName());
         Ion.with(getContext())
                 .load(b.toString())
                 .asString()
@@ -280,9 +293,26 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                     @Override
                     public void onCompleted(Exception e, String capabilityToken) {
                         if (e == null) {
-                            clientProfile = newClientProfile;
-                            DebugTool.logD("NEW: " + clientProfile.getName());
-                            createDevice(capabilityToken);
+
+                            try {
+                                if (!mDevices.containsKey(phoneNumber)) {
+                                    Device device = Twilio.createDevice(capabilityToken, PhoneService.this);
+                                    device.setIncomingSoundEnabled(true);
+
+                                    Intent intent = new Intent(getContext(), PhoneActivity.class);
+                                    PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    device.setIncomingIntent(pendingIntent);
+
+                                    mDevices.put(phoneNumber, device);
+                                    DebugTool.logD("SIZE DIVICE: " + mDevices.size());
+                                } else {
+                                    mDevices.get(phoneNumber).updateCapabilityToken(capabilityToken);
+                                }
+
+                            } catch (Exception e1) {
+                                Toast.makeText(getContext(), "Device error", Toast.LENGTH_SHORT).show();
+                            }
+
                         } else {
                             DebugTool.logD("Error retrieving token");
                         }
@@ -290,33 +320,24 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                 });
     }
 
-    private void createDevice(String capabilityToken) {
-        try {
-            if (mClientDevice == null) {
-                mClientDevice = Twilio.createDevice(capabilityToken, this);
-                mClientDevice.setIncomingSoundEnabled(true);
 
-                /*
-                 * Providing a PendingIntent to the newly created Device, allowing you to receive incoming calls
-                 *
-                 *  What you do when you receive the intent depends on the component you set in the Intent.
-                 *
-                 *  If you're using an Activity, you'll want to override Activity.onNewIntent()
-                 *  If you're using a Service, you'll want to override Service.onStartCommand().
-                 *  If you're using a BroadcastReceiver, override BroadcastReceiver.onReceive().
-                 */
+    private void registerDevicePhoneNumber(final String phoneNumber) {
+        if (Twilio.isInitialized()) {
+            retrieveCapabilityToken(phoneNumber);
+        } else {
+            Twilio.initialize(getApplicationContext(), new Twilio.InitListener() {
+                @Override
+                public void onInitialized() {
+                    retrieveCapabilityToken(phoneNumber);
+                }
 
-                Intent intent = new Intent(this, PhoneActivity.class);
-                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                mClientDevice.setIncomingIntent(pendingIntent);
-            } else {
-                mClientDevice.updateCapabilityToken(capabilityToken);
-            }
+                @Override
+                public void onError(Exception e) {
+                    DebugTool.logD("Failed to initialize the Twilio Client SDK");
+                }
+            });
 
-//            EventBus.getDefault().postSticky(mClientDevice);
-
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Device error", Toast.LENGTH_SHORT).show();
+            DebugTool.logD("TWILIO DO NOT INIT");
         }
     }
 
@@ -324,8 +345,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         Map<String, String> params = new HashMap<>();
 //        toPhoneNumber = "client:" + toPhoneNumber.trim();
         params.put("To", toPhoneNumber);
-        if (mClientDevice != null) {
-            mActiveConnection = mClientDevice.connect(params, this);
+        if (mDevices.containsKey(fromPhoneNumber)) {
+            mActiveConnection = mDevices.get(fromPhoneNumber).connect(params, this);
             DebugTool.logD("MAKE A CALL : " + toPhoneNumber);
         } else {
             Toast.makeText(getContext(), "No existing device", Toast.LENGTH_SHORT).show();
@@ -451,6 +472,24 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         } else {
             alarm.setExact(AlarmManager.RTC_WAKEUP, 0, pIntent);
         }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        // TODO Auto-generated method stub
+        Intent restartService = new Intent(getApplicationContext(), this.getClass());
+        restartService.setPackage(getPackageName());
+        PendingIntent restartServicePI = PendingIntent.getService(
+                getApplicationContext(), 1, restartService,
+                PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 1000, restartServicePI);
 
     }
 

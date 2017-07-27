@@ -3,6 +3,8 @@ package com.ethan.morephone;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Set;
+
 /**
  * Created by Ethan on 2/25/17.
  */
@@ -22,6 +24,8 @@ public class MyPreference {
     private static final String PROPERTY_PHONE_NUMBER = "PROPERTY_PHONE_NUMBER";
     private static final String PROPERTY_PHONE_FRIENDLY_NAME = "PROPERTY_PHONE_FRIENDLY_NAME";
     private static final String PROPERTY_PHONE_NUMBER_SID = "PROPERTY_PHONE_NUMBER_SID";
+
+    private static final String PROPERTY_PHONE_NUMBER_USAGE = "PROPERTY_PHONE_NUMBER_USAGE";
 
     private static final String PROPERTY_REGISTER_PHONE_NUMBER = "PROPERTY_REGISTER_PHONE_NUMBER";
 
@@ -170,6 +174,16 @@ public class MyPreference {
     public static void setPhoneNumberSid(Context context, String phoneNumber) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(PROPERTY_PHONE_NUMBER_SID, phoneNumber).commit();
+    }
+
+    public static Set<String> getPhoneNumberUsage(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getStringSet(PROPERTY_PHONE_NUMBER_USAGE, null);
+    }
+
+    public static void setPhoneNumberUsage(Context context, Set<String> phoneNumberUsages) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putStringSet(PROPERTY_PHONE_NUMBER_USAGE, phoneNumberUsages).commit();
     }
 
     public static boolean getInbox(Context context) {
@@ -351,4 +365,5 @@ public class MyPreference {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().remove(PROPERTY_ENDPOINT + identity).commit();
     }
+
 }
