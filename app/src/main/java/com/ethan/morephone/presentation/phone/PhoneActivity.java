@@ -7,12 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
@@ -51,6 +54,10 @@ public class PhoneActivity extends BaseActivity implements
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         setContentView(R.layout.activity_fragment);
 
         Intent service = new Intent(this, PhoneService.class);
@@ -69,6 +76,21 @@ public class PhoneActivity extends BaseActivity implements
         } else if (phoneState == PhoneService.PHONE_STATE_INCOMING) {
             showIncomingFragment(mFromPhoneNumber, mToPhoneNumber);
         }
+
+        WindowManager mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, 0, 0,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+/* | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON */,
+                PixelFormat.RGBA_8888);
+
+//        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content_frame);
+//        mWindowManager.addView(frameLayout, mLayoutParams);
 
     }
 

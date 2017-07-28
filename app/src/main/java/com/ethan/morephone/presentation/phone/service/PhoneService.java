@@ -175,6 +175,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         if (intent == null) return START_STICKY;
 
         String action = intent.getAction();
