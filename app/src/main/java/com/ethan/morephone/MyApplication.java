@@ -8,10 +8,8 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 
-import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
 import com.ethan.morephone.presentation.buy.payment.checkout.PlayStoreListener;
-import com.twilio.client.Twilio;
 
 import javax.annotation.Nonnull;
 
@@ -51,7 +49,6 @@ public class MyApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        initializeTwilioClientSDK();
 //        if (BuildConfig.DEBUG) {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectAll()
@@ -81,25 +78,7 @@ public class MyApplication extends MultiDexApplication {
         MultiDex.install(this);
     }
 
-    private void initializeTwilioClientSDK() {
-        if (!Twilio.isInitialized()) {
-            Twilio.initialize(getApplicationContext(), new Twilio.InitListener() {
-                @Override
-                public void onInitialized() {
-//                    retrieveCapabilityToken(clientProfile);
-                }
 
-                @Override
-                public void onError(Exception e) {
-                    DebugTool.logD("Failed to initialize the Twilio Client SDK");
-//                    Toast.makeText(getContext(), "Failed to initialize the Twilio Client SDK", Toast.LENGTH_LONG).show();
-                }
-            });
-        } else {
-//            retrieveCapabilityToken(clientProfile);
-            DebugTool.logD("INITED");
-        }
-    }
 
 
 

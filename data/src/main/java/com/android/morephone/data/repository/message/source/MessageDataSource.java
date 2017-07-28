@@ -3,6 +3,7 @@ package com.android.morephone.data.repository.message.source;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 
 import java.util.List;
 
@@ -34,7 +35,11 @@ public interface MessageDataSource {
 
     void getMessagesIncoming(String phoneNumberIncoming, @NonNull LoadMessagesCallback callback);
 
+    MessageListResourceResponse getMessagesIncoming(String phoneNumberIncoming);
+
     void getMessagesOutgoing(String phoneNumberOutgoing, @NonNull LoadMessagesCallback callback);
+
+    MessageListResourceResponse getMessagesOutgoing(String phoneNumberOutgoing);
 
     void getMessage(String messageSid, @NonNull GetMessageCallback callback);
 

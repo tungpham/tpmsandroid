@@ -3,10 +3,8 @@ package com.android.morephone.data.repository.message.source.remote;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
-import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.repository.message.source.MessageDataSource;
 
@@ -120,6 +118,11 @@ public class MessageRemoteDataSource implements MessageDataSource {
     }
 
     @Override
+    public MessageListResourceResponse getMessagesIncoming(String phoneNumberIncoming) {
+        return ApiManager.getMessagesIncoming(mContext, phoneNumberIncoming);
+    }
+
+    @Override
     public void getMessagesOutgoing(String phoneNumberOutgoing, @NonNull final LoadMessagesCallback callback) {
         ApiManager.getMessagesOutgoing(mContext, phoneNumberOutgoing, new Callback<MessageListResourceResponse>() {
             @Override
@@ -143,6 +146,11 @@ public class MessageRemoteDataSource implements MessageDataSource {
             }
         });
 
+    }
+
+    @Override
+    public MessageListResourceResponse getMessagesOutgoing(String phoneNumberOutgoing) {
+        return ApiManager.getMessagesOutgoing(mContext, phoneNumberOutgoing);
     }
 
     @Override

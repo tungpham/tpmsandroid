@@ -71,8 +71,7 @@ public class CallLogFragment extends BaseFragment implements
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
+        recyclerView.setItemAnimator(null);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -92,7 +91,7 @@ public class CallLogFragment extends BaseFragment implements
                     mPageIncoming++;
                     mPageOutgoing++;
                     DebugTool.logD("PAGE: " + mPageOutgoing);
-                    loadData();
+//                    loadData();
 //                    mPresenter.getTasks(mCurrPage);
                 }
             }
@@ -166,8 +165,9 @@ public class CallLogFragment extends BaseFragment implements
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
             mPresenter.clearData();
-            mPresenter.loadCallsIncoming(mPhoneNumber, mPageIncoming);
-            mPresenter.loadCallsOutgoing(mPhoneNumber, mPageOutgoing);
+//            mPresenter.loadCallsIncoming(mPhoneNumber, mPageIncoming);
+//            mPresenter.loadCallsOutgoing(mPhoneNumber, mPageOutgoing);
+            mPresenter.loadCalls(getContext(), mPhoneNumber, 0);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }

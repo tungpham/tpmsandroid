@@ -132,6 +132,28 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    public static MessageListResourceResponse getMessagesIncoming(Context context,
+                                                                  String phoneNumberIncoming) {
+        Call<MessageListResourceResponse> call = getApiPath(context).getMessagesIncoming(TwilioManager.getSid(context), phoneNumberIncoming);
+        try {
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static MessageListResourceResponse getMessagesOutgoing(Context context,
+                                                                  String phoneNumberOutgoing) {
+        Call<MessageListResourceResponse> call = getApiPath(context).getMessagesOutgoing(TwilioManager.getSid(context), phoneNumberOutgoing);
+        try {
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void getMessagesOutgoing(Context context,
                                            String phoneNumberOutgoing,
                                            Callback<MessageListResourceResponse> callback) {
@@ -197,12 +219,37 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    public static Calls getCallsIncoming(Context context,
+                                        String phoneNumberIncoming,
+                                        int page) {
+        Call<Calls> call = getApiPath(context).getCallsIncoming(TwilioManager.getSid(context), phoneNumberIncoming, PAGE_SIZE, page);
+        try {
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void getCallsOutgoing(Context context,
-                                        String phoneNumberOutgoing,
-                                        int page,
-                                        Callback<Calls> callback) {
+                                         String phoneNumberOutgoing,
+                                         int page,
+                                         Callback<Calls> callback) {
         Call<Calls> call = getApiPath(context).getCallsOutgoing(TwilioManager.getSid(context), phoneNumberOutgoing, PAGE_SIZE, page);
         call.enqueue(callback);
+    }
+
+
+    public static Calls getCallsOutgoing(Context context,
+                                        String phoneNumberOutgoing,
+                                        int page) {
+        Call<Calls> call = getApiPath(context).getCallsOutgoing(TwilioManager.getSid(context), phoneNumberOutgoing, PAGE_SIZE, page);
+        try {
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void deleteVoice(Context context, String callsid) {
@@ -219,7 +266,6 @@ public class ApiManager {
             }
         });
     }
-
 
     public static void fakeData(Context context, Callback<FakeData> callback) {
         Call<FakeData> call = getApiPath(context).getFakeDAta();

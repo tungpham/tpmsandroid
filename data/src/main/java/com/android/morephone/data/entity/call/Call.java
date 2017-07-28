@@ -1,6 +1,5 @@
 package com.android.morephone.data.entity.call;
 
-import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
 
@@ -121,11 +120,9 @@ public class Call implements Comparable<Call>{
         Date now = DateUtils.getDate(voiceItem.dateCreated);
         if (current != null && now != null) {
             if (current.after(now)) {
-                DebugTool.logD("COMPARE");
-                return 1;
-            } else {
-                DebugTool.logD("COM");
                 return -1;
+            } else {
+                return 1;
             }
         } else {
             return 0;

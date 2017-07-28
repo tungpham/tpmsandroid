@@ -2,12 +2,9 @@ package com.android.morephone.domain.usecase.message;
 
 import android.support.annotation.NonNull;
 
-import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.repository.message.MessageRepository;
-import com.android.morephone.data.repository.message.source.MessageDataSource;
 import com.android.morephone.domain.UseCase;
-
-import java.util.List;
 
 /**
  * Created by Ethan on 3/3/17.
@@ -24,17 +21,7 @@ public class GetMessagesIncoming extends UseCase<GetMessagesIncoming.RequestValu
 
     @Override
     protected void executeUseCase(RequestValue requestValue) {
-        mMessageRepository.getMessagesIncoming(requestValue.getPhoneNumberIncoming(), new MessageDataSource.LoadMessagesCallback() {
-            @Override
-            public void onMessagesLoaded(List<MessageItem> messageItems) {
-                getUseCaseCallback().onSuccess(new ResponseValue(messageItems));
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-                getUseCaseCallback().onError();
-            }
-        });
+        getUseCaseCallback().onSuccess(new ResponseValue(mMessageRepository.getMessagesIncoming(requestValue.getPhoneNumberIncoming())));
     }
 
     public static final class RequestValue implements UseCase.RequestValue {
@@ -52,13 +39,13 @@ public class GetMessagesIncoming extends UseCase<GetMessagesIncoming.RequestValu
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private final List<MessageItem> mMessageItems;
+        private final MessageListResourceResponse mMessageItems;
 
-        public ResponseValue(@NonNull List<MessageItem> messageItems) {
+        public ResponseValue(@NonNull MessageListResourceResponse messageItems) {
             mMessageItems = messageItems;
         }
 
-        public List<MessageItem> getMessageItems(){
+        public MessageListResourceResponse getMessages(){
             return mMessageItems;
         }
     }

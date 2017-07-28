@@ -37,6 +37,7 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
 
     public void replaceData(List<ConversationModel> conversationModels) {
         Collections.sort(conversationModels);
+
         mConversationModels = conversationModels;
         notifyDataSetChanged();
     }
@@ -56,7 +57,6 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
     public void onBindViewHolder(ConversationListViewHolder holder, int position) {
         final ConversationModel conversationModel = mConversationModels.get(position);
         List<MessageItem> messageItems = conversationModel.getMessageItems();
-        Collections.sort(messageItems);
         MessageItem messageItem = messageItems.get(messageItems.size() - 1);
 
         holder.textSmsTitle.setText(conversationModel.getPhoneNumber());

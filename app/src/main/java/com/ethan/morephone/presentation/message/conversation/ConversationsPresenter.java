@@ -1,11 +1,15 @@
 package com.ethan.morephone.presentation.message.conversation;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.message.CreateMessage;
@@ -14,7 +18,9 @@ import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
 import com.ethan.morephone.model.ConversationModel;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -61,26 +67,8 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     }
 
     @Override
-    public void loadListMessageResource() {
-        mView.showLoading(true);
-        GetAllMessages.RequestValue requestValue = new GetAllMessages.RequestValue();
-        mUseCaseHandler.execute(mGetAllMessages, requestValue, new UseCase.UseCaseCallback<GetAllMessages.ResponseValue>() {
-            @Override
-            public void onSuccess(GetAllMessages.ResponseValue response) {
-                List<MessageItem> messageItems = response.getMessageItems();
-                for (MessageItem messageItem : messageItems) {
-                    DebugTool.logD("BODY: " + messageItem.body);
-                }
-//                mView.showListMessage(messageItems);
-                mView.showLoading(false);
-            }
-
-            @Override
-            public void onError() {
-                DebugTool.logD("ERORR");
-                mView.showLoading(false);
-            }
-        });
+    public void loadListMessageResource(Context context, String phoneNumber) {
+        new DataAsync(context, this, phoneNumber).execute();
     }
 
     @Override
@@ -90,7 +78,9 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         mUseCaseHandler.execute(mGetMessagesIncoming, requestValue, new UseCase.UseCaseCallback<GetMessagesIncoming.ResponseValue>() {
             @Override
             public void onSuccess(GetMessagesIncoming.ResponseValue response) {
-                executeData(response.getMessageItems(), true);
+                response.getMessages();
+                //  executeData(response.getMessageItems(), true);
+
                 mView.showLoading(false);
             }
 
@@ -108,7 +98,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         mUseCaseHandler.execute(mGetMessagesOutgoing, requestValue, new UseCase.UseCaseCallback<GetMessagesOutgoing.ResponseValue>() {
             @Override
             public void onSuccess(GetMessagesOutgoing.ResponseValue response) {
-                executeData(response.getMessageItems(), false);
+//                executeData(response.getMessageItems(), false);
                 mView.showLoading(false);
             }
 
@@ -159,12 +149,16 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         for (Map.Entry entry : mArrayMap.entrySet()) {
             List<MessageItem> items = mArrayMap.get(entry.getKey());
             if (items != null && !items.isEmpty()) {
+                Collections.sort(items);
                 String dateCreated = items.get(items.size() - 1).dateCreated;
+                DebugTool.logD("DATE CREATED: " + dateCreated);
                 mConversationModels.add(new ConversationModel(entry.getKey().toString(), dateCreated, items));
             }
 
         }
-        mView.showListMessage(mConversationModels);
+
+        DebugTool.logD("SIZE CONVERSATION: " + mConversationModels.size());
+
     }
 
 //    public String loadJSONFromAsset() {
@@ -266,5 +260,56 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
                 mView.createMessageError();
             }
         });
+    }
+
+    private static class DataAsync extends AsyncTask<Void, Integer, Void> {
+        private final WeakReference<ConversationsPresenter> mWeakReference;
+        private final String mPhoneNumber;
+        private final Context mContext;
+
+        public DataAsync(Context context, ConversationsPresenter presenter, String phoneNumber) {
+            mWeakReference = new WeakReference<>(presenter);
+            this.mPhoneNumber = phoneNumber;
+            mContext = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ConversationsPresenter presenter = mWeakReference.get();
+            if(presenter != null){
+                presenter.mView.showLoading(true);
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            ConversationsPresenter presenter = mWeakReference.get();
+            if (presenter != null) {
+                MessageListResourceResponse messageIncoming = ApiManager.getMessagesIncoming(mContext, mPhoneNumber);
+                MessageListResourceResponse messageOutgoing = ApiManager.getMessagesOutgoing(mContext, mPhoneNumber);
+
+                if (messageIncoming != null && messageIncoming.messages != null && !messageIncoming.messages.isEmpty()) {
+                    presenter.executeData(messageIncoming.messages, true);
+                }
+
+                if (messageOutgoing != null && messageOutgoing.messages != null && !messageOutgoing.messages.isEmpty()) {
+                    presenter.executeData(messageOutgoing.messages, false);
+                }
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            ConversationsPresenter presenter = mWeakReference.get();
+            if(presenter != null){
+                presenter.mView.showListMessage(presenter.mConversationModels);
+                presenter.mView.showLoading(false);
+            }
+            DebugTool.logD("POST EXECUTE");
+        }
     }
 }

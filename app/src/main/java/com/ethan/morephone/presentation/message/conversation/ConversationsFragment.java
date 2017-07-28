@@ -97,9 +97,9 @@ public class ConversationsFragment extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
-
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
+//
+//        layoutManager.setReverseLayout(true);
+//        layoutManager.setStackFromEnd(true);
 
         mConversationListAdapter = new ConversationListAdapter(getContext(), new ArrayList<ConversationModel>(), this);
         recyclerView.setAdapter(mConversationListAdapter);
@@ -138,8 +138,7 @@ public class ConversationsFragment extends BaseFragment implements
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
             mPresenter.clearData();
-            mPresenter.loadMessagesIncoming(mPhoneNumber);
-            mPresenter.loadMessageOutgoing(mPhoneNumber);
+            mPresenter.loadListMessageResource(getContext(), mPhoneNumber);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }

@@ -1,5 +1,7 @@
 package com.ethan.morephone.presentation.message.conversation;
 
+import android.content.Context;
+
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.model.ConversationModel;
@@ -28,7 +30,7 @@ public interface ConversationsContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadListMessageResource();
+        void loadListMessageResource(Context context, String phoneNumber);
 
         void loadMessagesIncoming(String phoneNumberIncoming);
 

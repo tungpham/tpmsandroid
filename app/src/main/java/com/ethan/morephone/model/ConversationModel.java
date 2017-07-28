@@ -3,6 +3,7 @@ package com.ethan.morephone.model;
 import android.text.TextUtils;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.DateUtils;
 
 import java.util.Date;
@@ -22,6 +23,7 @@ public class ConversationModel implements Comparable<ConversationModel> {
         this.mPhoneNumber = phoneNumber;
         this.mDateCreated = dateCreated;
         this.mMessageItems = messageItems;
+
     }
 
     public String getPhoneNumber() {
@@ -50,19 +52,15 @@ public class ConversationModel implements Comparable<ConversationModel> {
 
     @Override
     public int compareTo(ConversationModel conversationModel) {
-
         if (!TextUtils.isEmpty(mDateCreated) && !TextUtils.isEmpty(conversationModel.getDateCreated())) {
 
             Date current = DateUtils.getDate(mDateCreated);
             Date now = DateUtils.getDate(conversationModel.getDateCreated());
-            if (current != null && now != null) {
-                if (current.after(now)) {
-                    return 1;
-                } else {
-                    return -1;
-                }
+            DebugTool.logD("CURRENT: " + mDateCreated);
+            if (current.after(now)) {
+                return -1;
             } else {
-                return 0;
+                return 1;
             }
         }
 

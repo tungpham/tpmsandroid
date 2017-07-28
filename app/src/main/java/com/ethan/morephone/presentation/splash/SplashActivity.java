@@ -25,6 +25,7 @@ import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
 import com.ethan.morephone.utils.Utils;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.twilio.client.Twilio;
 
 import java.lang.ref.WeakReference;
 
@@ -128,6 +129,28 @@ public class SplashActivity extends BaseActivity {
             finish();
         }
 
+        initializeTwilioClientSDK();
+
+    }
+
+    private void initializeTwilioClientSDK() {
+        if (!Twilio.isInitialized()) {
+            Twilio.initialize(getApplicationContext(), new Twilio.InitListener() {
+                @Override
+                public void onInitialized() {
+//                    retrieveCapabilityToken(clientProfile);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    DebugTool.logD("Failed to initialize the Twilio Client SDK");
+//                    Toast.makeText(getContext(), "Failed to initialize the Twilio Client SDK", Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+//            retrieveCapabilityToken(clientProfile);
+            DebugTool.logD("INITED");
+        }
     }
 
     private static class ApiAsync extends AsyncTask<Void, Integer, Void> {
