@@ -12,19 +12,18 @@ import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+import android.text.TextUtils;
 
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.main.MainActivity;
+import com.ethan.morephone.presentation.message.reply.MessageReplyActivity;
 import com.ethan.morephone.presentation.record.SoundPoolManager;
 import com.ethan.morephone.presentation.record.TestVoiceActivity;
+import com.ethan.morephone.utils.LifecycleHandler;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.twilio.voice.CallInvite;
-import com.twilio.voice.MessageException;
-import com.twilio.voice.MessageListener;
-import com.twilio.voice.Voice;
 
 import java.util.Map;
 
@@ -44,6 +43,8 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "VoiceFCMService";
     private static final String NOTIFICATION_ID_KEY = "NOTIFICATION_ID";
     private static final String CALL_SID_KEY = "CALL_SID";
+
+    public static final int NOTIFY_MESSAGE_ID = 100;
 
     private NotificationManager notificationManager;
 
@@ -71,39 +72,38 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
         DebugTool.logD("From: " + from);
         DebugTool.logD("TO: " + message.getTo());
 
-        Map<String,String> dataTest = message.getData();
-        if(dataTest != null){
+        Map<String, String> dataTest = message.getData();
+        if (dataTest != null) {
             String title = dataTest.get(NOTIFY_TITLE_DATA_KEY);
-            DebugTool.logD("TITLE: " + title);
             String body = dataTest.get(NOTIFY_BODY_DATA_KEY);
-            DebugTool.logD("body: " + body);
+            DebugTool.logD("DATA RESULT: " + dataTest.toString());
             sendSmsNotification(title, body);
         }
 
 
-        if (message.getData().size() > 0) {
-            Map<String, String> data = message.getData();
-            DebugTool.logD("DATA: " + data.toString());
-            final int notificationId = (int) System.currentTimeMillis();
-            Voice.handleMessage(this, data, new MessageListener() {
-                @Override
-                public void onCallInvite(CallInvite callInvite) {
-                    NotifyFirebaseMessagingService.this.notify(callInvite, notificationId);
-                    NotifyFirebaseMessagingService.this.sendCallInviteToActivity(callInvite, notificationId);
-                }
-
-                @Override
-                public void onError(MessageException messageException) {
-                    Log.e(TAG, messageException.getLocalizedMessage());
-                }
-            });
-        } else {
-            if(message.getNotification() != null) {
-                String title = message.getNotification().getTitle();
-                String body = message.getNotification().getBody();
-                sendSmsNotification(title, body);
-            }
-        }
+//        if (message.getData().size() > 0) {
+//            Map<String, String> data = message.getData();
+//            DebugTool.logD("DATA: " + data.toString());
+//            final int notificationId = (int) System.currentTimeMillis();
+//            Voice.handleMessage(this, data, new MessageListener() {
+//                @Override
+//                public void onCallInvite(CallInvite callInvite) {
+//                    NotifyFirebaseMessagingService.this.notify(callInvite, notificationId);
+//                    NotifyFirebaseMessagingService.this.sendCallInviteToActivity(callInvite, notificationId);
+//                }
+//
+//                @Override
+//                public void onError(MessageException messageException) {
+//                    Log.e(TAG, messageException.getLocalizedMessage());
+//                }
+//            });
+//        } else {
+//            if(message.getNotification() != null) {
+//                String title = message.getNotification().getTitle();
+//                String body = message.getNotification().getBody();
+//                sendSmsNotification(title, body);
+//            }
+//        }
     }
 
     /**
@@ -112,23 +112,42 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
      * @param message GCM message received.
      */
     private void sendSmsNotification(String title, String message) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+        if (!LifecycleHandler.isApplicationVisible()) {
+            Intent popupIntent = new Intent(getApplicationContext(), MessageReplyActivity.class);
+            popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+            if(!TextUtils.isEmpty(title) && title.contains("-")){
+                String str[] = title.split("-");
+                if(str != null && str.length == 2){
+                    popupIntent.putExtra(MessageReplyActivity.EXTRA_PHONE_NUMBER_FROM, str[0]);
+                    popupIntent.putExtra(MessageReplyActivity.EXTRA_PHONE_NUMBER_TO, str[1]);
+                }
+            }
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notificationBuilder.build());
+            popupIntent.putExtra(MessageReplyActivity.EXTRA_MESSAGE_BODY, message);
+            startActivity(popupIntent);
+        } else {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                    PendingIntent.FLAG_ONE_SHOT);
+
+            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent);
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            notificationManager.notify(NOTIFY_MESSAGE_ID, notificationBuilder.build());
+        }
+
+
     }
 
 

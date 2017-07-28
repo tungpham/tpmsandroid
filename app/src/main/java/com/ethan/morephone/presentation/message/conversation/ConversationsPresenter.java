@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
+import android.text.TextUtils;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
@@ -126,22 +127,27 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     private void executeData(List<MessageItem> messageItems, boolean isComing) {
         if (isComing) {
             for (MessageItem messageItem : messageItems) {
-                if (mArrayMap.containsKey(messageItem.from)) {
-                    mArrayMap.get(messageItem.from).add(messageItem);
-                } else {
-                    List<MessageItem> items = new ArrayList<>();
-                    items.add(messageItem);
-                    mArrayMap.put(messageItem.from, items);
+                if(!TextUtils.isEmpty(messageItem.status) && messageItem.status.equals("received")){
+                    if (mArrayMap.containsKey(messageItem.from)) {
+                        mArrayMap.get(messageItem.from).add(messageItem);
+                    } else {
+                        List<MessageItem> items = new ArrayList<>();
+                        items.add(messageItem);
+                        mArrayMap.put(messageItem.from, items);
+                    }
                 }
+
             }
         } else {
             for (MessageItem messageItem : messageItems) {
-                if (mArrayMap.containsKey(messageItem.to)) {
-                    mArrayMap.get(messageItem.to).add(messageItem);
-                } else {
-                    List<MessageItem> items = new ArrayList<>();
-                    items.add(messageItem);
-                    mArrayMap.put(messageItem.to, items);
+                if(!TextUtils.isEmpty(messageItem.status) && messageItem.status.equals("delivered")){
+                    if (mArrayMap.containsKey(messageItem.to)) {
+                        mArrayMap.get(messageItem.to).add(messageItem);
+                    } else {
+                        List<MessageItem> items = new ArrayList<>();
+                        items.add(messageItem);
+                        mArrayMap.put(messageItem.to, items);
+                    }
                 }
             }
         }

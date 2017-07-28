@@ -105,6 +105,8 @@
         <activity android:name=".presentation.license.LicenseActivity" />
         <activity android:name=".presentation.usage.UsageActivity" />
         <activity android:name=".presentation.phone.PhoneActivity" />
+        <activity android:name=".presentation.message.reply.MessageReplyActivity"
+            android:theme="@style/Theme.Transparent"/>
         <activity
             android:name=".presentation.phone.incall.InCallActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />

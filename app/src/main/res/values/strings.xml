@@ -88,6 +88,10 @@
     <string name="message_reset_success">Please check your email for the password reset email!</string>
     <string name="message_reset_fail">Failed to send reset email!</string>
 
+
+    <string name="message_send_success">Message has sent</string>
+    <string name="message_send_error">Message has sent error</string>
+
     <!-- Fragment Login-->
     <string name="text_login_title">Log In</string>
     <string name="text_login_email">EMAIL</string>

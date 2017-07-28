@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/activity_main_margin"
+        android:layout_marginRight="@dimen/activity_main_margin"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:id="@+id/image_icon_message_reply"
+            android:layout_width="@dimen/item_icon_sms_width_height"
+            android:layout_height="@dimen/item_icon_sms_width_height"
+            android:layout_marginLeft="@dimen/activity_main_margin"
+            android:layout_marginTop="@dimen/activity_main_margin" />
+
+        <ImageView
+            android:id="@+id/image_message_reply_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_main_margin"
+            android:layout_marginTop="@dimen/activity_main_margin"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_clear"/>
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_message_reply_title"
+            style="@style/TextSmsTitle"
+            android:layout_marginTop="@dimen/activity_main_margin"
+            android:layout_toRightOf="@+id/image_icon_message_reply" />
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_message_reply_time"
+            style="@style/TextSmsTime"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/image_icon_message_reply"
+            android:layout_marginTop="@dimen/activity_vertical_margin"/>
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_message_reply_body"
+            style="@style/TextMessageBody"
+            android:layout_below="@+id/text_message_reply_time"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/item_sms_margin_top" />
+
+        <include layout="@layout/view_compose" />
+    </RelativeLayout>
+
+</RelativeLayout>

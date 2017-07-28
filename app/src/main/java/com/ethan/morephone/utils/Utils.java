@@ -41,7 +41,7 @@ public class Utils {
     }
 
     public static String getTimeDate(long time) {
-        Format formatter = new SimpleDateFormat("hh:ss");
+        Format formatter = new SimpleDateFormat("hh:mm a");
         return formatter.format(new Date(time));
     }
 
