@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseActivity;
@@ -137,7 +138,7 @@ public class MessageListFragment extends BaseFragment implements
             case R.id.image_send:
                 String body = mEditTextMessage.getText().toString();
                 mEditTextMessage.setText("");
-                mPresenter.createMessage(mPhoneNumberTo, mPhoneNumberFrom, body, mMessageListAdapter.getData().size() - 1);
+                mPresenter.createMessage(MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, body, mMessageListAdapter.getData().size() - 1);
                 break;
             default:
                 break;

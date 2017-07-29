@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.utils.Injection;
@@ -70,7 +71,7 @@ public class MessageReplyActivity extends BaseActivity implements View.OnClickLi
             case R.id.image_send:
                 String body = mEditTextMessage.getText().toString();
                 if (!TextUtils.isEmpty(body)) {
-                    mPresenter.createMessage(mPhoneNumberFrom, mPhoneNumberTo, body, 0);
+                    mPresenter.createMessage(MyPreference.getUserId(getApplicationContext()), mPhoneNumberFrom, mPhoneNumberTo, body, 0);
                     finish();
                 }
                 break;

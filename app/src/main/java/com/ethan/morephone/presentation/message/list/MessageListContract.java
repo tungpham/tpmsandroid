@@ -29,7 +29,7 @@ public interface MessageListContract {
 
         void loadMessages(String to, String from);
 
-        void createMessage(String to, String from, String body, int position);
+        void createMessage(String userId, String to, String from, String body, int position);
 
         void deleteMessage(String messagesid);
     }

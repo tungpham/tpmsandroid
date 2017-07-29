@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -289,7 +290,7 @@ public class ConversationsFragment extends BaseFragment implements
                 String[] tos = data.getStringArrayExtra(EXTRA_MESSAGE_TO);
                 for (String to : tos) {
                     if (!TextUtils.isEmpty(to)) {
-                        mPresenter.createMessage(to, mPhoneNumber, body, 0);
+                        mPresenter.createMessage(MyPreference.getUserId(getContext()), to, mPhoneNumber, body, 0);
                     }
                 }
             }

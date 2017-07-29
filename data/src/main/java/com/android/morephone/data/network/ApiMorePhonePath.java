@@ -2,13 +2,17 @@ package com.android.morephone.data.network;
 
 
 import com.android.morephone.data.entity.BaseResponse;
+import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
+import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.user.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -20,17 +24,32 @@ import retrofit2.http.Query;
 interface ApiMorePhonePath {
 
     /*-----------------------------------------USER-----------------------------------------*/
-    @POST("api/v1/user")
+    @POST("user")
     Call<BaseResponse<User>> createUser(@Body User user);
 
-    @PUT("api/v1/user/{id}/token")
+    @PUT("user/{id}/token")
     Call<BaseResponse<User>> updateFcmToken(@Path("id") String id, @Query("token") String token);
 
     /*-----------------------------------------PHONE NUMBER-----------------------------------------*/
 
-    @POST("api/v1/phone-number")
+    @POST("phone-number")
     Call<BaseResponse<PhoneNumber>> createPhoneNumber(@Body PhoneNumber user);
 
+
+    /*-----------------------------------------MESSAGE-----------------------------------------*/
+
+    @FormUrlEncoded
+    @POST("message/send-message")
+    Call<BaseResponse<MessageItem>> createMessage(@Field("userId") String userId,
+                                    @Field("from") String from,
+                                    @Field("to") String to,
+                                    @Field("body") String body);
+
+
+    /*-----------------------------------------PURCHASE-----------------------------------------*/
+
+    @POST("purchase")
+    Call<MorePhonePurchase> purchase(@Body MorePhonePurchase morePhonePurchase);
 
 
     /*-----------------------------------------PHONE REGISTER-----------------------------------------*/
@@ -39,5 +58,7 @@ interface ApiMorePhonePath {
 
     @POST("phone/binding")
     Call<Response> binding(@Body BindingRequest bindingRequest);
+
+
 
 }

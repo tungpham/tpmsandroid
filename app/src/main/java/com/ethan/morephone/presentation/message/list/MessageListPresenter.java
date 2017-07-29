@@ -54,7 +54,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
     }
 
     @Override
-    public void createMessage(String to, String from, String body, final int position) {
+    public void createMessage(String userId, String to, String from, String body, final int position) {
         MessageItem messageItem = new MessageItem(
                 "",
                 "",
@@ -78,7 +78,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
                 null);
         mView.createMessageSuccess(messageItem);
 //        mView.showProgress(true, position);
-        CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(to, from, body);
+        CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(userId, to, from, body);
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
             public void onSuccess(CreateMessage.ResponseValue response) {

@@ -20,7 +20,7 @@ public interface MessageDataSource {
     }
 
     interface GetMessageCallback {
-        void onMessageLoaded(MessageItem messageItem);
+        void onMessageLoaded(MessageItem messageItem, int statusCode);
 
         void onDataNotAvailable();
     }
@@ -43,7 +43,7 @@ public interface MessageDataSource {
 
     void getMessage(String messageSid, @NonNull GetMessageCallback callback);
 
-    void createMessage(String to, String from, String body, @NonNull GetMessageCallback callback);
+    void createMessage(String userId, String to, String from, String body, @NonNull GetMessageCallback callback);
 
     void deleteMessage(String messageSid);
 

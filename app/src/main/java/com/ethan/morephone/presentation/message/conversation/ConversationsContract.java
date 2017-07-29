@@ -40,7 +40,7 @@ public interface ConversationsContract {
 
         void parseFakeData(FakeData fakeData, String phoneNumber);
 
-        void createMessage(String to, String from, String body, int position);
+        void createMessage(String userId, String to, String from, String body, int position);
 
     }
 }

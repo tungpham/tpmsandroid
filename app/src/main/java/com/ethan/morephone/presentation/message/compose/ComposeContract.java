@@ -20,7 +20,7 @@ public interface ComposeContract {
 
     interface Presenter extends BasePresenter {
 
-        void createMessage(String to, String from, String body, int position);
+        void createMessage(String userId, String to, String from, String body, int position);
 
     }
 }

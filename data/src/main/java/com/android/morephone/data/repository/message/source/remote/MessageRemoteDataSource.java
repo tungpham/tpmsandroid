@@ -3,9 +3,11 @@ package com.android.morephone.data.repository.message.source.remote;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.network.ApiManager;
+import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.repository.message.source.MessageDataSource;
 
 import retrofit2.Call;
@@ -159,19 +161,19 @@ public class MessageRemoteDataSource implements MessageDataSource {
     }
 
     @Override
-    public void createMessage(String to, String from, String body, @NonNull final GetMessageCallback callback) {
-        ApiManager.createMessage(mContext, to, from, body, new Callback<MessageItem>() {
+    public void createMessage(String userId, String to, String from, String body, @NonNull final GetMessageCallback callback) {
+        ApiMorePhone.createMessage(mContext, userId, to, from, body, new Callback<BaseResponse<MessageItem>>() {
             @Override
-            public void onResponse(Call<MessageItem> call, Response<MessageItem> response) {
+            public void onResponse(Call<BaseResponse<MessageItem>> call, Response<BaseResponse<MessageItem>> response) {
                 if (response.isSuccessful()) {
-                    callback.onMessageLoaded(response.body());
+                    callback.onMessageLoaded(response.body().getResponse(), response.body().getStatus());
                 } else {
                     callback.onDataNotAvailable();
                 }
             }
 
             @Override
-            public void onFailure(Call<MessageItem> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<MessageItem>> call, Throwable t) {
                 callback.onDataNotAvailable();
             }
         });

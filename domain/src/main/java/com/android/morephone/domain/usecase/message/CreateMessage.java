@@ -11,7 +11,7 @@ import com.android.morephone.domain.UseCase;
  * Created by Ethan on 3/3/17.
  */
 
-public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMessage.ResponseValue>{
+public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMessage.ResponseValue> {
 
     private final MessageRepository mMessageRepository;
 
@@ -22,10 +22,10 @@ public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMes
 
     @Override
     protected void executeUseCase(RequestValue requestValue) {
-        mMessageRepository.createMessage(requestValue.getPhoneNumberTo(), requestValue.getPhoneNumberFrom(), requestValue.getBody(), new MessageDataSource.GetMessageCallback() {
+        mMessageRepository.createMessage(requestValue.getUserId(), requestValue.getPhoneNumberTo(), requestValue.getPhoneNumberFrom(), requestValue.getBody(), new MessageDataSource.GetMessageCallback() {
             @Override
-            public void onMessageLoaded(MessageItem messageItem) {
-                getUseCaseCallback().onSuccess(new ResponseValue(messageItem));
+            public void onMessageLoaded(MessageItem messageItem, int statusCode) {
+                getUseCaseCallback().onSuccess(new ResponseValue(messageItem, statusCode));
             }
 
             @Override
@@ -37,14 +37,20 @@ public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMes
 
     public static final class RequestValue implements UseCase.RequestValue {
 
+        private final String mUserId;
         private final String mPhoneNumberTo;
         private final String mPhoneNumberFrom;
         private final String mBody;
 
-        public RequestValue(String phoneNumberTo, String phoneNumberFrom, String body) {
+        public RequestValue(String userId, String phoneNumberTo, String phoneNumberFrom, String body) {
+            mUserId = userId;
             mPhoneNumberTo = phoneNumberTo;
             mPhoneNumberFrom = phoneNumberFrom;
             mBody = body;
+        }
+
+        public String getUserId() {
+            return mUserId;
         }
 
         public String getPhoneNumberTo() {
@@ -63,13 +69,19 @@ public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMes
     public static final class ResponseValue implements UseCase.ResponseValue {
 
         private final MessageItem mMessageItem;
+        private final int mStatusCode;
 
-        public ResponseValue(@NonNull MessageItem messageItem) {
+        public ResponseValue(@NonNull MessageItem messageItem, @NonNull int statusCode) {
             mMessageItem = messageItem;
+            mStatusCode = statusCode;
         }
 
-        public MessageItem getMessageItem(){
+        public MessageItem getMessageItem() {
             return mMessageItem;
+        }
+
+        public int getStatusCode() {
+            return mStatusCode;
         }
     }
 }

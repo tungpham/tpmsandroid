@@ -2,14 +2,10 @@ package com.android.morephone.data.network;
 
 import android.content.Context;
 
-import com.android.morephone.data.entity.purchase.MorePhonePurchase;
-
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -77,10 +73,10 @@ public class ApiPurchaseManager {
         return mApiPath;
     }
 
-    public static void purchase(Context context,
-                                MorePhonePurchase morePhonePurchase,
-                                Callback<MorePhonePurchase> callback) {
-        Call<MorePhonePurchase> call = getApiPath(context).purchase(morePhonePurchase);
-        call.enqueue(callback);
-    }
+//    public static void purchase(Context context,
+//                                  MorePhonePurchase morePhonePurchase,
+//                                  Callback<MorePhonePurchase> callback) {
+//        Call<MorePhonePurchase> call = getApiPath(context).purchase(morePhonePurchase);
+//        call.enqueue(callback);
+//    }
 }

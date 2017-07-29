@@ -4,8 +4,10 @@ import android.content.Context;
 
 import com.android.morephone.data.BaseUrl;
 import com.android.morephone.data.entity.BaseResponse;
+import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
+import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.user.User;
 
@@ -128,7 +130,27 @@ public class ApiMorePhone {
         call.enqueue(callback);
     }
 
+     /*-----------------------------------------PURCHASE----------------------------------------*/
 
+    public static void purchase(Context context,
+                                MorePhonePurchase morePhonePurchase,
+                                Callback<MorePhonePurchase> callback) {
+        Call<MorePhonePurchase> call = getApiPath(context).purchase(morePhonePurchase);
+        call.enqueue(callback);
+    }
+
+
+    /*-----------------------------------------MESSAGE----------------------------------------*/
+
+    public static void createMessage(Context context,
+                                     String userId,
+                                     String to,
+                                     String from,
+                                     String body,
+                                     Callback<BaseResponse<MessageItem>> callback) {
+        Call<BaseResponse<MessageItem>> call = getApiPath(context).createMessage(userId, from, to, body);
+        call.enqueue(callback);
+    }
 
     /*-----------------------------------------PHONE REGISTER-----------------------------------------*/
 

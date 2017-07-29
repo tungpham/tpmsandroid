@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.ApiPurchaseManager;
+import com.android.morephone.data.network.ApiMorePhone;
 import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
@@ -204,7 +204,7 @@ public class AddFundFrag extends BaseFragment implements
                     purchase.time,
                     purchase.sku);
 
-            ApiPurchaseManager.purchase(getContext(), morePhonePurchase, new Callback<MorePhonePurchase>() {
+            ApiMorePhone.purchase(getContext(), morePhonePurchase, new Callback<MorePhonePurchase>() {
                 @Override
                 public void onResponse(Call<MorePhonePurchase> call, Response<MorePhonePurchase> response) {
 

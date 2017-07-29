@@ -248,9 +248,9 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     }
 
     @Override
-    public void createMessage(String to, String from, String body, int position) {
+    public void createMessage(String userId, String to, String from, String body, int position) {
         mView.showLoading(true);
-        CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(to, from, body);
+        CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(userId, to, from, body);
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
             public void onSuccess(CreateMessage.ResponseValue response) {
