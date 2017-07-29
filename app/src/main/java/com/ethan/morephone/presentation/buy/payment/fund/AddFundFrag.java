@@ -196,7 +196,7 @@ public class AddFundFrag extends BaseFragment implements
             mPurchase = purchase;
 
             MorePhonePurchase morePhonePurchase = new MorePhonePurchase(
-                    MyPreference.getUserEmail(getContext()),
+                    MyPreference.getUserId(getContext()),
                     purchase.packageName,
                     purchase.token,
                     purchase.state.id,

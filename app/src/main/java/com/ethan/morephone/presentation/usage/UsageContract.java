@@ -2,7 +2,7 @@ package com.ethan.morephone.presentation.usage;
 
 import android.content.Context;
 
-import com.android.morephone.data.entity.usage.Usage;
+import com.android.morephone.data.entity.usage.UsageItem;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 
@@ -16,7 +16,7 @@ public interface UsageContract {
 
         void showLoading(boolean isActive);
 
-        void showUsage(Usage usage);
+        void showUsage(UsageItem usage);
 
     }
 

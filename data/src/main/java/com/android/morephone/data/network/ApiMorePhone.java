@@ -9,6 +9,7 @@ import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.register.BindingRequest;
+import com.android.morephone.data.entity.usage.UsageItem;
 import com.android.morephone.data.entity.user.User;
 
 import java.io.IOException;
@@ -151,6 +152,16 @@ public class ApiMorePhone {
         Call<BaseResponse<MessageItem>> call = getApiPath(context).createMessage(userId, from, to, body);
         call.enqueue(callback);
     }
+
+     /*-----------------------------------------USAGE----------------------------------------*/
+
+    public static void usage(Context context,
+                             String userId,
+                             Callback<BaseResponse<UsageItem>> callback) {
+        Call<BaseResponse<UsageItem>> call = getApiPath(context).usage(userId);
+        call.enqueue(callback);
+    }
+
 
     /*-----------------------------------------PHONE REGISTER-----------------------------------------*/
 

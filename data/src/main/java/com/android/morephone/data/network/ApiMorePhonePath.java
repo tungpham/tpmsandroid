@@ -7,12 +7,14 @@ import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.register.BindingRequest;
+import com.android.morephone.data.entity.usage.UsageItem;
 import com.android.morephone.data.entity.user.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -45,6 +47,10 @@ interface ApiMorePhonePath {
                                     @Field("to") String to,
                                     @Field("body") String body);
 
+    /*-----------------------------------------USAGE-----------------------------------------*/
+
+    @GET("usage/{id}")
+    Call<BaseResponse<UsageItem>> usage(@Path("id") String userId);
 
     /*-----------------------------------------PURCHASE-----------------------------------------*/
 

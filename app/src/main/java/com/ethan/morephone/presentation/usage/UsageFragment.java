@@ -8,14 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.morephone.data.entity.usage.Usage;
-import com.android.morephone.data.entity.usage.UsageRecord;
+import com.android.morephone.data.entity.usage.UsageItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.widget.NavigationTabStrip;
-
-import java.util.List;
 
 /**
  * Created by Ethan on 4/22/17.
@@ -37,13 +34,10 @@ public class UsageFragment extends BaseFragment implements View.OnClickListener,
 
     private ViewPager mViewPager;
 
-    private TextView mTextMessageTotal;
-    private TextView mTextMessageSpent;
+    private TextView mTextBalance;
     private TextView mTextMessageIncoming;
     private TextView mTextMessageOutgoing;
 
-    private TextView mTextVoiceTotal;
-    private TextView mTextVoiceSpent;
     private TextView mTextVoiceIncoming;
     private TextView mTextVoiceOutgoing;
 
@@ -68,13 +62,11 @@ public class UsageFragment extends BaseFragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_usage, container, false);
 
-        mTextMessageTotal = (TextView) view.findViewById(R.id.text_usage_message_total_set);
-        mTextMessageSpent = (TextView) view.findViewById(R.id.text_usage_message_total_spent);
+        mTextBalance = (TextView) view.findViewById(R.id.text_usage_balance);
+
         mTextMessageIncoming = (TextView) view.findViewById(R.id.text_usage_message_incoming_set);
         mTextMessageOutgoing = (TextView) view.findViewById(R.id.text_usage_message_outgoing_set);
 
-        mTextVoiceTotal = (TextView) view.findViewById(R.id.text_usage_voice_total_set);
-        mTextVoiceSpent = (TextView) view.findViewById(R.id.text_usage_voice_total_spent);
         mTextVoiceIncoming = (TextView) view.findViewById(R.id.text_usage_voice_incoming_set);
         mTextVoiceOutgoing = (TextView) view.findViewById(R.id.text_usage_voice_outgoing_set);
 
@@ -102,7 +94,13 @@ public class UsageFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
-    public void showUsage(Usage usage) {
+    public void showUsage(UsageItem usage) {
+
+        mTextBalance.setText(getString(R.string.usage_balance) + ": $ " + usage.getBalance());
+        mTextMessageIncoming.setText(String.valueOf(usage.getMessageIncoming()));
+        mTextMessageOutgoing.setText(String.valueOf(usage.getMessageOutgoing()));
+        mTextVoiceIncoming.setText(String.valueOf(usage.getCallIncoming()));
+        mTextVoiceOutgoing.setText(String.valueOf(usage.getCallOutgoing()));
 
 //        if (!TextUtils.isEmpty(usage.nextPageUri)) {
 //            String pageToken = Utils.getPageToken(usage.nextPageUri);
@@ -110,55 +108,57 @@ public class UsageFragment extends BaseFragment implements View.OnClickListener,
 //        }
 
 
-        List<UsageRecord> usageRecords = usage.usageRecords;
-
-        if (usageRecords != null && !usageRecords.isEmpty()) {
-            for (UsageRecord usageRecord : usageRecords) {
-                if (usageRecord.category.equals(CATEGORY_SMS)) {
-                    mTextMessageSpent.setText(usageRecord.price + usageRecord.priceUnit);
-                    mTextMessageTotal.setText(usageRecord.count + " " + usageRecord.countUnit);
-                    mTotalMessage = Integer.parseInt(usageRecord.count);
-                    if(mInboundMessage > 0){
-                        int outboundMessage = mTotalMessage - mInboundMessage;
-                        mTextMessageOutgoing.setText(String.valueOf(outboundMessage));
-                    }
-
-                }
-
-                if (usageRecord.category.equals(CATEGORY_SMS_INBOUND)) {
-                    mTextMessageIncoming.setText(usageRecord.count + " " + usageRecord.countUnit);
-                    mTextMessageOutgoing.setText(usageRecord.count + " " + usageRecord.countUnit);
-                    mInboundMessage = Integer.parseInt(usageRecord.count);
-                    if(mTotalMessage > 0){
-                        int outboundMessage = mTotalMessage - mInboundMessage;
-                        mTextMessageOutgoing.setText(String.valueOf(outboundMessage));
-                    }
-                }
-
-                if (usageRecord.category.equals(CATEGORY_CALL)) {
-                    mTextVoiceTotal.setText(usageRecord.count + " " + usageRecord.countUnit);
-                    mTextVoiceSpent.setText(usageRecord.priceUnit + " " + usageRecord.price);
-
-                    mTotalCalls = Integer.parseInt(usageRecord.count);
-                    if(mInboundCalls > 0){
-                        int outboundMessage = mTotalCalls - mInboundCalls;
-                        mTextVoiceOutgoing.setText(String.valueOf(outboundMessage));
-                    }
-                }
-
-                if (usageRecord.category.equals(CATEGORY_CALL_INBOUND)) {
-                    mTextVoiceIncoming.setText(usageRecord.count + " " + usageRecord.countUnit);
-
-                    mInboundCalls = Integer.parseInt(usageRecord.count);
-                    if(mTotalCalls > 0){
-                        int outboundMessage = mTotalCalls - mInboundCalls;
-                        mTextVoiceOutgoing.setText(String.valueOf(outboundMessage));
-                    }
-                }
 
 
-            }
-        }
+//        List<UsageRecord> usageRecords = usage.usageRecords;
+//
+//        if (usageRecords != null && !usageRecords.isEmpty()) {
+//            for (UsageRecord usageRecord : usageRecords) {
+//                if (usageRecord.category.equals(CATEGORY_SMS)) {
+//                    mTextMessageSpent.setText(usageRecord.price + usageRecord.priceUnit);
+//                    mTextMessageTotal.setText(usageRecord.count + " " + usageRecord.countUnit);
+//                    mTotalMessage = Integer.parseInt(usageRecord.count);
+//                    if(mInboundMessage > 0){
+//                        int outboundMessage = mTotalMessage - mInboundMessage;
+//                        mTextMessageOutgoing.setText(String.valueOf(outboundMessage));
+//                    }
+//
+//                }
+//
+//                if (usageRecord.category.equals(CATEGORY_SMS_INBOUND)) {
+//                    mTextMessageIncoming.setText(usageRecord.count + " " + usageRecord.countUnit);
+//                    mTextMessageOutgoing.setText(usageRecord.count + " " + usageRecord.countUnit);
+//                    mInboundMessage = Integer.parseInt(usageRecord.count);
+//                    if(mTotalMessage > 0){
+//                        int outboundMessage = mTotalMessage - mInboundMessage;
+//                        mTextMessageOutgoing.setText(String.valueOf(outboundMessage));
+//                    }
+//                }
+//
+//                if (usageRecord.category.equals(CATEGORY_CALL)) {
+//                    mTextVoiceTotal.setText(usageRecord.count + " " + usageRecord.countUnit);
+//                    mTextVoiceSpent.setText(usageRecord.priceUnit + " " + usageRecord.price);
+//
+//                    mTotalCalls = Integer.parseInt(usageRecord.count);
+//                    if(mInboundCalls > 0){
+//                        int outboundMessage = mTotalCalls - mInboundCalls;
+//                        mTextVoiceOutgoing.setText(String.valueOf(outboundMessage));
+//                    }
+//                }
+//
+//                if (usageRecord.category.equals(CATEGORY_CALL_INBOUND)) {
+//                    mTextVoiceIncoming.setText(usageRecord.count + " " + usageRecord.countUnit);
+//
+//                    mInboundCalls = Integer.parseInt(usageRecord.count);
+//                    if(mTotalCalls > 0){
+//                        int outboundMessage = mTotalCalls - mInboundCalls;
+//                        mTextVoiceOutgoing.setText(String.valueOf(outboundMessage));
+//                    }
+//                }
+//
+//
+//            }
+//        }
 
     }
 

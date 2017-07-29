@@ -7,7 +7,7 @@ package com.android.morephone.data.entity.purchase;
 public class MorePhonePurchase {
 
     public String id;
-    public String email;
+    public String userId;
     public String packageName;
     public String token;
     public int purchaseState;
@@ -17,8 +17,8 @@ public class MorePhonePurchase {
     public long createdAt;
     public long updatedAt;
 
-    public MorePhonePurchase(String email, String packageName, String token, int purchaseState, String orderId, long purchaseTime, String productId) {
-        this.email = email;
+    public MorePhonePurchase(String userId, String packageName, String token, int purchaseState, String orderId, long purchaseTime, String productId) {
+        this.userId = userId;
         this.packageName = packageName;
         this.token = token;
         this.purchaseState = purchaseState;

@@ -283,6 +283,7 @@
     <string name="usage_message_outgoing">Outgoing</string>
 
     <string name="usage_message_label">Message</string>
+    <string name="usage_balance">Balance </string>
 
     <string name="usage_voice_label">Voice</string>
     <string name="usage_voice_total">Total</string>
