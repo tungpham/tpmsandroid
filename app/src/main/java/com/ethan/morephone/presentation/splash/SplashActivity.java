@@ -110,11 +110,16 @@ public class SplashActivity extends BaseActivity {
                                             .build();
                                     DebugTool.logD("TOKEN FCM: " + FirebaseInstanceId.getInstance().getToken());
                                     new ApiAsync(SplashActivity.this, user).execute();
+                                } else {
+                                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                                    finish();
                                 }
+                            } else {
+                                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                                finish();
                             }
 
-                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                            finish();
+
                         }
 
                         @Override
@@ -186,6 +191,10 @@ public class SplashActivity extends BaseActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             SplashActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.startActivity(new Intent(activity, MainActivity.class));
+                activity.finish();
+            }
             DebugTool.logD("POST EXECUTE");
         }
     }

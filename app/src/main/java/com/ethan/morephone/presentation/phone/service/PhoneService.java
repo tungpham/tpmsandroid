@@ -33,6 +33,10 @@ import com.twilio.client.Twilio;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import static com.twilio.client.impl.TwilioImpl.getContext;
 
@@ -44,6 +48,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     //    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
     private static final String TOKEN_SERVICE_URL = BaseUrl.BASE_URL + "call/token";
+
+    private static final long PROGRESS_UPDATE_INTERNAL = 10;
+    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 10;
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 
@@ -92,6 +99,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     private AudioManager mAudioManager;
     private int mSavedAudioMode = AudioManager.MODE_INVALID;
 
+    private ScheduledExecutorService mExecutorService;
+    private ScheduledFuture<?> mScheduleFuture;
+
     private final IBinder mBinder = new LocalBinder();
 
     public static void startServiceWithAction(Context context, String action, String fromPhoneNumber, String toPhoneNumber) {
@@ -130,41 +140,15 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onCreate() {
 
+        mExecutorService = Executors.newSingleThreadScheduledExecutor();
+
         mDevices = new HashMap<>();
 //        mClientProfiles = new ArrayList<>();
 
 //        clientProfile = new ClientProfile(MyPreference.getPhoneNumber(getApplicationContext()), true, true);
         DebugTool.logD("CREATE SERVICE");
-
-
-        final Set<String> phoneNumberUsages = MyPreference.getPhoneNumberUsage(getApplicationContext());
-        if (phoneNumberUsages != null) {
-
-            if (Twilio.isInitialized()) {
-                for (String phone : phoneNumberUsages) {
-                    retrieveCapabilityToken(phone);
-                }
-
-            } else {
-                Twilio.initialize(getApplicationContext(), new Twilio.InitListener() {
-                    @Override
-                    public void onInitialized() {
-                        for (String phone : phoneNumberUsages) {
-                            retrieveCapabilityToken(phone);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        DebugTool.logD("Failed to initialize the Twilio Client SDK");
-                    }
-                });
-
-                DebugTool.logD("TWILIO DO NOT INIT");
-            }
-
-
-        }
+        scheduleDonutProgressUpdate();
+        registerPhoneNumber();
 
 //        initializeTwilioClientSDK();
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -279,6 +263,57 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                 updateUIPhone(PHONE_STATE_DISCONNECTED, mFromPhoneNumber, mToPhoneNumber);
             }
             DebugTool.logD("Disconnect:  " + s + " || " + connection.getParameters().toString() + " STATE " + connection.getState().toString());
+        }
+    }
+
+    private void scheduleDonutProgressUpdate() {
+        stopDonutProgressUpdate();
+        if (!mExecutorService.isShutdown()) {
+            mScheduleFuture = mExecutorService.scheduleAtFixedRate(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            registerPhoneNumber();
+                        }
+                    }, PROGRESS_UPDATE_INITIAL_INTERVAL,
+                    PROGRESS_UPDATE_INTERNAL, TimeUnit.MINUTES);
+        }
+    }
+
+    private void stopDonutProgressUpdate() {
+        if (mScheduleFuture != null) {
+            mScheduleFuture.cancel(false);
+        }
+    }
+
+    private void registerPhoneNumber() {
+        final Set<String> phoneNumberUsages = MyPreference.getPhoneNumberUsage(getApplicationContext());
+        if (phoneNumberUsages != null) {
+            DebugTool.logD("REGISTER PHONE USAGE ");
+            if (Twilio.isInitialized()) {
+                for (String phone : phoneNumberUsages) {
+                    retrieveCapabilityToken(phone);
+                }
+
+            } else {
+                Twilio.initialize(getApplicationContext(), new Twilio.InitListener() {
+                    @Override
+                    public void onInitialized() {
+                        for (String phone : phoneNumberUsages) {
+                            retrieveCapabilityToken(phone);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        DebugTool.logD("Failed to initialize the Twilio Client SDK");
+                    }
+                });
+
+                DebugTool.logD("TWILIO DO NOT INIT");
+            }
+
+
         }
     }
 
@@ -469,9 +504,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         DebugTool.logD("ALARM START");
         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            alarm.set(AlarmManager.RTC_WAKEUP, 0, pIntent);
+            alarm.set(AlarmManager.RTC_WAKEUP, 1000, pIntent);
         } else {
-            alarm.setExact(AlarmManager.RTC_WAKEUP, 0, pIntent);
+            alarm.setExact(AlarmManager.RTC_WAKEUP, 1000, pIntent);
         }
 
     }
@@ -479,6 +514,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mExecutorService.shutdown();
+        stopDonutProgressUpdate();
     }
 
     @Override

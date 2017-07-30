@@ -3,6 +3,8 @@ package com.ethan.morephone;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.android.morephone.data.log.DebugTool;
+
 import java.util.Set;
 
 /**
@@ -62,6 +64,7 @@ public class MyPreference {
 
     public static void setUserId(Context context, String id) {
         SharedPreferences preferences = getSharedPreferences(context);
+        DebugTool.logD("COMMIT USER ID");
         preferences.edit().putString(PROPERTY_USER_ID, id).commit();
     }
 

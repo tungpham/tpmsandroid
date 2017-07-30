@@ -197,40 +197,18 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void showPhoneNumbers(List<IncomingPhoneNumber> numberEntities) {
         if (isAdded()) {
-            if (!MyPreference.getRegisterPhoneNumber(getContext())) {
-                if (numberEntities != null && !numberEntities.isEmpty()) {
-                    for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
+//            if (!MyPreference.getRegisterPhoneNumber(getContext())) {
+//                if (numberEntities != null && !numberEntities.isEmpty()) {
+//                    for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
+//
+//                        PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
+//
 
-                        PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
+//                    }
 
-                        PhoneNumber phoneNumber = PhoneNumber.getBuilder()
-                                .phoneNumber(incomingPhoneNumber.phoneNumber)
-                                .sid(incomingPhoneNumber.sid)
-                                .friendlyName(incomingPhoneNumber.friendlyName)
-                                .userId(MyPreference.getUserId(getContext()))
-                                .build();
+//                }
 
-                        ApiMorePhone.createPhoneNumber(getContext(), phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
-                            @Override
-                            public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
-                                if (response.isSuccessful() && response.body() != null && response.body().getStatus() == 201) {
-                                    DebugTool.logD("CREATE PHONE NUMBER SUCCESS");
-                                    MyPreference.setRegsiterPhoneNumber(getContext(), true);
-                                } else {
-                                    DebugTool.logD("CREATE PHONE NUMBER ERROR");
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
-                                DebugTool.logD("CREATE PHONE NUMBER ERROR");
-                            }
-                        });
-                    }
-
-                }
-
-            }
+//            }
 
             Set<String> phoneNumberUsages = new ArraySet<>();
             for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
@@ -239,6 +217,31 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
                 PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
 
+                PhoneNumber phoneNumber = PhoneNumber.getBuilder()
+                        .phoneNumber(incomingPhoneNumber.phoneNumber)
+                        .sid(incomingPhoneNumber.sid)
+                        .friendlyName(incomingPhoneNumber.friendlyName)
+                        .userId(MyPreference.getUserId(getContext()))
+                        .build();
+
+                DebugTool.logD("USER ID: " + MyPreference.getUserId(getContext()));
+
+                ApiMorePhone.createPhoneNumber(getContext(), phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
+                    @Override
+                    public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getStatus() == 201) {
+                            DebugTool.logD("CREATE PHONE NUMBER SUCCESS");
+                            MyPreference.setRegsiterPhoneNumber(getContext(), true);
+                        } else {
+                            DebugTool.logD("CREATE PHONE NUMBER ERROR");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
+                        DebugTool.logD("CREATE PHONE NUMBER ERROR");
+                    }
+                });
             }
 
             MyPreference.setPhoneNumberUsage(getContext(), phoneNumberUsages);
