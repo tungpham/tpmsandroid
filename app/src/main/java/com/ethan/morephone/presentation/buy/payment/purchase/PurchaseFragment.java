@@ -149,7 +149,7 @@ public class PurchaseFragment extends BaseFragment implements
         switch (view.getId()) {
             case R.id.button_purchase_pay_now:
                 DebugTool.logD("PHONE NUMBER: " + mPhoneNumber);
-                mPresenter.buyIncomingPhoneNumber(getContext(), "abcdef");
+                mPresenter.buyIncomingPhoneNumber(getContext(), mPhoneNumber);
 //                final Purchase purchase = mPurchase;
 //                if (purchase == null) {
 //                    DebugTool.logD("purchase: NULL");

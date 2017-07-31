@@ -11,6 +11,9 @@ public class PhoneNumber {
     private String phoneNumber;
     private String friendlyName;
     private String userId;
+    private String accountSid;
+    private String authToken;
+    private String applicationSid;
     private long createdAt;
     private long updatedAt;
 
@@ -22,6 +25,9 @@ public class PhoneNumber {
         this.phoneNumber = builder.phoneNumber;
         this.friendlyName = builder.friendlyName;
         this.userId = builder.userId;
+        this.accountSid = builder.accountSid;
+        this.authToken = builder.authToken;
+        this.applicationSid = builder.applicationSid;
     }
 
     public static Builder getBuilder() {
@@ -84,7 +90,31 @@ public class PhoneNumber {
         this.updatedAt = updatedAt;
     }
 
-//    public void update(String token) {
+    public String getAccountSid() {
+        return accountSid;
+    }
+
+    public void setAccountSid(String accountSid) {
+        this.accountSid = accountSid;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+    public String getApplicationSid() {
+        return applicationSid;
+    }
+
+    public void setApplicationSid(String applicationSid) {
+        this.applicationSid = applicationSid;
+    }
+
+    //    public void update(String token) {
 //        this.token = token;
 //    }
 
@@ -104,6 +134,9 @@ public class PhoneNumber {
         private String phoneNumber;
         private String friendlyName;
         private String userId;
+        private String accountSid;
+        private String authToken;
+        private String applicationSid;
 
         private Builder() {
         }
@@ -113,6 +146,22 @@ public class PhoneNumber {
             this.sid = sid;
             return this;
         }
+
+        public Builder accountSid(String accountSid) {
+            this.accountSid = accountSid;
+            return this;
+        }
+
+        public Builder authToken(String authToken) {
+            this.authToken = authToken;
+            return this;
+        }
+
+        public Builder applicationSid(String applicationSid) {
+            this.applicationSid = applicationSid;
+            return this;
+        }
+
 
         public Builder phoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;

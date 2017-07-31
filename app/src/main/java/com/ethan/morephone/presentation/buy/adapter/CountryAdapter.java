@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
 import com.ethan.morephone.R;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,6 +33,7 @@ public class CountryAdapter extends ArrayAdapter<AvailableCountry> {
     }
 
     public void replaceData(List<AvailableCountry> availableCountries){
+        Collections.sort(availableCountries);
         mAvailableCountries = availableCountries;
         notifyDataSetChanged();
     }

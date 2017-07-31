@@ -10,9 +10,10 @@ public class TwilioManager {
     private static final String PREFERENCES_NAME = "twilio";
     private final static String SID = "sid";
     private final static String AUTH_CODE = "auth_code";
+    private final static String APPLICATION_SID = "application_sid";
 
     public static void saveTwilio(Context context, String sid, String authCode) {
-        DebugTool.logD("SID: " + sid);
+        DebugTool.logD("SAVE TWILIO: " + sid);
         SharedPreferences sp = context.getSharedPreferences(
                 PREFERENCES_NAME, Context.MODE_PRIVATE);
         sp.edit()
@@ -35,6 +36,18 @@ public class TwilioManager {
 
         return sp.getString(AUTH_CODE, null);
 
+    }
+
+    public static String getApplicationSid(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(
+                PREFERENCES_NAME, Context.MODE_PRIVATE);
+        return sp.getString(APPLICATION_SID, "");
+    }
+
+    public static void setApplicationSid(Context context, String applicationSid) {
+        SharedPreferences sp = context.getSharedPreferences(
+                PREFERENCES_NAME, Context.MODE_PRIVATE);
+        sp.edit().putString(APPLICATION_SID, applicationSid).commit();
     }
 
 

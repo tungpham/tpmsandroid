@@ -15,6 +15,9 @@ public class User {
     private String device;
     private String token;
     private String platform;
+    private String accountSid;
+    private String authToken;
+    private String applicationSid;
     private long createdAt;
     private long updatedAt;
 
@@ -30,6 +33,8 @@ public class User {
         this.languageCode = builder.languageCode;
         this.device = builder.device;
         this.platform = builder.platform;
+        this.accountSid = builder.accountSid;
+        this.authToken = builder.authToken;
     }
 
     public static Builder getBuilder() {
@@ -112,6 +117,30 @@ public class User {
         this.platform = platform;
     }
 
+    public String getAccountSid() {
+        return accountSid;
+    }
+
+    public void setAccountSid(String accountSid) {
+        this.accountSid = accountSid;
+    }
+
+    public String getApplicationSid() {
+        return applicationSid;
+    }
+
+    public void setApplicationSid(String applicationSid) {
+        this.applicationSid = applicationSid;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
     public void update(String country, String languageCode) {
         this.country = country;
         this.languageCode = languageCode;
@@ -140,11 +169,22 @@ public class User {
         private String languageCode;
         private String token;
         private String device;
+        private String accountSid;
+        private String authToken;
         private String platform;
 
         private Builder() {
         }
 
+        public Builder accountSid(String accountSid) {
+            this.accountSid = accountSid;
+            return this;
+        }
+
+        public Builder authToken(String authToken) {
+            this.authToken = authToken;
+            return this;
+        }
 
         public Builder email(String email) {
             this.email = email;

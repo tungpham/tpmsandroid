@@ -11,6 +11,7 @@ import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.usage.UsageItem;
 import com.android.morephone.data.entity.user.User;
+import com.android.morephone.data.utils.TwilioManager;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -149,7 +150,16 @@ public class ApiMorePhone {
                                      String from,
                                      String body,
                                      Callback<BaseResponse<MessageItem>> callback) {
-        Call<BaseResponse<MessageItem>> call = getApiPath(context).createMessage(userId, from, to, body);
+        Call<BaseResponse<MessageItem>> call = getApiPath(context).createMessage(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), userId, from, to, body);
+        call.enqueue(callback);
+    }
+
+    /*-----------------------------------------CALL----------------------------------------*/
+
+    public static void createToken(Context context,
+                                     String client,
+                                     Callback<BaseResponse<String>> callback) {
+        Call<BaseResponse<String>> call = getApiPath(context).createToken(client, TwilioManager.getSid(context), TwilioManager.getAuthCode(context), TwilioManager.getApplicationSid(context));
         call.enqueue(callback);
     }
 

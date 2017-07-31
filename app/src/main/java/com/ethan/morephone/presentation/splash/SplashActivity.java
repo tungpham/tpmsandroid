@@ -88,11 +88,15 @@ public class SplashActivity extends BaseActivity {
                         @Override
                         public void onSuccess(final UserProfile payload) {
                             if (payload != null) {
-
+                                DebugTool.logD("PAYLOAD: " + payload.toString());
+                                DebugTool.logD("CREATE ACCOUTN: " + payload.getUserMetadata().toString());
                                 if (payload.getUserMetadata() != null
                                         && payload.getUserMetadata().containsKey("sid")
-                                        && payload.getUserMetadata().containsKey("auth_code")) {
-                                    TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
+                                        && payload.getUserMetadata().containsKey("auth_token")) {
+                                    DebugTool.logD("SID: " + payload.getUserMetadata().get("sid").toString());
+
+
+                                    TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_token").toString());
                                 }
 
 
@@ -105,6 +109,8 @@ public class SplashActivity extends BaseActivity {
 
                                     User user = User.getBuilder()
                                             .email(payload.getEmail())
+                                            .accountSid(TwilioManager.getSid(getApplicationContext()))
+                                            .authToken(TwilioManager.getAuthCode(getApplicationContext()))
                                             .token(FirebaseInstanceId.getInstance().getToken())
                                             .platform("Android")
                                             .build();
@@ -179,6 +185,8 @@ public class SplashActivity extends BaseActivity {
                 if (Utils.isInternetAvailable(activity.getApplicationContext())) {
                     BaseResponse<User> baseResponse = ApiMorePhone.createUser(activity.getApplicationContext(), mUser);
                     if (baseResponse != null && baseResponse.getResponse() != null) {
+                        DebugTool.logD("APPLICATION SID: " + baseResponse.getResponse().getApplicationSid());
+                        TwilioManager.setApplicationSid(activity.getApplicationContext(), baseResponse.getResponse().getApplicationSid());
                         MyPreference.setUserId(activity.getApplicationContext(), baseResponse.getResponse().getId());
                     }
                 }

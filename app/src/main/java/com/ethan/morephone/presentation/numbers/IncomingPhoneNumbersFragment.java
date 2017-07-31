@@ -24,6 +24,7 @@ import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
+import com.android.morephone.data.utils.TwilioManager;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -220,6 +221,9 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
                 PhoneNumber phoneNumber = PhoneNumber.getBuilder()
                         .phoneNumber(incomingPhoneNumber.phoneNumber)
                         .sid(incomingPhoneNumber.sid)
+                        .accountSid(TwilioManager.getSid(getContext()))
+                        .authToken(TwilioManager.getAuthCode(getContext()))
+                        .applicationSid(TwilioManager.getApplicationSid(getContext()))
                         .friendlyName(incomingPhoneNumber.friendlyName)
                         .userId(MyPreference.getUserId(getContext()))
                         .build();

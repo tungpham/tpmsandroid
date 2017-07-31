@@ -42,10 +42,22 @@ interface ApiMorePhonePath {
 
     @FormUrlEncoded
     @POST("message/send-message")
-    Call<BaseResponse<MessageItem>> createMessage(@Field("userId") String userId,
-                                    @Field("from") String from,
-                                    @Field("to") String to,
-                                    @Field("body") String body);
+    Call<BaseResponse<MessageItem>> createMessage(@Field("account_sid") String accountSid,
+                                                  @Field("auth_token") String authToken,
+                                                  @Field("userId") String userId,
+                                                  @Field("from") String from,
+                                                  @Field("to") String to,
+                                                  @Field("body") String body);
+
+
+    /*-----------------------------------------CALL-----------------------------------------*/
+
+    @FormUrlEncoded
+    @POST("call/token")
+    Call<BaseResponse<String>> createToken(@Field("client") String client,
+                                           @Field("account_sid") String accountSid,
+                                           @Field("auth_token") String authToken,
+                                           @Field("application_sid") String application_sid);
 
     /*-----------------------------------------USAGE-----------------------------------------*/
 
@@ -64,7 +76,6 @@ interface ApiMorePhonePath {
 
     @POST("phone/binding")
     Call<Response> binding(@Body BindingRequest bindingRequest);
-
 
 
 }

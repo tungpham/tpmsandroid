@@ -88,8 +88,10 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
                     IncomingPhoneNumbers incomingPhoneNumbers = response.body();
                     if (incomingPhoneNumbers != null && incomingPhoneNumbers.incomingPhoneNumbers != null && !incomingPhoneNumbers.incomingPhoneNumbers.isEmpty()) {
                         mView.showPhoneNumbers(response.body().incomingPhoneNumbers);
+                    } else {
+                        mView.emptyPhoneNumber();
                     }
-                }else{
+                } else {
                     mView.emptyPhoneNumber();
                 }
                 mView.showLoading(false);

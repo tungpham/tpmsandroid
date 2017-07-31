@@ -78,13 +78,17 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
 
         DebugTool.logD("From: " + from);
         DebugTool.logD("TO: " + message.getTo());
+        if (message.getNotification() != null) {
+            sendSmsNotification(message.getNotification().getTitle(), message.getNotification().getBody());
+        } else {
 
-        Map<String, String> dataTest = message.getData();
-        if (dataTest != null) {
-            String title = dataTest.get(NOTIFY_TITLE_DATA_KEY);
-            String body = dataTest.get(NOTIFY_BODY_DATA_KEY);
-            DebugTool.logD("DATA RESULT: " + dataTest.toString());
-            sendSmsNotification(title, body);
+            Map<String, String> dataTest = message.getData();
+            if (dataTest != null) {
+                String title = dataTest.get(NOTIFY_TITLE_DATA_KEY);
+                String body = dataTest.get(NOTIFY_BODY_DATA_KEY);
+                DebugTool.logD("DATA RESULT: " + dataTest.toString());
+
+            }
         }
 
 
@@ -123,9 +127,9 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
             Intent popupIntent = new Intent(getApplicationContext(), MessageReplyActivity.class);
             popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            if(!TextUtils.isEmpty(title) && title.contains("-")){
+            if (!TextUtils.isEmpty(title) && title.contains("-")) {
                 String str[] = title.split("-");
-                if(str != null && str.length == 2){
+                if (str != null && str.length == 2) {
                     popupIntent.putExtra(MessageReplyActivity.EXTRA_PHONE_NUMBER_FROM, str[0]);
                     popupIntent.putExtra(MessageReplyActivity.EXTRA_PHONE_NUMBER_TO, str[1]);
                 }

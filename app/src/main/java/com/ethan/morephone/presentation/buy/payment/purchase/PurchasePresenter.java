@@ -7,6 +7,7 @@ import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.network.ApiMorePhone;
+import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.number.BuyIncomingPhoneNumber;
@@ -64,6 +65,9 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
         PhoneNumber phoneNumber = PhoneNumber.getBuilder().userId(MyPreference.getUserId(context))
                 .friendlyName(incomingPhoneNumber.friendlyName)
                 .sid(incomingPhoneNumber.sid)
+                .accountSid(TwilioManager.getSid(context))
+                .authToken(TwilioManager.getAuthCode(context))
+                .applicationSid(TwilioManager.getApplicationSid(context))
                 .phoneNumber(incomingPhoneNumber.phoneNumber).build();
         ApiMorePhone.createPhoneNumber(context, phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
             @Override
