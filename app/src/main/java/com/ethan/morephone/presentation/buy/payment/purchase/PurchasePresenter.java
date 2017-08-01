@@ -39,6 +39,7 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
 
     @Override
     public void buyIncomingPhoneNumber(final Context context, String phoneNumber) {
+        mView.showLoading(true);
         BuyIncomingPhoneNumber.RequestValue requestValue = new BuyIncomingPhoneNumber.RequestValue(phoneNumber);
         mUseCaseHandler.execute(mBuyIncomingPhoneNumber, requestValue, new UseCase.UseCaseCallback<BuyIncomingPhoneNumber.ResponseValue>() {
             @Override
@@ -46,22 +47,22 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
                 IncomingPhoneNumber incomingPhoneNumber = response.getIncomingPhoneNumber();
                 if (incomingPhoneNumber != null) {
                     createPhoneNumber(context, incomingPhoneNumber);
-                    mView.buyIncomingPhoneNumberSuccess(incomingPhoneNumber);
-
                 } else {
                     mView.buyIncomingPhoneNumberFail();
+                    mView.showLoading(false);
                 }
             }
 
             @Override
             public void onError() {
                 mView.buyIncomingPhoneNumberFail();
+                mView.showLoading(false);
             }
         });
     }
 
-    @Override
-    public void createPhoneNumber(Context context, IncomingPhoneNumber incomingPhoneNumber) {
+//    @Override
+    public void createPhoneNumber(Context context, final IncomingPhoneNumber incomingPhoneNumber) {
         PhoneNumber phoneNumber = PhoneNumber.getBuilder().userId(MyPreference.getUserId(context))
                 .friendlyName(incomingPhoneNumber.friendlyName)
                 .sid(incomingPhoneNumber.sid)
@@ -72,12 +73,15 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
         ApiMorePhone.createPhoneNumber(context, phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
             @Override
             public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
-
+                if(response.isSuccessful()){
+                    mView.buyIncomingPhoneNumberSuccess(incomingPhoneNumber);
+                    mView.showLoading(false);
+                }
             }
 
             @Override
             public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
-
+                mView.showLoading(false);
             }
         });
     }
@@ -86,4 +90,5 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
     public void start() {
 
     }
+
 }

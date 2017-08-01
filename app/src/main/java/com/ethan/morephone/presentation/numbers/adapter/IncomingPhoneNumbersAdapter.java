@@ -52,7 +52,7 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
         final IncomingPhoneNumber numberEntity = mNumberEntities.get(position);
         holder.textNumber.setText(numberEntity.phoneNumber);
 
-        validatePhoneNumberSelected(holder, numberEntity.phoneNumber);
+//        validatePhoneNumberSelected(holder, numberEntity.phoneNumber);
 
         holder.textNumber.setOnClickListener(new View.OnClickListener() {
             @Override

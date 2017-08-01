@@ -393,7 +393,7 @@ public class RecordFragment extends BaseFragment implements
 
     @Override
     public void onDelete(String callSid, String recordSid, int position) {
-        mPresenter.deleteRecord(callSid, recordSid);
+        mPresenter.deleteRecord(getContext(), callSid, recordSid);
         mRecordAdapter.getData().remove(position);
         mRecordAdapter.notifyDataSetChanged();
 //        mRecordsViewHolder.visiblePlayerControl(false);

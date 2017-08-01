@@ -198,57 +198,48 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void showPhoneNumbers(List<IncomingPhoneNumber> numberEntities) {
         if (isAdded()) {
-//            if (!MyPreference.getRegisterPhoneNumber(getContext())) {
-//                if (numberEntities != null && !numberEntities.isEmpty()) {
-//                    for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
-//
-//                        PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
-//
+            if (!MyPreference.getRegisterPhoneNumber(getContext())) {
 
-//                    }
+                Set<String> phoneNumberUsages = new ArraySet<>();
+                for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
 
-//                }
+                    phoneNumberUsages.add(incomingPhoneNumber.phoneNumber);
 
-//            }
+                    PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
 
-            Set<String> phoneNumberUsages = new ArraySet<>();
-            for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
+                    PhoneNumber phoneNumber = PhoneNumber.getBuilder()
+                            .phoneNumber(incomingPhoneNumber.phoneNumber)
+                            .sid(incomingPhoneNumber.sid)
+                            .accountSid(TwilioManager.getSid(getContext()))
+                            .authToken(TwilioManager.getAuthCode(getContext()))
+                            .applicationSid(TwilioManager.getApplicationSid(getContext()))
+                            .friendlyName(incomingPhoneNumber.friendlyName)
+                            .userId(MyPreference.getUserId(getContext()))
+                            .build();
 
-                phoneNumberUsages.add(incomingPhoneNumber.phoneNumber);
+                    DebugTool.logD("USER ID: " + MyPreference.getUserId(getContext()));
 
-                PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
+                    ApiMorePhone.createPhoneNumber(getContext(), phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
+                        @Override
+                        public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+                            if (response.isSuccessful() && response.body() != null && response.body().getStatus() == 201) {
+                                DebugTool.logD("CREATE PHONE NUMBER SUCCESS");
+                                MyPreference.setRegsiterPhoneNumber(getContext(), true);
+                            } else {
+                                DebugTool.logD("CREATE PHONE NUMBER ERROR");
+                            }
+                        }
 
-                PhoneNumber phoneNumber = PhoneNumber.getBuilder()
-                        .phoneNumber(incomingPhoneNumber.phoneNumber)
-                        .sid(incomingPhoneNumber.sid)
-                        .accountSid(TwilioManager.getSid(getContext()))
-                        .authToken(TwilioManager.getAuthCode(getContext()))
-                        .applicationSid(TwilioManager.getApplicationSid(getContext()))
-                        .friendlyName(incomingPhoneNumber.friendlyName)
-                        .userId(MyPreference.getUserId(getContext()))
-                        .build();
-
-                DebugTool.logD("USER ID: " + MyPreference.getUserId(getContext()));
-
-                ApiMorePhone.createPhoneNumber(getContext(), phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
-                    @Override
-                    public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getStatus() == 201) {
-                            DebugTool.logD("CREATE PHONE NUMBER SUCCESS");
-                            MyPreference.setRegsiterPhoneNumber(getContext(), true);
-                        } else {
+                        @Override
+                        public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
                             DebugTool.logD("CREATE PHONE NUMBER ERROR");
                         }
-                    }
+                    });
+                }
 
-                    @Override
-                    public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
-                        DebugTool.logD("CREATE PHONE NUMBER ERROR");
-                    }
-                });
+                MyPreference.setPhoneNumberUsage(getContext(), phoneNumberUsages);
+                MyPreference.setRegsiterPhoneNumber(getContext(), true);
             }
-
-            MyPreference.setPhoneNumberUsage(getContext(), phoneNumberUsages);
 
             mIncomingPhoneNumbersAdapter.replaceData(numberEntities);
         }
@@ -282,7 +273,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(position);
         mIncomingPhoneNumbersAdapter.getData().remove(incomingPhoneNumber);
         mIncomingPhoneNumbersAdapter.notifyDataSetChanged();
-        mPresenter.deleteIncomingPhoneNumber(incomingPhoneNumber.sid);
+        mPresenter.deleteIncomingPhoneNumber(getContext(), incomingPhoneNumber.sid);
         if (incomingPhoneNumber.phoneNumber.equals(MyPreference.getPhoneNumber(getContext()))) {
             MyPreference.setPhoneNumber(getContext(), "");
             mIsDelete = true;

@@ -30,7 +30,7 @@ public interface IncomingPhoneNumbersContract {
 
         void getFakeData(Context context);
 
-        void deleteIncomingPhoneNumber(String incomingPhoneNumberSid);
+        void deleteIncomingPhoneNumber(Context context, String incomingPhoneNumberSid);
 
         void loadIncomingPhoneNumbers(Context context);
 

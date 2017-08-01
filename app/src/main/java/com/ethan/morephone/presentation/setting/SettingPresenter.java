@@ -1,7 +1,9 @@
 package com.ethan.morephone.presentation.setting;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.number.incoming.ChangeFriendlyName;
@@ -28,9 +30,9 @@ public class SettingPresenter implements SettingContract.Presenter {
     }
 
     @Override
-    public void changeFriendlyName(String incomingPhoneNumberSid, String friendlyName) {
+    public void changeFriendlyName(Context context, String incomingPhoneNumberSid, String friendlyName) {
         mView.showLoading(true);
-        ChangeFriendlyName.RequestValue requestValue = new ChangeFriendlyName.RequestValue(Constant.ACCOUNT_SID, incomingPhoneNumberSid, friendlyName);
+        ChangeFriendlyName.RequestValue requestValue = new ChangeFriendlyName.RequestValue(TwilioManager.getSid(context), incomingPhoneNumberSid, friendlyName);
         mUseCaseHandler.execute(mChangeFriendlyName, requestValue, new UseCase.UseCaseCallback<ChangeFriendlyName.ResponseValue>() {
             @Override
             public void onSuccess(ChangeFriendlyName.ResponseValue response) {

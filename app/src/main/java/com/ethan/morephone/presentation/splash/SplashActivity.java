@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.android.morephone.data.entity.BaseResponse;
+import com.android.morephone.data.entity.application.Applications;
 import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
@@ -100,7 +102,7 @@ public class SplashActivity extends BaseActivity {
                                 }
 
 
-                                if (!MyPreference.getUserEmail(getApplicationContext()).equals(payload.getEmail())) {
+                                if (TextUtils.isEmpty(MyPreference.getUserId(getApplicationContext()))) {
                                     MyPreference.setUserEmail(getApplicationContext(), payload.getEmail());
                                     MyPreference.setUserName(getApplicationContext(), payload.getName());
                                     MyPreference.setGivenName(getApplicationContext(), payload.getGivenName());
@@ -117,12 +119,8 @@ public class SplashActivity extends BaseActivity {
                                     DebugTool.logD("TOKEN FCM: " + FirebaseInstanceId.getInstance().getToken());
                                     new ApiAsync(SplashActivity.this, user).execute();
                                 } else {
-                                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                                    finish();
+                                    new ApiAsync(SplashActivity.this, null).execute();
                                 }
-                            } else {
-                                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                                finish();
                             }
 
 
@@ -183,11 +181,23 @@ public class SplashActivity extends BaseActivity {
             SplashActivity activity = mWeakReference.get();
             if (activity != null) {
                 if (Utils.isInternetAvailable(activity.getApplicationContext())) {
-                    BaseResponse<User> baseResponse = ApiMorePhone.createUser(activity.getApplicationContext(), mUser);
-                    if (baseResponse != null && baseResponse.getResponse() != null) {
-                        DebugTool.logD("APPLICATION SID: " + baseResponse.getResponse().getApplicationSid());
-                        TwilioManager.setApplicationSid(activity.getApplicationContext(), baseResponse.getResponse().getApplicationSid());
-                        MyPreference.setUserId(activity.getApplicationContext(), baseResponse.getResponse().getId());
+                    if (mUser != null) {
+                        BaseResponse<User> baseResponse = ApiMorePhone.createUser(activity.getApplicationContext(), mUser);
+                        if (baseResponse != null && baseResponse.getResponse() != null) {
+                            DebugTool.logD("APPLICATION SID: " + baseResponse.getResponse().getApplicationSid());
+                            if(TextUtils.isEmpty(baseResponse.getResponse().getApplicationSid())){
+                                Applications applications = ApiManager.getApplications(activity.getApplicationContext());
+                                if (applications != null && !applications.applications.isEmpty()) {
+                                    TwilioManager.setApplicationSid(activity.getApplicationContext(), applications.applications.get(0).sid);
+                                }
+                            }
+                            MyPreference.setUserId(activity.getApplicationContext(), baseResponse.getResponse().getId());
+                        }
+                    } else if(mUser == null && TextUtils.isEmpty(TwilioManager.getApplicationSid(activity.getApplicationContext()))){
+                        Applications applications = ApiManager.getApplications(activity.getApplicationContext());
+                        if (applications != null && !applications.applications.isEmpty()) {
+                            TwilioManager.setApplicationSid(activity.getApplicationContext(), applications.applications.get(0).sid);
+                        }
                     }
                 }
             }

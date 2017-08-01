@@ -12,6 +12,7 @@ import com.android.morephone.data.entity.user.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -36,6 +37,9 @@ interface ApiMorePhonePath {
 
     @POST("phone-number")
     Call<BaseResponse<PhoneNumber>> createPhoneNumber(@Body PhoneNumber user);
+
+    @DELETE("phone-number/{id}")
+    Call<BaseResponse<PhoneNumber>> deletePhoneNumber(@Path("id") String id);
 
 
     /*-----------------------------------------MESSAGE-----------------------------------------*/

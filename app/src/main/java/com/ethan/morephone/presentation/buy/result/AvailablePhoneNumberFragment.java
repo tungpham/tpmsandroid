@@ -1,7 +1,5 @@
 package com.ethan.morephone.presentation.buy.result;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -100,12 +98,4 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements
         PurchaseActivity.starter(getActivity(), availablePhoneNumber.friendlyName, availablePhoneNumber.phoneNumber, "$1.00", availablePhoneNumber.capabilities.voice, availablePhoneNumber.capabilities.SMS, availablePhoneNumber.capabilities.MMS, availablePhoneNumber.capabilities.fax);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PurchaseActivity.REQUEST_PURCHASE_ACTIVITY && resultCode == Activity.RESULT_OK) {
-            getActivity().setResult(Activity.RESULT_OK);
-            getActivity().finish();
-        }
-    }
 }

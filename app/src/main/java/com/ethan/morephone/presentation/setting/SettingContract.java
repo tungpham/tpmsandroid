@@ -1,5 +1,7 @@
 package com.ethan.morephone.presentation.setting;
 
+import android.content.Context;
+
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 
@@ -18,7 +20,7 @@ public interface SettingContract {
 
     interface Presenter extends BasePresenter {
 
-        void changeFriendlyName(String incomingPhoneNumberSid, String friendlyName);
+        void changeFriendlyName(Context context, String incomingPhoneNumberSid, String friendlyName);
 
     }
 }

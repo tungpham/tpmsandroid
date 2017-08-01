@@ -26,7 +26,7 @@ public interface RecordContract {
 
     interface Presenter extends BasePresenter {
 
-        void deleteRecord(String callSid, String recordSid);
+        void deleteRecord(Context context, String callSid, String recordSid);
 
         void loadRecords(String phoneNumber);
 

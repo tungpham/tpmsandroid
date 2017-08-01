@@ -25,10 +25,10 @@ public interface PurchaseContract {
 
         void buyIncomingPhoneNumber(Context context, String phoneNumber);
 
-        /**
-         * Create phone with backend
-         * @param incomingPhoneNumber  .
-         */
-        void createPhoneNumber(Context context, IncomingPhoneNumber incomingPhoneNumber);
+//        /**
+//         * Create phone with backend
+//         * @param incomingPhoneNumber  .
+//         */
+//        void createPhoneNumber(Context context, IncomingPhoneNumber incomingPhoneNumber);
     }
 }

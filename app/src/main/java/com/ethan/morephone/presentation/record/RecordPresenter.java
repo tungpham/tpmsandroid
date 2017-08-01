@@ -7,12 +7,12 @@ import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.entity.record.mapper.RecordDataMapper;
 import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
+import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.call.GetCall;
 import com.android.morephone.domain.usecase.record.DeleteRecord;
 import com.android.morephone.domain.usecase.record.GetRecords;
-import com.ethan.morephone.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +54,8 @@ public class RecordPresenter implements RecordContract.Presenter {
     }
 
     @Override
-    public void deleteRecord(String callSid, String recordSid) {
-        DeleteRecord.RequestValue requestValue = new DeleteRecord.RequestValue(Constant.ACCOUNT_SID, callSid, recordSid);
+    public void deleteRecord(Context context, String callSid, String recordSid) {
+        DeleteRecord.RequestValue requestValue = new DeleteRecord.RequestValue(TwilioManager.getSid(context), callSid, recordSid);
         mUseCaseHandler.execute(mDeleteRecord, requestValue, new UseCase.UseCaseCallback<DeleteRecord.ResponseValue>() {
             @Override
             public void onSuccess(DeleteRecord.ResponseValue response) {

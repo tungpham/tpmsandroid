@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.buy.result;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberFragment;
+import com.ethan.morephone.presentation.buy.payment.purchase.PurchaseActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 
 /**
@@ -58,6 +60,10 @@ public class AvailablePhoneNumberActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PurchaseActivity.REQUEST_PURCHASE_ACTIVITY && resultCode == Activity.RESULT_OK) {
+            setResult(Activity.RESULT_OK);
+            finish();
+        }
     }
 
 }

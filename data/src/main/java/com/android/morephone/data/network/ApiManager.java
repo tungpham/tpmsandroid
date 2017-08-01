@@ -304,18 +304,18 @@ public class ApiManager {
     }
 
     public static void deleteIncomingPhoneNumber(Context context, String accountsid, String incomingPhoneNumberSid) {
-//        Call<Void> call = getApiPath(context).deletePhoneNumber(accountsid, incomingPhoneNumberSid);
-//        call.enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//
-//            }
-//        });
+        Call<Void> call = getApiPath(context).deletePhoneNumber(accountsid, incomingPhoneNumberSid);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
     }
 
     public static void changeFriendlyName(Context context,
@@ -405,9 +405,13 @@ public class ApiManager {
 
     /*----------------------------------------- APPLICATIONS -----------------------------------------*/
 
-    public static void getApplications(Context context,
-                                       Callback<Applications> callback) {
+    public static Applications getApplications(Context context) {
         Call<Applications> call = getApiPath(context).getApplications(TwilioManager.getSid(context));
-        call.enqueue(callback);
+        try {
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

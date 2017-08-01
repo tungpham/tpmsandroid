@@ -150,7 +150,7 @@ public class SettingFragment extends BaseFragment implements
 
     @Override
     public void changeFriendlyName(String friendlyName) {
-        mPresenter.changeFriendlyName(MyPreference.getPhoneNumberSid(getContext()), friendlyName);
+        mPresenter.changeFriendlyName(getContext(), MyPreference.getPhoneNumberSid(getContext()), friendlyName);
         mTextFriendlyName.setText(friendlyName);
     }
 

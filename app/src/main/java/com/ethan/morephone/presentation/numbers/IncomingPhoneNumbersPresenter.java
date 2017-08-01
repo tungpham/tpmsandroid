@@ -2,15 +2,21 @@ package com.ethan.morephone.presentation.numbers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
+import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
+import com.android.morephone.data.network.ApiMorePhone;
+import com.android.morephone.data.network.HTTPStatus;
+import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.number.DeleteIncomingPhoneNumber;
-import com.ethan.morephone.Constant;
+import com.ethan.morephone.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,11 +68,24 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
     }
 
     @Override
-    public void deleteIncomingPhoneNumber(String incomingPhoneNumberSid) {
-        DeleteIncomingPhoneNumber.RequestValue requestValue = new DeleteIncomingPhoneNumber.RequestValue(Constant.ACCOUNT_SID, incomingPhoneNumberSid);
+    public void deleteIncomingPhoneNumber(final Context context, final String incomingPhoneNumberSid) {
+        DeleteIncomingPhoneNumber.RequestValue requestValue = new DeleteIncomingPhoneNumber.RequestValue(TwilioManager.getSid(context), incomingPhoneNumberSid);
         mUseCaseHandler.execute(mDeleteIncomingPhoneNumber, requestValue, new UseCase.UseCaseCallback<DeleteIncomingPhoneNumber.ResponseValue>() {
             @Override
             public void onSuccess(DeleteIncomingPhoneNumber.ResponseValue response) {
+                ApiMorePhone.deletePhoneNumber(context, incomingPhoneNumberSid, new Callback<BaseResponse<PhoneNumber>>() {
+                    @Override
+                    public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+                        if(response.isSuccessful() && response.body() != null && response.body().getStatus() == HTTPStatus.OK.getStatusCode()){
+                            Toast.makeText(context, context.getString(R.string.delete_phone_number_success), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
+
+                    }
+                });
 
             }
 

@@ -16,6 +16,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
@@ -238,11 +239,12 @@ public class PhoneActivity extends BaseActivity implements
                     showIncomingFragment(fromPhoneNumber, toPhoneNumber);
                     DebugTool.logD("UPDATE INCOMING");
                 } else if (phoneState == PhoneService.PHONE_STATE_DISCONNECTED) {
-//                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_disconnected), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_disconnected), Toast.LENGTH_SHORT).show();
                     finish();
                 } else if (phoneState == PhoneService.PHONE_STATE_HANG_UP) {
                     finish();
                 } else if (phoneState == PhoneService.PHONE_STATE_DECLINE) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_decline), Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }

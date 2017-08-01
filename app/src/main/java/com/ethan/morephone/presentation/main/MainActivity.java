@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.morephone.data.utils.CredentialsManager;
+import com.android.morephone.data.utils.TwilioManager;
 import com.auth0.android.Auth0;
 import com.auth0.android.authentication.AuthenticationAPIClient;
 import com.auth0.android.authentication.AuthenticationException;
@@ -124,7 +125,7 @@ public class MainActivity extends BaseActivity implements
         textEmail.setText(MyPreference.getUserEmail(getApplicationContext()));
 
         ImageView imagePicture = (ImageView) header.findViewById(R.id.image_picture);
-        if(!TextUtils.isEmpty(MyPreference.getUserPicture(getApplicationContext()))){
+        if (!TextUtils.isEmpty(MyPreference.getUserPicture(getApplicationContext()))) {
             Picasso.with(getApplicationContext())
                     .load(MyPreference.getUserPicture(getApplicationContext()))
                     .transform(new CircleTransform())
@@ -163,6 +164,12 @@ public class MainActivity extends BaseActivity implements
                 break;
             case R.id.nav_logout:
                 CredentialsManager.deleteCredentials(this);
+                MyPreference.setUserId(getApplicationContext(), "");
+                MyPreference.setUserEmail(getApplicationContext(), "");
+                MyPreference.setRegsiterPhoneNumber(getApplicationContext(), false);
+                TwilioManager.saveTwilio(getApplicationContext(), "", "");
+                TwilioManager.setApplicationSid(getApplicationContext(), "");
+
                 startActivity(new Intent(this, AuthenticationActivity.class));
                 finish();
                 break;
@@ -267,9 +274,10 @@ public class MainActivity extends BaseActivity implements
 
 
     private void startService() {
-        PhoneService.startPhoneService(getApplicationContext());
+        if (!PhoneService.isMyServiceRunning(getApplicationContext())) {
+            PhoneService.startPhoneService(getApplicationContext());
+        }
     }
-
 
      /*------------------------------------------------PERMISSION MIC ----------------------------------------*/
 
@@ -341,7 +349,7 @@ public class MainActivity extends BaseActivity implements
             paint.setShader(shader);
             paint.setAntiAlias(true);
 
-            float r = size/2f;
+            float r = size / 2f;
             canvas.drawCircle(r, r, r, paint);
 
             squaredBitmap.recycle();

@@ -132,6 +132,13 @@ public class ApiMorePhone {
         call.enqueue(callback);
     }
 
+    public static void deletePhoneNumber(Context context,
+                                         String id,
+                                         Callback<BaseResponse<PhoneNumber>> callback) {
+        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).deletePhoneNumber(id);
+        call.enqueue(callback);
+    }
+
      /*-----------------------------------------PURCHASE----------------------------------------*/
 
     public static void purchase(Context context,
