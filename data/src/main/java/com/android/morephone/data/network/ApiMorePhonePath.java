@@ -39,8 +39,9 @@ interface ApiMorePhonePath {
     Call<BaseResponse<PhoneNumber>> createPhoneNumber(@Body PhoneNumber user);
 
     @DELETE("phone-number/{id}")
-    Call<BaseResponse<PhoneNumber>> deletePhoneNumber(@Path("id") String id);
-
+    Call<BaseResponse<PhoneNumber>> deletePhoneNumber(@Path("id") String id,
+                                                      @Query("account_sid") String accountSid,
+                                                      @Query("auth_token") String authToken);
 
     /*-----------------------------------------MESSAGE-----------------------------------------*/
 

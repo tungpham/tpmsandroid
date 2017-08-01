@@ -134,8 +134,10 @@ public class ApiMorePhone {
 
     public static void deletePhoneNumber(Context context,
                                          String id,
+                                         String accountToken,
+                                         String authToken,
                                          Callback<BaseResponse<PhoneNumber>> callback) {
-        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).deletePhoneNumber(id);
+        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).deletePhoneNumber(id, accountToken, authToken);
         call.enqueue(callback);
     }
 
@@ -164,8 +166,8 @@ public class ApiMorePhone {
     /*-----------------------------------------CALL----------------------------------------*/
 
     public static void createToken(Context context,
-                                     String client,
-                                     Callback<BaseResponse<String>> callback) {
+                                   String client,
+                                   Callback<BaseResponse<String>> callback) {
         Call<BaseResponse<String>> call = getApiPath(context).createToken(client, TwilioManager.getSid(context), TwilioManager.getAuthCode(context), TwilioManager.getApplicationSid(context));
         call.enqueue(callback);
     }
