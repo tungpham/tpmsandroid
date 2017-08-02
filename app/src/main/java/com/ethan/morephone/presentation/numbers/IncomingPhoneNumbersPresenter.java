@@ -15,8 +15,11 @@ import com.android.morephone.data.network.HTTPStatus;
 import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.number.DeleteIncomingPhoneNumber;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
+
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,9 +75,12 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
         ApiMorePhone.deletePhoneNumber(context, incomingPhoneNumberSid, TwilioManager.getSid(context), TwilioManager.getAuthCode(context), new Callback<BaseResponse<PhoneNumber>>() {
             @Override
             public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
-                if(response.isSuccessful() && response.body() != null && response.body().getStatus() == HTTPStatus.OK.getStatusCode()){
+                if (response.isSuccessful() && response.body() != null && response.body().getStatus() == HTTPStatus.OK.getStatusCode()) {
                     Toast.makeText(context, context.getString(R.string.delete_phone_number_success), Toast.LENGTH_SHORT).show();
                     PhoneService.startServiceWithAction(context, PhoneService.ACTION_UNREGISTER_PHONE_NUMBER, response.body().getResponse().getPhoneNumber(), "");
+                    Set<String> phoneNumberUsage = MyPreference.getPhoneNumberUsage(context);
+                    phoneNumberUsage.remove(response.body().getResponse().getPhoneNumber());
+                    MyPreference.setPhoneNumberUsage(context, phoneNumberUsage);
                 }
             }
 

@@ -185,12 +185,16 @@ public class SplashActivity extends BaseActivity {
                         BaseResponse<User> baseResponse = ApiMorePhone.createUser(activity.getApplicationContext(), mUser);
                         if (baseResponse != null && baseResponse.getResponse() != null) {
                             DebugTool.logD("APPLICATION SID: " + baseResponse.getResponse().getApplicationSid());
+
                             if(TextUtils.isEmpty(baseResponse.getResponse().getApplicationSid())){
                                 Applications applications = ApiManager.getApplications(activity.getApplicationContext());
                                 if (applications != null && !applications.applications.isEmpty()) {
                                     TwilioManager.setApplicationSid(activity.getApplicationContext(), applications.applications.get(0).sid);
                                 }
+                            }else{
+                                TwilioManager.setApplicationSid(activity.getApplicationContext(), baseResponse.getResponse().getApplicationSid());
                             }
+
                             MyPreference.setUserId(activity.getApplicationContext(), baseResponse.getResponse().getId());
                         }
                     } else if(mUser == null && TextUtils.isEmpty(TwilioManager.getApplicationSid(activity.getApplicationContext()))){

@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.ArraySet;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
@@ -49,6 +50,8 @@ import com.ethan.morephone.presentation.usage.UsageActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+
+import java.util.Set;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -170,6 +173,12 @@ public class MainActivity extends BaseActivity implements
                 MyPreference.setRegsiterPhoneNumber(getApplicationContext(), false);
                 TwilioManager.saveTwilio(getApplicationContext(), "", "");
                 TwilioManager.setApplicationSid(getApplicationContext(), "");
+
+                Set<String> phoneNumbersUsage = MyPreference.getPhoneNumberUsage(getApplicationContext());
+                for(String str: phoneNumbersUsage){
+                    PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_UNREGISTER_PHONE_NUMBER, str, "");
+                }
+                MyPreference.setPhoneNumberUsage(getApplicationContext(), new ArraySet<String>());
 
                 startActivity(new Intent(this, AuthenticationActivity.class));
                 finish();

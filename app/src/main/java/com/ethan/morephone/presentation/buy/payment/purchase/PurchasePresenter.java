@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCaseHandler;
@@ -40,6 +41,7 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
     public void buyIncomingPhoneNumber(final Context context, final String buyPhoneNumber) {
 
         mView.showLoading(true);
+        DebugTool.logD("APP SID FOR BUY PHONE: " + TwilioManager.getApplicationSid(context));
         PhoneNumber phoneNumber = PhoneNumber.getBuilder().userId(MyPreference.getUserId(context))
                 .accountSid(TwilioManager.getSid(context))
                 .authToken(TwilioManager.getAuthCode(context))
