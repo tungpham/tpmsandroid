@@ -25,16 +25,20 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
+import com.ethan.morephone.presentation.main.MainActivity;
 import com.ethan.morephone.presentation.main.RequirePhoneNumberDialog;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersViewHolder;
+import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.utils.Injection;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.twilio.client.impl.TwilioImpl.context;
 
 /**
  * Created by Ethan on 3/16/17.
@@ -179,55 +183,22 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
     @Override
     public void showLoading(boolean isActive) {
-        if (isActive) showProgress();
-        else hideProgress();
+        if(isAdded()) {
+            if (isActive) showProgress();
+            else hideProgress();
+        }
     }
 
     @Override
     public void showPhoneNumbers(List<IncomingPhoneNumber> numberEntities) {
         if (isAdded()) {
-//            if (!MyPreference.getRegisterPhoneNumber(getContext())) {
-//
-//                Set<String> phoneNumberUsages = new ArraySet<>();
-//                for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
-//
-//                    phoneNumberUsages.add(incomingPhoneNumber.phoneNumber);
-//
-//                    PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
-//
-//                    PhoneNumber phoneNumber = PhoneNumber.getBuilder()
-//                            .phoneNumber(incomingPhoneNumber.phoneNumber)
-//                            .sid(incomingPhoneNumber.sid)
-//                            .accountSid(TwilioManager.getSid(getContext()))
-//                            .authToken(TwilioManager.getAuthCode(getContext()))
-//                            .applicationSid(TwilioManager.getApplicationSid(getContext()))
-//                            .friendlyName(incomingPhoneNumber.friendlyName)
-//                            .userId(MyPreference.getUserId(getContext()))
-//                            .build();
-//
-//                    DebugTool.logD("USER ID: " + MyPreference.getUserId(getContext()));
-//
-//                    ApiMorePhone.createPhoneNumber(getContext(), phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
-//                        @Override
-//                        public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
-//                            if (response.isSuccessful() && response.body() != null && response.body().getStatus() == 201) {
-//                                DebugTool.logD("CREATE PHONE NUMBER SUCCESS");
-//                                MyPreference.setRegsiterPhoneNumber(getContext(), true);
-//                            } else {
-//                                DebugTool.logD("CREATE PHONE NUMBER ERROR");
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
-//                            DebugTool.logD("CREATE PHONE NUMBER ERROR");
-//                        }
-//                    });
-//                }
-//
-//                MyPreference.setPhoneNumberUsage(getContext(), phoneNumberUsages);
-//                MyPreference.setRegsiterPhoneNumber(getContext(), true);
-//            }
+
+            for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
+                PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
+            }
+
+//            MyPreference.setPhoneNumberUsage(getContext(), phoneNumberUsages);
+
 
             mIncomingPhoneNumbersAdapter.replaceData(numberEntities);
         }
@@ -262,10 +233,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         mIncomingPhoneNumbersAdapter.getData().remove(incomingPhoneNumber);
         mIncomingPhoneNumbersAdapter.notifyDataSetChanged();
         mPresenter.deleteIncomingPhoneNumber(getContext(), incomingPhoneNumber.sid);
-        if (incomingPhoneNumber.phoneNumber.equals(MyPreference.getPhoneNumber(getContext()))) {
-            MyPreference.setPhoneNumber(getContext(), "");
-            mIsDelete = true;
-        }
     }
 
     @Override
@@ -290,8 +257,14 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 ////        startActivity(new Intent(this, IncomingPhoneNumbersActivity.class));
 //    }
 
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        DebugTool.logD("requestCode FRAGMENT: " + requestCode);
+//
+//    }
     @Override
     public void onBuyPhone() {
-        startActivity(new Intent(getActivity(), SearchPhoneNumberActivity.class));
+        getActivity().startActivityForResult(new Intent(getActivity(), SearchPhoneNumberActivity.class), MainActivity.REQUEST_BUY_PHONE_NUMBER);
     }
 }

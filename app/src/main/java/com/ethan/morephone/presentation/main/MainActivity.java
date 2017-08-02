@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.auth0.android.Auth0;
@@ -60,8 +61,8 @@ public class MainActivity extends BaseActivity implements
 
     private final int MIC_PERMISSION_REQUEST_CODE = 101;
 
-    private final int REQUEST_INCOMING_PHONE = 100;
-    private final int REQUEST_BUY_PHONE_NUMBER = REQUEST_INCOMING_PHONE + 1;
+    public static final int REQUEST_INCOMING_PHONE = 100;
+    public static final int REQUEST_BUY_PHONE_NUMBER = REQUEST_INCOMING_PHONE + 1;
 
     private Toolbar mToolbar;
 
@@ -216,7 +217,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        DebugTool.logD("requestCode: " + requestCode);
         switch (requestCode) {
             case REQUEST_BUY_PHONE_NUMBER:
                 if (resultCode == RESULT_OK) {

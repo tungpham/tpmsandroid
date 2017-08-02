@@ -56,6 +56,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 
     public final static String ACTION_REGISTER_PHONE_NUMBER = "com.ethan.morephone.action.ACTION_REGISTER_PHONE_NUMBER";
+    public final static String ACTION_UNREGISTER_PHONE_NUMBER = "com.ethan.morephone.action.UNACTION_REGISTER_PHONE_NUMBER";
 
     public final static String ACTION_OUTGOING = "com.ethan.morephone.action.OUTGOING";
     public final static String ACTION_INCOMING = "com.ethan.morephone.action.INCOMING";
@@ -104,6 +105,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     private ScheduledFuture<?> mScheduleFuture;
 
     private Device.State mDeviceState = Device.State.OFFLINE;
+    private int mPhoneState = PHONE_STATE_DEFAULT;
 
     private final IBinder mBinder = new LocalBinder();
 
@@ -150,8 +152,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
 //        clientProfile = new ClientProfile(MyPreference.getPhoneNumber(getApplicationContext()), true, true);
         DebugTool.logD("CREATE SERVICE");
-        scheduleDonutProgressUpdate();
-        registerPhoneNumber();
+        scheduleRegisterPhoneNumber();
+        registerPhoneNumberAgain();
 
 //        initializeTwilioClientSDK();
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -173,6 +175,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
             if (action.equals(ACTION_REGISTER_PHONE_NUMBER))
                 registerDevicePhoneNumber(mFromPhoneNumber);
+            else if (action.equals(ACTION_UNREGISTER_PHONE_NUMBER))
+                unRegisterDevicePhoneNumber(mFromPhoneNumber);
             else if (action.equals(ACTION_OUTGOING))
                 processOutgoingRequest(mFromPhoneNumber, mToPhoneNumber);
             else if (action.equals(ACTION_HANG_UP))
@@ -206,18 +210,18 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         DebugTool.logD("START LISTENING: " + device.getCapabilities().toString());
         DebugTool.logD("START LISTENING STATE: " + device.getState().name());
         updateDeviceState(device.getState());
-        Map<Device.Capability, Object> capabilityMap = device.getCapabilities();
-        if (capabilityMap != null) {
-            long expire = (long) capabilityMap.get(Device.Capability.EXPIRATION);
-            if (expire - 100 < 0) {
-                for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
-                    Device value = entry.getValue();
-                    if (value == device) {
-                        retrieveCapabilityToken(entry.getKey());
-                    }
-                }
-            }
-        }
+//        Map<Device.Capability, Object> capabilityMap = device.getCapabilities();
+//        if (capabilityMap != null) {
+//            long expire = (long) capabilityMap.get(Device.Capability.EXPIRATION);
+//            if (expire - 100 < 0) {
+//                for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
+//                    Device value = entry.getValue();
+//                    if (value == device) {
+//                        retrieveCapabilityToken(entry.getKey());
+//                    }
+//                }
+//            }
+//        }
         mDeviceState = device.getState();
     }
 
@@ -293,7 +297,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         }
     }
 
-    private void scheduleDonutProgressUpdate() {
+    private void scheduleRegisterPhoneNumber() {
         stopDonutProgressUpdate();
         if (!mExecutorService.isShutdown()) {
             mScheduleFuture = mExecutorService.scheduleAtFixedRate(
@@ -301,6 +305,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                         @Override
                         public void run() {
 //                            registerPhoneNumber();
+                            if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
+                                registerPhoneNumberAgain();
+                            }
                         }
                     }, PROGRESS_UPDATE_INITIAL_INTERVAL,
                     PROGRESS_UPDATE_INTERNAL, TimeUnit.MINUTES);
@@ -313,8 +320,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         }
     }
 
-    private void registerPhoneNumber() {
+    private void registerPhoneNumberAgain() {
         final Set<String> phoneNumberUsages = MyPreference.getPhoneNumberUsage(getApplicationContext());
+
         if (phoneNumberUsages != null) {
             DebugTool.logD("REGISTER PHONE USAGE ");
             if (Twilio.isInitialized()) {
@@ -342,13 +350,22 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         }
     }
 
+    private String getToken(final String phoneNumber) {
+        TwilioCapability capability = new TwilioCapability(TwilioManager.getSid(getApplicationContext()), TwilioManager.getAuthCode(getApplicationContext()));
+        capability.allowClientOutgoing(TwilioManager.getApplicationSid(getApplicationContext()));
+        capability.allowClientIncoming(phoneNumber);
+
+        try {
+            return capability.generateToken();
+
+        } catch (CapabilityToken.DomainException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private void retrieveCapabilityToken(final String phoneNumber) {
         DebugTool.logD("REGISTER DEVICE NUMER");
-//        Uri.Builder b = Uri.parse(TOKEN_SERVICE_URL).buildUpon();
-//        b.appendQueryParameter("client", phoneNumber);
-//        b.appendQueryParameter("account_sid", TwilioManager.getSid(getApplicationContext()));
-//        b.appendQueryParameter("auth_token", TwilioManager.getAuthCode(getApplicationContext()));
-//        b.appendQueryParameter("application_sid", TwilioManager.getApplicationSid(getApplicationContext()));
 
         TwilioCapability capability = new TwilioCapability(TwilioManager.getSid(getApplicationContext()), TwilioManager.getAuthCode(getApplicationContext()));
         capability.allowClientOutgoing(TwilioManager.getApplicationSid(getApplicationContext()));
@@ -358,6 +375,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             String token = capability.generateToken();
 
             if (!mDevices.containsKey(phoneNumber)) {
+                DebugTool.logD("TOKEN BEFORE : " + token);
                 Device device = Twilio.createDevice(token, PhoneService.this);
                 device.setIncomingSoundEnabled(true);
 
@@ -366,8 +384,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                 device.setIncomingIntent(pendingIntent);
 
                 mDevices.put(phoneNumber, device);
-                DebugTool.logD("SIZE DIVICE: " + mDevices.size());
+                DebugTool.logD("SIZE DIVICE: " + mDevices.size() + " |||| " + device.getCapabilities().toString());
                 DebugTool.logD("TOKEN: " + token);
+
             } else {
                 mDevices.get(phoneNumber).updateCapabilityToken(token);
             }
@@ -417,8 +436,31 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     }
 
+    private void unRegisterDevicePhoneNumber(final String phoneNumber) {
+        if (mDevices.containsKey(phoneNumber)) {
+            Device device = mDevices.get(phoneNumber);
+            device.setDeviceListener(null);
+            mDevices.remove(phoneNumber);
+        }
+    }
+
 
     private void registerDevicePhoneNumber(final String phoneNumber) {
+
+        if (mDevices.containsKey(phoneNumber)) {
+            return;
+        }
+
+        Set<String> savePhoneNumber = MyPreference.getPhoneNumberUsage(getApplicationContext());
+        for (String str : savePhoneNumber) {
+            if (!str.equals(phoneNumber)) {
+                savePhoneNumber.add(phoneNumber);
+                break;
+            }
+        }
+
+        MyPreference.setPhoneNumberUsage(getApplicationContext(), savePhoneNumber);
+
         if (Twilio.isInitialized()) {
             retrieveCapabilityToken(phoneNumber);
         } else {
@@ -448,13 +490,21 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         params.put("To", toPhoneNumber);
         if (mDevices.containsKey(fromPhoneNumber)) {
 //            retrieveCapabilityToken(fromPhoneNumber);
+            Device device = mDevices.get(fromPhoneNumber);
             mActiveConnection = mDevices.get(fromPhoneNumber).connect(params, this);
             DebugTool.logD("MAKE A CALL : " + toPhoneNumber + " EXPERI: " + mDevices.get(fromPhoneNumber).getCapabilities().toString());
+            if (device.getCapabilities().isEmpty()) {
+                device.updateCapabilityToken(getToken(fromPhoneNumber));
+                device.setDeviceListener(this);
+                Toast.makeText(getContext(), "device don't allow outgoing", Toast.LENGTH_SHORT).show();
+            }
+            updateUIPhone(PHONE_STATE_OUTGOING, fromPhoneNumber, toPhoneNumber);
         } else {
             updateUIPhone(PHONE_STATE_DISCONNECTED, fromPhoneNumber, toPhoneNumber);
             Toast.makeText(getContext(), "No existing device", Toast.LENGTH_SHORT).show();
         }
-        updateUIPhone(PHONE_STATE_OUTGOING, fromPhoneNumber, toPhoneNumber);
+
+
     }
 
     private void processIncomingRequest(Intent intent) {
@@ -520,6 +570,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     }
 
     private void updateUIPhone(int phoneState, String fromPhoneNumber, String toPhoneNumber) {
+        mPhoneState = phoneState;
         Intent intent = new Intent(PhoneService.ACTION_UPDATE_UI);
         intent.putExtra(EXTRA_PHONE_STATE, phoneState);
         intent.putExtra(EXTRA_FROM_PHONE_NUMBER, fromPhoneNumber);

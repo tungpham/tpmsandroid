@@ -2,6 +2,7 @@ package com.ethan.morephone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.util.ArraySet;
 
 import com.android.morephone.data.log.DebugTool;
 
@@ -181,7 +182,7 @@ public class MyPreference {
 
     public static Set<String> getPhoneNumberUsage(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getStringSet(PROPERTY_PHONE_NUMBER_USAGE, null);
+        return preferences.getStringSet(PROPERTY_PHONE_NUMBER_USAGE, new ArraySet<String>());
     }
 
     public static void setPhoneNumberUsage(Context context, Set<String> phoneNumberUsages) {

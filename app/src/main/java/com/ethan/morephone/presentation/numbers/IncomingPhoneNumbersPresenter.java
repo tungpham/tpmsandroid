@@ -16,6 +16,7 @@ import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.number.DeleteIncomingPhoneNumber;
 import com.ethan.morephone.R;
+import com.ethan.morephone.presentation.phone.service.PhoneService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,6 +74,7 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
             public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
                 if(response.isSuccessful() && response.body() != null && response.body().getStatus() == HTTPStatus.OK.getStatusCode()){
                     Toast.makeText(context, context.getString(R.string.delete_phone_number_success), Toast.LENGTH_SHORT).show();
+                    PhoneService.startServiceWithAction(context, PhoneService.ACTION_UNREGISTER_PHONE_NUMBER, response.body().getResponse().getPhoneNumber(), "");
                 }
             }
 
@@ -93,7 +95,7 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
                 if (response.isSuccessful()) {
                     IncomingPhoneNumbers incomingPhoneNumbers = response.body();
                     if (incomingPhoneNumbers != null && incomingPhoneNumbers.incomingPhoneNumbers != null && !incomingPhoneNumbers.incomingPhoneNumbers.isEmpty()) {
-                        mView.showPhoneNumbers(response.body().incomingPhoneNumbers);
+                        mView.showPhoneNumbers(incomingPhoneNumbers.incomingPhoneNumbers);
                     } else {
                         mView.emptyPhoneNumber();
                     }

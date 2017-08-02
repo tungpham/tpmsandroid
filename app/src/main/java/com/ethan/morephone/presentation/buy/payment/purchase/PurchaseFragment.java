@@ -24,7 +24,6 @@ import com.ethan.morephone.presentation.buy.payment.checkout.Inventory;
 import com.ethan.morephone.presentation.buy.payment.checkout.ProductTypes;
 import com.ethan.morephone.presentation.buy.payment.checkout.Purchase;
 import com.ethan.morephone.presentation.buy.payment.checkout.UiCheckout;
-import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.utils.Injection;
 
 import javax.annotation.Nonnull;
@@ -178,7 +177,6 @@ public class PurchaseFragment extends BaseFragment implements
     @Override
     public void buyIncomingPhoneNumberSuccess(String phoneNumber) {
         Toast.makeText(getContext(), getString(R.string.purchase_success), Toast.LENGTH_SHORT).show();
-        PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, phoneNumber, "");
         getActivity().setResult(Activity.RESULT_OK);
         getActivity().finish();
     }
