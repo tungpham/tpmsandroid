@@ -30,7 +30,7 @@ public interface ConversationsContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadListMessageResource(Context context, String phoneNumber);
+        void loadListMessageResource(Context context, String phoneNumber, boolean isShowLoading);
 
         void loadMessagesIncoming(String phoneNumberIncoming);
 

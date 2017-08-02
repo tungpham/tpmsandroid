@@ -1,10 +1,14 @@
 package com.ethan.morephone.presentation.message.conversation;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +23,7 @@ import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
+import com.ethan.morephone.fcm.NotifyFirebaseMessagingService;
 import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
@@ -68,6 +73,8 @@ public class ConversationsFragment extends BaseFragment implements
 
     private String mPhoneNumber;
 
+    private UpdateMessageReceiver mUpdateMessageReceiver = new UpdateMessageReceiver();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +84,11 @@ public class ConversationsFragment extends BaseFragment implements
                 Injection.providerGetMessagesIncoming(getContext()),
                 Injection.providerGetMessagesOutgoing(getContext()),
                 Injection.providerCreateMessage(getContext()));
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(NotifyFirebaseMessagingService.ACTION_UPDATE_MESSAGE);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mUpdateMessageReceiver, intentFilter);
+
     }
 
     @Nullable
@@ -120,7 +132,7 @@ public class ConversationsFragment extends BaseFragment implements
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            loadData();
+                            loadData(false);
                         }
                     });
 
@@ -130,15 +142,15 @@ public class ConversationsFragment extends BaseFragment implements
 
 //        setHasOptionsMenu(true);
 
-        loadData();
+        loadData(true);
 
         return view;
     }
 
-    public void loadData() {
+    public void loadData(boolean isShowLoading) {
         if (Utils.isNetworkAvailable(getActivity())) {
             mPresenter.clearData();
-            mPresenter.loadListMessageResource(getContext(), mPhoneNumber);
+            mPresenter.loadListMessageResource(getContext(), mPhoneNumber, isShowLoading);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }
@@ -166,11 +178,7 @@ public class ConversationsFragment extends BaseFragment implements
         return filteredModelList;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getActivity().finish();
-    }
+
 
     @Override
     public void onItemClick(ConversationModel conversationModel) {
@@ -211,7 +219,7 @@ public class ConversationsFragment extends BaseFragment implements
 
     @Override
     public void createMessageSuccess(MessageItem messageItem) {
-        loadData();
+        loadData(false);
     }
 
     @Override
@@ -295,6 +303,30 @@ public class ConversationsFragment extends BaseFragment implements
 //                    }
 //                }
 
+            }
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mUpdateMessageReceiver);
+        getActivity().finish();
+    }
+
+    class UpdateMessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null)
+                return;
+            if (NotifyFirebaseMessagingService.ACTION_UPDATE_MESSAGE.equals(intent.getAction())) {
+
+                //Check type UI
+                String body = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_MESSAGE_BODY);
+                String fromPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_FROM_PHONE_NUMBER);
+                String toPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_TO_PHONE_NUMBER);
+                loadData(false);
             }
         }
     }

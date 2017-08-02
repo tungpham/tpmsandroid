@@ -9,4 +9,6 @@ public class Constant {
 
     public static final String EXTRA_IDENTITY = "EXTRA_IDENTITY";
 
+    public static final String MESSAGE_STATUS_RECEIVED = "received";
+
 }

@@ -1,10 +1,14 @@
 package com.ethan.morephone.presentation.message.list;
 
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,8 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
+import com.ethan.morephone.fcm.NotifyFirebaseMessagingService;
 import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -68,6 +74,8 @@ public class MessageListFragment extends BaseFragment implements
 
     private String mMessageBody;
 
+    private UpdateMessageReceiver mUpdateMessageReceiver = new UpdateMessageReceiver();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +85,13 @@ public class MessageListFragment extends BaseFragment implements
                 Injection.providerGetMessagesByToAndFrom(getContext()),
                 Injection.providerCreateMessage(getContext()),
                 Injection.providerDeleteMessage(getContext()));
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(NotifyFirebaseMessagingService.ACTION_UPDATE_MESSAGE);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mUpdateMessageReceiver, intentFilter);
+
     }
+
 
     @Nullable
     @Override
@@ -230,6 +244,52 @@ public class MessageListFragment extends BaseFragment implements
 
         if(!TextUtils.isEmpty(mMessageBody)){
             mPresenter.createMessage(MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size() - 1);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mUpdateMessageReceiver);
+    }
+
+    class UpdateMessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null)
+                return;
+            if (NotifyFirebaseMessagingService.ACTION_UPDATE_MESSAGE.equals(intent.getAction())) {
+
+                //Check type UI
+                String body = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_MESSAGE_BODY);
+                String fromPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_FROM_PHONE_NUMBER);
+                String toPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_TO_PHONE_NUMBER);
+
+
+                final MessageItem messageItem = new MessageItem(
+                        "",
+                        "",
+                        "",
+                        "",
+                        null,
+                        toPhoneNumber,
+                        fromPhoneNumber,
+                        null,
+                        body,
+                        Constant.MESSAGE_STATUS_RECEIVED,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        null);
+
+                createMessageSuccess(messageItem);
+            }
         }
     }
 }

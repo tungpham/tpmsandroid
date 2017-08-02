@@ -17,7 +17,6 @@ import android.text.TextUtils;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.main.MainActivity;
-import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.presentation.record.SoundPoolManager;
 import com.ethan.morephone.presentation.record.TestVoiceActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -37,6 +36,8 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
      * You can find a more detailed description of all supported fields here:
      * https://www.twilio.com/docs/api/notifications/rest/notifications#generic-payload-parameters
      */
+
+    public final static String ACTION_UPDATE_MESSAGE = "com.ethan.morephone.action.ACTION_UPDATE_MESSAGE";
 
     public final static String EXTRA_FROM_PHONE_NUMBER = "EXTRA_FROM_PHONE_NUMBER";
     public final static String EXTRA_TO_PHONE_NUMBER = "EXTRA_TO_PHONE_NUMBER";
@@ -159,7 +160,10 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
                     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
                     notificationManager.notify(NOTIFY_MESSAGE_ID, notificationBuilder.build());
+
+                    updateMessage(str[0], str[1], message);
                 }
+
             }
 
 
@@ -170,7 +174,7 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void updateMessage(String fromPhoneNumber, String toPhoneNumber, String body) {
-        Intent intent = new Intent(PhoneService.ACTION_UPDATE_UI);
+        Intent intent = new Intent(ACTION_UPDATE_MESSAGE);
         intent.putExtra(EXTRA_FROM_PHONE_NUMBER, fromPhoneNumber);
         intent.putExtra(EXTRA_TO_PHONE_NUMBER, toPhoneNumber);
         intent.putExtra(EXTRA_MESSAGE_BODY, body);

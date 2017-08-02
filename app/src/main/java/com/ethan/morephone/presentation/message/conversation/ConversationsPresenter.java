@@ -68,8 +68,8 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     }
 
     @Override
-    public void loadListMessageResource(Context context, String phoneNumber) {
-        new DataAsync(context, this, phoneNumber).execute();
+    public void loadListMessageResource(Context context, String phoneNumber, boolean isShowLoading) {
+        new DataAsync(context, this, phoneNumber, isShowLoading).execute();
     }
 
     @Override
@@ -256,18 +256,20 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         private final WeakReference<ConversationsPresenter> mWeakReference;
         private final String mPhoneNumber;
         private final Context mContext;
+        private final boolean isShowLoading;
 
-        public DataAsync(Context context, ConversationsPresenter presenter, String phoneNumber) {
+        public DataAsync(Context context, ConversationsPresenter presenter, String phoneNumber, boolean isShowLoading) {
             mWeakReference = new WeakReference<>(presenter);
             this.mPhoneNumber = phoneNumber;
             mContext = context;
+            this.isShowLoading = isShowLoading;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             ConversationsPresenter presenter = mWeakReference.get();
-            if(presenter != null){
+            if(presenter != null && isShowLoading){
                 presenter.mView.showLoading(true);
             }
         }

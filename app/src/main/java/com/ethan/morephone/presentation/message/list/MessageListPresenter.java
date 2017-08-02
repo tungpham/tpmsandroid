@@ -85,7 +85,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
         DebugTool.logD("userId : " + userId);
         mView.createMessageSuccess(messageItem);
 
-        CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(userId, to, from, body);
+        CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(userId.trim(), to.trim(), from.trim(), body.trim());
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
             public void onSuccess(CreateMessage.ResponseValue response) {

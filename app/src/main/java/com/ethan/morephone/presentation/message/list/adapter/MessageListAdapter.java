@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.ethan.morephone.Constant;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TextDrawable;
@@ -117,7 +118,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if(item == null) return INCOMING_ITEM;
         String isSent = item.status;
 
-        if (isSent.equals("received")) {
+        if (isSent.equals(Constant.MESSAGE_STATUS_RECEIVED)) {
             return INCOMING_ITEM;
         } else {
             return OUTGOING_ITEM;
