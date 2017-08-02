@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -83,7 +82,6 @@ public class PurchaseFragment extends BaseFragment implements
         View view = inflater.inflate(R.layout.fragment_purchase, container, false);
         mButtonPayNow = (AppCompatButton) view.findViewById(R.id.button_purchase_pay_now);
         mButtonPayNow.setOnClickListener(this);
-        mButtonPayNow.setEnabled(false);
 
         Bundle bundle = getArguments();
 
@@ -178,9 +176,9 @@ public class PurchaseFragment extends BaseFragment implements
     }
 
     @Override
-    public void buyIncomingPhoneNumberSuccess(IncomingPhoneNumber incomingPhoneNumber) {
+    public void buyIncomingPhoneNumberSuccess(String phoneNumber) {
         Toast.makeText(getContext(), getString(R.string.purchase_success), Toast.LENGTH_SHORT).show();
-        PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
+        PhoneService.startServiceWithAction(getContext(), PhoneService.ACTION_REGISTER_PHONE_NUMBER, phoneNumber, "");
         getActivity().setResult(Activity.RESULT_OK);
         getActivity().finish();
     }
@@ -205,7 +203,6 @@ public class PurchaseFragment extends BaseFragment implements
 
     @Override
     public void onDestroy() {
-        mCheckout.stop();
         super.onDestroy();
     }
 

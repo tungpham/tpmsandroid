@@ -2,7 +2,6 @@ package com.ethan.morephone.presentation.buy.payment.purchase;
 
 import android.content.Context;
 
-import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 
@@ -16,7 +15,7 @@ public interface PurchaseContract {
 
         void showLoading(boolean isActive);
 
-        void buyIncomingPhoneNumberSuccess(IncomingPhoneNumber incomingPhoneNumber);
+        void buyIncomingPhoneNumberSuccess(String incomingPhoneNumber);
 
         void buyIncomingPhoneNumberFail();
     }

@@ -447,8 +447,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
         params.put("To", toPhoneNumber);
         if (mDevices.containsKey(fromPhoneNumber)) {
+//            retrieveCapabilityToken(fromPhoneNumber);
             mActiveConnection = mDevices.get(fromPhoneNumber).connect(params, this);
-            DebugTool.logD("MAKE A CALL : " + toPhoneNumber);
+            DebugTool.logD("MAKE A CALL : " + toPhoneNumber + " EXPERI: " + mDevices.get(fromPhoneNumber).getCapabilities().toString());
         } else {
             updateUIPhone(PHONE_STATE_DISCONNECTED, fromPhoneNumber, toPhoneNumber);
             Toast.makeText(getContext(), "No existing device", Toast.LENGTH_SHORT).show();

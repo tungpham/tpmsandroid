@@ -239,7 +239,7 @@ public class PhoneActivity extends BaseActivity implements
                     showIncomingFragment(fromPhoneNumber, toPhoneNumber);
                     DebugTool.logD("UPDATE INCOMING");
                 } else if (phoneState == PhoneService.PHONE_STATE_DISCONNECTED) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_disconnected), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_disconnected), Toast.LENGTH_SHORT).show();
                     finish();
                 } else if (phoneState == PhoneService.PHONE_STATE_HANG_UP) {
                     finish();
