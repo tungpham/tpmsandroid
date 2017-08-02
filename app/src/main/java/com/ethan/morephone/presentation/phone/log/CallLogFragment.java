@@ -158,6 +158,11 @@ public class CallLogFragment extends BaseFragment implements
         } else {
             phoneNumber = call.from;
         }
+        DebugTool.logD("PHONE NUMBER: " + phoneNumber);
+        if(phoneNumber.startsWith("client:")){
+            phoneNumber = phoneNumber.replace("client:", "");
+            DebugTool.logD("NOT REPLACE");
+        }
 
         PhoneActivity.starterOutgoing(getActivity(), mPhoneNumber, phoneNumber);
     }

@@ -481,6 +481,13 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     }
 
     private void processOutgoingRequest(String fromPhoneNumber, String toPhoneNumber) {
+
+        if(toPhoneNumber.contains("client:")){
+            toPhoneNumber.replace("client:", "");
+        }
+        fromPhoneNumber = fromPhoneNumber.trim();
+        toPhoneNumber = toPhoneNumber.trim();
+
         Map<String, String> params = new HashMap<>();
 //        toPhoneNumber = "client:" + toPhoneNumber.trim();
         for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
