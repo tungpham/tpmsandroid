@@ -167,21 +167,6 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
 
     }
 
-//    public String loadJSONFromAsset() {
-//        String json;
-//        try {
-//            InputStream is = mContext.getAssets().open("fake_data.json");
-//            int size = is.available();
-//            byte[] buffer = new byte[size];
-//            is.read(buffer);
-//            is.close();
-//            json = new String(buffer, "UTF-8");
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//            return null;
-//        }
-//        return json;
-//    }
 
     public List<MessageItem> parseMessageIncoming(FakeData mFakeData, String phoneNumberIncoming) {
         List<MessageItem> messageItems = new ArrayList<>();
@@ -254,7 +239,6 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
             public void onSuccess(CreateMessage.ResponseValue response) {
-//                mView.showProgress(false, position);
                 mView.showLoading(false);
                 mView.createMessageSuccess(response.getMessageItem());
             }

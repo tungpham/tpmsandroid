@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +46,7 @@ public class MessageListFragment extends BaseFragment implements
         MessageDialog.MessageDialogListener {
 
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+    public static final String BUNDLE_MESSAGE_BODY = "BUNDLE_MESSAGE_BODY";
 
     public static MessageListFragment getInstance(Bundle bundle) {
         MessageListFragment messageListFragment = new MessageListFragment();
@@ -64,6 +66,7 @@ public class MessageListFragment extends BaseFragment implements
 
     private RecyclerView mRecyclerView;
 
+    private String mMessageBody;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +86,7 @@ public class MessageListFragment extends BaseFragment implements
         setHasOptionsMenu(true);
 
         mPhoneNumberFrom = getArguments().getString(BUNDLE_PHONE_NUMBER);
+        mMessageBody = getArguments().getString(BUNDLE_MESSAGE_BODY);
 
         view.findViewById(R.id.image_send).setOnClickListener(this);
 
@@ -106,6 +110,7 @@ public class MessageListFragment extends BaseFragment implements
                 mRecyclerView.scrollToPosition(mMessageListAdapter.getItemCount() - 1);
             }
         });
+
 
 //        mPresenter.loadMessages(mPhoneNumberTo, mPhoneNumberFrom);
         return view;
@@ -168,6 +173,7 @@ public class MessageListFragment extends BaseFragment implements
     @Override
     public void showMessages(List<MessageItem> messageItems) {
         mMessageListAdapter.replaceData(messageItems);
+
     }
 
     @Override
@@ -221,5 +227,9 @@ public class MessageListFragment extends BaseFragment implements
 
         showMessages(conversationModel.getMessageItems());
         mPhoneNumberTo = conversationModel.getPhoneNumber();
+
+        if(!TextUtils.isEmpty(mMessageBody)){
+            mPresenter.createMessage(MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size() - 1);
+        }
     }
 }

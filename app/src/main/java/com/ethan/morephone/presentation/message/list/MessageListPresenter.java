@@ -3,6 +3,7 @@ package com.ethan.morephone.presentation.message.list;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.message.CreateMessage;
@@ -55,7 +56,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
 
     @Override
     public void createMessage(String userId, String to, String from, String body, final int position) {
-        MessageItem messageItem = new MessageItem(
+        final MessageItem messageItem = new MessageItem(
                 "",
                 "",
                 "",
@@ -76,8 +77,14 @@ public class MessageListPresenter implements MessageListContract.Presenter {
                 "",
                 "",
                 null);
-        mView.createMessageSuccess(messageItem);
+//        mView.createMessageSuccess(messageItem);
 //        mView.showProgress(true, position);
+        DebugTool.logD("TO : " + to);
+        DebugTool.logD("FROM : " + from);
+        DebugTool.logD("BODY : " + body);
+        DebugTool.logD("userId : " + userId);
+        mView.createMessageSuccess(messageItem);
+
         CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(userId, to, from, body);
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
@@ -87,6 +94,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
 
             @Override
             public void onError() {
+                mView.createMessageError();
 //                mView.showProgress(false, position);
             }
         });

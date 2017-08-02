@@ -10,7 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
-import com.ethan.morephone.MyPreference;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -64,7 +63,7 @@ public class ConversationsFragment extends BaseFragment implements
 
     private ConversationsContract.Presenter mPresenter;
 
-//    private Toolbar mToolbar;
+    //    private Toolbar mToolbar;
     private MultiSwipeRefreshLayout mSwipeRefreshLayout;
 
     private String mPhoneNumber;
@@ -144,45 +143,6 @@ public class ConversationsFragment extends BaseFragment implements
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//
-//            case android.R.id.home:
-//                getActivity().finish();
-//                break;
-//
-//            default:
-//                break;
-//        }
-//        return true;
-//    }
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.menu_conversation, menu);
-//
-//        final MenuItem item = menu.findItem(R.id.action_search);
-//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-//        searchView.setOnQueryTextListener(this);
-//
-//        MenuItemCompat.setOnActionExpandListener(item,
-//                new MenuItemCompat.OnActionExpandListener() {
-//                    @Override
-//                    public boolean onMenuItemActionCollapse(MenuItem item) {
-//                        // Do something when collapsed
-////                        mConversationListAdapter.setFilter(mConversationEntities);
-//                        return true; // Return true to collapse action view
-//                    }
-//
-//                    @Override
-//                    public boolean onMenuItemActionExpand(MenuItem item) {
-//                        // Do something when expanded
-//                        return true; // Return true to expand action view
-//                    }
-//                });
-//    }
 
     @Override
     public boolean onQueryTextChange(String newText) {
@@ -284,15 +244,57 @@ public class ConversationsFragment extends BaseFragment implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == DashboardFrag.REQUEST_COMPOSE){
-            if(resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == DashboardFrag.REQUEST_COMPOSE) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+
                 String body = data.getStringExtra(EXTRA_MESSAGE_BODY);
                 String[] tos = data.getStringArrayExtra(EXTRA_MESSAGE_TO);
-                for (String to : tos) {
-                    if (!TextUtils.isEmpty(to)) {
-                        mPresenter.createMessage(MyPreference.getUserId(getContext()), to, mPhoneNumber, body, 0);
+
+                if (tos != null && tos.length != 0) {
+                    if (tos.length == 1) {
+                        String toPhoneNumber = tos[0];
+                        DebugTool.logD("toPhoneNumber: " + toPhoneNumber);
+                        List<ConversationModel> conversationModels = mConversationListAdapter.getData();
+                        if (conversationModels != null && !conversationModels.isEmpty()) {
+                            for (ConversationModel model : conversationModels) {
+                                DebugTool.logD("PHONE NUMBER: " + model.getPhoneNumber());
+                                if (model.getPhoneNumber().trim().equals(toPhoneNumber.trim())) {
+                                    EventBus.getDefault().postSticky(model);
+                                    Intent intent = new Intent(getActivity(), MessageListActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
+                                    bundle.putString(MessageListFragment.BUNDLE_MESSAGE_BODY, body);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    DebugTool.logD("SEND: " + body);
+                                    return;
+                                }
+                            }
+                        }
+
+                        ConversationModel model = new ConversationModel(toPhoneNumber, "", new ArrayList<MessageItem>());
+                        EventBus.getDefault().postSticky(model);
+                        Intent intent = new Intent(getActivity(), MessageListActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
+                        bundle.putString(MessageListFragment.BUNDLE_MESSAGE_BODY, body);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        DebugTool.logD("OUTSIDE: " + body);
+
+                    } else {
+
+                        //Send to group
+
                     }
                 }
+
+//                for (String to : tos) {
+//                    if (!TextUtils.isEmpty(to)) {
+//                        mPresenter.createMessage(MyPreference.getUserId(getContext()), to, mPhoneNumber, body, 0);
+//                    }
+//                }
+
             }
         }
     }

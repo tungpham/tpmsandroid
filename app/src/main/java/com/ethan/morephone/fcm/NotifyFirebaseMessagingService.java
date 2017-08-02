@@ -17,11 +17,9 @@ import android.text.TextUtils;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.main.MainActivity;
-import com.ethan.morephone.presentation.message.reply.MessageReplyActivity;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.presentation.record.SoundPoolManager;
 import com.ethan.morephone.presentation.record.TestVoiceActivity;
-import com.ethan.morephone.utils.LifecycleHandler;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.twilio.voice.CallInvite;
@@ -123,22 +121,22 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
      * @param message GCM message received.
      */
     private void sendSmsNotification(String title, String message) {
-        if (!LifecycleHandler.isApplicationVisible()) {
-            Intent popupIntent = new Intent(getApplicationContext(), MessageReplyActivity.class);
-            popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            if (!TextUtils.isEmpty(title) && title.contains("-")) {
-                String str[] = title.split("-");
-                if (str != null && str.length == 2) {
-                    popupIntent.putExtra(MessageReplyActivity.EXTRA_PHONE_NUMBER_FROM, str[0]);
-                    popupIntent.putExtra(MessageReplyActivity.EXTRA_PHONE_NUMBER_TO, str[1]);
-                }
-            }
-
-
-            popupIntent.putExtra(MessageReplyActivity.EXTRA_MESSAGE_BODY, message);
-            startActivity(popupIntent);
-        } else {
+//        if (!LifecycleHandler.isApplicationVisible()) {
+//            Intent popupIntent = new Intent(getApplicationContext(), MessageReplyActivity.class);
+//            popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//            if (!TextUtils.isEmpty(title) && title.contains("-")) {
+//                String str[] = title.split("-");
+//                if (str != null && str.length == 2) {
+//                    popupIntent.putExtra(MessageReplyActivity.EXTRA_PHONE_NUMBER_FROM, str[0]);
+//                    popupIntent.putExtra(MessageReplyActivity.EXTRA_PHONE_NUMBER_TO, str[1]);
+//                }
+//            }
+//
+//
+//            popupIntent.putExtra(MessageReplyActivity.EXTRA_MESSAGE_BODY, message);
+//            startActivity(popupIntent);
+//        } else {
 
 
             Intent intent = new Intent(this, MainActivity.class);
@@ -166,7 +164,7 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
 
 
 
-        }
+//        }
 
 
     }

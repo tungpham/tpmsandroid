@@ -103,13 +103,6 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
                 intent.putExtra(ConversationsFragment.EXTRA_MESSAGE_TO, getRecipientAddresses());
                 getActivity().setResult(Activity.RESULT_OK, intent);
                 getActivity().finish();
-//                mEditTextBody.setText("");
-//
-//                for (String to : getRecipientAddresses()) {
-//                    if (!TextUtils.isEmpty(to)) {
-//                        mPresenter.createMessage(to, mPhoneNumber, body, 0);
-//                    }
-//                }
                 break;
             default:
                 break;
