@@ -16,7 +16,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.android.morephone.data.BaseUrl;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.TwilioManager;
 import com.ethan.morephone.MyPreference;
@@ -48,7 +47,6 @@ import static com.twilio.client.impl.TwilioImpl.getContext;
 public class PhoneService extends Service implements DeviceListener, ConnectionListener {
 
     //    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
-    private static final String TOKEN_SERVICE_URL = BaseUrl.BASE_URL + "call/token";
 
     private static final long PROGRESS_UPDATE_INTERNAL = 10;
     private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 10;
@@ -305,6 +303,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                         @Override
                         public void run() {
 //                            registerPhoneNumber();
+                            DebugTool.logD("PHONE STATE: " + mPhoneState);
                             if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
                                 registerPhoneNumberAgain();
                             }

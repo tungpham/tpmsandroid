@@ -265,6 +265,9 @@ public class MessageListFragment extends BaseFragment implements
                 String fromPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_FROM_PHONE_NUMBER);
                 String toPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_TO_PHONE_NUMBER);
 
+                if(MyPreference.getPhoneNumber(getContext()).equals(fromPhoneNumber)){
+                    return;
+                }
 
                 final MessageItem messageItem = new MessageItem(
                         "",
