@@ -25,8 +25,6 @@ import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.phone.dial.DialFragment;
 import com.ethan.morephone.presentation.phone.incoming.IncomingFragment;
 import com.ethan.morephone.utils.ActivityUtils;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 import com.twilio.client.Connection;
 import com.twilio.client.ConnectionListener;
 import com.twilio.client.Device;
@@ -309,25 +307,25 @@ public class InCallActivity extends BaseActivity implements
 
         DebugTool.logD("NAME PHONE: " + newClientProfile.getName());
         DebugTool.logD("URL: " + b.toString());
-        Ion.with(getContext())
-                .load(b.toString())
-                .asString()
-                .setCallback(new FutureCallback<String>() {
-                    @Override
-                    public void onCompleted(Exception e, String capabilityToken) {
-                        if (e == null) {
-
-                            // Update the current Client Profile to represent current properties
-                            clientProfile = newClientProfile;
-
-                            DebugTool.logD("NEW: " + clientProfile.getName());
-                            // Create a Device with the Capability Token
-                            createDevice(capabilityToken);
-                        } else {
-                            Toast.makeText(getContext(), "Error retrieving token", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+//        Ion.with(getContext())
+//                .load(b.toString())
+//                .asString()
+//                .setCallback(new FutureCallback<String>() {
+//                    @Override
+//                    public void onCompleted(Exception e, String capabilityToken) {
+//                        if (e == null) {
+//
+//                            // Update the current Client Profile to represent current properties
+//                            clientProfile = newClientProfile;
+//
+//                            DebugTool.logD("NEW: " + clientProfile.getName());
+//                            // Create a Device with the Capability Token
+//                            createDevice(capabilityToken);
+//                        } else {
+//                            Toast.makeText(getContext(), "Error retrieving token", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
     }
 
 

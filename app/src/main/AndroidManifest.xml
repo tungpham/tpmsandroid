@@ -17,19 +17,21 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <!-- needed for monitoring network availability -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <!-- needed to enable/disable the speakerphone -->
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <!-- needed to receive audio from microphone during a call -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
-    <permission android:name="com.morephone.tpms.permission.C2D_MESSAGE"
+    <permission
+        android:name="com.morephone.tpms.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.morephone.tpms.permission.C2D_MESSAGE" />
 
@@ -37,6 +39,7 @@
         android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
@@ -44,7 +47,9 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".presentation.splash.SplashActivity">
+        <activity
+            android:name=".presentation.splash.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,7 +60,8 @@
 
         <activity
             android:name=".presentation.authentication.AuthenticationActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -72,49 +78,101 @@
         </activity>
 
 
-        <activity android:name=".presentation.main.MainActivity" />
+        <activity
+            android:name=".presentation.main.MainActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".presentation.message.conversation.ConversationsActivity" />
-        <activity android:name=".presentation.message.list.MessageListActivity" />
-        <activity android:name=".presentation.message.compose.ComposeActivity" />
-        <activity android:name=".presentation.buy.payment.purchase.PurchaseActivity" />
+        <activity
+            android:name=".presentation.message.conversation.ConversationsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.message.list.MessageListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.message.compose.ComposeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.buy.payment.purchase.PurchaseActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".presentation.record.RecordActivity" />
+        <activity
+            android:name=".presentation.record.RecordActivity"
+            android:screenOrientation="portrait" />
         <!--<activity android:name=".presentation.record.TestVoiceActivity" />-->
 
-        <activity android:name=".presentation.authentication.register.RegisterActivity" />
-        <activity android:name=".presentation.authentication.register.name.RegisterNameActivity" />
-        <activity android:name=".presentation.authentication.register.email.RegisterEmailActivity" />
-        <activity android:name=".presentation.authentication.register.password.RegisterPasswordActivity" />
+        <activity
+            android:name=".presentation.authentication.register.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.authentication.register.name.RegisterNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.authentication.register.email.RegisterEmailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.authentication.register.password.RegisterPasswordActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".presentation.authentication.login.LoginActivity" />
-        <activity android:name=".presentation.authentication.login.forgot.ForgotPasswordActivity" />
+        <activity
+            android:name=".presentation.authentication.login.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.authentication.login.forgot.ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".presentation.dashboard.DashboardActivity" />
+        <activity
+            android:name=".presentation.dashboard.DashboardActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".presentation.numbers.IncomingPhoneNumbersActivity" />
-        <activity android:name=".presentation.buy.SearchPhoneNumberActivity" />
-        <activity android:name=".presentation.buy.result.AvailablePhoneNumberActivity" />
-        <activity android:name=".presentation.buy.payment.card.CardActivity" />
-        <activity android:name=".presentation.buy.payment.PaymentActivity" />
+        <activity
+            android:name=".presentation.numbers.IncomingPhoneNumbersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.buy.SearchPhoneNumberActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.buy.result.AvailablePhoneNumberActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.buy.payment.card.CardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.buy.payment.PaymentActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".presentation.buy.payment.fund.AddFundActivity" />
+        <activity
+            android:name=".presentation.buy.payment.fund.AddFundActivity"
+            android:screenOrientation="portrait" />
 
         <!--<activity android:name=".presentation.phone.CallActivity" />-->
-        <activity android:name=".presentation.setting.SettingActivity" />
-        <activity android:name=".presentation.license.LicenseActivity" />
-        <activity android:name=".presentation.usage.UsageActivity" />
-        <activity android:name=".presentation.phone.PhoneActivity" />
-        <activity android:name=".presentation.message.reply.MessageReplyActivity"
-            android:theme="@style/Theme.Transparent"/>
+        <activity
+            android:name=".presentation.setting.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.license.LicenseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.usage.UsageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.phone.PhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.message.reply.MessageReplyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".presentation.phone.incall.InCallActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
-        <activity android:name=".presentation.phone.callingscreen.CallingScreenActivity" />
+        <activity
+            android:name=".presentation.phone.callingscreen.CallingScreenActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".presentation.phone.dial.DialActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <service
@@ -167,16 +225,14 @@
             android:name=".fcm.BindingIntentService"
             android:exported="false" />
 
-        <service
-            android:name=".fcm.NotifyFirebaseMessagingService">
+        <service android:name=".fcm.NotifyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <!-- [END fcm_listener] -->
         <!-- [START instanceId_listener] -->
-        <service
-            android:name=".fcm.NotifyFirebaseInstanceIDService" >
+        <service android:name=".fcm.NotifyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

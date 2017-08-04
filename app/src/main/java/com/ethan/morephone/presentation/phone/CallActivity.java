@@ -29,8 +29,6 @@ import android.widget.Toast;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 import com.twilio.client.Connection;
 import com.twilio.client.ConnectionListener;
 import com.twilio.client.Device;
@@ -289,24 +287,24 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
             b.appendQueryParameter("client", newClientProfile.getName());
         }
 
-        Ion.with(getApplicationContext())
-                .load(b.toString())
-                .asString()
-                .setCallback(new FutureCallback<String>() {
-                    @Override
-                    public void onCompleted(Exception e, String capabilityToken) {
-                        if (e == null) {
-
-                            // Update the current Client Profile to represent current properties
-                            CallActivity.this.clientProfile = newClientProfile;
-
-                            // Create a Device with the Capability Token
-                            createDevice(capabilityToken);
-                        } else {
-                            Toast.makeText(CallActivity.this, "Error retrieving token", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+//        Ion.with(getApplicationContext())
+//                .load(b.toString())
+//                .asString()
+//                .setCallback(new FutureCallback<String>() {
+//                    @Override
+//                    public void onCompleted(Exception e, String capabilityToken) {
+//                        if (e == null) {
+//
+//                            // Update the current Client Profile to represent current properties
+//                            CallActivity.this.clientProfile = newClientProfile;
+//
+//                            // Create a Device with the Capability Token
+//                            createDevice(capabilityToken);
+//                        } else {
+//                            Toast.makeText(CallActivity.this, "Error retrieving token", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
     }
 
     /*

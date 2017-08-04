@@ -54,7 +54,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 
     public final static String ACTION_REGISTER_PHONE_NUMBER = "com.ethan.morephone.action.ACTION_REGISTER_PHONE_NUMBER";
-    public final static String ACTION_UNREGISTER_PHONE_NUMBER = "com.ethan.morephone.action.UNACTION_REGISTER_PHONE_NUMBER";
+    public final static String ACTION_UNREGISTER_PHONE_NUMBER = "com.ethan.morephone.action.ACTION_UNREGISTER_PHONE_NUMBER";
 
     public final static String ACTION_OUTGOING = "com.ethan.morephone.action.OUTGOING";
     public final static String ACTION_INCOMING = "com.ethan.morephone.action.INCOMING";
@@ -323,8 +323,11 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         final Set<String> phoneNumberUsages = MyPreference.getPhoneNumberUsage(getApplicationContext());
 
         if (phoneNumberUsages != null) {
-            DebugTool.logD("REGISTER PHONE USAGE ");
+            DebugTool.logD("REGISTER PHONE USAGE: " + phoneNumberUsages.size());
+
             if (Twilio.isInitialized()) {
+                DebugTool.logD("TWILIO INITED: AND LOAD PHONE: " + mDevices.size());
+
                 for (String phone : phoneNumberUsages) {
                     retrieveCapabilityToken(phone);
                 }
@@ -333,6 +336,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                 Twilio.initialize(getApplicationContext(), new Twilio.InitListener() {
                     @Override
                     public void onInitialized() {
+                        DebugTool.logD("TWILIO INITED SUCCESS " + mDevices.size());
                         for (String phone : phoneNumberUsages) {
                             retrieveCapabilityToken(phone);
                         }
@@ -364,7 +368,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     }
 
     private void retrieveCapabilityToken(final String phoneNumber) {
-        DebugTool.logD("REGISTER DEVICE NUMER");
+        DebugTool.logD("REGISTER DEVICE NUMER: " + phoneNumber);
 
         TwilioCapability capability = new TwilioCapability(TwilioManager.getSid(getApplicationContext()), TwilioManager.getAuthCode(getApplicationContext()));
         capability.allowClientOutgoing(TwilioManager.getApplicationSid(getApplicationContext()));
@@ -451,12 +455,14 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         }
 
         Set<String> savePhoneNumber = MyPreference.getPhoneNumberUsage(getApplicationContext());
-        for (String str : savePhoneNumber) {
-            if (!str.equals(phoneNumber)) {
-                savePhoneNumber.add(phoneNumber);
-                break;
-            }
+
+        DebugTool.logD("savePhoneNumber SIZE: " + savePhoneNumber.size());
+
+        if(!savePhoneNumber.contains(phoneNumber)){
+            savePhoneNumber.add(phoneNumber);
         }
+
+        DebugTool.logD("savePhoneNumber AFTER SIZE: " + savePhoneNumber.size());
 
         MyPreference.setPhoneNumberUsage(getApplicationContext(), savePhoneNumber);
 

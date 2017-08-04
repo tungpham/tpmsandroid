@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.FakeData;
+import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
@@ -78,6 +79,7 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
                 if (response.isSuccessful() && response.body() != null && response.body().getStatus() == HTTPStatus.OK.getStatusCode()) {
                     Toast.makeText(context, context.getString(R.string.delete_phone_number_success), Toast.LENGTH_SHORT).show();
                     PhoneService.startServiceWithAction(context, PhoneService.ACTION_UNREGISTER_PHONE_NUMBER, response.body().getResponse().getPhoneNumber(), "");
+
                     Set<String> phoneNumberUsage = MyPreference.getPhoneNumberUsage(context);
                     phoneNumberUsage.remove(response.body().getResponse().getPhoneNumber());
                     MyPreference.setPhoneNumberUsage(context, phoneNumberUsage);
@@ -92,7 +94,7 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
     }
 
     @Override
-    public void loadIncomingPhoneNumbers(Context context) {
+    public void loadIncomingPhoneNumbers(final Context context) {
         mView.showLoading(true);
         DebugTool.logD("LOAD INCOMING PHONE");
         ApiManager.getIncomingPhoneNumbers(context, new Callback<IncomingPhoneNumbers>() {
@@ -101,6 +103,12 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
                 if (response.isSuccessful()) {
                     IncomingPhoneNumbers incomingPhoneNumbers = response.body();
                     if (incomingPhoneNumbers != null && incomingPhoneNumbers.incomingPhoneNumbers != null && !incomingPhoneNumbers.incomingPhoneNumbers.isEmpty()) {
+
+                        for (final IncomingPhoneNumber incomingPhoneNumber : incomingPhoneNumbers.incomingPhoneNumbers) {
+                            PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
+                        }
+
+
                         mView.showPhoneNumbers(incomingPhoneNumbers.incomingPhoneNumbers);
                     } else {
                         mView.emptyPhoneNumber();

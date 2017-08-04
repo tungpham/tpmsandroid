@@ -193,9 +193,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     public void showPhoneNumbers(List<IncomingPhoneNumber> numberEntities) {
         if (isAdded()) {
 
-            for (final IncomingPhoneNumber incomingPhoneNumber : numberEntities) {
-                PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
-            }
 
 //            MyPreference.setPhoneNumberUsage(getContext(), phoneNumberUsages);
 

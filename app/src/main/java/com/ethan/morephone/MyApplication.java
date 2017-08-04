@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
 import com.ethan.morephone.presentation.buy.payment.checkout.PlayStoreListener;
+import com.facebook.stetho.Stetho;
 
 import javax.annotation.Nonnull;
 
@@ -70,6 +71,8 @@ public class MyApplication extends MultiDexApplication {
                 Toast.makeText(MyApplication.this, R.string.purchases_changed, Toast.LENGTH_LONG).show();
             }
         });
+
+        Stetho.initializeWithDefaults(this);
     }
 
     @Override

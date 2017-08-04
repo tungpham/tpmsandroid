@@ -74,7 +74,9 @@ public class ApiMorePhone {
                             .readTimeout(60, TimeUnit.SECONDS)
                             .connectTimeout(60, TimeUnit.SECONDS)
                             .addInterceptor(logging)
+//                            .addNetworkInterceptor((Interceptor) new StethoInterceptor())
                             .build();
+
                     mRetrofit = new Retrofit.Builder()
                             .baseUrl(BaseUrl.BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create())

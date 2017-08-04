@@ -78,6 +78,7 @@ public class ApiManager {
                             .readTimeout(60, TimeUnit.SECONDS)
                             .connectTimeout(60, TimeUnit.SECONDS)
                             .addInterceptor(logging)
+//                            .addNetworkInterceptor((Interceptor) new StethoInterceptor())
                             .build();
                     mRetrofit = new Retrofit.Builder()
                             .baseUrl(BASE_URL)
