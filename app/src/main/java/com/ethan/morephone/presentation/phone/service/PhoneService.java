@@ -20,6 +20,7 @@ import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.TwilioManager;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
+import com.ethan.morephone.presentation.record.SoundPoolManager;
 import com.ethan.morephone.token.CapabilityToken;
 import com.ethan.morephone.token.TwilioCapability;
 import com.ethan.morephone.utils.EnumUtil;
@@ -55,6 +56,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     public final static String ACTION_REGISTER_PHONE_NUMBER = "com.ethan.morephone.action.ACTION_REGISTER_PHONE_NUMBER";
     public final static String ACTION_UNREGISTER_PHONE_NUMBER = "com.ethan.morephone.action.ACTION_UNREGISTER_PHONE_NUMBER";
+
+    public final static String ACTION_SOUND_RINGING = "com.ethan.morephone.action.ACTION_SOUND_RINGING";
+    public final static String ACTION_SOUND_STOP = "com.ethan.morephone.action.ACTION_SOUND_STOP";
 
     public final static String ACTION_OUTGOING = "com.ethan.morephone.action.OUTGOING";
     public final static String ACTION_INCOMING = "com.ethan.morephone.action.INCOMING";
@@ -107,6 +111,16 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     private final IBinder mBinder = new LocalBinder();
 
+    private SoundPoolManager soundPoolManager;
+
+    public static void startServiceWithAction(Context context, String action) {
+        Intent intent = new Intent(context, PhoneService.class);
+        if (action != null) {
+            intent.setAction(action);
+        }
+        context.startService(intent);
+    }
+
     public static void startServiceWithAction(Context context, String action, String fromPhoneNumber, String toPhoneNumber) {
         Intent intent = new Intent(context, PhoneService.class);
         intent.putExtra(EXTRA_FROM_PHONE_NUMBER, fromPhoneNumber);
@@ -143,6 +157,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onCreate() {
 
+        soundPoolManager = SoundPoolManager.getInstance(this);
+
         mExecutorService = Executors.newSingleThreadScheduledExecutor();
 
         mDevices = new HashMap<>();
@@ -171,7 +187,11 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             mToPhoneNumber = intent.getStringExtra(EXTRA_TO_PHONE_NUMBER);
             String digit = intent.getStringExtra(EXTRA_SEND_DIGIT);
 
-            if (action.equals(ACTION_REGISTER_PHONE_NUMBER))
+            if (action.equals(ACTION_SOUND_RINGING))
+                soundPoolManager.playRinging();
+            else if (action.equals(ACTION_SOUND_STOP))
+                soundPoolManager.stopRinging();
+            else if (action.equals(ACTION_REGISTER_PHONE_NUMBER))
                 registerDevicePhoneNumber(mFromPhoneNumber);
             else if (action.equals(ACTION_UNREGISTER_PHONE_NUMBER))
                 unRegisterDevicePhoneNumber(mFromPhoneNumber);
@@ -458,7 +478,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
         DebugTool.logD("savePhoneNumber SIZE: " + savePhoneNumber.size());
 
-        if(!savePhoneNumber.contains(phoneNumber)){
+        if (!savePhoneNumber.contains(phoneNumber)) {
             savePhoneNumber.add(phoneNumber);
         }
 
@@ -487,7 +507,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     private void processOutgoingRequest(String fromPhoneNumber, String toPhoneNumber) {
 
-        if(toPhoneNumber.contains("client:")){
+        if (toPhoneNumber.contains("client:")) {
             toPhoneNumber.replace("client:", "");
         }
         fromPhoneNumber = fromPhoneNumber.trim();
@@ -654,6 +674,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onDestroy() {
         super.onDestroy();
+        soundPoolManager.release();
         mExecutorService.shutdown();
         stopDonutProgressUpdate();
     }

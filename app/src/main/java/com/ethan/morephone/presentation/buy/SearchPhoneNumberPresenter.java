@@ -2,10 +2,13 @@ package com.ethan.morephone.presentation.buy;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.number.GetAvailableCountries;
+import com.ethan.morephone.R;
+import com.ethan.morephone.utils.Utils;
 
 /**
  * Created by Ethan on 4/3/17.
@@ -29,6 +32,11 @@ public class SearchPhoneNumberPresenter implements SearchPhoneNumberContract.Pre
     }
     @Override
     public void loadAvailableCountries(Context context) {
+        if(!Utils.isInternetAvailable(context)){
+            Toast.makeText(context, context.getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
+            mView.loadEmptyCountries();
+            return;
+        }
         mView.showLoading(true);
 
         GetAvailableCountries.RequestValue requestValue = new GetAvailableCountries.RequestValue();
@@ -42,6 +50,7 @@ public class SearchPhoneNumberPresenter implements SearchPhoneNumberContract.Pre
             @Override
             public void onError() {
                 mView.showLoading(false);
+                mView.loadEmptyCountries();
             }
         });
     }

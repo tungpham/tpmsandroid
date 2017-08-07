@@ -30,15 +30,12 @@ import com.ethan.morephone.presentation.main.RequirePhoneNumberDialog;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersViewHolder;
-import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.utils.Injection;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.twilio.client.impl.TwilioImpl.context;
 
 /**
  * Created by Ethan on 3/16/17.
@@ -163,7 +160,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
 
         Intent intent = new Intent(getActivity(), DashboardActivity.class);
-        intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false);
+        intent.putExtra(DashboardFrag.BUNDLE_FRAGMENT_MODE, DashboardFrag.BUNDLE_FRAGMENT_MESSAGE);
         startActivity(intent);
 
     }
@@ -177,8 +174,22 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
 
         Intent intent = new Intent(getActivity(), DashboardActivity.class);
-        intent.putExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, true);
+        intent.putExtra(DashboardFrag.BUNDLE_FRAGMENT_MODE, DashboardFrag.BUNDLE_FRAGMENT_RECORD);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemDial(IncomingPhoneNumbersViewHolder holder, int pos) {
+        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
+        storePhoneNumber(incomingPhoneNumber);
+
+        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
+        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
+
+        Intent intent = new Intent(getActivity(), DashboardActivity.class);
+        intent.putExtra(DashboardFrag.BUNDLE_FRAGMENT_MODE, DashboardFrag.BUNDLE_FRAGMENT_DIAL);
+        startActivity(intent);
+
     }
 
     @Override

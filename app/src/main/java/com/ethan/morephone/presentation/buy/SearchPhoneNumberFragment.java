@@ -29,7 +29,8 @@ import java.util.List;
 public class SearchPhoneNumberFragment extends BaseFragment implements
         View.OnClickListener,
         AdapterView.OnItemSelectedListener,
-        SearchPhoneNumberContract.View {
+        SearchPhoneNumberContract.View,
+        AlertGetCountryDialog.AlertGetCountryListener{
 
     public static final String BUNDLE_COUNTRY_NAME = "BUNDLE_COUNTRY_NAME";
     public static final String BUNDLE_COUNTRY_CODE = "BUNDLE_COUNTRY_CODE";
@@ -90,6 +91,7 @@ public class SearchPhoneNumberFragment extends BaseFragment implements
         switch (view.getId()) {
 
             case R.id.button_buy_number_search:
+                if(mSpinnerCountry.getSelectedItem() == null) return;
 
                 String countryName = ((AvailableCountry) mSpinnerCountry.getSelectedItem()).country;
                 String countryCode = ((AvailableCountry) mSpinnerCountry.getSelectedItem()).countryCode;
@@ -128,13 +130,23 @@ public class SearchPhoneNumberFragment extends BaseFragment implements
 
     @Override
     public void showLoading(boolean isActive) {
-        if (isActive) showProgress();
-        else hideProgress();
+        if(isAdded()) {
+            if (isActive) showProgress();
+            else hideProgress();
+        }
     }
 
     @Override
     public void showAvailableCountries(List<AvailableCountry> availableCountries) {
         mCountryAdapter.replaceData(availableCountries);
+    }
+
+    @Override
+    public void loadEmptyCountries() {
+        AlertGetCountryDialog recordDialog = AlertGetCountryDialog.getInstance();
+        recordDialog.setCancelable(false);
+        recordDialog.show(getChildFragmentManager(), AlertGetCountryDialog.class.getSimpleName());
+        recordDialog.setAlertGetCountryListener(this);
     }
 
     @Override
@@ -149,5 +161,10 @@ public class SearchPhoneNumberFragment extends BaseFragment implements
             getActivity().setResult(Activity.RESULT_OK);
             getActivity().finish();
         }
+    }
+
+    @Override
+    public void onLoadCountry() {
+        mPresenter.loadAvailableCountries(getContext());
     }
 }

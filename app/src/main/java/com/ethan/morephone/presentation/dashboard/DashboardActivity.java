@@ -56,7 +56,7 @@ public class DashboardActivity extends BaseActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        DashboardFrag voiceFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), getIntent().getBooleanExtra(DashboardFrag.BUNDLE_CHOOSE_VOICE, false));
+        DashboardFrag voiceFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), getIntent().getIntExtra(DashboardFrag.BUNDLE_FRAGMENT_MODE, DashboardFrag.BUNDLE_FRAGMENT_MESSAGE));
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 voiceFragment,

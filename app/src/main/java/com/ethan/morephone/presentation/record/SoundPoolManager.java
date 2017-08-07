@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 
 import static android.content.Context.AUDIO_SERVICE;
@@ -44,6 +45,7 @@ public class SoundPoolManager {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
                 loaded = true;
+                DebugTool.logD("LOADED SOUND");
             }
 
         });
@@ -61,6 +63,7 @@ public class SoundPoolManager {
     public void playRinging() {
         if (loaded && !playing) {
             ringingStreamId = soundPool.play(ringingSoundId, volume, volume, 1, -1, 1f);
+            DebugTool.logD("RINGING");
             playing = true;
         }
     }

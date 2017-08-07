@@ -32,8 +32,16 @@ public class CountryAdapter extends ArrayAdapter<AvailableCountry> {
         replaceData(availableCountries);
     }
 
-    public void replaceData(List<AvailableCountry> availableCountries){
+    public void replaceData(List<AvailableCountry> availableCountries) {
         Collections.sort(availableCountries);
+        for (int i = availableCountries.size() - 1; i > 0; i--) {
+            if (availableCountries.get(i).countryCode.equals("US")) {
+                AvailableCountry availableCountry = availableCountries.get(i);
+                availableCountries.remove(availableCountry);
+                availableCountries.add(0, availableCountry);
+                break;
+            }
+        }
         mAvailableCountries = availableCountries;
         notifyDataSetChanged();
     }

@@ -19,9 +19,13 @@ public interface SearchPhoneNumberContract {
         void showLoading(boolean isActive);
 
         void showAvailableCountries(List<AvailableCountry> availableCountries);
+
+        void loadEmptyCountries();
     }
 
     interface Presenter extends BasePresenter {
         void loadAvailableCountries(Context context);
+
+
     }
 }

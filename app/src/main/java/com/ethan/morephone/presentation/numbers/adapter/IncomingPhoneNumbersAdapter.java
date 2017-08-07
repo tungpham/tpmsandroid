@@ -86,6 +86,14 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
             }
         });
 
+        holder.imageDial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnItemNumberClickListener != null)
+                    mOnItemNumberClickListener.onItemDial(holder, position);
+            }
+        });
+
     }
 
     @Override
@@ -123,5 +131,7 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
         void onItemMessage(IncomingPhoneNumbersViewHolder holder, int pos);
 
         void onItemVoice(IncomingPhoneNumbersViewHolder holder, int pos);
+
+        void onItemDial(IncomingPhoneNumbersViewHolder holder, int pos);
     }
 }

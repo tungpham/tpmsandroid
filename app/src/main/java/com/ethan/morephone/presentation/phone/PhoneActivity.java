@@ -181,6 +181,8 @@ public class PhoneActivity extends BaseActivity implements
                 R.id.content_frame,
                 IncomingFragment.class.getSimpleName());
         incomingFragment.setIncomingListener(this);
+
+        PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_SOUND_RINGING);
     }
 
     private void showDialFragment(String fromPhoneNumber, String toPhoneNumber) {
@@ -240,6 +242,7 @@ public class PhoneActivity extends BaseActivity implements
                     DebugTool.logD("UPDATE INCOMING");
                 } else if (phoneState == PhoneService.PHONE_STATE_DISCONNECTED) {
 //                    Toast.makeText(getApplicationContext(), getString(R.string.all_call_disconnected), Toast.LENGTH_SHORT).show();
+                    PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_SOUND_STOP);
                     finish();
                 } else if (phoneState == PhoneService.PHONE_STATE_HANG_UP) {
                     finish();
