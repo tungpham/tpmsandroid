@@ -181,8 +181,6 @@ public class PhoneActivity extends BaseActivity implements
                 R.id.content_frame,
                 IncomingFragment.class.getSimpleName());
         incomingFragment.setIncomingListener(this);
-
-        PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_SOUND_RINGING);
     }
 
     private void showDialFragment(String fromPhoneNumber, String toPhoneNumber) {
@@ -236,8 +234,10 @@ public class PhoneActivity extends BaseActivity implements
                 if (phoneState == PhoneService.PHONE_STATE_OUTGOING) {
                     showOutgoingFragment(fromPhoneNumber, toPhoneNumber);
                 } else if (phoneState == PhoneService.PHONE_STATE_IN_CALL) {
+                    PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_SOUND_STOP);
                     showInCallFragment(fromPhoneNumber, toPhoneNumber);
                 } else if (phoneState == PhoneService.PHONE_STATE_INCOMING) {
+                    PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_SOUND_RINGING);
                     showIncomingFragment(fromPhoneNumber, toPhoneNumber);
                     DebugTool.logD("UPDATE INCOMING");
                 } else if (phoneState == PhoneService.PHONE_STATE_DISCONNECTED) {
@@ -245,8 +245,10 @@ public class PhoneActivity extends BaseActivity implements
                     PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_SOUND_STOP);
                     finish();
                 } else if (phoneState == PhoneService.PHONE_STATE_HANG_UP) {
+                    PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_SOUND_STOP);
                     finish();
                 } else if (phoneState == PhoneService.PHONE_STATE_DECLINE) {
+                    PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_SOUND_STOP);
                     Toast.makeText(getApplicationContext(), getString(R.string.all_call_decline), Toast.LENGTH_SHORT).show();
                     finish();
                 }
