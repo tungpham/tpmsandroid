@@ -50,7 +50,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     //    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
 
     private static final long PROGRESS_UPDATE_INTERNAL = 10;
-    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 10;
+    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 60;
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 

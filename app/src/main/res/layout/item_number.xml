@@ -16,6 +16,7 @@
             style="@style/ViewDivider"
             android:layout_centerVertical="true"
             android:layout_marginLeft="2dp"
+            android:visibility="invisible"
             android:background="@android:color/white" />
 
         <com.ethan.morephone.widget.MyTextView
@@ -27,8 +28,7 @@
             android:id="@+id/image_delete"
             style="@style/ImageAction"
             android:layout_alignParentRight="true"
-            android:paddingLeft="@dimen/item_number_space"
-            android:paddingRight="@dimen/item_number_space"
+            android:padding="@dimen/item_number_padding"
             android:src="@drawable/ic_trash"
             android:visibility="visible" />
 
@@ -42,8 +42,7 @@
             android:id="@+id/image_dial"
             style="@style/ImageAction"
             android:layout_toLeftOf="@+id/view_0"
-            android:paddingLeft="@dimen/item_number_space"
-            android:paddingRight="@dimen/item_number_space"
+            android:padding="@dimen/item_number_padding"
             android:src="@drawable/dialpad"
             android:visibility="visible" />
 
@@ -66,8 +65,7 @@
             android:id="@+id/image_voice"
             style="@style/ImageAction"
             android:layout_toLeftOf="@+id/view_10"
-            android:paddingLeft="@dimen/item_number_space"
-            android:paddingRight="@dimen/item_number_space"
+            android:padding="@dimen/item_number_padding"
             android:src="@drawable/ic_voice"
             android:visibility="visible" />
 
@@ -81,8 +79,7 @@
             android:id="@+id/image_message"
             style="@style/ImageAction"
             android:layout_toLeftOf="@+id/view_2"
-            android:paddingLeft="@dimen/item_number_space"
-            android:paddingRight="@dimen/item_number_space"
+            android:padding="@dimen/item_number_padding"
             android:src="@drawable/message"
             android:visibility="visible" />
 
