@@ -15,6 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.HTTPStatus;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.main.MainActivity;
 import com.ethan.morephone.presentation.record.SoundPoolManager;
@@ -78,7 +79,11 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
         DebugTool.logD("From: " + from);
         DebugTool.logD("TO: " + message.getTo());
         if (message.getNotification() != null) {
-            sendSmsNotification(message.getNotification().getTitle(), message.getNotification().getBody());
+            if (message.getNotification().getTitle().equals(HTTPStatus.MONEY.getReasonPhrase())) {
+                NotificationHelpper.moneyNotification(getApplicationContext());
+            } else {
+                sendSmsNotification(message.getNotification().getTitle(), message.getNotification().getBody());
+            }
         } else {
 
             Map<String, String> dataTest = message.getData();
@@ -116,6 +121,26 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
 //        }
     }
 
+    private void moneyNotification(Context context){
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(getString(R.string.notification_money_title))
+                .setContentText(getString(R.string.notification_money_description))
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(NOTIFY_MESSAGE_ID, notificationBuilder.build());
+    }
+
     /**
      * Create and show a simple notification containing the GCM message.
      *
@@ -140,32 +165,30 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
 //        } else {
 
 
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                    PendingIntent.FLAG_ONE_SHOT);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-            if (!TextUtils.isEmpty(title) && title.contains("-")) {
-                String str[] = title.split("-");
-                if (str != null && str.length == 2) {
-                    Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .setContentTitle(str[0])
-                            .setContentText(message)
-                            .setAutoCancel(true)
-                            .setSound(defaultSoundUri)
-                            .setContentIntent(pendingIntent);
+        if (!TextUtils.isEmpty(title) && title.contains("-")) {
+            String str[] = title.split("-");
+            if (str != null && str.length == 2) {
+                Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(str[0])
+                        .setContentText(message)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent);
 
-                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-                    notificationManager.notify(NOTIFY_MESSAGE_ID, notificationBuilder.build());
+                notificationManager.notify(NOTIFY_MESSAGE_ID, notificationBuilder.build());
 
-                    updateMessage(str[0], str[1], message);
-                }
-
+                updateMessage(str[0], str[1], message);
             }
 
+        }
 
 
 //        }

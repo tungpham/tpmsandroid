@@ -1,5 +1,7 @@
 package com.ethan.morephone.presentation.message.list;
 
+import android.content.Context;
+
 import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
@@ -29,7 +31,7 @@ public interface MessageListContract {
 
         void loadMessages(String to, String from);
 
-        void createMessage(String userId, String to, String from, String body, int position);
+        void createMessage(Context context, String userId, String to, String from, String body, int position);
 
         void deleteMessage(String messagesid);
     }

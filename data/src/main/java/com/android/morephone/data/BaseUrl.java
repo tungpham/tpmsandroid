@@ -6,5 +6,6 @@ package com.android.morephone.data;
 
 public class BaseUrl {
 
-    public static final String BASE_URL = "https://immense-temple-84969.herokuapp.com/api/v1/";
+    public static final String BASE_URL = "https://firebase-morephone.appspot.com/api/v1/";
+
 }

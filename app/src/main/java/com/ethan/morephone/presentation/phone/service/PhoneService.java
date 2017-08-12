@@ -16,14 +16,19 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.android.morephone.data.entity.BaseResponse;
+import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.TwilioManager;
 import com.ethan.morephone.MyPreference;
+import com.ethan.morephone.fcm.NotificationHelpper;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.presentation.record.SoundPoolManager;
 import com.ethan.morephone.token.CapabilityToken;
 import com.ethan.morephone.token.TwilioCapability;
 import com.ethan.morephone.utils.EnumUtil;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.twilio.client.Connection;
 import com.twilio.client.ConnectionListener;
 import com.twilio.client.Device;
@@ -39,6 +44,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.twilio.client.impl.TwilioImpl.getContext;
 
 /**
@@ -50,7 +59,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     //    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
 
     private static final long PROGRESS_UPDATE_INTERNAL = 10;
-    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 60;
+    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 30;
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 
@@ -291,6 +300,11 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onDisconnected(Connection connection) {
         DebugTool.logD("onDisconnected: " + connection.getParameters().toString() + " |||| " + connection.getState().name());
+        DebugTool.logD("PHONE STATE = " + mPhoneState);
+        if(mPhoneState == PHONE_STATE_INCOMING){
+            NotificationHelpper.missingNotification(getApplicationContext(), mFromPhoneNumber);
+        }
+
         updateUIPhone(PHONE_STATE_DISCONNECTED, mFromPhoneNumber, mToPhoneNumber);
 
         if (mPartnerDevice != null) {
@@ -323,6 +337,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                         @Override
                         public void run() {
 //                            registerPhoneNumber();
+                            updateTokenFcm();
                             DebugTool.logD("PHONE STATE: " + mPhoneState);
                             if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
                                 registerPhoneNumberAgain();
@@ -540,6 +555,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     }
 
     private void processIncomingRequest(Intent intent) {
+
+        mPhoneState = PHONE_STATE_INCOMING;
+
         Device device = intent.getParcelableExtra(Device.EXTRA_DEVICE);
         Connection incomingConnection = intent.getParcelableExtra(Device.EXTRA_CONNECTION);
 
@@ -648,17 +666,49 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public static void startPhoneService(Context context) {
         context.stopService(new Intent(context, PhoneService.class));
 
-        Intent intent = new Intent(context, PhoneIntervalReceiver.class);
-        intent.setAction(ACTION_WAKEUP);
-        PendingIntent pIntent = PendingIntent.getBroadcast(context, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        DebugTool.logD("ALARM START");
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            alarm.set(AlarmManager.RTC_WAKEUP, 1000, pIntent);
-        } else {
-            alarm.setExact(AlarmManager.RTC_WAKEUP, 1000, pIntent);
-        }
+        Intent intent = new Intent(context, PhoneService.class);
+        context.startService(intent);
 
+//        Intent intent = new Intent(context, PhoneIntervalReceiver.class);
+//        intent.setAction(ACTION_WAKEUP);
+//        PendingIntent pIntent = PendingIntent.getBroadcast(context, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        DebugTool.logD("ALARM START");
+//        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+//            alarm.set(AlarmManager.RTC_WAKEUP, 1000, pIntent);
+//        } else {
+//            alarm.setExact(AlarmManager.RTC_WAKEUP, 1000, pIntent);
+//        }
+
+    }
+
+    private void updateTokenFcm(){
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        DebugTool.logD("Refreshed token: " + refreshedToken);
+
+        if (!TextUtils.isEmpty(MyPreference.getUserId(getApplicationContext()))) {
+            ApiMorePhone.updateFcmToken(getApplicationContext(), MyPreference.getUserId(getApplicationContext()), refreshedToken, new Callback<BaseResponse<User>>() {
+                @Override
+                public void onResponse(Call<BaseResponse<User>> call, Response<BaseResponse<User>> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().getStatus() == 200) {
+                            DebugTool.logD("TOKEN UPDATE SUCCESS");
+                        } else {
+                            DebugTool.logD("TOKEN UPDATE ERROR");
+                        }
+                    } else {
+                        DebugTool.logD("TOKEN UPDATE ERROR");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BaseResponse<User>> call, Throwable t) {
+                    DebugTool.logD("TOKEN UPDATE ERROR");
+                }
+            });
+        } else {
+            DebugTool.logD("USER NOT REGISTER");
+        }
     }
 
     public static boolean isMyServiceRunning(Context context) {

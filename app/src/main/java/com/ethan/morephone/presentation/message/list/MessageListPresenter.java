@@ -1,14 +1,17 @@
 package com.ethan.morephone.presentation.message.list;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.HTTPStatus;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.DeleteMessage;
 import com.android.morephone.domain.usecase.message.GetMessages;
+import com.ethan.morephone.fcm.NotificationHelpper;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -55,7 +58,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
     }
 
     @Override
-    public void createMessage(String userId, String to, String from, String body, final int position) {
+    public void createMessage(final Context context, String userId, String to, String from, String body, final int position) {
         final MessageItem messageItem = new MessageItem(
                 "",
                 "",
@@ -89,6 +92,11 @@ public class MessageListPresenter implements MessageListContract.Presenter {
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
             public void onSuccess(CreateMessage.ResponseValue response) {
+                if (response.getStatusCode() == HTTPStatus.MONEY.getStatusCode()) {
+                    NotificationHelpper.moneyNotification(context);
+                } else {
+
+                }
 //                mView.showProgress(false, position);
             }
 

@@ -107,19 +107,19 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
 
     public void validatePhoneNumberSelected(IncomingPhoneNumbersViewHolder holder, String phoneNumber) {
         mCurrentHolder = holder;
-        if (MyPreference.getPhoneNumber(mContext).equals(phoneNumber)) {
-            holder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
-            holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
-        } else {
-            holder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
-            holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
-        }
+//        if (MyPreference.getPhoneNumber(mContext).equals(phoneNumber)) {
+//            holder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+//            holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+//        } else {
+//            holder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+//            holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
+//        }
     }
 
     public void validateCurrentPhoneNumberSelected() {
         if (mCurrentHolder != null) {
-            mCurrentHolder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
-            mCurrentHolder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
+//            mCurrentHolder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+//            mCurrentHolder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
         }
     }
 

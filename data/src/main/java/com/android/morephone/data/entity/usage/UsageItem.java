@@ -8,6 +8,7 @@ public class UsageItem {
 
     private String id;
     private String userId;
+    private String accountSid;
     private double balance;
     private long messageIncoming;
     private long messageOutgoing;
@@ -20,8 +21,9 @@ public class UsageItem {
 
     }
 
-    public UsageItem(String userId, double balance, long messageIncoming, long messageOutgoing, long callIncoming, long callOutgoing) {
+    public UsageItem(String userId, String accountSid, double balance, long messageIncoming, long messageOutgoing, long callIncoming, long callOutgoing) {
         this.userId = userId;
+        this.accountSid = accountSid;
         this.balance = balance;
         this.messageIncoming = messageIncoming;
         this.messageOutgoing = messageOutgoing;
@@ -35,6 +37,14 @@ public class UsageItem {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAccountSid() {
+        return accountSid;
+    }
+
+    public void setAccountSid(String accountSid) {
+        this.accountSid = accountSid;
     }
 
     public String getUserId() {

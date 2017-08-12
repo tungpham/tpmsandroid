@@ -138,8 +138,8 @@ public class ApiMorePhone {
                                          String id,
                                          String accountToken,
                                          String authToken,
-                                         Callback<BaseResponse<PhoneNumber>> callback) {
-        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).deletePhoneNumber(id, accountToken, authToken);
+                                         Callback<BaseResponse<String>> callback) {
+        Call<BaseResponse<String>> call = getApiPath(context).deletePhoneNumber(id, accountToken, authToken);
         call.enqueue(callback);
     }
 

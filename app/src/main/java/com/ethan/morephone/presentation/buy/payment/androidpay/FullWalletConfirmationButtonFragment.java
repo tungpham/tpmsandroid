@@ -53,21 +53,21 @@ public class FullWalletConfirmationButtonFragment extends Fragment implements
         mActivityLaunchIntent = getActivity().getIntent();
         mItemId = mActivityLaunchIntent.getIntExtra(Constants.EXTRA_ITEM_ID, 0);
         mMaskedWallet = mActivityLaunchIntent.getParcelableExtra(Constants.EXTRA_MASKED_WALLET);
-
-        String accountName = getApplication().getAccountName();
-
-        // Set up an API client
-        FragmentActivity fragmentActivity = getActivity();
-
-        // [START build_google_api_client]
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(fragmentActivity, this /* onConnectionFailedListener */)
-                .setAccountName(accountName) // optional
-                .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
-                        .setEnvironment(Constants.WALLET_ENVIRONMENT)
-                        .setTheme(WalletConstants.THEME_LIGHT)
-                        .build())
-                .build();
+//
+//        String accountName = getApplication().getAccountName();
+//
+//        // Set up an API client
+//        FragmentActivity fragmentActivity = getActivity();
+//
+//        // [START build_google_api_client]
+//        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+//                .enableAutoManage(fragmentActivity, this /* onConnectionFailedListener */)
+//                .setAccountName(accountName) // optional
+//                .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
+//                        .setEnvironment(Constants.WALLET_ENVIRONMENT)
+//                        .setTheme(WalletConstants.THEME_LIGHT)
+//                        .build())
+//                .build();
         // [END build_google_api_client]
     }
 

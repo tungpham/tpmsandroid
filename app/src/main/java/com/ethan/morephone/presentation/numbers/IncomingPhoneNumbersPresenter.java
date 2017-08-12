@@ -72,22 +72,22 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
     }
 
     @Override
-    public void deleteIncomingPhoneNumber(final Context context, final String incomingPhoneNumberSid) {
-        ApiMorePhone.deletePhoneNumber(context, incomingPhoneNumberSid, TwilioManager.getSid(context), TwilioManager.getAuthCode(context), new Callback<BaseResponse<PhoneNumber>>() {
+    public void deleteIncomingPhoneNumber(final Context context, final String phoneNumber, final String incomingPhoneNumberSid) {
+        ApiMorePhone.deletePhoneNumber(context, incomingPhoneNumberSid, TwilioManager.getSid(context), TwilioManager.getAuthCode(context), new Callback<BaseResponse<String>>() {
             @Override
-            public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+            public void onResponse(Call<BaseResponse<String>> call, Response<BaseResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getStatus() == HTTPStatus.OK.getStatusCode()) {
                     Toast.makeText(context, context.getString(R.string.delete_phone_number_success), Toast.LENGTH_SHORT).show();
-                    PhoneService.startServiceWithAction(context, PhoneService.ACTION_UNREGISTER_PHONE_NUMBER, response.body().getResponse().getPhoneNumber(), "");
+                    PhoneService.startServiceWithAction(context, PhoneService.ACTION_UNREGISTER_PHONE_NUMBER, phoneNumber, "");
 
                     Set<String> phoneNumberUsage = MyPreference.getPhoneNumberUsage(context);
-                    phoneNumberUsage.remove(response.body().getResponse().getPhoneNumber());
+                    phoneNumberUsage.remove(phoneNumber);
                     MyPreference.setPhoneNumberUsage(context, phoneNumberUsage);
                 }
             }
 
             @Override
-            public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<String>> call, Throwable t) {
 
             }
         });

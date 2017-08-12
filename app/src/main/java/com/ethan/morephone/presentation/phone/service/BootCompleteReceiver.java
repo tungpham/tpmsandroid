@@ -14,7 +14,11 @@ public class BootCompleteReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        DebugTool.logD("REBOOT");
-        PhoneService.startPhoneService(context);
+        DebugTool.logD("REBOOT NOW");
+        if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
+            PhoneService.startPhoneService(context);
+        } else {
+            DebugTool.logD("REBOOT NOT WORK");
+        }
     }
 }

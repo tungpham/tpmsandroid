@@ -240,7 +240,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(position);
         mIncomingPhoneNumbersAdapter.getData().remove(incomingPhoneNumber);
         mIncomingPhoneNumbersAdapter.notifyDataSetChanged();
-        mPresenter.deleteIncomingPhoneNumber(getContext(), incomingPhoneNumber.sid);
+        mPresenter.deleteIncomingPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber, incomingPhoneNumber.sid);
     }
 
     @Override

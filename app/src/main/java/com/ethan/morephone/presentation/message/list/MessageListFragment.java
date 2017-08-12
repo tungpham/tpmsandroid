@@ -157,7 +157,7 @@ public class MessageListFragment extends BaseFragment implements
             case R.id.image_send:
                 String body = mEditTextMessage.getText().toString();
                 mEditTextMessage.setText("");
-                mPresenter.createMessage(MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, body, mMessageListAdapter.getData().size() - 1);
+                mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, body, mMessageListAdapter.getData().size() - 1);
                 break;
             default:
                 break;
@@ -243,7 +243,7 @@ public class MessageListFragment extends BaseFragment implements
         mPhoneNumberTo = conversationModel.getPhoneNumber();
 
         if(!TextUtils.isEmpty(mMessageBody)){
-            mPresenter.createMessage(MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size() - 1);
+            mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size() - 1);
         }
     }
 
