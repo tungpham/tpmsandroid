@@ -22,7 +22,7 @@ public class AddFundActivity extends BaseActivity {
         setContentView(R.layout.activity_normal);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        enableHomeActionBar(mToolbar, getString(R.string.add_fund_label));
+        setTitleActionBar(mToolbar, getString(R.string.add_fund_label));
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof AddFundFrag) return;

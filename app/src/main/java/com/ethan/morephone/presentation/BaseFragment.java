@@ -25,7 +25,7 @@ public class BaseFragment extends Fragment {
         if (mProgressDialog == null && isAdded()) {
             mProgressDialog = new ProgressDialog(getActivity());
             mProgressDialog.setMessage(getString(R.string.message_progress_dialog));
-            mProgressDialog.setCancelable(false);
+//            mProgressDialog.setCancelable(false);
             mProgressDialog.show();
         }
     }

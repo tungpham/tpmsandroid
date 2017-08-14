@@ -16,6 +16,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.android.morephone.data.database.DatabaseHelpper;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.log.DebugTool;
@@ -58,8 +59,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     //    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
 
-    private static final long PROGRESS_UPDATE_INTERNAL = 10;
-    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 30;
+    private static final long PROGRESS_UPDATE_INTERNAL = 60;
+    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 0;
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 
@@ -236,6 +237,14 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public void onStartListening(Device device) {
         DebugTool.logD("START LISTENING: " + device.getCapabilities().toString());
         DebugTool.logD("START LISTENING STATE: " + device.getState().name());
+        DatabaseHelpper.insert(getApplicationContext(), device.getState().name());
+
+        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
+            Device value = entry.getValue();
+            if (value == device) {
+                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
+            }
+        }
         updateDeviceState(device.getState());
 //        Map<Device.Capability, Object> capabilityMap = device.getCapabilities();
 //        if (capabilityMap != null) {
@@ -255,7 +264,16 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onStopListening(Device device) {
         DebugTool.logD("STOP LISTENING: " + device.getState().name());
+        DatabaseHelpper.insert(getApplicationContext(), device.getState().name());
         updateDeviceState(device.getState());
+
+        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
+            Device value = entry.getValue();
+            if (value == device) {
+                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
+            }
+        }
+
 //        if (device.getState() == Device.State.OFFLINE && mDeviceState != Device.State.OFFLINE) {
 //            mDeviceState = Device.State.OFFLINE;
 //
@@ -301,7 +319,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public void onDisconnected(Connection connection) {
         DebugTool.logD("onDisconnected: " + connection.getParameters().toString() + " |||| " + connection.getState().name());
         DebugTool.logD("PHONE STATE = " + mPhoneState);
-        if(mPhoneState == PHONE_STATE_INCOMING){
+        if (mPhoneState == PHONE_STATE_INCOMING) {
             NotificationHelpper.missingNotification(getApplicationContext(), mFromPhoneNumber);
         }
 
@@ -341,10 +359,13 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                             DebugTool.logD("PHONE STATE: " + mPhoneState);
                             if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
                                 registerPhoneNumberAgain();
+                                DatabaseHelpper.insert(getApplicationContext(), "REGISTER DEVICE");
                             }
                         }
-                    }, PROGRESS_UPDATE_INITIAL_INTERVAL,
-                    PROGRESS_UPDATE_INTERNAL, TimeUnit.MINUTES);
+                    },
+                    PROGRESS_UPDATE_INITIAL_INTERVAL,
+                    PROGRESS_UPDATE_INTERNAL,
+                    TimeUnit.MINUTES);
         }
     }
 
@@ -682,7 +703,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 
     }
 
-    private void updateTokenFcm(){
+    private void updateTokenFcm() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         DebugTool.logD("Refreshed token: " + refreshedToken);
 

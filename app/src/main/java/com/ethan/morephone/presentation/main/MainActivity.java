@@ -41,6 +41,7 @@ import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.buy.payment.fund.AddFundActivity;
+import com.ethan.morephone.presentation.credit.CreditActivity;
 import com.ethan.morephone.presentation.license.LicenseActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
@@ -142,7 +143,7 @@ public class MainActivity extends BaseActivity implements
         mDrawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.nav_card:
-                startActivity(new Intent(this, AddFundActivity.class));
+                startActivity(new Intent(this, CreditActivity.class));
                 break;
             case R.id.nav_buy_number:
                 startActivityForResult(new Intent(this, SearchPhoneNumberActivity.class), REQUEST_BUY_PHONE_NUMBER);

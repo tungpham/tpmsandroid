@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.ethan.morephone.widget.MyTextView
+        android:id="@+id/text_credit_title"
+        style="@style/TextSettingDisplay" />
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_add_fund"
+        style="@style/ButtonBlue"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@string/add_fund_button" />
+
+</RelativeLayout>
