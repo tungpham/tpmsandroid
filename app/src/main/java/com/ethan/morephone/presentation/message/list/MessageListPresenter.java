@@ -92,11 +92,12 @@ public class MessageListPresenter implements MessageListContract.Presenter {
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
             public void onSuccess(CreateMessage.ResponseValue response) {
-                if (response.getStatusCode() == HTTPStatus.MONEY.getStatusCode()) {
-                    NotificationHelpper.moneyNotification(context);
-                } else {
-
-                }
+                DebugTool.logD("STATUS: " + response.getStatusCode());
+//                if (response.getStatusCode() == HTTPStatus.MONEY.getStatusCode()) {
+//                    NotificationHelpper.moneyNotification(context);
+//                } else {
+//
+//                }
 //                mView.showProgress(false, position);
             }
 

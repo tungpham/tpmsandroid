@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
+import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
@@ -52,7 +53,8 @@ import static com.ethan.morephone.presentation.buy.payment.checkout.ProductTypes
  */
 
 public class AddFundFrag extends BaseFragment implements
-        View.OnClickListener, AddFundAdapter.OnItemPurchaseClickListener {
+        View.OnClickListener, AddFundAdapter.OnItemPurchaseClickListener,
+        UiCheckout.DestroyCheckoutListener{
 
 
     public static AddFundFrag getInstance() {
@@ -73,6 +75,10 @@ public class AddFundFrag extends BaseFragment implements
     private AddFundAdapter mAddFundAdapter;
 
     private final List<Inventory.Callback> mInventoryCallbacks = new ArrayList<>();
+
+    private double mBalanceAdd = 0;
+
+    private boolean isApprovalBuy = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,7 +161,15 @@ public class AddFundFrag extends BaseFragment implements
 
     @Override
     public void onItemClick(SkuItem skuItem) {
-        mUiCheckout.loadInventory(Inventory.Request.create().loadAllPurchases(), new InventoryCallback(skuItem.getSku()));
+        if(isApprovalBuy) {
+            mUiCheckout.loadInventory(Inventory.Request.create().loadAllPurchases(), new InventoryCallback(skuItem.getSku()));
+            mUiCheckout.setDestroyCheckoutListener(this);
+            isApprovalBuy = !isApprovalBuy;
+        }
+    }
+
+    public double getBalance() {
+        return mBalanceAdd;
     }
 
     private void reloadInventory() {
@@ -169,7 +183,13 @@ public class AddFundFrag extends BaseFragment implements
                     callback.onLoaded(products);
                 }
             }
+
         });
+    }
+
+    @Override
+    public void onDestroyCheckout() {
+        isApprovalBuy = !isApprovalBuy;
     }
 
 
@@ -192,7 +212,7 @@ public class AddFundFrag extends BaseFragment implements
     private class PurchaseListener extends EmptyRequestListener<Purchase> {
 
         @Override
-        public void onSuccess(@Nonnull Purchase purchase) {
+        public void onSuccess(@Nonnull final Purchase purchase) {
             mPurchase = purchase;
 
             MorePhonePurchase morePhonePurchase = new MorePhonePurchase(
@@ -204,15 +224,21 @@ public class AddFundFrag extends BaseFragment implements
                     purchase.time,
                     purchase.sku);
 
+            showProgressForever();
             ApiMorePhone.purchase(getContext(), morePhonePurchase, new Callback<MorePhonePurchase>() {
                 @Override
                 public void onResponse(Call<MorePhonePurchase> call, Response<MorePhonePurchase> response) {
-
+                    if (response.isSuccessful() && response.body() != null) {
+                        if (response.body().productId.equals("add_fund")) {
+                            mBalanceAdd += Constant.PRODUCT_ADD_FUND;
+                        }
+                    }
+                    hideProgressForever();
                 }
 
                 @Override
                 public void onFailure(Call<MorePhonePurchase> call, Throwable t) {
-
+                    hideProgressForever();
                 }
             });
             DebugTool.logD("PURCHASE SUCCESS + " + purchase.toJson());
@@ -231,6 +257,7 @@ public class AddFundFrag extends BaseFragment implements
         public void onLoaded(@Nonnull Inventory.Products products) {
             final Inventory.Product product = products.get(ProductTypes.IN_APP);
             DebugTool.logD("product: " + product.id);
+
             if (!product.supported) {
                 return;
             }
@@ -242,6 +269,7 @@ public class AddFundFrag extends BaseFragment implements
 //            onPurchaseChanged();
 //            mButtonPayNow.setEnabled(true);
         }
+
     }
 
     private void purchase(final Sku sku) {

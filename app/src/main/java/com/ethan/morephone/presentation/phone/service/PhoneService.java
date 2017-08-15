@@ -237,14 +237,14 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public void onStartListening(Device device) {
         DebugTool.logD("START LISTENING: " + device.getCapabilities().toString());
         DebugTool.logD("START LISTENING STATE: " + device.getState().name());
-        DatabaseHelpper.insert(getApplicationContext(), device.getState().name());
-
-        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
-            Device value = entry.getValue();
-            if (value == device) {
-                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
-            }
-        }
+//        DatabaseHelpper.insert(getApplicationContext(), device.getState().name());
+//
+//        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
+//            Device value = entry.getValue();
+//            if (value == device) {
+//                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
+//            }
+//        }
         updateDeviceState(device.getState());
 //        Map<Device.Capability, Object> capabilityMap = device.getCapabilities();
 //        if (capabilityMap != null) {
@@ -264,15 +264,15 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onStopListening(Device device) {
         DebugTool.logD("STOP LISTENING: " + device.getState().name());
-        DatabaseHelpper.insert(getApplicationContext(), device.getState().name());
+//        DatabaseHelpper.insert(getApplicationContext(), device.getState().name());
         updateDeviceState(device.getState());
-
-        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
-            Device value = entry.getValue();
-            if (value == device) {
-                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
-            }
-        }
+//
+//        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
+//            Device value = entry.getValue();
+//            if (value == device) {
+//                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
+//            }
+//        }
 
 //        if (device.getState() == Device.State.OFFLINE && mDeviceState != Device.State.OFFLINE) {
 //            mDeviceState = Device.State.OFFLINE;
@@ -359,7 +359,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                             DebugTool.logD("PHONE STATE: " + mPhoneState);
                             if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
                                 registerPhoneNumberAgain();
-                                DatabaseHelpper.insert(getApplicationContext(), "REGISTER DEVICE");
+//                                DatabaseHelpper.insert(getApplicationContext(), "REGISTER DEVICE");
                             }
                         }
                     },

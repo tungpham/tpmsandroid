@@ -79,12 +79,16 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
         DebugTool.logD("From: " + from);
         DebugTool.logD("TO: " + message.getTo());
         if (message.getNotification() != null) {
+            DebugTool.logD("TITLE: " + message.getNotification().getTitle());
+            DebugTool.logD("BODY: " + message.getNotification().getBody());
             if (message.getNotification().getTitle().equals(HTTPStatus.MONEY.getReasonPhrase())) {
                 NotificationHelpper.moneyNotification(getApplicationContext());
             } else {
                 sendSmsNotification(message.getNotification().getTitle(), message.getNotification().getBody());
             }
         } else {
+
+            DebugTool.logD("NOTIFICATION NULL");
 
             Map<String, String> dataTest = message.getData();
             if (dataTest != null) {

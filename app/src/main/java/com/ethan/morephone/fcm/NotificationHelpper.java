@@ -8,6 +8,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.main.MainActivity;
 
@@ -20,7 +21,8 @@ public class NotificationHelpper {
     public static final int NOTIFY_MESSAGE_ID = 100;
     public static final int NOTIFY_MONEY_ID = 101;
 
-    public static void moneyNotification(Context context){
+    public static void moneyNotification(Context context) {
+        DebugTool.logD("MONEY NOTIFY ");
         Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -39,7 +41,7 @@ public class NotificationHelpper {
         notificationManager.notify(NOTIFY_MONEY_ID, notificationBuilder.build());
     }
 
-    public static void missingNotification(Context context, String phoneNumber){
+    public static void missingNotification(Context context, String phoneNumber) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);

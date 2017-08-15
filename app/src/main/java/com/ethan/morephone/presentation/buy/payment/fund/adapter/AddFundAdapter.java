@@ -29,6 +29,7 @@ public class AddFundAdapter extends RecyclerView.Adapter<AddFundViewHolder> impl
     private List<SkuItem> mSkuItems;
     private OnItemPurchaseClickListener mOnItemPurchaseClickListener;
 
+
     public AddFundAdapter(Context context, List<SkuItem> skuItems, OnItemPurchaseClickListener mOnItemPurchaseClickListener) {
         mContext = context;
         mSkuItems = skuItems;

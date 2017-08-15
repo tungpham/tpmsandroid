@@ -5,7 +5,8 @@
 
     <com.ethan.morephone.widget.MyTextView
         android:id="@+id/text_credit_title"
-        style="@style/TextSettingDisplay" />
+        style="@style/TextSettingDisplay"
+        android:layout_marginTop="?attr/actionBarSize"/>
 
 
     <android.support.v7.widget.AppCompatButton

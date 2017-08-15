@@ -11,4 +11,6 @@ public class Constant {
 
     public static final String MESSAGE_STATUS_RECEIVED = "received";
 
+    public static final double PRODUCT_ADD_FUND = 10;
+
 }

@@ -29,6 +29,7 @@ public class IncomingFragment extends BaseFragment implements View.OnClickListen
     }
 
     private IncomingListener mIncomingListener;
+    private boolean isClick = false;
 
     @Nullable
     @Override
@@ -50,10 +51,16 @@ public class IncomingFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.floating_button_incoming_decline:
-                if (mIncomingListener != null) mIncomingListener.decline();
+                if (mIncomingListener != null && !isClick) {
+                    mIncomingListener.decline();
+                    isClick = !isClick;
+                }
                 break;
             case R.id.floating_button_incoming_accept:
-                if (mIncomingListener != null) mIncomingListener.accept();
+                if (mIncomingListener != null && !isClick) {
+                    mIncomingListener.accept();
+                    isClick = !isClick;
+                }
                 break;
             default:
                 break;

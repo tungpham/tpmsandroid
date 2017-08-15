@@ -89,6 +89,7 @@ dependencies {
     compile presentationDependencies.servicesWallet
     compile presentationDependencies.supportV4
     compile presentationDependencies.firebaseMessage
+    compile presentationDependencies.firebaseCrash
 
     compile 'com.google.code.findbugs:jsr305:2.0.3'
     compile 'com.klinkerapps:android-chips:1.0.0'

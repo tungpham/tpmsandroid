@@ -1,11 +1,13 @@
 package com.ethan.morephone.presentation.buy.payment.fund;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.utils.ActivityUtils;
@@ -15,6 +17,10 @@ import com.ethan.morephone.utils.ActivityUtils;
  */
 
 public class AddFundActivity extends BaseActivity {
+
+    public static final String EXTRA_BALANCE_ADD = "EXTRA_BALANCE_ADD";
+
+    private AddFundFrag mAddFundFrag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,10 +32,10 @@ public class AddFundActivity extends BaseActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof AddFundFrag) return;
-        AddFundFrag browserFragment = AddFundFrag.getInstance();
+        mAddFundFrag = AddFundFrag.getInstance();
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
-                browserFragment,
+                mAddFundFrag,
                 R.id.content_frame,
                 AddFundFragment.class.getSimpleName());
     }
@@ -46,5 +52,15 @@ public class AddFundActivity extends BaseActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        double balance = mAddFundFrag.getBalance();
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_BALANCE_ADD, balance);
+        setResult(RESULT_OK, intent);
+        DebugTool.logD("BACK PRESS: " + balance);
+        super.onBackPressed();
     }
 }

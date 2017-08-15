@@ -37,6 +37,24 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    private ProgressDialog mProgressDialogForever;
+
+    protected void showProgressForever() {
+        if (mProgressDialogForever == null && isAdded()) {
+            mProgressDialogForever = new ProgressDialog(getActivity());
+            mProgressDialogForever.setMessage(getString(R.string.message_progress_dialog));
+            mProgressDialogForever.setCancelable(false);
+            mProgressDialogForever.show();
+        }
+    }
+
+    protected void hideProgressForever() {
+        if (mProgressDialogForever != null && mProgressDialogForever.isShowing() && isAdded()) {
+            mProgressDialogForever.dismiss();
+            mProgressDialogForever = null;
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

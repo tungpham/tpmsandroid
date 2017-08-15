@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.android.morephone.data.log.DebugTool;
+import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -32,6 +33,7 @@ import com.ethan.morephone.presentation.buy.payment.fund.adapter.PurchasedSkusAd
 import com.ethan.morephone.presentation.buy.payment.fund.adapter.TargetSkusAdapter;
 import com.ethan.morephone.presentation.buy.payment.fund.model.SkuItem;
 import com.ethan.morephone.presentation.buy.payment.purchase.PaymentMethodsDialog;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,6 +72,8 @@ public class AddFundFragment extends BaseFragment implements
     private Spinner mTargetSkus;
     private Spinner mAvailableSkus;
     private final List<Inventory.Callback> mInventoryCallbacks = new ArrayList<>();
+
+    private double mBalanceAdd = 0;
 
     public static AddFundFragment getInstance() {
         return new AddFundFragment();
@@ -263,6 +267,8 @@ public class AddFundFragment extends BaseFragment implements
                     callback.onLoaded(products);
                 }
             }
+
+
         });
     }
 
@@ -294,6 +300,10 @@ public class AddFundFragment extends BaseFragment implements
         mInventoryCallbacks.add(mTargetSkusAdapter);
     }
 
+    public double getBalance(){
+        return mBalanceAdd;
+    }
+
     private void updateTargetSkusVisibility() {
         final boolean enabled = mTargetSkusAdapter.getCount() > 0 && mPurchasedSkusAdapter.getChecked().size() > 0;
 //        mChange.setEnabled(enabled);
@@ -317,6 +327,7 @@ public class AddFundFragment extends BaseFragment implements
     private class PurchaseListener implements RequestListener<Purchase> {
         @Override
         public void onSuccess(@Nonnull Purchase result) {
+            DebugTool.logD("SKU: " + result.sku);
             DebugTool.logD("Purchase: " + result.toJson());
             reloadInventory();
         }

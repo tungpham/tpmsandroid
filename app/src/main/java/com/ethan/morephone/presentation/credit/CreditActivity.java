@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.credit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,10 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.usage.UsageFragment;
 import com.ethan.morephone.utils.ActivityUtils;
+import com.google.firebase.crash.FirebaseCrash;
 
 /**
  * Created by Ethan on 4/20/17.
@@ -54,6 +57,11 @@ public class CreditActivity extends BaseActivity implements View.OnClickListener
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        DebugTool.logD("REQUEST: " + requestCode);
+    }
 
     @Override
     public void onClick(View view) {

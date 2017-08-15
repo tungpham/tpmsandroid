@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.util.SparseArray;
 
+import com.android.morephone.data.log.DebugTool;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -56,6 +58,8 @@ public abstract class UiCheckout extends Checkout {
     @Nonnull
     private final SparseArray<PurchaseFlow> mFlows = new SparseArray<>();
 
+    private DestroyCheckoutListener mDestroyCheckoutListener;
+
     protected UiCheckout(@Nonnull Object tag, @Nonnull Billing billing) {
         super(tag, billing);
     }
@@ -63,6 +67,7 @@ public abstract class UiCheckout extends Checkout {
     @Override
     public void stop() {
         mFlows.clear();
+        DebugTool.logD("STOP UI CHECK OUT");
         super.stop();
     }
 
@@ -89,6 +94,10 @@ public abstract class UiCheckout extends Checkout {
         createPurchaseFlow(requestCode, listener, false);
     }
 
+    public void setDestroyCheckoutListener(DestroyCheckoutListener destroyCheckoutListener){
+        this.mDestroyCheckoutListener = destroyCheckoutListener;
+    }
+
     /**
      * Same as {@link #destroyPurchaseFlow(int)} but with the default request code
      */
@@ -110,6 +119,8 @@ public abstract class UiCheckout extends Checkout {
         mFlows.delete(requestCode);
         // instead of cancelling purchase request in `Billing` class (which we can't do as we don't
         // have `requestId`) let's cancel it here
+        DebugTool.logD("DESTROY UI CHECK OUT");
+        if(mDestroyCheckoutListener != null) mDestroyCheckoutListener.onDestroyCheckout();
         flow.cancel();
     }
 
@@ -273,5 +284,9 @@ public abstract class UiCheckout extends Checkout {
             destroyPurchaseFlow(mRequestCode);
             super.onSuccess(result);
         }
+    }
+
+    public interface DestroyCheckoutListener{
+        void onDestroyCheckout();
     }
 }

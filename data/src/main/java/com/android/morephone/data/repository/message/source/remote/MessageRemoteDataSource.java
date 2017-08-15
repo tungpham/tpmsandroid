@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.repository.message.source.MessageDataSource;
@@ -167,7 +168,9 @@ public class MessageRemoteDataSource implements MessageDataSource {
             public void onResponse(Call<BaseResponse<MessageItem>> call, Response<BaseResponse<MessageItem>> response) {
                 if (response.isSuccessful()) {
                     callback.onMessageLoaded(response.body().getResponse(), response.body().getStatus());
+                    DebugTool.logD("SMS NOT SUCCESS: " + response.body().getStatus());
                 } else {
+                    DebugTool.logD("SMS: " + response.body().getStatus());
                     callback.onDataNotAvailable();
                 }
             }
@@ -175,6 +178,7 @@ public class MessageRemoteDataSource implements MessageDataSource {
             @Override
             public void onFailure(Call<BaseResponse<MessageItem>> call, Throwable t) {
                 callback.onDataNotAvailable();
+                DebugTool.logD("SMS FAILURE: ");
             }
         });
     }
