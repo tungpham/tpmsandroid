@@ -73,6 +73,9 @@ public class MessageItem implements Comparable<MessageItem> {
     @SerializedName("subresource_uris")
     public SubresourceUris subresourceUris;
 
+    public boolean isLoading = false;
+    public boolean isSendFail = false;
+
 
     public MessageItem(String id,
                        String dateCreated,

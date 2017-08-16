@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
-    public List<MessageItem> getData(){
+    public List<MessageItem> getData() {
         return mMessageItems;
     }
 
@@ -84,7 +85,13 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             MessageInViewHolder viewHolder = (MessageInViewHolder) holder;
             viewHolder.imageAvatar.setImageDrawable(mDrawableBuilder.build(String.valueOf(mTitle.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
             viewHolder.textMessageBody.setText(messageItem.body);
-            viewHolder.textMessageTime.setText(Utils.formatDate(messageItem.dateSent));
+
+            if (!TextUtils.isEmpty(messageItem.dateSent)) {
+                viewHolder.textMessageTime.setVisibility(View.VISIBLE);
+                viewHolder.textMessageTime.setText(Utils.formatDateMessage(messageItem.dateSent));
+            } else {
+                viewHolder.textMessageTime.setVisibility(View.GONE);
+            }
 
             viewHolder.relativeMessageBlock.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -92,20 +99,48 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     mOnItemMessageClickListener.onItemClick(position);
                 }
             });
+
 
         } else if (holder instanceof MessageOutViewHolder) {
             MessageOutViewHolder viewHolder = (MessageOutViewHolder) holder;
             viewHolder.textMessageBody.setText(messageItem.body);
-            viewHolder.textMessageTime.setText(Utils.formatDate(messageItem.dateSent));
+
+            if (!TextUtils.isEmpty(messageItem.dateSent)) {
+                viewHolder.textMessageTime.setVisibility(View.VISIBLE);
+                viewHolder.textMessageTime.setText(Utils.formatDateMessage(messageItem.dateSent));
+            } else {
+                viewHolder.textMessageTime.setVisibility(View.GONE);
+            }
 
             viewHolder.imageAvatar.setImageDrawable(mDrawableBuilder.build("Me", ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
             viewHolder.textMessageBody.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.colorBackgroundMessageBody), PorterDuff.Mode.SRC_ATOP);
-            viewHolder.relativeMessageBlock.setOnClickListener(new View.OnClickListener() {
+            viewHolder.textMessageBody.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mOnItemMessageClickListener.onItemClick(position);
                 }
             });
+
+            if (messageItem.isLoading) {
+                viewHolder.mTypingIndicatorView.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.mTypingIndicatorView.setVisibility(View.INVISIBLE);
+            }
+
+            if (messageItem.isSendFail) {
+                viewHolder.imageResend.setVisibility(View.VISIBLE);
+                viewHolder.imageMessageFail.setVisibility(View.VISIBLE);
+
+                viewHolder.imageResend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mOnItemMessageClickListener.onResend(position);
+                    }
+                });
+            } else {
+                viewHolder.imageResend.setVisibility(View.INVISIBLE);
+                viewHolder.imageMessageFail.setVisibility(View.INVISIBLE);
+            }
 //            viewHolder.imageAvatar.setImageDrawable(Contact.getMe(true).getAvatar(mContext, null));
         }
     }
@@ -115,7 +150,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         // This method shouldn't be called if our cursor is null, since the framework should know
         // that there aren't any items to look at in that case
         MessageItem item = mMessageItems.get(position);
-        if(item == null) return INCOMING_ITEM;
+        if (item == null) return INCOMING_ITEM;
         String isSent = item.status;
 
         if (isSent.equals(Constant.MESSAGE_STATUS_RECEIVED)) {
@@ -132,5 +167,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public interface OnItemMessageClickListener {
         void onItemClick(int pos);
+
+        void onResend(int pos);
     }
 }

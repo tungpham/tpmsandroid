@@ -106,6 +106,17 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
     </style>
 
+    <style name="TextMessageTime" parent="TextSmsBase">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:background">@drawable/btn_background_time</item>
+    </style>
+
     <style name="ButtonCommon" parent="ViewMatch">
         <item name="android:layout_marginLeft">@dimen/activity_main_margin</item>
         <item name="android:layout_marginRight">@dimen/activity_main_margin</item>

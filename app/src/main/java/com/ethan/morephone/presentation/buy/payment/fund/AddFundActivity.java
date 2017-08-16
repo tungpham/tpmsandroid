@@ -45,6 +45,7 @@ public class AddFundActivity extends BaseActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
+                setResult();
                 finish();
                 break;
 
@@ -56,11 +57,16 @@ public class AddFundActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        setResult();
+
+        super.onBackPressed();
+    }
+
+    private void setResult(){
         double balance = mAddFundFrag.getBalance();
         Intent intent = new Intent();
         intent.putExtra(EXTRA_BALANCE_ADD, balance);
         setResult(RESULT_OK, intent);
         DebugTool.logD("BACK PRESS: " + balance);
-        super.onBackPressed();
     }
 }

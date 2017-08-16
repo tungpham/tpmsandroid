@@ -24,14 +24,14 @@ public interface MessageListContract {
 
         void createMessageSuccess(MessageItem messageItem);
 
-        void createMessageError();
+        void createMessageError(int position);
     }
 
     interface Presenter extends BasePresenter {
 
         void loadMessages(String to, String from);
 
-        void createMessage(Context context, String userId, String to, String from, String body, int position);
+        void createMessage(Context context, String userId, String to, String from, String body, int position, boolean isResend);
 
         void deleteMessage(String messagesid);
     }

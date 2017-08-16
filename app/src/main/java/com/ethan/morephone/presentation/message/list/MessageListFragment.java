@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
@@ -31,6 +32,7 @@ import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.adapter.MessageListAdapter;
+import com.ethan.morephone.presentation.message.list.adapter.MessageOutViewHolder;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 
@@ -153,12 +155,20 @@ public class MessageListFragment extends BaseFragment implements
     }
 
     @Override
+    public void onResend(int pos) {
+        MessageItem messageItem = mMessageListAdapter.getData().get(pos);
+        mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, messageItem.body, pos, true);
+        mMessageListAdapter.getData().get(pos).isSendFail = false;
+        mMessageListAdapter.notifyItemChanged(pos);
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_send:
                 String body = mEditTextMessage.getText().toString();
                 mEditTextMessage.setText("");
-                mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, body, mMessageListAdapter.getData().size() - 1);
+                mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, body, mMessageListAdapter.getData().size(), false);
                 break;
             default:
                 break;
@@ -173,16 +183,24 @@ public class MessageListFragment extends BaseFragment implements
 
     @Override
     public void showProgress(boolean isActive, int position) {
-//        if (isAdded()) {
-////            MessageOutViewHolder viewHolder = (MessageOutViewHolder) mRecyclerView.findViewHolderForAdapterPosition(2);
+        if (isAdded()) {
+            DebugTool.logD("POS: " + position);
+//            MessageOutViewHolder viewHolder = (MessageOutViewHolder) mRecyclerView.findViewHolderForAdapterPosition(2);
 //            MessageOutViewHolder viewHolder = (MessageOutViewHolder)mRecyclerView.findViewHolderForLayoutPosition(position);
 //            if (viewHolder != null) {
-//                if (isActive) viewHolder.dotProgressBar.setVisibility(View.VISIBLE);
-//                else viewHolder.dotProgressBar.setVisibility(View.GONE);
+//                if (isActive){
+//                    viewHolder.mTypingIndicatorView.setVisibility(View.VISIBLE);
+//                    DebugTool.logD("VISIBLE: " + position);
+//                }
+//                else viewHolder.mTypingIndicatorView.setVisibility(View.GONE);
 //            } else {
 //                DebugTool.logD("CANNOT FILED" + position);
 //            }
-//        }
+            if (isActive) mMessageListAdapter.getData().get(position).isLoading = true;
+            else mMessageListAdapter.getData().get(position).isLoading = false;
+
+            mMessageListAdapter.notifyItemChanged(position);
+        }
     }
 
     @Override
@@ -199,8 +217,9 @@ public class MessageListFragment extends BaseFragment implements
     }
 
     @Override
-    public void createMessageError() {
-        Toast.makeText(getContext(), R.string.message_error_send, Toast.LENGTH_SHORT).show();
+    public void createMessageError(int position) {
+        mMessageListAdapter.getData().get(position).isSendFail = true;
+        mMessageListAdapter.notifyItemChanged(position);
     }
 
     @Override
@@ -243,8 +262,8 @@ public class MessageListFragment extends BaseFragment implements
         showMessages(conversationModel.getMessageItems());
         mPhoneNumberTo = conversationModel.getPhoneNumber();
 
-        if(!TextUtils.isEmpty(mMessageBody)){
-            mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size() - 1);
+        if (!TextUtils.isEmpty(mMessageBody)) {
+            mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size(), false);
         }
     }
 
@@ -266,7 +285,7 @@ public class MessageListFragment extends BaseFragment implements
                 String fromPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_FROM_PHONE_NUMBER);
                 String toPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_TO_PHONE_NUMBER);
 
-                if(MyPreference.getPhoneNumber(getContext()).equals(fromPhoneNumber)){
+                if (MyPreference.getPhoneNumber(getContext()).equals(fromPhoneNumber)) {
                     return;
                 }
 

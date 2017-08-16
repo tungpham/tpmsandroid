@@ -58,6 +58,19 @@ public class Utils {
         return "";
     }
 
+    public static String formatDateMessage(String date) {
+        SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
+        SimpleDateFormat out = new SimpleDateFormat("MMM d, HH:mm a");
+
+        try {
+            Date time = in.parse(date);
+            return out.format(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static Date getDate(String date) {
         SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
 

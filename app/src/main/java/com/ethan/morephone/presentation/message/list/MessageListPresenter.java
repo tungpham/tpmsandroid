@@ -58,7 +58,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
     }
 
     @Override
-    public void createMessage(final Context context, String userId, String to, String from, String body, final int position) {
+    public void createMessage(final Context context, String userId, String to, String from, String body, final int position, boolean isResend) {
         final MessageItem messageItem = new MessageItem(
                 "",
                 "",
@@ -80,14 +80,13 @@ public class MessageListPresenter implements MessageListContract.Presenter {
                 "",
                 "",
                 null);
-//        mView.createMessageSuccess(messageItem);
-//        mView.showProgress(true, position);
+
         DebugTool.logD("TO : " + to);
         DebugTool.logD("FROM : " + from);
         DebugTool.logD("BODY : " + body);
         DebugTool.logD("userId : " + userId);
-        mView.createMessageSuccess(messageItem);
-
+        if (!isResend) mView.createMessageSuccess(messageItem);
+        mView.showProgress(true, position);
         CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(userId.trim(), to.trim(), from.trim(), body.trim());
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
@@ -99,12 +98,14 @@ public class MessageListPresenter implements MessageListContract.Presenter {
 //
 //                }
 //                mView.showProgress(false, position);
+                mView.showProgress(false, position);
             }
 
             @Override
             public void onError() {
-                mView.createMessageError();
+                mView.createMessageError(position);
 //                mView.showProgress(false, position);
+                mView.showProgress(false, position);
             }
         });
     }
