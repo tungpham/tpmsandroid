@@ -3,11 +3,19 @@ package com.ethan.morephone.presentation.setting;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.android.morephone.data.entity.BaseResponse;
+import com.android.morephone.data.entity.user.User;
+import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.number.incoming.ChangeFriendlyName;
 import com.ethan.morephone.Constant;
+import com.ethan.morephone.MyPreference;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Ethan on 4/25/17.
@@ -42,6 +50,27 @@ public class SettingPresenter implements SettingContract.Presenter {
 
             @Override
             public void onError() {
+                mView.showLoading(false);
+            }
+        });
+    }
+
+    @Override
+    public void settingForward(final Context context, String userId, String forwardPhoneNumber, String forwardEmail) {
+        mView.showLoading(true);
+        ApiMorePhone.updateForward(context, userId, forwardPhoneNumber, forwardEmail, new Callback<BaseResponse<User>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<User>> call, Response<BaseResponse<User>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    MyPreference.setSettingConfigurePhone(context, response.body().getResponse().getForwardPhoneNumber());
+                    MyPreference.setSettingConfigureEmail(context, response.body().getResponse().getForwardEmail());
+                    mView.updateForward();
+                }
+                mView.showLoading(false);
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<User>> call, Throwable t) {
                 mView.showLoading(false);
             }
         });

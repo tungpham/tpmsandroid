@@ -52,7 +52,13 @@ import com.ethan.morephone.utils.ActivityUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -61,7 +67,8 @@ import java.util.Set;
 public class MainActivity extends BaseActivity implements
         SearchView.OnQueryTextListener,
         NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener {
+        View.OnClickListener,
+        EasyPermissions.PermissionCallbacks {
 
     private final int MIC_PERMISSION_REQUEST_CODE = 101;
 
@@ -93,11 +100,42 @@ public class MainActivity extends BaseActivity implements
 
         MyPreference.setTimesUse(getApplicationContext(), MyPreference.getTimesUse(getApplicationContext()) + 1);
 
-        if (!checkPermissionForMicrophone()) {
-            requestPermissionForMicrophone();
-        } else {
-            startService();
-        }
+//        if (!checkPermissionForMicrophone()) {
+//            requestPermissionForMicrophone();
+//        } else {
+//            startService();
+//        }
+
+//        // Here, thisActivity is the current activity
+//        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)
+//                != PackageManager.PERMISSION_GRANTED) {
+//
+//            // Should we show an explanation?
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.RECORD_AUDIO)) {
+//
+//                // Show an explanation to the user *asynchronously* -- don't block
+//                // this thread waiting for the user's response! After the user
+//                // sees the explanation, try again to request the permission.
+//                DebugTool.logD("REQUEST PERMISSTION");
+//
+//            }
+//
+//            // No explanation needed, we can request the permission.
+//
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.READ_CONTACTS},
+//                    MIC_PERMISSION_REQUEST_CODE);
+//
+//            DebugTool.logD("REQUEST PERMISSTION 2");
+//            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+//            // app-defined int constant. The callback method gets the
+//            // result of the request.
+//        } else {
+//            startService();
+//        }
+
+        recordPermission();
     }
 
     @Override
@@ -176,7 +214,7 @@ public class MainActivity extends BaseActivity implements
                 TwilioManager.setApplicationSid(getApplicationContext(), "");
 
                 Set<String> phoneNumbersUsage = MyPreference.getPhoneNumberUsage(getApplicationContext());
-                for(String str: phoneNumbersUsage){
+                for (String str : phoneNumbersUsage) {
                     PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_UNREGISTER_PHONE_NUMBER, str, "");
                 }
                 MyPreference.setPhoneNumberUsage(getApplicationContext(), new ArraySet<String>());
@@ -294,19 +332,34 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        /*
-         * Check if microphone permissions is granted
-         */
-        if (requestCode == MIC_PERMISSION_REQUEST_CODE && permissions.length > 0) {
-            boolean granted = true;
-            if (granted) {
-                startService();
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "Microphone permissions needed. Please allow in App Settings for additional functionality.",
-                        Toast.LENGTH_LONG).show();
-            }
-        }
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+
+//        switch (requestCode) {
+//            case MIC_PERMISSION_REQUEST_CODE: {
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0
+//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                    // permission was granted, yay! Do the
+//                    // contacts-related task you need to do.
+//                    startService();
+//
+//                } else {
+//
+//                    // permission denied, boo! Disable the
+//                    // functionality that depends on this permission.
+//                    Toast.makeText(getApplicationContext(),
+//                            "Microphone permissions needed. Please allow in App Settings for additional functionality.",
+//                            Toast.LENGTH_LONG).show();
+//                    finish();
+//                }
+//                return;
+//            }
+//
+//            // other 'case' lines to check for other
+//            // permissions this app might request
+//        }
     }
 
     private boolean checkPermissionForMicrophone() {
@@ -323,6 +376,7 @@ public class MainActivity extends BaseActivity implements
                     "Microphone permissions needed. Please allow in App Settings for additional functionality.",
                     Toast.LENGTH_LONG).show();
         } else {
+            DebugTool.logD("SHOW REQUEST");
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.RECORD_AUDIO},
@@ -335,6 +389,30 @@ public class MainActivity extends BaseActivity implements
         CredentialsManager.deleteCredentials(this);
         startActivity(new Intent(this, AuthenticationActivity.class));
         finish();
+    }
+
+    @AfterPermissionGranted(MIC_PERMISSION_REQUEST_CODE)
+    public void recordPermission() {
+        String perm = Manifest.permission.RECORD_AUDIO;
+        if (!EasyPermissions.hasPermissions(this, perm)) {
+            EasyPermissions.requestPermissions(this, Manifest.permission.RECORD_AUDIO, MIC_PERMISSION_REQUEST_CODE, perm);
+        } else {
+            startService();
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        startService();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        List<String> strings = new ArrayList<>();
+        strings.add(Manifest.permission.RECORD_AUDIO);
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, strings)) {
+            new AppSettingsDialog.Builder(this).build().show();
+        }
     }
 
 

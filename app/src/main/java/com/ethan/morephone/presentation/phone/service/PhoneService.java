@@ -49,7 +49,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.twilio.client.impl.TwilioImpl.getContext;
 
 /**
  * Created by Ethan on 4/27/17.
@@ -358,14 +357,14 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                             updateTokenFcm();
                             DebugTool.logD("PHONE STATE: " + mPhoneState);
                             if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
-//                                registerPhoneNumberAgain();
+                                registerPhoneNumberAgain();
                                 DatabaseHelpper.insert(getApplicationContext(), "REGISTER DEVICE");
                             }
                         }
                     },
                     PROGRESS_UPDATE_INITIAL_INTERVAL,
                     PROGRESS_UPDATE_INTERNAL,
-                    TimeUnit.MINUTES);
+                    TimeUnit.SECONDS);
         }
     }
 
@@ -438,8 +437,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                 Device device = Twilio.createDevice(token, PhoneService.this);
                 device.setIncomingSoundEnabled(true);
 
-                Intent intent = new Intent(getContext(), PhoneActivity.class);
-                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                Intent intent = new Intent(getApplicationContext(), PhoneActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 device.setIncomingIntent(pendingIntent);
 
                 mDevices.put(phoneNumber, device);
@@ -564,12 +563,12 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             if (device.getCapabilities().isEmpty()) {
                 device.updateCapabilityToken(getToken(fromPhoneNumber));
                 device.setDeviceListener(this);
-                Toast.makeText(getContext(), "device don't allow outgoing", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "device don't allow outgoing", Toast.LENGTH_SHORT).show();
             }
             updateUIPhone(PHONE_STATE_OUTGOING, fromPhoneNumber, toPhoneNumber);
         } else {
             updateUIPhone(PHONE_STATE_DISCONNECTED, fromPhoneNumber, toPhoneNumber);
-            Toast.makeText(getContext(), "No existing device", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No existing device", Toast.LENGTH_SHORT).show();
         }
 
 

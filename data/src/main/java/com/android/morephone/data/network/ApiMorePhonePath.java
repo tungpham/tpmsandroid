@@ -33,6 +33,9 @@ interface ApiMorePhonePath {
     @PUT("user/{id}/token")
     Call<BaseResponse<User>> updateFcmToken(@Path("id") String id, @Query("token") String token);
 
+    @PUT("user/{id}/forward")
+    Call<BaseResponse<User>> updateForward(@Path("id") String id, @Query("forward_phone_number") String forwardPhoneNumber, @Query("forward_email") String forwardEmail);
+
     /*-----------------------------------------PHONE NUMBER-----------------------------------------*/
 
     @POST("phone-number")

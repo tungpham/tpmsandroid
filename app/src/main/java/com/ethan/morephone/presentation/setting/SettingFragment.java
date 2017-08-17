@@ -91,7 +91,7 @@ public class SettingFragment extends BaseFragment implements
 
         visibleConfigure();
 
-        loadData();
+        updateForward();
 
         setHasOptionsMenu(true);
         return view;
@@ -167,6 +167,12 @@ public class SettingFragment extends BaseFragment implements
     }
 
     @Override
+    public void updateForward() {
+        mTextPhone.setText(MyPreference.getSettingConfigurePhone(getContext()));
+        mTextEmail.setText(MyPreference.getSettingConfigureEmail(getContext()));
+    }
+
+    @Override
     public void setPresenter(SettingContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -202,20 +208,13 @@ public class SettingFragment extends BaseFragment implements
         }
     }
 
-    private void loadData(){
-        mTextPhone.setText(MyPreference.getSettingConfigurePhone(getContext()));
-        mTextEmail.setText(MyPreference.getSettingConfigureEmail(getContext()));
-    }
-
     @Override
     public void configurePhone(String phoneNumber) {
-        MyPreference.setSettingConfigurePhone(getContext(), phoneNumber);
-        loadData();
+        mPresenter.settingForward(getContext(), MyPreference.getUserId(getContext()), phoneNumber, MyPreference.getSettingConfigureEmail(getContext()));
     }
 
     @Override
-    public void configureEmail(String phoneNumber) {
-        MyPreference.setSettingConfigureEmail(getContext(), phoneNumber);
-        loadData();
+    public void configureEmail(String email) {
+        mPresenter.settingForward(getContext(), MyPreference.getUserId(getContext()), MyPreference.getSettingConfigurePhone(getContext()), email);
     }
 }

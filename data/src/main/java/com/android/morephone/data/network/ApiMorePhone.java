@@ -124,6 +124,14 @@ public class ApiMorePhone {
     }
 
 
+    public static void updateForward(Context context,
+                                     String id,
+                                     String forwardPhoneNumber,
+                                     String forwardEmail,
+                                     Callback<BaseResponse<User>> callback) {
+        Call<BaseResponse<User>> call = getApiPath(context).updateForward(id, forwardPhoneNumber, forwardEmail);
+        call.enqueue(callback);
+    }
 
     /*-----------------------------------------PHONE NUMBER-----------------------------------------*/
 

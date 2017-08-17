@@ -1,5 +1,7 @@
 package com.android.morephone.data.entity.user;
 
+import java.util.Date;
+
 /**
  * Created by Ethan on 7/26/17.
  */
@@ -8,6 +10,8 @@ public class User {
 
     private String id;
     private String email;
+    private String forwardPhoneNumber;
+    private String forwardEmail;
     private String firstName;
     private String lastName;
     private String country;
@@ -26,6 +30,8 @@ public class User {
 
     private User(Builder builder) {
         this.email = builder.email;
+        this.forwardPhoneNumber = builder.forwardPhoneNumber;
+        this.forwardEmail = builder.forwardEmail;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.country = builder.country;
@@ -141,6 +147,22 @@ public class User {
         this.authToken = authToken;
     }
 
+    public String getForwardPhoneNumber() {
+        return forwardPhoneNumber;
+    }
+
+    public void setForwardPhoneNumber(String forwardPhoneNumber) {
+        this.forwardPhoneNumber = forwardPhoneNumber;
+    }
+
+    public String getForwardEmail() {
+        return forwardEmail;
+    }
+
+    public void setForwardEmail(String forwardEmail) {
+        this.forwardEmail = forwardEmail;
+    }
+
     public void update(String country, String languageCode) {
         this.country = country;
         this.languageCode = languageCode;
@@ -148,6 +170,13 @@ public class User {
 
     public void update(String token) {
         this.token = token;
+    }
+
+    public void updateForward(String forwardPhoneNumber, String forwardEmail) {
+        this.forwardPhoneNumber = forwardPhoneNumber;
+        this.forwardEmail = forwardEmail;
+        Date date = new Date();
+        updatedAt = date.getTime();
     }
 
     @Override
@@ -163,6 +192,8 @@ public class User {
 
     public static class Builder {
         private String email;
+        private String forwardPhoneNumber;
+        private String forwardEmail;
         private String firstName;
         private String lastName;
         private String country;
@@ -174,6 +205,17 @@ public class User {
         private String platform;
 
         private Builder() {
+        }
+
+
+        public Builder forwardPhoneNumber(String forwardPhoneNumber) {
+            this.forwardPhoneNumber = forwardPhoneNumber;
+            return this;
+        }
+
+        public Builder forwardEmail(String forwardEmail) {
+            this.forwardEmail = forwardEmail;
+            return this;
         }
 
         public Builder accountSid(String accountSid) {
