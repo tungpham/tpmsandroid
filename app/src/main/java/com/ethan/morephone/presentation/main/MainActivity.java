@@ -100,41 +100,6 @@ public class MainActivity extends BaseActivity implements
 
         MyPreference.setTimesUse(getApplicationContext(), MyPreference.getTimesUse(getApplicationContext()) + 1);
 
-//        if (!checkPermissionForMicrophone()) {
-//            requestPermissionForMicrophone();
-//        } else {
-//            startService();
-//        }
-
-//        // Here, thisActivity is the current activity
-//        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)
-//                != PackageManager.PERMISSION_GRANTED) {
-//
-//            // Should we show an explanation?
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-//                    Manifest.permission.RECORD_AUDIO)) {
-//
-//                // Show an explanation to the user *asynchronously* -- don't block
-//                // this thread waiting for the user's response! After the user
-//                // sees the explanation, try again to request the permission.
-//                DebugTool.logD("REQUEST PERMISSTION");
-//
-//            }
-//
-//            // No explanation needed, we can request the permission.
-//
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.READ_CONTACTS},
-//                    MIC_PERMISSION_REQUEST_CODE);
-//
-//            DebugTool.logD("REQUEST PERMISSTION 2");
-//            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-//            // app-defined int constant. The callback method gets the
-//            // result of the request.
-//        } else {
-//            startService();
-//        }
-
         recordPermission();
     }
 
@@ -186,9 +151,9 @@ public class MainActivity extends BaseActivity implements
             case R.id.nav_buy_number:
                 startActivityForResult(new Intent(this, SearchPhoneNumberActivity.class), REQUEST_BUY_PHONE_NUMBER);
                 break;
-            case R.id.nav_setting:
-                startActivity(new Intent(this, SettingActivity.class));
-                break;
+//            case R.id.nav_setting:
+//                startActivity(new Intent(this, SettingActivity.class));
+//                break;
             case R.id.nav_license:
                 startActivity(new Intent(this, LicenseActivity.class));
                 break;

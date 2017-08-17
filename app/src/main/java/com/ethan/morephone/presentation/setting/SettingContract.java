@@ -18,6 +18,8 @@ public interface SettingContract {
         void updateFriendlyName(String friendlyName);
 
         void updateForward();
+
+        void showConfigure();
     }
 
     interface Presenter extends BasePresenter {
@@ -25,5 +27,7 @@ public interface SettingContract {
         void changeFriendlyName(Context context, String incomingPhoneNumberSid, String friendlyName);
 
         void settingForward(Context context, String userId, String forwardPhoneNumber, String forwardEmail);
+
+        void enableForward(Context context, String userId, boolean isForward);
     }
 }

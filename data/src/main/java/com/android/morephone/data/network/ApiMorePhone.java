@@ -133,6 +133,14 @@ public class ApiMorePhone {
         call.enqueue(callback);
     }
 
+    public static void enableForward(Context context,
+                                     String id,
+                                     boolean isForward,
+                                     Callback<BaseResponse<User>> callback) {
+        Call<BaseResponse<User>> call = getApiPath(context).enableForward(id, isForward);
+        call.enqueue(callback);
+    }
+
     /*-----------------------------------------PHONE NUMBER-----------------------------------------*/
 
     public static void createPhoneNumber(Context context,

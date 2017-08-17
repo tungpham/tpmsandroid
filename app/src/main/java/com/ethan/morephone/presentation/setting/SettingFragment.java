@@ -89,7 +89,7 @@ public class SettingFragment extends BaseFragment implements
         mTextPhone = (TextView) view.findViewById(R.id.text_setting_phone_summary);
         mTextEmail = (TextView) view.findViewById(R.id.text_setting_email_summary);
 
-        visibleConfigure();
+        showConfigure();
 
         updateForward();
 
@@ -173,6 +173,17 @@ public class SettingFragment extends BaseFragment implements
     }
 
     @Override
+    public void showConfigure() {
+        if (MyPreference.getSettingConfigure(getContext())) {
+            mRelativePhone.setVisibility(View.VISIBLE);
+            mRelativeEmail.setVisibility(View.VISIBLE);
+        } else {
+            mRelativePhone.setVisibility(View.GONE);
+            mRelativeEmail.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public void setPresenter(SettingContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -190,21 +201,10 @@ public class SettingFragment extends BaseFragment implements
                 break;
 
             case R.id.switch_setting_configure_sms_forwarding:
-                MyPreference.setSettingConfigure(getContext(), mSwitchConfigure.isChecked());
-                visibleConfigure();
+                mPresenter.enableForward(getContext(), MyPreference.getUserId(getContext()), mSwitchConfigure.isChecked());
                 break;
             default:
                 break;
-        }
-    }
-
-    private void visibleConfigure() {
-        if (MyPreference.getSettingConfigure(getContext())) {
-            mRelativePhone.setVisibility(View.VISIBLE);
-            mRelativeEmail.setVisibility(View.VISIBLE);
-        } else {
-            mRelativePhone.setVisibility(View.GONE);
-            mRelativeEmail.setVisibility(View.GONE);
         }
     }
 

@@ -22,7 +22,7 @@ public class SettingActivity extends BaseActivity {
         setContentView(R.layout.activity_setting);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        enableHomeActionBar(toolbar, getString(R.string.setting_label));
+        setTitleActionBar(toolbar, getString(R.string.setting_label));
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof SettingFragment) return;

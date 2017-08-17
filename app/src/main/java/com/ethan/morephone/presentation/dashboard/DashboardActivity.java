@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -21,8 +22,11 @@ import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.authentication.login.LoginActivity;
+import com.ethan.morephone.presentation.authentication.login.forgot.ForgotPasswordActivity;
 import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
+import com.ethan.morephone.presentation.setting.SettingActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 import com.ethan.morephone.utils.EnumUtil;
 import com.twilio.client.Device;
@@ -73,12 +77,24 @@ public class DashboardActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_setting, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
             case android.R.id.home:
                 finish();
                 break;
+
+            case R.id.menu_setting:
+                startActivity(new Intent(DashboardActivity.this, SettingActivity.class));
+                break;
+
 
             default:
                 break;

@@ -77,6 +77,27 @@ public class SettingPresenter implements SettingContract.Presenter {
     }
 
     @Override
+    public void enableForward(final Context context, String userId, final boolean isForward) {
+        mView.showLoading(true);
+        ApiMorePhone.enableForward(context, userId, isForward, new Callback<BaseResponse<User>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<User>> call, Response<BaseResponse<User>> response) {
+                if(response.isSuccessful()){
+                    MyPreference.setSettingConfigure(context, isForward);
+                }
+                mView.showLoading(false);
+                mView.showConfigure();
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<User>> call, Throwable t) {
+                mView.showLoading(false);
+                mView.showConfigure();
+            }
+        });
+    }
+
+    @Override
     public void start() {
 
     }

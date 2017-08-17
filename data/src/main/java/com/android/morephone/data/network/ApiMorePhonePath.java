@@ -36,6 +36,9 @@ interface ApiMorePhonePath {
     @PUT("user/{id}/forward")
     Call<BaseResponse<User>> updateForward(@Path("id") String id, @Query("forward_phone_number") String forwardPhoneNumber, @Query("forward_email") String forwardEmail);
 
+    @PUT("user/{id}/forward/enable")
+    Call<BaseResponse<User>> enableForward(@Path("id") String id, @Query("is_forward") boolean isEnable);
+
     /*-----------------------------------------PHONE NUMBER-----------------------------------------*/
 
     @POST("phone-number")
