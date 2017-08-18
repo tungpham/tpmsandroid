@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,9 +24,16 @@ import com.ethan.morephone.R;
 
 public class ChangeFriendlyNameDialog extends DialogFragment {
 
-    public static ChangeFriendlyNameDialog getInstance() {
-        return new ChangeFriendlyNameDialog();
+    private static final String BUNDLE_FRIENDLY_NAME = "BUNDLE_FRIENDLY_NAME";
+    public static ChangeFriendlyNameDialog getInstance(String friendlyName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_FRIENDLY_NAME, friendlyName);
+        ChangeFriendlyNameDialog changeFriendlyNameDialog = new ChangeFriendlyNameDialog();
+        changeFriendlyNameDialog.setArguments(bundle);
+        return changeFriendlyNameDialog;
     }
+
+
 
     private ChangeFriendlyNameListener mChangeFriendlyNameListener;
 
@@ -51,9 +59,11 @@ public class ChangeFriendlyNameDialog extends DialogFragment {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
+        lp.leftMargin = 16;
+        lp.rightMargin = 16;
         input.setLayoutParams(lp);
         builder.setView(input);
-        input.setText(MyPreference.getFriendlyName(getContext()));
+        input.setText(getArguments().getString(BUNDLE_FRIENDLY_NAME));
 
         builder.setPositiveButton(getString(R.string.change_friendly_name_dialog_change), new DialogInterface.OnClickListener() {
             @Override

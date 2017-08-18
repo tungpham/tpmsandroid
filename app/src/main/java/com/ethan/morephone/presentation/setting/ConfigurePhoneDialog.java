@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,8 +24,14 @@ import com.ethan.morephone.R;
 
 public class ConfigurePhoneDialog extends DialogFragment {
 
-    public static ConfigurePhoneDialog getInstance() {
-        return new ConfigurePhoneDialog();
+    private static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+
+    public static ConfigurePhoneDialog getInstance(String phoneNumber) {
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
+        ConfigurePhoneDialog configurePhoneDialog = new ConfigurePhoneDialog();
+        configurePhoneDialog.setArguments(bundle);
+        return configurePhoneDialog;
     }
 
     private ConfigurePhoneListener mConfigurePhoneListener;
@@ -51,22 +58,25 @@ public class ConfigurePhoneDialog extends DialogFragment {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
+        lp.leftMargin = 16;
+        lp.rightMargin = 16;
         input.setLayoutParams(lp);
+        input.setInputType(InputType.TYPE_CLASS_PHONE);
         builder.setView(input);
-        input.setText(MyPreference.getSettingConfigurePhone(getContext()));
+        input.setText(getArguments().getString(BUNDLE_PHONE_NUMBER));
 
         builder.setPositiveButton(getString(R.string.configure_phone_dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String phoneNumber = input.getText().toString();
-                if (!TextUtils.isEmpty(phoneNumber)) {
-                    if (mConfigurePhoneListener != null) {
-                        mConfigurePhoneListener.configurePhone(phoneNumber);
-                    }
-                    dismiss();
-                } else {
-                    Toast.makeText(getContext(), getString(R.string.configure_phone_dialog_empty), Toast.LENGTH_SHORT).show();
+//                if (!TextUtils.isEmpty(phoneNumber)) {
+                if (mConfigurePhoneListener != null) {
+                    mConfigurePhoneListener.configurePhone(phoneNumber);
                 }
+                dismiss();
+//                } else {
+//                    Toast.makeText(getContext(), getString(R.string.configure_phone_dialog_empty), Toast.LENGTH_SHORT).show();
+//                }
             }
         });
 

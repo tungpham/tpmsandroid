@@ -46,9 +46,11 @@ public class SettingFragment extends BaseFragment implements
     private SwitchCompat mSwitchConfigure;
 
     private RelativeLayout mRelativePhone;
-    private TextView mTextPhone;
+    private TextView mTextPhoneForward;
     private RelativeLayout mRelativeEmail;
-    private TextView mTextEmail;
+    private TextView mTextEmailForward;
+
+    private String mPhoneNumberId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,10 +88,11 @@ public class SettingFragment extends BaseFragment implements
         mSwitchConfigure = (SwitchCompat) view.findViewById(R.id.switch_setting_configure_sms_forwarding);
         mSwitchConfigure.setOnCheckedChangeListener(this);
 
-        mTextPhone = (TextView) view.findViewById(R.id.text_setting_phone_summary);
-        mTextEmail = (TextView) view.findViewById(R.id.text_setting_email_summary);
+        mTextPhoneForward = (TextView) view.findViewById(R.id.text_setting_phone_summary);
+        mTextEmailForward = (TextView) view.findViewById(R.id.text_setting_email_summary);
 
-        mPresenter.getPhoneNumber(getContext(), getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID));
+        mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
+        mPresenter.getPhoneNumber(getContext(), mPhoneNumberId);
 
         setHasOptionsMenu(true);
         return view;
@@ -113,7 +116,7 @@ public class SettingFragment extends BaseFragment implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.relative_setting_friendly_name:
-                ChangeFriendlyNameDialog changeFriendlyNameDialog = ChangeFriendlyNameDialog.getInstance();
+                ChangeFriendlyNameDialog changeFriendlyNameDialog = ChangeFriendlyNameDialog.getInstance(mTextFriendlyName.getText().toString());
                 changeFriendlyNameDialog.show(getChildFragmentManager(), ChangeFriendlyNameDialog.class.getSimpleName());
                 changeFriendlyNameDialog.setChangeFriendlyNameListener(this);
                 break;
@@ -131,13 +134,13 @@ public class SettingFragment extends BaseFragment implements
                 break;
 
             case R.id.relative_setting_phone:
-                ConfigurePhoneDialog configurePhoneDialog = ConfigurePhoneDialog.getInstance();
+                ConfigurePhoneDialog configurePhoneDialog = ConfigurePhoneDialog.getInstance(mTextPhoneForward.getText().toString());
                 configurePhoneDialog.show(getChildFragmentManager(), ConfigurePhoneDialog.class.getSimpleName());
                 configurePhoneDialog.setConfigurePhoneListener(this);
                 break;
 
             case R.id.relative_setting_email:
-                ConfigureEmailDialog configureEmailDialog = ConfigureEmailDialog.getInstance();
+                ConfigureEmailDialog configureEmailDialog = ConfigureEmailDialog.getInstance(mTextEmailForward.getText().toString());
                 configureEmailDialog.show(getChildFragmentManager(), ConfigureEmailDialog.class.getSimpleName());
                 configureEmailDialog.setConfigureEmailListener(this);
                 break;
@@ -186,8 +189,8 @@ public class SettingFragment extends BaseFragment implements
 
     @Override
     public void updateForward(String phoneNumber, String email) {
-        mTextPhone.setText(phoneNumber);
-        mTextEmail.setText(email);
+        mTextPhoneForward.setText(phoneNumber);
+        mTextEmailForward.setText(email);
     }
 
     @Override
@@ -219,7 +222,7 @@ public class SettingFragment extends BaseFragment implements
 //                break;
 
             case R.id.switch_setting_configure_sms_forwarding:
-                mPresenter.enableForward(getContext(), MyPreference.getPhoneNumberId(getContext()), mSwitchConfigure.isChecked());
+                mPresenter.enableForward(getContext(), mPhoneNumberId, mSwitchConfigure.isChecked());
                 break;
             default:
                 break;
@@ -228,11 +231,11 @@ public class SettingFragment extends BaseFragment implements
 
     @Override
     public void configurePhone(String phoneNumber) {
-        mPresenter.settingForward(getContext(), MyPreference.getPhoneNumberId(getContext()), phoneNumber, MyPreference.getSettingConfigureEmail(getContext()));
+        mPresenter.settingForward(getContext(), mPhoneNumberId, phoneNumber, mTextEmailForward.getText().toString());
     }
 
     @Override
     public void configureEmail(String email) {
-        mPresenter.settingForward(getContext(), MyPreference.getPhoneNumberId(getContext()), MyPreference.getSettingConfigurePhone(getContext()), email);
+        mPresenter.settingForward(getContext(),mPhoneNumberId, mTextPhoneForward.getText().toString(), email);
     }
 }
