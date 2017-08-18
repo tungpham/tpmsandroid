@@ -285,33 +285,32 @@ public class MessageListFragment extends BaseFragment implements
                 String fromPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_FROM_PHONE_NUMBER);
                 String toPhoneNumber = intent.getStringExtra(NotifyFirebaseMessagingService.EXTRA_TO_PHONE_NUMBER);
 
-                if (MyPreference.getPhoneNumber(getContext()).equals(fromPhoneNumber)) {
-                    return;
+                if (mPhoneNumberTo.equals(fromPhoneNumber) && mPhoneNumberFrom.equals(toPhoneNumber)) {
+
+                    final MessageItem messageItem = new MessageItem(
+                            "",
+                            "",
+                            "",
+                            "",
+                            null,
+                            toPhoneNumber,
+                            fromPhoneNumber,
+                            null,
+                            body,
+                            Constant.MESSAGE_STATUS_RECEIVED,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            null);
+
+                    createMessageSuccess(messageItem);
                 }
-
-                final MessageItem messageItem = new MessageItem(
-                        "",
-                        "",
-                        "",
-                        "",
-                        null,
-                        toPhoneNumber,
-                        fromPhoneNumber,
-                        null,
-                        body,
-                        Constant.MESSAGE_STATUS_RECEIVED,
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        null);
-
-                createMessageSuccess(messageItem);
             }
         }
     }
