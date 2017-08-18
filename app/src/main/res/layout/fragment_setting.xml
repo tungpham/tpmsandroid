@@ -42,67 +42,9 @@
         </RelativeLayout>
 
         <View
-            android:id="@+id/view_divider_1a"
-            style="@style/Divider"
-            android:layout_below="@+id/relative_setting_friendly_name" />
-
-        <RelativeLayout
-            android:id="@+id/relative_setting_enable_record"
-            style="@style/RelativeSetting"
-            android:layout_below="@+id/view_divider_1a">
-
-            <com.ethan.morephone.widget.MyTextView
-                android:id="@+id/text_setting_enable_record"
-                style="@style/TextTorrentSettingItem"
-                android:layout_toLeftOf="@+id/switch_setting_enable_record"
-                android:text="@string/setting_enable_record" />
-
-            <com.ethan.morephone.widget.MyTextView
-                style="@style/TextTorrentSettingSummary"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_setting_enable_record"
-                android:layout_toLeftOf="@+id/switch_setting_enable_record"
-                android:text="@string/setting_enable_record_summary" />
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switch_setting_enable_record"
-                style="@style/SwitchSettingItem" />
-
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/view_divider_1b"
-            style="@style/Divider"
-            android:layout_below="@+id/relative_setting_enable_record" />
-
-        <RelativeLayout
-            android:id="@+id/relative_setting_enable_notification"
-            style="@style/RelativeSetting"
-            android:layout_below="@+id/view_divider_1b">
-
-            <com.ethan.morephone.widget.MyTextView
-                android:id="@+id/text_setting_enable_notification"
-                style="@style/TextTorrentSettingItem"
-                android:layout_toLeftOf="@+id/switch_setting_enable_notification"
-                android:text="@string/setting_enable_notification" />
-
-            <com.ethan.morephone.widget.MyTextView
-                style="@style/TextTorrentSettingSummary"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_setting_enable_notification"
-                android:layout_toLeftOf="@+id/switch_setting_enable_notification"
-                android:text="@string/setting_enable_notification_summary" />
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switch_setting_enable_notification"
-                style="@style/SwitchSettingItem" />
-
-        </RelativeLayout>
-
-        <View
             android:id="@+id/view_divider_1c"
             style="@style/Divider"
-            android:layout_below="@+id/relative_setting_enable_notification" />
+            android:layout_below="@+id/relative_setting_friendly_name" />
 
 
         <RelativeLayout

@@ -16,7 +16,7 @@ public class PhoneNumber {
     private String applicationSid;
     private String forwardPhoneNumber;
     private String forwardEmail;
-    private boolean isForward;
+    private boolean forward;
     private long createdAt;
     private long updatedAt;
 
@@ -33,7 +33,7 @@ public class PhoneNumber {
         this.applicationSid = builder.applicationSid;
         this.forwardPhoneNumber = builder.forwardPhoneNumber;
         this.forwardEmail = builder.forwardEmail;
-        this.isForward = builder.isForward;
+        this.forward = builder.isForward;
     }
 
     public static Builder getBuilder() {
@@ -121,11 +121,11 @@ public class PhoneNumber {
     }
 
     public boolean isForward() {
-        return isForward;
+        return forward;
     }
 
     public void setForward(boolean forward) {
-        isForward = forward;
+        this.forward = forward;
     }
 
     public String getForwardPhoneNumber() {

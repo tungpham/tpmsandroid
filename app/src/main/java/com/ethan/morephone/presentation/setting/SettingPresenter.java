@@ -82,6 +82,7 @@ public class SettingPresenter implements SettingContract.Presenter {
         ApiMorePhone.enableForward(context, userId, isForward, new Callback<BaseResponse<PhoneNumber>>() {
             @Override
             public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+                DebugTool.logD("IS FORWARD: " + response.body().getResponse().isForward());
                 if(response.isSuccessful() && response.body() != null && response.body().getResponse() != null){
                     mView.showConfigure(response.body().getResponse().isForward());
                 }

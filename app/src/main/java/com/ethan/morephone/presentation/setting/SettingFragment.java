@@ -66,8 +66,8 @@ public class SettingFragment extends BaseFragment implements
         mTextFriendlyName = (TextView) view.findViewById(R.id.text_setting_friendly_name_set);
 
         view.findViewById(R.id.relative_setting_friendly_name).setOnClickListener(this);
-        view.findViewById(R.id.relative_setting_enable_record).setOnClickListener(this);
-        view.findViewById(R.id.relative_setting_enable_notification).setOnClickListener(this);
+//        view.findViewById(R.id.relative_setting_enable_record).setOnClickListener(this);
+//        view.findViewById(R.id.relative_setting_enable_notification).setOnClickListener(this);
         view.findViewById(R.id.relative_setting_configure_sms_forwarding).setOnClickListener(this);
 
         mRelativePhone = (RelativeLayout) view.findViewById(R.id.relative_setting_phone);
@@ -75,13 +75,13 @@ public class SettingFragment extends BaseFragment implements
         mRelativeEmail = (RelativeLayout) view.findViewById(R.id.relative_setting_email);
         mRelativeEmail.setOnClickListener(this);
 
-        mSwitchRecord = (SwitchCompat) view.findViewById(R.id.switch_setting_enable_record);
-        mSwitchRecord.setOnCheckedChangeListener(this);
-        mSwitchRecord.setChecked(MyPreference.getSettingEnableRecord(getContext()));
-
-        mSwitchNotification = (SwitchCompat) view.findViewById(R.id.switch_setting_enable_notification);
-        mSwitchNotification.setOnCheckedChangeListener(this);
-        mSwitchNotification.setChecked(MyPreference.getSettingEnableNotification(getContext()));
+//        mSwitchRecord = (SwitchCompat) view.findViewById(R.id.switch_setting_enable_record);
+//        mSwitchRecord.setOnCheckedChangeListener(this);
+//        mSwitchRecord.setChecked(MyPreference.getSettingEnableRecord(getContext()));
+//
+//        mSwitchNotification = (SwitchCompat) view.findViewById(R.id.switch_setting_enable_notification);
+//        mSwitchNotification.setOnCheckedChangeListener(this);
+//        mSwitchNotification.setChecked(MyPreference.getSettingEnableNotification(getContext()));
 
         mSwitchConfigure = (SwitchCompat) view.findViewById(R.id.switch_setting_configure_sms_forwarding);
         mSwitchConfigure.setOnCheckedChangeListener(this);
@@ -118,13 +118,13 @@ public class SettingFragment extends BaseFragment implements
                 changeFriendlyNameDialog.setChangeFriendlyNameListener(this);
                 break;
 
-            case R.id.relative_setting_enable_record:
-                mSwitchRecord.setChecked(!mSwitchRecord.isChecked());
-                break;
+//            case R.id.relative_setting_enable_record:
+//                mSwitchRecord.setChecked(!mSwitchRecord.isChecked());
+//                break;
 
-            case R.id.relative_setting_enable_notification:
-                mSwitchNotification.setChecked(!mSwitchNotification.isChecked());
-                break;
+//            case R.id.relative_setting_enable_notification:
+//                mSwitchNotification.setChecked(!mSwitchNotification.isChecked());
+//                break;
 
             case R.id.relative_setting_configure_sms_forwarding:
                 mSwitchConfigure.setChecked(!mSwitchConfigure.isChecked());
@@ -210,13 +210,13 @@ public class SettingFragment extends BaseFragment implements
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         switch (compoundButton.getId()) {
 
-            case R.id.switch_setting_enable_record:
-                MyPreference.setSettingEnableRecord(getContext(), mSwitchRecord.isChecked());
-                break;
-
-            case R.id.switch_setting_enable_notification:
-                MyPreference.setSettingEnableNotification(getContext(), mSwitchNotification.isChecked());
-                break;
+//            case R.id.switch_setting_enable_record:
+//                MyPreference.setSettingEnableRecord(getContext(), mSwitchRecord.isChecked());
+//                break;
+//
+//            case R.id.switch_setting_enable_notification:
+//                MyPreference.setSettingEnableNotification(getContext(), mSwitchNotification.isChecked());
+//                break;
 
             case R.id.switch_setting_configure_sms_forwarding:
                 mPresenter.enableForward(getContext(), MyPreference.getPhoneNumberId(getContext()), mSwitchConfigure.isChecked());
