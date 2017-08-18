@@ -18,10 +18,6 @@ import com.ethan.morephone.widget.PagerSlidingTabStrip;
 
 public class DashboardFrag extends BaseFragment {
 
-    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
-
-    public static final String BUNDLE_FRAGMENT_MODE = "BUNDLE_FRAGMENT_MODE";
-
     public static final int BUNDLE_FRAGMENT_MESSAGE = 0;
     public static final int BUNDLE_FRAGMENT_RECORD = 1;
     public static final int BUNDLE_FRAGMENT_CALL_LOGS = 2;
@@ -29,11 +25,8 @@ public class DashboardFrag extends BaseFragment {
 
     public static final int REQUEST_COMPOSE = 100;
 
-    public static DashboardFrag getInstance(String phoneNumber, int mode) {
+    public static DashboardFrag getInstance(Bundle bundle) {
         DashboardFrag dashboardFragment = new DashboardFrag();
-        Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
-        bundle.putInt(BUNDLE_FRAGMENT_MODE, mode);
         dashboardFragment.setArguments(bundle);
         return dashboardFragment;
     }
@@ -46,9 +39,9 @@ public class DashboardFrag extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
+        mPhoneNumber = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
 
-        int mode = getArguments().getInt(BUNDLE_FRAGMENT_MODE);
+        int mode = getArguments().getInt(DashboardActivity.BUNDLE_FRAGMENT_MODE);
 
         setUpViewPager(view, mode);
 

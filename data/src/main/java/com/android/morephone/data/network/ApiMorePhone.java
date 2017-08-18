@@ -14,6 +14,7 @@ import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.utils.TwilioManager;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -128,16 +129,16 @@ public class ApiMorePhone {
                                      String id,
                                      String forwardPhoneNumber,
                                      String forwardEmail,
-                                     Callback<BaseResponse<User>> callback) {
-        Call<BaseResponse<User>> call = getApiPath(context).updateForward(id, forwardPhoneNumber, forwardEmail);
+                                     Callback<BaseResponse<PhoneNumber>> callback) {
+        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).updateForward(id, forwardPhoneNumber, forwardEmail);
         call.enqueue(callback);
     }
 
     public static void enableForward(Context context,
                                      String id,
                                      boolean isForward,
-                                     Callback<BaseResponse<User>> callback) {
-        Call<BaseResponse<User>> call = getApiPath(context).enableForward(id, isForward);
+                                     Callback<BaseResponse<PhoneNumber>> callback) {
+        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).enableForward(id, isForward);
         call.enqueue(callback);
     }
 
@@ -147,6 +148,20 @@ public class ApiMorePhone {
                                          PhoneNumber phoneNumber,
                                          Callback<BaseResponse<PhoneNumber>> callback) {
         Call<BaseResponse<PhoneNumber>> call = getApiPath(context).createPhoneNumber(phoneNumber);
+        call.enqueue(callback);
+    }
+
+    public static void getPhoneNumbers(Context context,
+                                       String userId,
+                                       Callback<BaseResponse<List<PhoneNumber>>> callback) {
+        Call<BaseResponse<List<PhoneNumber>>> call = getApiPath(context).getPhoneNumbers(userId);
+        call.enqueue(callback);
+    }
+
+    public static void getPhoneNumber(Context context,
+                                      String id,
+                                      Callback<BaseResponse<PhoneNumber>> callback) {
+        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).getPhoneNumber(id);
         call.enqueue(callback);
     }
 

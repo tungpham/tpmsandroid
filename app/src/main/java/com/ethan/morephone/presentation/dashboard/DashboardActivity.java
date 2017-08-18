@@ -1,6 +1,7 @@
 package com.ethan.morephone.presentation.dashboard;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
@@ -39,7 +41,26 @@ public class DashboardActivity extends BaseActivity {
 
     private final int MIC_PERMISSION_REQUEST_CODE = 101;
 
+    public static final String BUNDLE_PHONE_NUMBER_ID = "BUNDLE_PHONE_NUMBER_ID";
+    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
+    public static final String BUNDLE_FRAGMENT_MODE = "BUNDLE_FRAGMENT_MODE";
+
     private UpdateDeviceReceiver mUpdateDeviceReceiver = new UpdateDeviceReceiver();
+
+    private String mPhoneNumberId;
+    private String mPhoneNumber;
+
+    public static void starter(Activity activity, PhoneNumber phoneNumber, int mode){
+        Intent intent = new Intent(activity, DashboardActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, phoneNumber.getId());
+        bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, phoneNumber.getPhoneNumber());
+        bundle.putInt(DashboardActivity.BUNDLE_FRAGMENT_MODE, mode);
+        intent.putExtras(bundle);
+        activity.startActivity(intent);
+
+        MyPreference.setPhoneNumber(activity.getApplicationContext(), phoneNumber.getPhoneNumber());
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,13 +75,16 @@ public class DashboardActivity extends BaseActivity {
         intentFilterDevicePartner.addAction(PhoneService.ACTION_UPDATE_DEVICE_PARTNER_STATE);
         LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateDeviceReceiver, intentFilterDevicePartner);
 
+        Bundle bundle = getIntent().getExtras();
+        mPhoneNumber = bundle.getString(BUNDLE_PHONE_NUMBER);
+        mPhoneNumberId = bundle.getString(BUNDLE_PHONE_NUMBER_ID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setTitleActionBar(toolbar, MyPreference.getPhoneNumber(getApplicationContext()));
+        setTitleActionBar(toolbar, mPhoneNumber);
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        DashboardFrag voiceFragment = DashboardFrag.getInstance(MyPreference.getPhoneNumber(getApplicationContext()), getIntent().getIntExtra(DashboardFrag.BUNDLE_FRAGMENT_MODE, DashboardFrag.BUNDLE_FRAGMENT_MESSAGE));
+        DashboardFrag voiceFragment = DashboardFrag.getInstance(getIntent().getExtras());
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 voiceFragment,
@@ -92,7 +116,11 @@ public class DashboardActivity extends BaseActivity {
                 break;
 
             case R.id.menu_setting:
-                startActivity(new Intent(DashboardActivity.this, SettingActivity.class));
+                Intent intent = new Intent(DashboardActivity.this, SettingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(BUNDLE_PHONE_NUMBER_ID, mPhoneNumberId);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
 
 

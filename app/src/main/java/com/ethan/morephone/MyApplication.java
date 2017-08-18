@@ -72,7 +72,7 @@ public class MyApplication extends MultiDexApplication {
             }
         });
 
-        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
     }
 
     @Override

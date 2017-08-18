@@ -14,6 +14,9 @@ public class PhoneNumber {
     private String accountSid;
     private String authToken;
     private String applicationSid;
+    private String forwardPhoneNumber;
+    private String forwardEmail;
+    private boolean isForward;
     private long createdAt;
     private long updatedAt;
 
@@ -28,6 +31,9 @@ public class PhoneNumber {
         this.accountSid = builder.accountSid;
         this.authToken = builder.authToken;
         this.applicationSid = builder.applicationSid;
+        this.forwardPhoneNumber = builder.forwardPhoneNumber;
+        this.forwardEmail = builder.forwardEmail;
+        this.isForward = builder.isForward;
     }
 
     public static Builder getBuilder() {
@@ -114,6 +120,30 @@ public class PhoneNumber {
         this.applicationSid = applicationSid;
     }
 
+    public boolean isForward() {
+        return isForward;
+    }
+
+    public void setForward(boolean forward) {
+        isForward = forward;
+    }
+
+    public String getForwardPhoneNumber() {
+        return forwardPhoneNumber;
+    }
+
+    public void setForwardPhoneNumber(String forwardPhoneNumber) {
+        this.forwardPhoneNumber = forwardPhoneNumber;
+    }
+
+    public String getForwardEmail() {
+        return forwardEmail;
+    }
+
+    public void setForwardEmail(String forwardEmail) {
+        this.forwardEmail = forwardEmail;
+    }
+
     //    public void update(String token) {
 //        this.token = token;
 //    }
@@ -137,6 +167,9 @@ public class PhoneNumber {
         private String accountSid;
         private String authToken;
         private String applicationSid;
+        private String forwardPhoneNumber;
+        private String forwardEmail;
+        private boolean isForward;
 
         private Builder() {
         }
@@ -159,6 +192,21 @@ public class PhoneNumber {
 
         public Builder applicationSid(String applicationSid) {
             this.applicationSid = applicationSid;
+            return this;
+        }
+
+        public Builder forwardPhoneNumber(String forwardPhoneNumber) {
+            this.forwardPhoneNumber = forwardPhoneNumber;
+            return this;
+        }
+
+        public Builder forwardEmail(String forwardEmail) {
+            this.forwardEmail = forwardEmail;
+            return this;
+        }
+
+        public Builder isForward(boolean isForward) {
+            this.isForward = isForward;
             return this;
         }
 

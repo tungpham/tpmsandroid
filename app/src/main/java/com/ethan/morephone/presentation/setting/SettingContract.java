@@ -2,6 +2,7 @@ package com.ethan.morephone.presentation.setting;
 
 import android.content.Context;
 
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 
@@ -17,9 +18,13 @@ public interface SettingContract {
 
         void updateFriendlyName(String friendlyName);
 
-        void updateForward();
+        void showPhoneNumber(PhoneNumber phoneNumber);
 
-        void showConfigure();
+        void emptyPhoneNumber();
+
+        void updateForward(String phoneNumber, String email);
+
+        void showConfigure(boolean isEnable);
     }
 
     interface Presenter extends BasePresenter {
@@ -29,5 +34,7 @@ public interface SettingContract {
         void settingForward(Context context, String userId, String forwardPhoneNumber, String forwardEmail);
 
         void enableForward(Context context, String userId, boolean isForward);
+
+        void getPhoneNumber(Context context, String id);
     }
 }

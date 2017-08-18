@@ -26,7 +26,7 @@ public class SettingActivity extends BaseActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof SettingFragment) return;
-        SettingFragment composeFragment = SettingFragment.getInstance();
+        SettingFragment composeFragment = SettingFragment.getInstance(getIntent().getExtras());
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 composeFragment,

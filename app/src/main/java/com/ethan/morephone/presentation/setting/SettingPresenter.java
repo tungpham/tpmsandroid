@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.BaseResponse;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.user.User;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
@@ -58,19 +60,17 @@ public class SettingPresenter implements SettingContract.Presenter {
     @Override
     public void settingForward(final Context context, String userId, String forwardPhoneNumber, String forwardEmail) {
         mView.showLoading(true);
-        ApiMorePhone.updateForward(context, userId, forwardPhoneNumber, forwardEmail, new Callback<BaseResponse<User>>() {
+        ApiMorePhone.updateForward(context, userId, forwardPhoneNumber, forwardEmail, new Callback<BaseResponse<PhoneNumber>>() {
             @Override
-            public void onResponse(Call<BaseResponse<User>> call, Response<BaseResponse<User>> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    MyPreference.setSettingConfigurePhone(context, response.body().getResponse().getForwardPhoneNumber());
-                    MyPreference.setSettingConfigureEmail(context, response.body().getResponse().getForwardEmail());
-                    mView.updateForward();
+            public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+                if(response.isSuccessful() && response.body() != null && response.body().getResponse() != null){
+                    mView.updateForward(response.body().getResponse().getForwardPhoneNumber(), response.body().getResponse().getForwardEmail());
                 }
                 mView.showLoading(false);
             }
 
             @Override
-            public void onFailure(Call<BaseResponse<User>> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
                 mView.showLoading(false);
             }
         });
@@ -79,20 +79,42 @@ public class SettingPresenter implements SettingContract.Presenter {
     @Override
     public void enableForward(final Context context, String userId, final boolean isForward) {
         mView.showLoading(true);
-        ApiMorePhone.enableForward(context, userId, isForward, new Callback<BaseResponse<User>>() {
+        ApiMorePhone.enableForward(context, userId, isForward, new Callback<BaseResponse<PhoneNumber>>() {
             @Override
-            public void onResponse(Call<BaseResponse<User>> call, Response<BaseResponse<User>> response) {
-                if(response.isSuccessful()){
-                    MyPreference.setSettingConfigure(context, isForward);
+            public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+                if(response.isSuccessful() && response.body() != null && response.body().getResponse() != null){
+                    mView.showConfigure(response.body().getResponse().isForward());
                 }
                 mView.showLoading(false);
-                mView.showConfigure();
             }
 
             @Override
-            public void onFailure(Call<BaseResponse<User>> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
                 mView.showLoading(false);
-                mView.showConfigure();
+            }
+        });
+    }
+
+    @Override
+    public void getPhoneNumber(Context context, String id) {
+        mView.showLoading(true);
+
+        ApiMorePhone.getPhoneNumber(context, id, new Callback<BaseResponse<PhoneNumber>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+                DebugTool.logD("PHONE: " + response.body().getResponse().getAccountSid());
+                if(response.isSuccessful() && response.body() != null && response.body().getResponse() != null){
+                    mView.showPhoneNumber(response.body().getResponse());
+                }else {
+                    mView.emptyPhoneNumber();
+                }
+                mView.showLoading(false);
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
+                mView.emptyPhoneNumber();
+                mView.showLoading(false);
             }
         });
     }

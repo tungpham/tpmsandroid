@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -83,7 +84,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
-        mIncomingPhoneNumbersAdapter = new IncomingPhoneNumbersAdapter(getContext(), new ArrayList<IncomingPhoneNumber>(), this);
+        mIncomingPhoneNumbersAdapter = new IncomingPhoneNumbersAdapter(getContext(), new ArrayList<PhoneNumber>(), this);
         recyclerView.setAdapter(mIncomingPhoneNumbersAdapter);
 
         mPresenter.loadIncomingPhoneNumbers(getContext());
@@ -137,11 +138,10 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
     @Override
     public void onItemClick(IncomingPhoneNumbersViewHolder holder, int pos) {
-        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        storePhoneNumber(incomingPhoneNumber);
-        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
-        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
-        startActivity(new Intent(getActivity(), DashboardActivity.class));
+        PhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
+//        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
+//        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
+        DashboardActivity.starter(getActivity(), incomingPhoneNumber, DashboardFrag.BUNDLE_FRAGMENT_MESSAGE);
     }
 
     @Override
@@ -153,42 +153,28 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
     @Override
     public void onItemMessage(IncomingPhoneNumbersViewHolder holder, int pos) {
-        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        storePhoneNumber(incomingPhoneNumber);
+        PhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
+//        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
+//        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
 
-        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
-        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
-
-        Intent intent = new Intent(getActivity(), DashboardActivity.class);
-        intent.putExtra(DashboardFrag.BUNDLE_FRAGMENT_MODE, DashboardFrag.BUNDLE_FRAGMENT_MESSAGE);
-        startActivity(intent);
-
+        DashboardActivity.starter(getActivity(), incomingPhoneNumber, DashboardFrag.BUNDLE_FRAGMENT_MESSAGE);
     }
 
     @Override
     public void onItemVoice(IncomingPhoneNumbersViewHolder holder, int pos) {
-        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        storePhoneNumber(incomingPhoneNumber);
+        PhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
+//        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
+//        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
 
-        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
-        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
-
-        Intent intent = new Intent(getActivity(), DashboardActivity.class);
-        intent.putExtra(DashboardFrag.BUNDLE_FRAGMENT_MODE, DashboardFrag.BUNDLE_FRAGMENT_RECORD);
-        startActivity(intent);
+        DashboardActivity.starter(getActivity(), incomingPhoneNumber, DashboardFrag.BUNDLE_FRAGMENT_RECORD);
     }
 
     @Override
     public void onItemDial(IncomingPhoneNumbersViewHolder holder, int pos) {
-        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
-        storePhoneNumber(incomingPhoneNumber);
-
-        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
-        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
-
-        Intent intent = new Intent(getActivity(), DashboardActivity.class);
-        intent.putExtra(DashboardFrag.BUNDLE_FRAGMENT_MODE, DashboardFrag.BUNDLE_FRAGMENT_DIAL);
-        startActivity(intent);
+        PhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(pos);
+//        mIncomingPhoneNumbersAdapter.validateCurrentPhoneNumberSelected();
+//        mIncomingPhoneNumbersAdapter.validatePhoneNumberSelected(holder, incomingPhoneNumber.phoneNumber);
+        DashboardActivity.starter(getActivity(), incomingPhoneNumber, DashboardFrag.BUNDLE_FRAGMENT_DIAL);
 
     }
 
@@ -201,13 +187,8 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     }
 
     @Override
-    public void showPhoneNumbers(List<IncomingPhoneNumber> numberEntities) {
+    public void showPhoneNumbers(List<PhoneNumber> numberEntities) {
         if (isAdded()) {
-
-
-//            MyPreference.setPhoneNumberUsage(getContext(), phoneNumberUsages);
-
-
             mIncomingPhoneNumbersAdapter.replaceData(numberEntities);
         }
     }
@@ -237,10 +218,10 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
     @Override
     public void onDelete(int position) {
-        IncomingPhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(position);
+        PhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(position);
         mIncomingPhoneNumbersAdapter.getData().remove(incomingPhoneNumber);
         mIncomingPhoneNumbersAdapter.notifyDataSetChanged();
-        mPresenter.deleteIncomingPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber, incomingPhoneNumber.sid);
+        mPresenter.deleteIncomingPhoneNumber(getContext(), incomingPhoneNumber.getPhoneNumber(), incomingPhoneNumber.getSid());
     }
 
     @Override
@@ -252,12 +233,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
             default:
                 break;
         }
-    }
-
-    private void storePhoneNumber(IncomingPhoneNumber incomingPhoneNumber) {
-        MyPreference.setPhoneNumber(getContext(), incomingPhoneNumber.phoneNumber);
-        MyPreference.setFriendlyName(getContext(), incomingPhoneNumber.friendlyName);
-        MyPreference.setPhoneNumberSid(getContext(), incomingPhoneNumber.sid);
     }
 
 //    @Override

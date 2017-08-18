@@ -10,6 +10,8 @@ import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.usage.UsageItem;
 import com.android.morephone.data.entity.user.User;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -33,21 +35,28 @@ interface ApiMorePhonePath {
     @PUT("user/{id}/token")
     Call<BaseResponse<User>> updateFcmToken(@Path("id") String id, @Query("token") String token);
 
-    @PUT("user/{id}/forward")
-    Call<BaseResponse<User>> updateForward(@Path("id") String id, @Query("forward_phone_number") String forwardPhoneNumber, @Query("forward_email") String forwardEmail);
-
-    @PUT("user/{id}/forward/enable")
-    Call<BaseResponse<User>> enableForward(@Path("id") String id, @Query("is_forward") boolean isEnable);
 
     /*-----------------------------------------PHONE NUMBER-----------------------------------------*/
 
     @POST("phone-number")
     Call<BaseResponse<PhoneNumber>> createPhoneNumber(@Body PhoneNumber user);
 
+    @GET("phone-number")
+    Call<BaseResponse<List<PhoneNumber>>> getPhoneNumbers(@Query("userId") String userId);
+
+    @GET("phone-number/{id}")
+    Call<BaseResponse<PhoneNumber>> getPhoneNumber(@Path("id") String id);
+
     @DELETE("phone-number/{id}")
     Call<BaseResponse<String>> deletePhoneNumber(@Path("id") String id,
-                                                      @Query("account_sid") String accountSid,
-                                                      @Query("auth_token") String authToken);
+                                                 @Query("account_sid") String accountSid,
+                                                 @Query("auth_token") String authToken);
+
+    @PUT("phone-number/{id}/forward")
+    Call<BaseResponse<PhoneNumber>> updateForward(@Path("id") String id, @Query("forward_phone_number") String forwardPhoneNumber, @Query("forward_email") String forwardEmail);
+
+    @PUT("phone-number/{id}/forward/enable")
+    Call<BaseResponse<PhoneNumber>> enableForward(@Path("id") String id, @Query("is_forward") boolean isEnable);
 
     /*-----------------------------------------MESSAGE-----------------------------------------*/
 

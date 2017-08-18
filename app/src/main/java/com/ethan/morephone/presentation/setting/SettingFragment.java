@@ -11,9 +11,12 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.utils.Injection;
 
 /**
@@ -26,14 +29,16 @@ public class SettingFragment extends BaseFragment implements
         ChangeFriendlyNameDialog.ChangeFriendlyNameListener,
         CompoundButton.OnCheckedChangeListener,
         ConfigurePhoneDialog.ConfigurePhoneListener,
-        ConfigureEmailDialog.ConfigureEmailListener{
+        ConfigureEmailDialog.ConfigureEmailListener {
 
-
-    public static SettingFragment getInstance() {
-        return new SettingFragment();
+    public static SettingFragment getInstance(Bundle bundle) {
+        SettingFragment fragment = new SettingFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     private SettingContract.Presenter mPresenter;
+    private TextView mTextPhoneNumber;
     private TextView mTextFriendlyName;
 
     private SwitchCompat mSwitchRecord;
@@ -56,11 +61,9 @@ public class SettingFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        TextView textPhoneNumber = (TextView) view.findViewById(R.id.text_setting_phone_number);
-        textPhoneNumber.setText(MyPreference.getPhoneNumber(getContext()));
+        mTextPhoneNumber = (TextView) view.findViewById(R.id.text_setting_phone_number);
 
         mTextFriendlyName = (TextView) view.findViewById(R.id.text_setting_friendly_name_set);
-        mTextFriendlyName.setText(MyPreference.getFriendlyName(getContext()));
 
         view.findViewById(R.id.relative_setting_friendly_name).setOnClickListener(this);
         view.findViewById(R.id.relative_setting_enable_record).setOnClickListener(this);
@@ -82,16 +85,11 @@ public class SettingFragment extends BaseFragment implements
 
         mSwitchConfigure = (SwitchCompat) view.findViewById(R.id.switch_setting_configure_sms_forwarding);
         mSwitchConfigure.setOnCheckedChangeListener(this);
-        mSwitchConfigure.setChecked(MyPreference.getSettingConfigure(getContext()));
-
-
 
         mTextPhone = (TextView) view.findViewById(R.id.text_setting_phone_summary);
         mTextEmail = (TextView) view.findViewById(R.id.text_setting_email_summary);
 
-        showConfigure();
-
-        updateForward();
+        mPresenter.getPhoneNumber(getContext(), getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID));
 
         setHasOptionsMenu(true);
         return view;
@@ -167,14 +165,34 @@ public class SettingFragment extends BaseFragment implements
     }
 
     @Override
-    public void updateForward() {
-        mTextPhone.setText(MyPreference.getSettingConfigurePhone(getContext()));
-        mTextEmail.setText(MyPreference.getSettingConfigureEmail(getContext()));
+    public void showPhoneNumber(PhoneNumber phoneNumber) {
+        DebugTool.logD("SHOW PHONE");
+        if (isAdded()) {
+            mTextPhoneNumber.setText(phoneNumber.getPhoneNumber());
+            mTextFriendlyName.setText(phoneNumber.getFriendlyName());
+            mSwitchConfigure.setChecked(phoneNumber.isForward());
+
+            showConfigure(phoneNumber.isForward());
+
+            updateForward(phoneNumber.getForwardPhoneNumber(), phoneNumber.getForwardEmail());
+        }
+
     }
 
     @Override
-    public void showConfigure() {
-        if (MyPreference.getSettingConfigure(getContext())) {
+    public void emptyPhoneNumber() {
+        DebugTool.logD("EMPTY PHONE");
+    }
+
+    @Override
+    public void updateForward(String phoneNumber, String email) {
+        mTextPhone.setText(phoneNumber);
+        mTextEmail.setText(email);
+    }
+
+    @Override
+    public void showConfigure(boolean isEnable) {
+        if (isEnable) {
             mRelativePhone.setVisibility(View.VISIBLE);
             mRelativeEmail.setVisibility(View.VISIBLE);
         } else {
@@ -201,7 +219,7 @@ public class SettingFragment extends BaseFragment implements
                 break;
 
             case R.id.switch_setting_configure_sms_forwarding:
-                mPresenter.enableForward(getContext(), MyPreference.getUserId(getContext()), mSwitchConfigure.isChecked());
+                mPresenter.enableForward(getContext(), MyPreference.getPhoneNumberId(getContext()), mSwitchConfigure.isChecked());
                 break;
             default:
                 break;
@@ -210,11 +228,11 @@ public class SettingFragment extends BaseFragment implements
 
     @Override
     public void configurePhone(String phoneNumber) {
-        mPresenter.settingForward(getContext(), MyPreference.getUserId(getContext()), phoneNumber, MyPreference.getSettingConfigureEmail(getContext()));
+        mPresenter.settingForward(getContext(), MyPreference.getPhoneNumberId(getContext()), phoneNumber, MyPreference.getSettingConfigureEmail(getContext()));
     }
 
     @Override
     public void configureEmail(String email) {
-        mPresenter.settingForward(getContext(), MyPreference.getUserId(getContext()), MyPreference.getSettingConfigurePhone(getContext()), email);
+        mPresenter.settingForward(getContext(), MyPreference.getPhoneNumberId(getContext()), MyPreference.getSettingConfigurePhone(getContext()), email);
     }
 }

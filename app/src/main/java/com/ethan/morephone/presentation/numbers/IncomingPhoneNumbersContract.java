@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 
@@ -19,7 +20,7 @@ public interface IncomingPhoneNumbersContract {
 
         void showLoading(boolean isActive);
 
-        void showPhoneNumbers(List<IncomingPhoneNumber> incomingPhoneNumbers);
+        void showPhoneNumbers(List<PhoneNumber> incomingPhoneNumbers);
 
         void emptyPhoneNumber();
 

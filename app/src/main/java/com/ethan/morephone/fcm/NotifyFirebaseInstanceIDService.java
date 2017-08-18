@@ -57,24 +57,6 @@ public class NotifyFirebaseInstanceIDService extends FirebaseInstanceIdService {
          * because the token is requested by the Service.
          */
 
-//        Call<TokenResponse> call = TwilioSDKStarterAPI.registerToken(new TokenRequest(token));
-//        call.enqueue(new Callback<TokenResponse>() {
-//            @Override
-//            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-//                if (response.isSuccess()) {
-//                    Log.d("TAG", "TOKEN SUCCESS" + response.body().token);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<TokenResponse> call, Throwable t) {
-//
-//            }
-//        });
-
-//        Intent intent = new Intent(this, BindingIntentService.class);
-//        startService(intent);
-
         if (!TextUtils.isEmpty(MyPreference.getUserId(getApplicationContext()))) {
             ApiMorePhone.updateFcmToken(getApplicationContext(), MyPreference.getUserId(getApplicationContext()), token, new Callback<BaseResponse<User>>() {
                 @Override

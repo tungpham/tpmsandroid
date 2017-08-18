@@ -20,6 +20,7 @@ import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
 
+import java.util.List;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -97,22 +98,16 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
     public void loadIncomingPhoneNumbers(final Context context) {
         mView.showLoading(true);
         DebugTool.logD("LOAD INCOMING PHONE");
-        ApiManager.getIncomingPhoneNumbers(context, new Callback<IncomingPhoneNumbers>() {
+
+        ApiMorePhone.getPhoneNumbers(context, MyPreference.getUserId(context), new Callback<BaseResponse<List<PhoneNumber>>>() {
             @Override
-            public void onResponse(Call<IncomingPhoneNumbers> call, Response<IncomingPhoneNumbers> response) {
-                if (response.isSuccessful()) {
-                    IncomingPhoneNumbers incomingPhoneNumbers = response.body();
-                    if (incomingPhoneNumbers != null && incomingPhoneNumbers.incomingPhoneNumbers != null && !incomingPhoneNumbers.incomingPhoneNumbers.isEmpty()) {
-
-                        for (final IncomingPhoneNumber incomingPhoneNumber : incomingPhoneNumbers.incomingPhoneNumbers) {
-                            PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
-                        }
-
-
-                        mView.showPhoneNumbers(incomingPhoneNumbers.incomingPhoneNumbers);
-                    } else {
-                        mView.emptyPhoneNumber();
+            public void onResponse(Call<BaseResponse<List<PhoneNumber>>> call, Response<BaseResponse<List<PhoneNumber>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    for (final PhoneNumber incomingPhoneNumber : response.body().getResponse()) {
+                        PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.getPhoneNumber(), "");
                     }
+
+                    mView.showPhoneNumbers(response.body().getResponse());
                 } else {
                     mView.emptyPhoneNumber();
                 }
@@ -120,10 +115,37 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
             }
 
             @Override
-            public void onFailure(Call<IncomingPhoneNumbers> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<List<PhoneNumber>>> call, Throwable t) {
                 mView.showLoading(false);
             }
         });
+//        ApiManager.getIncomingPhoneNumbers(context, new Callback<IncomingPhoneNumbers>() {
+//            @Override
+//            public void onResponse(Call<IncomingPhoneNumbers> call, Response<IncomingPhoneNumbers> response) {
+//                if (response.isSuccessful()) {
+//                    IncomingPhoneNumbers incomingPhoneNumbers = response.body();
+//                    if (incomingPhoneNumbers != null && incomingPhoneNumbers.incomingPhoneNumbers != null && !incomingPhoneNumbers.incomingPhoneNumbers.isEmpty()) {
+//
+//                        for (final IncomingPhoneNumber incomingPhoneNumber : incomingPhoneNumbers.incomingPhoneNumbers) {
+//                            PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.phoneNumber, "");
+//                        }
+//
+//
+//                        mView.showPhoneNumbers(incomingPhoneNumbers.incomingPhoneNumbers);
+//                    } else {
+//                        mView.emptyPhoneNumber();
+//                    }
+//                } else {
+//                    mView.emptyPhoneNumber();
+//                }
+//                mView.showLoading(false);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<IncomingPhoneNumbers> call, Throwable t) {
+//                mView.showLoading(false);
+//            }
+//        });
     }
 
 }

@@ -20,6 +20,7 @@ import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.phone.dial.DialFragment;
@@ -78,7 +79,7 @@ public class InCallActivity extends BaseActivity implements
 
         setContentView(R.layout.activity_fragment);
 
-        mPhoneNumber = getIntent().getStringExtra(DashboardFrag.BUNDLE_PHONE_NUMBER);
+        mPhoneNumber = getIntent().getStringExtra(DashboardActivity.BUNDLE_PHONE_NUMBER);
         mToPhoneNumber = getIntent().getStringExtra(BUNDLE_TO_PHONE_NUMBER);
         showDialFragment();
 //        showInCallFragment();
@@ -99,7 +100,7 @@ public class InCallActivity extends BaseActivity implements
 
         audioManager.setSpeakerphoneOn(speakerPhone);
 
-        clientProfile = new ClientProfile(MyPreference.getPhoneNumber(getApplicationContext()), true, true);
+        clientProfile = new ClientProfile(mPhoneNumber, true, true);
          /*
          * Check microphone permissions. Needed in Android M.
          */

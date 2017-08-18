@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 
@@ -20,23 +21,23 @@ import java.util.List;
 public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPhoneNumbersViewHolder> {
 
     private Context mContext;
-    private List<IncomingPhoneNumber> mNumberEntities;
+    private List<PhoneNumber> mNumberEntities;
     private IncomingPhoneNumbersAdapter.OnItemNumberClickListener mOnItemNumberClickListener;
     private IncomingPhoneNumbersViewHolder mCurrentHolder;
 
-    public IncomingPhoneNumbersAdapter(Context context, List<IncomingPhoneNumber> numberEntities, IncomingPhoneNumbersAdapter.OnItemNumberClickListener onItemNumberClickListener) {
+    public IncomingPhoneNumbersAdapter(Context context, List<PhoneNumber> numberEntities, IncomingPhoneNumbersAdapter.OnItemNumberClickListener onItemNumberClickListener) {
         mContext = context;
         mNumberEntities = numberEntities;
         mOnItemNumberClickListener = onItemNumberClickListener;
     }
 
-    public void replaceData(List<IncomingPhoneNumber> numberEntities) {
+    public void replaceData(List<PhoneNumber> numberEntities) {
         mNumberEntities = numberEntities;
         notifyDataSetChanged();
     }
 
 
-    public List<IncomingPhoneNumber> getData() {
+    public List<PhoneNumber> getData() {
         return mNumberEntities;
     }
 
@@ -49,8 +50,8 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
 
     @Override
     public void onBindViewHolder(final IncomingPhoneNumbersViewHolder holder, final int position) {
-        final IncomingPhoneNumber numberEntity = mNumberEntities.get(position);
-        holder.textNumber.setText(numberEntity.phoneNumber);
+        final PhoneNumber numberEntity = mNumberEntities.get(position);
+        holder.textNumber.setText(numberEntity.getPhoneNumber());
 
 //        validatePhoneNumberSelected(holder, numberEntity.phoneNumber);
 
