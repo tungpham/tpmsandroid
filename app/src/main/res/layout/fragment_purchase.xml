@@ -28,7 +28,7 @@
                 <com.ethan.morephone.widget.MyTextView
                     android:id="@+id/text_purchase_price"
                     style="@style/TextPurchasePrice"
-                    android:text="$1.00" />
+                    android:text="@string/all_price_buy_phone_number" />
 
                 <com.ethan.morephone.widget.MyTextView
                     android:id="@+id/text_purchase_price_time"

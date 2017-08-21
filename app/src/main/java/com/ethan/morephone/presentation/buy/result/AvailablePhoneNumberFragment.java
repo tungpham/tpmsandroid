@@ -95,7 +95,7 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements
     @Override
     public void onBuyPhoneNumber(AvailablePhoneNumber availablePhoneNumber) {
         DebugTool.logD("availablePhoneNumber.capabilities.voice: " + availablePhoneNumber.capabilities.voice);
-        PurchaseActivity.starter(getActivity(), availablePhoneNumber.friendlyName, availablePhoneNumber.phoneNumber, "$1.00", availablePhoneNumber.capabilities.voice, availablePhoneNumber.capabilities.SMS, availablePhoneNumber.capabilities.MMS, availablePhoneNumber.capabilities.fax);
+        PurchaseActivity.starter(getActivity(), availablePhoneNumber.friendlyName, availablePhoneNumber.phoneNumber, getString(R.string.all_price_buy_phone_number), availablePhoneNumber.capabilities.voice, availablePhoneNumber.capabilities.SMS, availablePhoneNumber.capabilities.MMS, availablePhoneNumber.capabilities.fax);
     }
 
 }

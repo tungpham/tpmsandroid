@@ -47,14 +47,7 @@ public class PurchaseFragment extends BaseFragment implements
 
     private String mPhoneNumber;
 
-    private InventoryCallback mInventoryCallbacks;
-
-    private static final String SKUS = "test_02";
-
     private AppCompatButton mButtonPayNow;
-    private Inventory.Product mProduct;
-
-    private UiCheckout mCheckout;
     @Nullable
     private Purchase mPurchase;
 
@@ -64,15 +57,11 @@ public class PurchaseFragment extends BaseFragment implements
         new PurchasePresenter(this,
                 Injection.providerUseCaseHandler(),
                 Injection.providerBuyIncomingPhoneNumber(getContext()));
-//        mCheckout.start();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        final Activity activity = (Activity) context;
-//        final Billing billing = MyApplication.get(activity).getBilling();
-//        mCheckout = Checkout.forUi(new MyIntentStarter(this), this, billing);
     }
 
     @Nullable
@@ -129,8 +118,6 @@ public class PurchaseFragment extends BaseFragment implements
             textFaxSummary.setVisibility(View.GONE);
         }
 
-//        mCheckout.loadInventory(Inventory.Request.create().loadAllPurchases(), new InventoryCallback());
-
         return view;
     }
 
@@ -145,19 +132,6 @@ public class PurchaseFragment extends BaseFragment implements
             case R.id.button_purchase_pay_now:
                 DebugTool.logD("PHONE NUMBER: " + mPhoneNumber);
                 mPresenter.buyIncomingPhoneNumber(getContext(), mPhoneNumber);
-//                final Purchase purchase = mPurchase;
-//                if (purchase == null) {
-//                    DebugTool.logD("purchase: NULL");
-//                    mCheckout.startPurchaseFlow(ProductTypes.IN_APP, SKUS, null, new PurchaseListener());
-//                } else {
-//                    DebugTool.logD("purchase: OK");
-//                    mCheckout.whenReady(new Checkout.EmptyListener() {
-//                        @Override
-//                        public void onReady(@Nonnull BillingRequests requests) {
-//                            requests.consume(purchase.token, new ConsumeListener());
-//                        }
-//                    });
-//                }
                 break;
             default:
                 break;
@@ -184,13 +158,10 @@ public class PurchaseFragment extends BaseFragment implements
     @Override
     public void buyIncomingPhoneNumberFail() {
         Toast.makeText(getContext(), getString(R.string.purchase_fail), Toast.LENGTH_SHORT).show();
-        getActivity().setResult(Activity.RESULT_OK);
-        getActivity().finish();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mCheckout.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -204,58 +175,4 @@ public class PurchaseFragment extends BaseFragment implements
         super.onDestroy();
     }
 
-    private class ConsumeListener extends EmptyRequestListener<Object> {
-        @Override
-        public void onSuccess(@Nonnull Object result) {
-            mPurchase = null;
-            onPurchaseChanged();
-            DebugTool.logD("ConsumeListener Success");
-        }
-    }
-
-    private class PurchaseListener extends EmptyRequestListener<Purchase> {
-        @Override
-        public void onSuccess(@Nonnull Purchase purchase) {
-            mPurchase = purchase;
-            onPurchaseChanged();
-            DebugTool.logD("PurchaseListener Success");
-
-        }
-    }
-
-    private class InventoryCallback implements Inventory.Callback {
-        @Override
-        public void onLoaded(@Nonnull Inventory.Products products) {
-            final Inventory.Product product = products.get(ProductTypes.IN_APP);
-            if (!product.supported) {
-                DebugTool.logD("SUPPORT");
-                return;
-            }
-            DebugTool.logD("PRODUCT");
-            mPurchase = product.getPurchaseInState(SKUS, Purchase.State.PURCHASED);
-            onPurchaseChanged();
-            mButtonPayNow.setEnabled(true);
-        }
-    }
-
-    private void onPurchaseChanged() {
-        mButtonPayNow.setText(mPurchase != null ? "Consume" : "Buy");
-    }
-
-    /**
-     * Trivial implementation of {@link IntentStarter} for the support lib's {@link Fragment}.
-     */
-    private static class MyIntentStarter implements IntentStarter {
-        @Nonnull
-        private final Fragment mFragment;
-
-        public MyIntentStarter(@Nonnull Fragment fragment) {
-            mFragment = fragment;
-        }
-
-        @Override
-        public void startForResult(@Nonnull IntentSender intentSender, int requestCode, @Nonnull Intent intent) throws IntentSender.SendIntentException {
-            mFragment.startIntentSenderForResult(intentSender, requestCode, intent, 0, 0, 0, null);
-        }
-    }
 }
