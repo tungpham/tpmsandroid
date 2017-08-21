@@ -349,7 +349,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     private void scheduleRegisterPhoneNumber() {
         stopDonutProgressUpdate();
         if (!mExecutorService.isShutdown()) {
-            mScheduleFuture = mExecutorService.scheduleAtFixedRate(
+            mScheduleFuture = mExecutorService.schedule(
                     new Runnable() {
                         @Override
                         public void run() {
@@ -362,7 +362,6 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                             }
                         }
                     },
-                    PROGRESS_UPDATE_INITIAL_INTERVAL,
                     PROGRESS_UPDATE_INTERNAL,
                     TimeUnit.SECONDS);
         }

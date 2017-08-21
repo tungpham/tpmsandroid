@@ -174,7 +174,7 @@ public class RecordFragment extends BaseFragment implements
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
             mPresenter.clearData();
-            mPresenter.loadRecords(mPhoneNumber);
+            mPresenter.loadRecords(getContext(), mPhoneNumber);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }
@@ -476,7 +476,6 @@ public class RecordFragment extends BaseFragment implements
         mRecordsViewHolder = null;
         mExoPlayer = null;
         mScheduleFuture = null;
-
     }
 
     private void playRecord() {

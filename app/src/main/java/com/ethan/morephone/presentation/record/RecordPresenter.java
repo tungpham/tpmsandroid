@@ -3,10 +3,13 @@ package com.ethan.morephone.presentation.record;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.android.morephone.data.entity.call.Call;
 import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.entity.record.mapper.RecordDataMapper;
 import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
+import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
@@ -16,6 +19,9 @@ import com.android.morephone.domain.usecase.record.GetRecords;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Ethan on 2/17/17.
@@ -70,7 +76,7 @@ public class RecordPresenter implements RecordContract.Presenter {
     }
 
     @Override
-    public void loadRecords(final String phoneNumber) {
+    public void loadRecords(final Context context, final String phoneNumber) {
         mView.showLoading(true);
         GetRecords.RequestValue requestValue = new GetRecords.RequestValue();
         mUseCaseHandler.execute(mGetRecords, requestValue, new UseCase.UseCaseCallback<GetRecords.ResponseValue>() {
@@ -78,7 +84,7 @@ public class RecordPresenter implements RecordContract.Presenter {
             public void onSuccess(GetRecords.ResponseValue response) {
                 RecordListResourceResponse recordListResourceResponse = response.getRecordListResourceResponse();
                 if (recordListResourceResponse.recordings != null && !recordListResourceResponse.recordings.isEmpty()) {
-                    executeData(phoneNumber, recordListResourceResponse.recordings);
+                    executeData(context, phoneNumber, recordListResourceResponse.recordings);
                 } else {
 
                 }
@@ -102,30 +108,57 @@ public class RecordPresenter implements RecordContract.Presenter {
         mRecords.clear();
     }
 
-    private void executeData(final String phoneNumber, List<RecordItem> records) {
-        for (RecordItem recordItem : records) {
-
-            GetCall.RequestValue requestValue = new GetCall.RequestValue(recordItem.callSid, recordItem);
-            mUseCaseHandler.execute(mGetCall, requestValue, new UseCase.UseCaseCallback<GetCall.ResponseValue>() {
+    private void executeData(Context context, final String phoneNumber, List<RecordItem> records) {
+        DebugTool.logD("RECORDS SIZE: " + records.size() + " PHONE NUMBER: " + phoneNumber);
+        mRecords.clear();
+        for (final RecordItem recordItem : records) {
+            DebugTool.logD("RecordItem: " + recordItem.uri);
+            DebugTool.logD("RecordItem CALL SID: " + recordItem.callSid);
+//            ApiManager.
+            ApiManager.getCall(context, recordItem.callSid, new Callback<Call>() {
                 @Override
-                public void onSuccess(GetCall.ResponseValue response) {
-                    com.android.morephone.data.entity.call.Call call = response.getCall();
-                    if (call != null) {
+                public void onResponse(retrofit2.Call<Call> callResponse, Response<Call> response) {
+                    if (response.isSuccessful()) {
+                        com.android.morephone.data.entity.call.Call call = response.body();
                         if (phoneNumber.equals(call.to)) {
-                            mRecords.add(RecordDataMapper.transform(false, call.from, response.getRecordItem()));
+                            mRecords.add(RecordDataMapper.transform(false, call.from, recordItem));
                             mView.showRecords(mRecords);
-                        } else if(phoneNumber.equals(call.from)){
-                            mRecords.add(RecordDataMapper.transform(true, call.to, response.getRecordItem()));
-                            mView.showRecords(mRecords);
+                        } else {
+
                         }
                     }
                 }
 
                 @Override
-                public void onError() {
-
+                public void onFailure(retrofit2.Call<Call> call, Throwable t) {
                 }
             });
+
+//            GetCall.RequestValue requestValue = new GetCall.RequestValue(recordItem.callSid, recordItem);
+//            mUseCaseHandler.execute(mGetCall, requestValue, new UseCase.UseCaseCallback<GetCall.ResponseValue>() {
+//                @Override
+//                public void onSuccess(GetCall.ResponseValue response) {
+//                    com.android.morephone.data.entity.call.Call call = response.getCall();
+//                    if (call != null) {
+//                        DebugTool.logD("TO: " + call.to + " |||    " + call.from);
+//                        if (phoneNumber.equals(call.to)) {
+//                            mRecords.add(RecordDataMapper.transform(false, call.from, response.getRecordItem()));
+//                            mView.showRecords(mRecords);
+//                        } else {
+//
+//                        }
+////                        else if(phoneNumber.equals(call.from)){
+////                            mRecords.add(RecordDataMapper.transform(true, call.to, response.getRecordItem()));
+////                            mView.showRecords(mRecords);
+////                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onError() {
+//
+//                }
+//            });
         }
 
     }

@@ -168,9 +168,7 @@ public class MessageRemoteDataSource implements MessageDataSource {
             public void onResponse(Call<BaseResponse<MessageItem>> call, Response<BaseResponse<MessageItem>> response) {
                 if (response.isSuccessful()) {
                     callback.onMessageLoaded(response.body().getResponse(), response.body().getStatus());
-                    DebugTool.logD("SMS NOT SUCCESS: " + response.body().getStatus());
                 } else {
-                    DebugTool.logD("SMS: " + response.body().getStatus());
                     callback.onDataNotAvailable();
                 }
             }
@@ -178,7 +176,6 @@ public class MessageRemoteDataSource implements MessageDataSource {
             @Override
             public void onFailure(Call<BaseResponse<MessageItem>> call, Throwable t) {
                 callback.onDataNotAvailable();
-                DebugTool.logD("SMS FAILURE: ");
             }
         });
     }

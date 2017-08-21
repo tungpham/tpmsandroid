@@ -103,7 +103,6 @@ public class SettingPresenter implements SettingContract.Presenter {
         ApiMorePhone.getPhoneNumber(context, id, new Callback<BaseResponse<PhoneNumber>>() {
             @Override
             public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
-                DebugTool.logD("PHONE: " + response.body().getResponse().getAccountSid());
                 if(response.isSuccessful() && response.body() != null && response.body().getResponse() != null){
                     mView.showPhoneNumber(response.body().getResponse());
                 }else {

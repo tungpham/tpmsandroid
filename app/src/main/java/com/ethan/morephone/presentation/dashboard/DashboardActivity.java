@@ -83,11 +83,11 @@ public class DashboardActivity extends BaseActivity {
         setTitleActionBar(toolbar, mPhoneNumber);
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (fragment instanceof ConversationsFragment) return;
-        DashboardFrag voiceFragment = DashboardFrag.getInstance(getIntent().getExtras());
+        if (fragment instanceof DashboardFrag) return;
+        DashboardFrag dashboardFrag = DashboardFrag.getInstance(getIntent().getExtras());
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
-                voiceFragment,
+                dashboardFrag,
                 R.id.content_frame,
                 DashboardFrag.class.getSimpleName());
 
