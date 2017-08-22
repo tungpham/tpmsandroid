@@ -95,7 +95,7 @@ public class CreditFragment extends BaseFragment implements
         switch (view.getId()) {
             case R.id.button_add_fund:
                 startActivityForResult(new Intent(getActivity(), AddFundActivity.class), REQUEST_ADD_FUND);
-                exportDatabase("phone.db");
+//                exportDatabase("phone.db");
                 break;
             default:
                 break;

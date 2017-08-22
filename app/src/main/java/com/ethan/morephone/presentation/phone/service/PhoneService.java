@@ -37,9 +37,12 @@ import com.twilio.client.DeviceListener;
 import com.twilio.client.PresenceEvent;
 import com.twilio.client.Twilio;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -59,7 +62,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     //    private static final String TOKEN_SERVICE_URL = "https://numberphone1.herokuapp.com/token";
 
     private static final long PROGRESS_UPDATE_INTERNAL = 60;
-    private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 0;
+    private static final long PROGRESS_UPDATE_DELAY = 0;
 
     public final static String ACTION_WAKEUP = "com.ethan.morephone.action.WAKE_UP";
 
@@ -266,12 +269,12 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 //        DatabaseHelpper.insert(getApplicationContext(), device.getState().name());
         updateDeviceState(device.getState());
 //
-        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
-            Device value = entry.getValue();
-            if (value == device) {
-                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
-            }
-        }
+//        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
+//            Device value = entry.getValue();
+//            if (value == device) {
+//                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
+//            }
+//        }
 
 //        if (device.getState() == Device.State.OFFLINE && mDeviceState != Device.State.OFFLINE) {
 //            mDeviceState = Device.State.OFFLINE;
@@ -347,24 +350,35 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     }
 
     private void scheduleRegisterPhoneNumber() {
-        stopDonutProgressUpdate();
-        if (!mExecutorService.isShutdown()) {
-            mScheduleFuture = mExecutorService.schedule(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-//                            registerPhoneNumber();
-                            updateTokenFcm();
-                            DebugTool.logD("PHONE STATE: " + mPhoneState);
-                            if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
-                                registerPhoneNumberAgain();
-                                DatabaseHelpper.insert(getApplicationContext(), "REGISTER DEVICE");
-                            }
-                        }
-                    },
-                    PROGRESS_UPDATE_INTERNAL,
-                    TimeUnit.SECONDS);
-        }
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateTokenFcm();
+                if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
+                    registerPhoneNumberAgain();
+                }
+            }
+        }, new Date(), PROGRESS_UPDATE_INTERNAL * 1000 * 60);
+//        stopDonutProgressUpdate();
+//        if (!mExecutorService.isShutdown()) {
+//            mScheduleFuture = mExecutorService.scheduleAtFixedRate(
+//                    new Runnable() {
+//                        @Override
+//                        public void run() {
+////                            registerPhoneNumber();
+//                            updateTokenFcm();
+//                            DebugTool.logD("PHONE STATE: " + mPhoneState);
+//                            if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
+//                                registerPhoneNumberAgain();
+////                                DatabaseHelpper.insert(getApplicationContext(), "REGISTER DEVICE");
+//                            }
+//                        }
+//                    },
+//                    PROGRESS_UPDATE_DELAY,
+//                    PROGRESS_UPDATE_INTERNAL,
+//                    TimeUnit.SECONDS);
+//        }
     }
 
     private void stopDonutProgressUpdate() {

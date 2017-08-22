@@ -11,8 +11,8 @@ ext {
     androidMinSdkVersion = 16
     androidTargetSdkVersion = 25
     androidCompileSdkVersion = 25
-    androidVersionCode = 12
-    androidVersionName = "1.0.11"
+    androidVersionCode = 13
+    androidVersionName = "1.0.12"
 
     //Google Libraries
     supportVersion = '25.0.1'
