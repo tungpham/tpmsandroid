@@ -17,6 +17,8 @@ public class PhoneNumber {
     private String forwardPhoneNumber;
     private String forwardEmail;
     private boolean forward;
+    private boolean pool;
+    private long expire;
     private long createdAt;
     private long updatedAt;
 
@@ -34,6 +36,8 @@ public class PhoneNumber {
         this.forwardPhoneNumber = builder.forwardPhoneNumber;
         this.forwardEmail = builder.forwardEmail;
         this.forward = builder.isForward;
+        this.expire = builder.expire;
+        this.pool = builder.pool;
     }
 
     public static Builder getBuilder() {
@@ -144,6 +148,22 @@ public class PhoneNumber {
         this.forwardEmail = forwardEmail;
     }
 
+    public long getExpire() {
+        return expire;
+    }
+
+    public void setExpire(long expire) {
+        this.expire = expire;
+    }
+
+    public boolean isPool() {
+        return pool;
+    }
+
+    public void setPool(boolean pool) {
+        this.pool = pool;
+    }
+
     //    public void update(String token) {
 //        this.token = token;
 //    }
@@ -170,6 +190,8 @@ public class PhoneNumber {
         private String forwardPhoneNumber;
         private String forwardEmail;
         private boolean isForward;
+        private boolean pool;
+        private long expire;
 
         private Builder() {
         }
@@ -223,6 +245,16 @@ public class PhoneNumber {
 
         public Builder userId(String userId) {
             this.userId = userId;
+            return this;
+        }
+
+        public Builder expire(long expire) {
+            this.expire = expire;
+            return this;
+        }
+
+        public Builder pool(boolean pool) {
+            this.pool = pool;
             return this;
         }
 

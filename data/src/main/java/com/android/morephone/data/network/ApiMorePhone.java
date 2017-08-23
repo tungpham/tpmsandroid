@@ -165,6 +165,19 @@ public class ApiMorePhone {
         call.enqueue(callback);
     }
 
+    public static void buyPoolPhoneNumber(Context context,
+                                         PhoneNumber phoneNumber,
+                                         Callback<BaseResponse<PhoneNumber>> callback) {
+        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).buyPoolPhoneNumber(phoneNumber);
+        call.enqueue(callback);
+    }
+
+    public static void getPoolPhoneNumber(Context context,
+                                          Callback<BaseResponse<List<PhoneNumber>>> callback) {
+        Call<BaseResponse<List<PhoneNumber>>> call = getApiPath(context).getPoolPhoneNumbers();
+        call.enqueue(callback);
+    }
+
     public static void deletePhoneNumber(Context context,
                                          String id,
                                          String accountToken,

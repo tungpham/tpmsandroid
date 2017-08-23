@@ -13,4 +13,6 @@ public class Constant {
 
     public static final double PRODUCT_ADD_FUND = 10;
 
+    public static final double CREDIT_BUY_PHONE = 1;
+
 }

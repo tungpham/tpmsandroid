@@ -1,4 +1,4 @@
-package com.ethan.morephone.presentation.buy.result;
+package com.ethan.morephone.presentation.buy.pool;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumber;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberFragment;
 import com.ethan.morephone.presentation.buy.payment.purchase.PurchaseActivity;
+import com.ethan.morephone.presentation.buy.pool.adapter.PoolPhoneNumberAdapter;
+import com.ethan.morephone.presentation.buy.result.AvailablePhoneNumberContract;
+import com.ethan.morephone.presentation.buy.result.AvailablePhoneNumberPresenter;
 import com.ethan.morephone.presentation.buy.result.adapter.AvailablePhoneNumberAdapter;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 
@@ -26,23 +30,21 @@ import java.util.List;
  * Created by Ethan on 3/31/17.
  */
 
-public class AvailablePhoneNumberFragment extends BaseFragment implements
-        AvailablePhoneNumberContract.View,
-        AvailablePhoneNumberAdapter.AvailablePhoneNumberListener {
+public class PoolPhoneNumberFragment extends BaseFragment implements
+        PoolPhoneNumberContract.View,
+        PoolPhoneNumberAdapter.PoolPhoneNumberListener {
 
-    public static AvailablePhoneNumberFragment getInstance(Bundle bundle) {
-        AvailablePhoneNumberFragment availablePhoneNumberFragment = new AvailablePhoneNumberFragment();
-        availablePhoneNumberFragment.setArguments(bundle);
-        return availablePhoneNumberFragment;
+    public static PoolPhoneNumberFragment getInstance() {
+        return new PoolPhoneNumberFragment();
     }
 
-    private AvailablePhoneNumberAdapter mAvailablePhoneNumberAdapter;
-    private AvailablePhoneNumberContract.Presenter mPresenter;
+    private PoolPhoneNumberAdapter mAvailablePhoneNumberAdapter;
+    private PoolPhoneNumberContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new AvailablePhoneNumberPresenter(this);
+        new PoolPhoneNumberPresenter(this);
     }
 
     @Nullable
@@ -55,18 +57,11 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
-        mAvailablePhoneNumberAdapter = new AvailablePhoneNumberAdapter(getContext(), new ArrayList<AvailablePhoneNumber>());
+        mAvailablePhoneNumberAdapter = new PoolPhoneNumberAdapter(getContext(), new ArrayList<PhoneNumber>());
         recyclerView.setAdapter(mAvailablePhoneNumberAdapter);
         mAvailablePhoneNumberAdapter.setAvailablePhoneNumbers(this);
 
-        Bundle bundle = getArguments();
-        String countryCode = bundle.getString(SearchPhoneNumberFragment.BUNDLE_COUNTRY_CODE);
-        String phoneNumber = bundle.getString(SearchPhoneNumberFragment.BUNDLE_PHONE_NUMBER);
-        boolean smsEnabled = bundle.getBoolean(SearchPhoneNumberFragment.BUNDLE_SMS_ENABLE);
-        boolean mmsEnabled = bundle.getBoolean(SearchPhoneNumberFragment.BUNDLE_MMS_ENABLE);
-        boolean voiceEnabled = bundle.getBoolean(SearchPhoneNumberFragment.BUNDLE_VOICE_ENABLE);
-
-        mPresenter.searchPhoneNumber(getContext(), countryCode, phoneNumber, smsEnabled, mmsEnabled, voiceEnabled);
+        mPresenter.searchPhoneNumber(getContext());
         return view;
     }
 
@@ -78,24 +73,23 @@ public class AvailablePhoneNumberFragment extends BaseFragment implements
     }
 
     @Override
-    public void showResultSearchNumber(List<AvailablePhoneNumber> availablePhoneNumbers) {
+    public void showResultSearchNumber(List<PhoneNumber> availablePhoneNumbers) {
         mAvailablePhoneNumberAdapter.replaceData(availablePhoneNumbers);
     }
 
     @Override
-    public void emptyPhoneNumberAvailable() {
+    public void emptyPhoneNumber() {
         Toast.makeText(getContext(), getString(R.string.available_phone_number_empty), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void setPresenter(AvailablePhoneNumberContract.Presenter presenter) {
+    public void setPresenter(PoolPhoneNumberContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
     @Override
-    public void onBuyPhoneNumber(AvailablePhoneNumber availablePhoneNumber) {
-        DebugTool.logD("availablePhoneNumber.capabilities.voice: " + availablePhoneNumber.capabilities.voice);
-        PurchaseActivity.starter(getActivity(), availablePhoneNumber.friendlyName, availablePhoneNumber.phoneNumber, getString(R.string.all_price_buy_phone_number), availablePhoneNumber.capabilities.voice, availablePhoneNumber.capabilities.SMS, availablePhoneNumber.capabilities.MMS, availablePhoneNumber.capabilities.fax, false);
+    public void onBuyPhoneNumber(PhoneNumber availablePhoneNumber) {
+        PurchaseActivity.starter(getActivity(), availablePhoneNumber.getFriendlyName(), availablePhoneNumber.getPhoneNumber(), getString(R.string.all_price_buy_phone_number), true, true, true, true, true);
     }
 
 }

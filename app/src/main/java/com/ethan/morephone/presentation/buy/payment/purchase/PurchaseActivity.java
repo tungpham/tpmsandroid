@@ -25,10 +25,11 @@ public class PurchaseActivity extends BaseActivity {
     public static final String BUNDLE_IS_SMS = "BUNDLE_IS_SMS";
     public static final String BUNDLE_IS_MMS = "BUNDLE_IS_MMS";
     public static final String BUNDLE_IS_FAX = "BUNDLE_IS_FAX";
+    public static final String BUNDLE_IS_POOL = "BUNDLE_IS_POOL";
 
     public static final int REQUEST_PURCHASE_ACTIVITY = 100;
 
-    public static void starter(Activity activity, String friendlyPhoneNumber, String phoneNumber, String price, boolean isVoice, boolean isSms, boolean isMms, boolean isFax) {
+    public static void starter(Activity activity, String friendlyPhoneNumber, String phoneNumber, String price, boolean isVoice, boolean isSms, boolean isMms, boolean isFax, boolean isPool) {
         Intent intent = new Intent(activity, PurchaseActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_FRIENDLY_PHONE_NUMBER, friendlyPhoneNumber);
@@ -38,6 +39,7 @@ public class PurchaseActivity extends BaseActivity {
         bundle.putBoolean(BUNDLE_IS_SMS, isSms);
         bundle.putBoolean(BUNDLE_IS_MMS, isMms);
         bundle.putBoolean(BUNDLE_IS_FAX, isFax);
+        bundle.putBoolean(BUNDLE_IS_POOL, isPool);
         intent.putExtras(bundle);
         activity.startActivityForResult(intent, REQUEST_PURCHASE_ACTIVITY);
     }

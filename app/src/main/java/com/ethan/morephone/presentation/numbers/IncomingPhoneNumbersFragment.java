@@ -24,9 +24,11 @@ import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
+import com.ethan.morephone.presentation.buy.pool.PoolPhoneNumberActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.main.MainActivity;
+import com.ethan.morephone.presentation.main.OptionBuyPhoneNumberDialog;
 import com.ethan.morephone.presentation.main.RequirePhoneNumberDialog;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
@@ -48,7 +50,8 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         IncomingPhoneNumbersContract.View,
         DeletePhoneNumberDialog.DeletePhoneNumberListener,
         View.OnClickListener,
-        RequirePhoneNumberDialog.RequirePhoneNumberListener {
+        RequirePhoneNumberDialog.RequirePhoneNumberListener,
+        OptionBuyPhoneNumberDialog.OptionBuyPhoneNumberListener{
 
     public static final String BINDING_REGISTRATION = "BINDING_REGISTRATION";
 
@@ -195,9 +198,13 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
     @Override
     public void emptyPhoneNumber() {
-        RequirePhoneNumberDialog requirePhoneNumberDialog = RequirePhoneNumberDialog.getInstance();
-        requirePhoneNumberDialog.show(getChildFragmentManager(), RequirePhoneNumberDialog.class.getSimpleName());
-        requirePhoneNumberDialog.setRequirePhoneNumberListener(this);
+        OptionBuyPhoneNumberDialog optionBuyPhoneNumberDialog = OptionBuyPhoneNumberDialog.getInstance();
+        optionBuyPhoneNumberDialog.show(getChildFragmentManager(), OptionBuyPhoneNumberDialog.class.getSimpleName());
+        optionBuyPhoneNumberDialog.setOptionPhoneNumberListener(this);
+
+//        RequirePhoneNumberDialog requirePhoneNumberDialog = RequirePhoneNumberDialog.getInstance();
+//        requirePhoneNumberDialog.show(getChildFragmentManager(), RequirePhoneNumberDialog.class.getSimpleName());
+//        requirePhoneNumberDialog.setRequirePhoneNumberListener(this);
     }
 
     @Override
@@ -249,5 +256,14 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void onBuyPhone() {
         getActivity().startActivityForResult(new Intent(getActivity(), SearchPhoneNumberActivity.class), MainActivity.REQUEST_BUY_PHONE_NUMBER);
+    }
+
+    @Override
+    public void onOptionBuyPhoneNumber(boolean pool) {
+        if (pool) {
+            startActivityForResult(new Intent(getActivity(), PoolPhoneNumberActivity.class), MainActivity.REQUEST_BUY_PHONE_NUMBER);
+        } else {
+            startActivityForResult(new Intent(getActivity(), SearchPhoneNumberActivity.class), MainActivity.REQUEST_BUY_PHONE_NUMBER);
+        }
     }
 }

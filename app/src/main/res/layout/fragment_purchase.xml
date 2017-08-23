@@ -28,7 +28,7 @@
                 <com.ethan.morephone.widget.MyTextView
                     android:id="@+id/text_purchase_price"
                     style="@style/TextPurchasePrice"
-                    android:text="@string/all_price_buy_phone_number" />
+                    />
 
                 <com.ethan.morephone.widget.MyTextView
                     android:id="@+id/text_purchase_price_time"
@@ -46,17 +46,41 @@
                 android:layout_below="@+id/relative_price"
                 android:layout_marginTop="@dimen/activity_main_margin" />
 
+            <RelativeLayout
+                android:id="@+id/relative_expire"
+                style="@style/RelativePurchase"
+                android:layout_below="@+id/view_divider_1">
+
+                <ImageView
+                    android:id="@+id/image_purchase_expire"
+                    style="@style/TextPurchaseImage"
+                    android:src="@drawable/ic_clock" />
+
+                <com.ethan.morephone.widget.MyTextView
+                    android:id="@+id/text_purchase_expire"
+                    style="@style/TextPurchaseTitle"
+                    android:layout_toRightOf="@+id/image_purchase_expire"
+                    android:text="@string/purchase_expire" />
+
+                <com.ethan.morephone.widget.MyTextView
+                    android:id="@+id/text_purchase_expire_summary"
+                    style="@style/TextPurchaseSummary"
+                    android:layout_below="@+id/text_purchase_expire"
+                    android:layout_toRightOf="@+id/image_purchase_expire"
+                    android:text="@string/purchase_expire_summary" />
+            </RelativeLayout>
+
 
             <ImageView
                 android:id="@+id/image_purchase_voice"
                 style="@style/TextPurchaseImage"
-                android:layout_below="@+id/view_divider_1"
+                android:layout_below="@+id/relative_expire"
                 android:src="@drawable/phone" />
 
             <com.ethan.morephone.widget.MyTextView
                 android:id="@+id/text_purchase_voice"
                 style="@style/TextPurchaseTitle"
-                android:layout_below="@+id/view_divider_1"
+                android:layout_below="@+id/relative_expire"
                 android:layout_toRightOf="@+id/image_purchase_voice"
                 android:text="@string/purchase_voice" />
 
@@ -126,7 +150,6 @@
                 android:layout_below="@+id/text_purchase_mms"
                 android:layout_toRightOf="@+id/image_purchase_fax"
                 android:text="@string/purchase_mms_summary" />
-
 
         </RelativeLayout>
     </ScrollView>

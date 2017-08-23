@@ -24,6 +24,8 @@ public interface PurchaseContract {
 
         void buyIncomingPhoneNumber(Context context, String phoneNumber);
 
+        void buyPoolPhoneNumber(Context context, String phoneNumber, long expire);
+
 //        /**
 //         * Create phone with backend
 //         * @param incomingPhoneNumber  .

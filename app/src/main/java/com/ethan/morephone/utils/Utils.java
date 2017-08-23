@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Aspsine on 2015/7/29.
@@ -69,6 +70,18 @@ public class Utils {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static long getDifferenceDays(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
+    public static String formatDatePurchase(long date) {
+        SimpleDateFormat out = new SimpleDateFormat("MMM d, yyyy");
+
+        Date time = new Date(date);
+        return out.format(time);
     }
 
     public static Date getDate(String date) {

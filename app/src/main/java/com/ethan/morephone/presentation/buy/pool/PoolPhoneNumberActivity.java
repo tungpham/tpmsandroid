@@ -1,4 +1,4 @@
-package com.ethan.morephone.presentation.buy.result;
+package com.ethan.morephone.presentation.buy.pool;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,13 +12,14 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberFragment;
 import com.ethan.morephone.presentation.buy.payment.purchase.PurchaseActivity;
+import com.ethan.morephone.presentation.buy.result.AvailablePhoneNumberFragment;
 import com.ethan.morephone.utils.ActivityUtils;
 
 /**
  * Created by Ethan on 3/31/17.
  */
 
-public class AvailablePhoneNumberActivity extends BaseActivity {
+public class PoolPhoneNumberActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,17 +28,14 @@ public class AvailablePhoneNumberActivity extends BaseActivity {
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
 
-        Bundle bundle = getIntent().getExtras();
-        String countryName = bundle.getString(SearchPhoneNumberFragment.BUNDLE_COUNTRY_NAME);
-
-        setTitleActionBar(mToolbar, countryName);
+        setTitleActionBar(mToolbar, getString(R.string.option_phone_number_label));
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (fragment instanceof AvailablePhoneNumberFragment) return;
-        AvailablePhoneNumberFragment browserFragment = AvailablePhoneNumberFragment.getInstance(bundle);
+        if (fragment instanceof PoolPhoneNumberFragment) return;
+        PoolPhoneNumberFragment poolPhoneNumberFragment = PoolPhoneNumberFragment.getInstance();
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
-                browserFragment,
+                poolPhoneNumberFragment,
                 R.id.content_frame,
                 AvailablePhoneNumberFragment.class.getSimpleName());
     }

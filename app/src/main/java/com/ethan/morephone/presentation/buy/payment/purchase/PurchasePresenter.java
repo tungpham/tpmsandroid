@@ -71,6 +71,36 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
     }
 
     @Override
+    public void buyPoolPhoneNumber(final Context context, final String buyPhoneNumber, long expire) {
+        PhoneNumber phoneNumber = PhoneNumber.getBuilder().userId(MyPreference.getUserId(context))
+                .accountSid(TwilioManager.getSid(context))
+                .authToken(TwilioManager.getAuthCode(context))
+                .applicationSid(TwilioManager.getApplicationSid(context))
+                .expire(expire)
+                .phoneNumber(buyPhoneNumber).build();
+
+        ApiMorePhone.buyPoolPhoneNumber(context, phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
+                if (response.isSuccessful()) {
+                    PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, buyPhoneNumber, "");
+                    mView.buyIncomingPhoneNumberSuccess(buyPhoneNumber);
+                    mView.showLoading(false);
+                }else {
+                    mView.showLoading(false);
+                    mView.buyIncomingPhoneNumberFail();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<PhoneNumber>> call, Throwable t) {
+                mView.showLoading(false);
+                mView.buyIncomingPhoneNumberFail();
+            }
+        });
+    }
+
+    @Override
     public void start() {
 
     }

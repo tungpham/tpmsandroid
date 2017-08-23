@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 
@@ -21,6 +23,17 @@ public class RequirePhoneNumberDialog extends DialogFragment {
     }
 
     private RequirePhoneNumberDialog.RequirePhoneNumberListener mRequirePhoneNumberListener;
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+
+        try {
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.add(this, tag);
+            ft.commit();
+        } catch (IllegalStateException e) {
+        }
+    }
 
     @NonNull
     @Override

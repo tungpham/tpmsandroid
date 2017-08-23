@@ -102,7 +102,7 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
         ApiMorePhone.getPhoneNumbers(context, MyPreference.getUserId(context), new Callback<BaseResponse<List<PhoneNumber>>>() {
             @Override
             public void onResponse(Call<BaseResponse<List<PhoneNumber>>> call, Response<BaseResponse<List<PhoneNumber>>> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && response.body().getResponse() != null && !response.body().getResponse().isEmpty()) {
                     for (final PhoneNumber incomingPhoneNumber : response.body().getResponse()) {
                         PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, incomingPhoneNumber.getPhoneNumber(), "");
                     }

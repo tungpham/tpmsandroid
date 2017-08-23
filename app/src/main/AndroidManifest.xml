@@ -178,6 +178,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".presentation.buy.pool.PoolPhoneNumberActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".presentation.phone.dial.DialActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />

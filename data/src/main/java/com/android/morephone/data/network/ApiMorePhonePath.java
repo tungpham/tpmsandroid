@@ -39,10 +39,16 @@ interface ApiMorePhonePath {
     /*-----------------------------------------PHONE NUMBER-----------------------------------------*/
 
     @POST("phone-number")
-    Call<BaseResponse<PhoneNumber>> createPhoneNumber(@Body PhoneNumber user);
+    Call<BaseResponse<PhoneNumber>> createPhoneNumber(@Body PhoneNumber phoneNumber);
 
     @GET("phone-number")
     Call<BaseResponse<List<PhoneNumber>>> getPhoneNumbers(@Query("userId") String userId);
+
+    @GET("phone-number/pool")
+    Call<BaseResponse<List<PhoneNumber>>> getPoolPhoneNumbers();
+
+    @POST("phone-number/pool")
+    Call<BaseResponse<PhoneNumber>> buyPoolPhoneNumber(@Body PhoneNumber phoneNumber);
 
     @GET("phone-number/{id}")
     Call<BaseResponse<PhoneNumber>> getPhoneNumber(@Path("id") String id);

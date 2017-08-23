@@ -41,6 +41,7 @@ import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
 import com.ethan.morephone.presentation.buy.payment.fund.AddFundActivity;
+import com.ethan.morephone.presentation.buy.pool.PoolPhoneNumberActivity;
 import com.ethan.morephone.presentation.credit.CreditActivity;
 import com.ethan.morephone.presentation.license.LicenseActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
@@ -68,7 +69,8 @@ public class MainActivity extends BaseActivity implements
         SearchView.OnQueryTextListener,
         NavigationView.OnNavigationItemSelectedListener,
         View.OnClickListener,
-        EasyPermissions.PermissionCallbacks {
+        EasyPermissions.PermissionCallbacks,
+        OptionBuyPhoneNumberDialog.OptionBuyPhoneNumberListener {
 
     private final int MIC_PERMISSION_REQUEST_CODE = 101;
 
@@ -149,7 +151,9 @@ public class MainActivity extends BaseActivity implements
                 startActivity(new Intent(this, CreditActivity.class));
                 break;
             case R.id.nav_buy_number:
-                startActivityForResult(new Intent(this, SearchPhoneNumberActivity.class), REQUEST_BUY_PHONE_NUMBER);
+                OptionBuyPhoneNumberDialog optionBuyPhoneNumberDialog = OptionBuyPhoneNumberDialog.getInstance();
+                optionBuyPhoneNumberDialog.show(getSupportFragmentManager(), OptionBuyPhoneNumberDialog.class.getSimpleName());
+                optionBuyPhoneNumberDialog.setOptionPhoneNumberListener(this);
                 break;
 //            case R.id.nav_setting:
 //                startActivity(new Intent(this, SettingActivity.class));
@@ -377,6 +381,15 @@ public class MainActivity extends BaseActivity implements
         strings.add(Manifest.permission.RECORD_AUDIO);
         if (EasyPermissions.somePermissionPermanentlyDenied(this, strings)) {
             new AppSettingsDialog.Builder(this).build().show();
+        }
+    }
+
+    @Override
+    public void onOptionBuyPhoneNumber(boolean pool) {
+        if (pool) {
+            startActivityForResult(new Intent(this, PoolPhoneNumberActivity.class), REQUEST_BUY_PHONE_NUMBER);
+        } else {
+            startActivityForResult(new Intent(this, SearchPhoneNumberActivity.class), REQUEST_BUY_PHONE_NUMBER);
         }
     }
 
