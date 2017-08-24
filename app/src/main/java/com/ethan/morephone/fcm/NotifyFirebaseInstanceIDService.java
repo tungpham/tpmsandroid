@@ -9,7 +9,6 @@ import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.ethan.morephone.MyPreference;
-import com.ethan.morephone.presentation.record.TestVoiceActivity;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -38,8 +37,8 @@ public class NotifyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // Instance ID token to your app server.
         sendRegistrationToServer(refreshedToken);
 
-        Intent intent = new Intent(TestVoiceActivity.ACTION_FCM_TOKEN);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+//        Intent intent = new Intent(TestVoiceActivity.ACTION_FCM_TOKEN);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
     // [END refresh_token]
 

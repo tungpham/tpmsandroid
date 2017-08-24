@@ -22,12 +22,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.fcm.NotifyFirebaseMessagingService;
-import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
@@ -257,10 +257,10 @@ public class MessageListFragment extends BaseFragment implements
     public void onEvent(ConversationModel conversationModel) {
         Toolbar toolbar = (Toolbar) getView().findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setTitleActionBar(toolbar, conversationModel.getPhoneNumber());
+        baseActivity.setTitleActionBar(toolbar, conversationModel.mPhoneNumber);
 
-        showMessages(conversationModel.getMessageItems());
-        mPhoneNumberTo = conversationModel.getPhoneNumber();
+        showMessages(conversationModel.mMessageItems);
+        mPhoneNumberTo = conversationModel.mPhoneNumber;
 
         if (!TextUtils.isEmpty(mMessageBody)) {
             mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size(), false);

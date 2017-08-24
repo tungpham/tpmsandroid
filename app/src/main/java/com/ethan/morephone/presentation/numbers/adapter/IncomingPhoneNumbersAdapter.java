@@ -53,6 +53,12 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
         final PhoneNumber numberEntity = mNumberEntities.get(position);
         holder.textNumber.setText(numberEntity.getPhoneNumber());
 
+        if (numberEntity.isPool()) {
+            holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+        } else {
+            holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
+        }
+
 //        validatePhoneNumberSelected(holder, numberEntity.phoneNumber);
 
         holder.textNumber.setOnClickListener(new View.OnClickListener() {

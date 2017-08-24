@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.ethan.morephone.presentation.record.TestVoiceActivity;
 import com.google.android.gms.gcm.GcmListenerService;
-import com.twilio.voice.CallInvite;
 
 public class VoiceGCMListenerService extends GcmListenerService {
 
@@ -56,9 +54,9 @@ public class VoiceGCMListenerService extends GcmListenerService {
     /*
      * Show the notification in the Android notification drawer
      */
-    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
-    private void showNotification(CallInvite callInvite, int notificationId) {
-        String callSid = callInvite.getCallSid();
+//    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
+//    private void showNotification(CallInvite callInvite, int notificationId) {
+//        String callSid = callInvite.getCallSid();
 
 //        if (!callInvite.isCancelled()) {
 //            /*
@@ -125,16 +123,16 @@ public class VoiceGCMListenerService extends GcmListenerService {
 //                notificationManager.cancelAll();
 //            }
 //        }
-    }
+//    }
 
     /*
      * Send the IncomingCallMessage to the TestVoiceActivity
      */
-    private void sendCallInviteToActivity(CallInvite incomingCallMessage, int notificationId) {
-        Intent intent = new Intent(TestVoiceActivity.ACTION_INCOMING_CALL);
-        intent.putExtra(TestVoiceActivity.INCOMING_CALL_INVITE, incomingCallMessage);
-        intent.putExtra(TestVoiceActivity.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
+//    private void sendCallInviteToActivity(CallInvite incomingCallMessage, int notificationId) {
+//        Intent intent = new Intent(TestVoiceActivity.ACTION_INCOMING_CALL);
+//        intent.putExtra(TestVoiceActivity.INCOMING_CALL_INVITE, incomingCallMessage);
+//        intent.putExtra(TestVoiceActivity.INCOMING_CALL_NOTIFICATION_ID, notificationId);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+//    }
 
 }

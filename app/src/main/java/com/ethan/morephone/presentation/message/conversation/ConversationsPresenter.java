@@ -6,18 +6,20 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
+import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
+import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.GetAllMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
-import com.ethan.morephone.model.ConversationModel;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -278,16 +280,22 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         protected Void doInBackground(Void... params) {
             ConversationsPresenter presenter = mWeakReference.get();
             if (presenter != null) {
-                MessageListResourceResponse messageIncoming = ApiManager.getMessagesIncoming(mContext, mPhoneNumber);
-                MessageListResourceResponse messageOutgoing = ApiManager.getMessagesOutgoing(mContext, mPhoneNumber);
 
-                if (messageIncoming != null && messageIncoming.messages != null && !messageIncoming.messages.isEmpty()) {
-                    presenter.executeData(messageIncoming.messages, true);
+                BaseResponse<List<ConversationModel>> baseResponse = ApiMorePhone.getMessage(mContext, mPhoneNumber);
+                if(baseResponse != null && baseResponse.getResponse() != null){
+                    presenter.mConversationModels = baseResponse.getResponse();
                 }
 
-                if (messageOutgoing != null && messageOutgoing.messages != null && !messageOutgoing.messages.isEmpty()) {
-                    presenter.executeData(messageOutgoing.messages, false);
-                }
+//                MessageListResourceResponse messageIncoming = ApiManager.getMessagesIncoming(mContext, mPhoneNumber);
+//                MessageListResourceResponse messageOutgoing = ApiManager.getMessagesOutgoing(mContext, mPhoneNumber);
+//
+//                if (messageIncoming != null && messageIncoming.messages != null && !messageIncoming.messages.isEmpty()) {
+//                    presenter.executeData(messageIncoming.messages, true);
+//                }
+//
+//                if (messageOutgoing != null && messageOutgoing.messages != null && !messageOutgoing.messages.isEmpty()) {
+//                    presenter.executeData(messageOutgoing.messages, false);
+//                }
             }
             return null;
         }

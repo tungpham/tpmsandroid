@@ -27,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.morephone.data.database.DatabaseHelpper;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
@@ -182,11 +184,13 @@ public class MainActivity extends BaseActivity implements
                 TwilioManager.saveTwilio(getApplicationContext(), "", "");
                 TwilioManager.setApplicationSid(getApplicationContext(), "");
 
-                Set<String> phoneNumbersUsage = MyPreference.getPhoneNumberUsage(getApplicationContext());
-                for (String str : phoneNumbersUsage) {
-                    PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_UNREGISTER_PHONE_NUMBER, str, "");
+//                Set<String> phoneNumbersUsage = MyPreference.getPhoneNumberUsage(getApplicationContext());
+                List<PhoneNumber> phoneNumbers = DatabaseHelpper.findAll(getApplicationContext());
+                for (PhoneNumber phoneNumber : phoneNumbers) {
+                    PhoneService.startServiceUnregisterPhoneNumber(getApplicationContext(), phoneNumber.getPhoneNumber(), phoneNumber.getSid());
                 }
-                MyPreference.setPhoneNumberUsage(getApplicationContext(), new ArraySet<String>());
+
+//                MyPreference.setPhoneNumberUsage(getApplicationContext(), new ArraySet<String>());
 
                 startActivity(new Intent(this, AuthenticationActivity.class));
                 finish();

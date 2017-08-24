@@ -4,6 +4,7 @@ package com.android.morephone.data.network;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.Response;
+import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.register.BindingRequest;
@@ -75,6 +76,10 @@ interface ApiMorePhonePath {
                                                   @Field("to") String to,
                                                   @Field("body") String body);
 
+    @GET("message/retrieve")
+    Call<BaseResponse<List<ConversationModel>>> getMessage(@Query("account_sid") String accountSid,
+                                                           @Query("auth_token") String authToken,
+                                                           @Query("phone_number") String phoneNumber);
 
     /*-----------------------------------------CALL-----------------------------------------*/
 

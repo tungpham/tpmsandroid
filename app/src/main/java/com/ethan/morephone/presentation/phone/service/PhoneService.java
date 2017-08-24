@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import com.android.morephone.data.database.DatabaseHelpper;
 import com.android.morephone.data.entity.BaseResponse;
+import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
+import com.android.morephone.data.network.HTTPStatus;
 import com.android.morephone.data.utils.TwilioManager;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.fcm.NotificationHelpper;
@@ -39,6 +41,7 @@ import com.twilio.client.Twilio;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
@@ -130,6 +133,22 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         if (action != null) {
             intent.setAction(action);
         }
+        context.startService(intent);
+    }
+
+    public static void startServiceRegisterPhoneNumber(Context context, PhoneNumber phoneNumber) {
+        Intent intent = new Intent(context, PhoneService.class);
+        intent.putExtra(EXTRA_FROM_PHONE_NUMBER, phoneNumber.getPhoneNumber());
+        intent.setAction(ACTION_REGISTER_PHONE_NUMBER);
+        DatabaseHelpper.insert(context, phoneNumber);
+        context.startService(intent);
+    }
+
+    public static void startServiceUnregisterPhoneNumber(Context context, String phoneNumber, String sid) {
+        Intent intent = new Intent(context, PhoneService.class);
+        intent.putExtra(EXTRA_FROM_PHONE_NUMBER, phoneNumber);
+        intent.setAction(ACTION_UNREGISTER_PHONE_NUMBER);
+        DatabaseHelpper.deletePhoneNumber(context, sid);
         context.startService(intent);
     }
 
@@ -388,7 +407,9 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     }
 
     private void registerPhoneNumberAgain() {
-        final Set<String> phoneNumberUsages = MyPreference.getPhoneNumberUsage(getApplicationContext());
+//        final Set<String> phoneNumberUsages = MyPreference.getPhoneNumberUsage(getApplicationContext());
+
+        final List<PhoneNumber> phoneNumberUsages = DatabaseHelpper.findAll(getApplicationContext());
 
         if (phoneNumberUsages != null) {
             DebugTool.logD("REGISTER PHONE USAGE: " + phoneNumberUsages.size());
@@ -396,8 +417,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             if (Twilio.isInitialized()) {
                 DebugTool.logD("TWILIO INITED: AND LOAD PHONE: " + mDevices.size());
 
-                for (String phone : phoneNumberUsages) {
-                    retrieveCapabilityToken(phone);
+                for (PhoneNumber phone : phoneNumberUsages) {
+                    retrieveCapabilityToken(phone.getPhoneNumber());
                 }
 
             } else {
@@ -405,8 +426,8 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                     @Override
                     public void onInitialized() {
                         DebugTool.logD("TWILIO INITED SUCCESS " + mDevices.size());
-                        for (String phone : phoneNumberUsages) {
-                            retrieveCapabilityToken(phone);
+                        for (PhoneNumber phone : phoneNumberUsages) {
+                            retrieveCapabilityToken(phone.getPhoneNumber());
                         }
                     }
 
@@ -435,7 +456,59 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         }
     }
 
-    private void retrieveCapabilityToken(final String phoneNumber) {
+    private void retrieveCapabilityToken(String phoneNumber) {
+        PhoneNumber number = DatabaseHelpper.findPhoneNumber(getApplicationContext(), phoneNumber);
+        if (number != null) {
+            if (number.isPool()) {
+                retrieveCapabilityTokenOnline(getApplicationContext(), phoneNumber);
+            } else {
+                retrieveCapabilityTokenOffline(phoneNumber);
+            }
+        }
+    }
+
+    private void retrieveCapabilityTokenOnline(final Context context, final String phoneNumber) {
+        DebugTool.logD("TOKEN ONLINE HERE: " + phoneNumber);
+        ApiMorePhone.createToken(getApplicationContext(), phoneNumber, new Callback<BaseResponse<String>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<String>> call, Response<BaseResponse<String>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null && response.body().getStatus() == HTTPStatus.CREATED.getStatusCode()) {
+                        String capabilityToken = response.body().getResponse();
+                        try {
+                            DebugTool.logD("TOKEN ONLINE : " + capabilityToken);
+                            if (!mDevices.containsKey(phoneNumber)) {
+                                Device device = Twilio.createDevice(capabilityToken, PhoneService.this);
+                                device.setIncomingSoundEnabled(true);
+
+                                Intent intent = new Intent(context, PhoneActivity.class);
+                                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                device.setIncomingIntent(pendingIntent);
+
+                                mDevices.put(phoneNumber, device);
+                                DebugTool.logD("SIZE DIVICE ONLINE : " + mDevices.size());
+                            } else {
+                                mDevices.get(phoneNumber).updateCapabilityToken(capabilityToken);
+                            }
+
+                        } catch (Exception e1) {
+                        }
+                    } else {
+                        DebugTool.logD("ERROR CREATE TOKEN ONLINE ");
+                    }
+                } else {
+                    DebugTool.logD("ERROR CREATE TOKEN ONLINE ");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<String>> call, Throwable t) {
+                DebugTool.logD("FAILE CREATE TOKEN");
+            }
+        });
+    }
+
+    private void retrieveCapabilityTokenOffline(final String phoneNumber) {
         DebugTool.logD("REGISTER DEVICE NUMER: " + phoneNumber);
 
         TwilioCapability capability = new TwilioCapability(TwilioManager.getSid(getApplicationContext()), TwilioManager.getAuthCode(getApplicationContext()));
@@ -465,46 +538,6 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             e.printStackTrace();
         }
 
-
-//        ApiMorePhone.createToken(getApplicationContext(), phoneNumber, new Callback<BaseResponse<String>>() {
-//            @Override
-//            public void onResponse(Call<BaseResponse<String>> call, Response<BaseResponse<String>> response) {
-//                if (response.isSuccessful()) {
-//                    if (response.body() != null && response.body().getStatus() == HTTPStatus.CREATED.getStatusCode()) {
-//                        String capabilityToken = response.body().getResponse();
-//                        try {
-//                            DebugTool.logD("TOKEN: " + capabilityToken);
-//                            if (!mDevices.containsKey(phoneNumber)) {
-//                                Device device = Twilio.createDevice(capabilityToken, PhoneService.this);
-//                                device.setIncomingSoundEnabled(true);
-//
-//                                Intent intent = new Intent(getContext(), PhoneActivity.class);
-//                                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                                device.setIncomingIntent(pendingIntent);
-//
-//                                mDevices.put(phoneNumber, device);
-//                                DebugTool.logD("SIZE DIVICE: " + mDevices.size());
-//                            } else {
-//                                mDevices.get(phoneNumber).updateCapabilityToken(capabilityToken);
-//                            }
-//
-//                        } catch (Exception e1) {
-//                            Toast.makeText(getContext(), "Device error", Toast.LENGTH_SHORT).show();
-//                        }
-//                    } else {
-//                        DebugTool.logD("ERROR CREATE TOKEN");
-//                    }
-//                } else {
-//                    DebugTool.logD("ERROR CREATE TOKEN");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<BaseResponse<String>> call, Throwable t) {
-//                DebugTool.logD("FAILE CREATE TOKEN");
-//            }
-//        });
-
     }
 
     private void unRegisterDevicePhoneNumber(final String phoneNumber) {
@@ -522,17 +555,18 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             return;
         }
 
-        Set<String> savePhoneNumber = MyPreference.getPhoneNumberUsage(getApplicationContext());
+//        Set<String> savePhoneNumber = MyPreference.getPhoneNumberUsage(getApplicationContext());
 
-        DebugTool.logD("savePhoneNumber SIZE: " + savePhoneNumber.size());
+//        DebugTool.logD("savePhoneNumber SIZE: " + savePhoneNumber.size());
 
-        if (!savePhoneNumber.contains(phoneNumber)) {
-            savePhoneNumber.add(phoneNumber);
-        }
+//        if (!savePhoneNumber.contains(phoneNumber)) {
+//            savePhoneNumber.add(phoneNumber);
+//        }
 
-        DebugTool.logD("savePhoneNumber AFTER SIZE: " + savePhoneNumber.size());
+//        DebugTool.logD("savePhoneNumber AFTER SIZE: " + savePhoneNumber.size());
 
-        MyPreference.setPhoneNumberUsage(getApplicationContext(), savePhoneNumber);
+//        MyPreference.setPhoneNumberUsage(getApplicationContext(), savePhoneNumber);
+
 
         if (Twilio.isInitialized()) {
             retrieveCapabilityToken(phoneNumber);

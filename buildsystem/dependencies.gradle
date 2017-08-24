@@ -24,8 +24,8 @@ ext {
     gsonVersion = '2.7'
 
     //Other Libraries
-    retrofitVersion = '2.1.0'
-    retrofitLoggingVersion = '3.3.1'
+    retrofitVersion = '2.3.0'
+    retrofitLoggingVersion = '3.4.1'
     glideVersion = '3.7.0'
     glideTransformationsVersion = '2.0.0'
     facebookSDKVersion = '4.+'
@@ -55,6 +55,7 @@ ext {
             retrofit            : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
             converterGson       : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
             retrofitLogging     : "com.squareup.okhttp3:logging-interceptor:${retrofitLoggingVersion}",
+            okhttp              : "com.squareup.okhttp3:okhttp:${retrofitLoggingVersion}",
 
             //Development
             stetho         : "com.facebook.stetho:stetho:${stethoVersion}",

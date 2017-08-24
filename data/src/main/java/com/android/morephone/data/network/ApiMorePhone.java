@@ -6,6 +6,7 @@ import com.android.morephone.data.BaseUrl;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.Response;
+import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.register.BindingRequest;
@@ -207,6 +208,17 @@ public class ApiMorePhone {
                                      Callback<BaseResponse<MessageItem>> callback) {
         Call<BaseResponse<MessageItem>> call = getApiPath(context).createMessage(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), userId, from, to, body);
         call.enqueue(callback);
+    }
+
+    public static BaseResponse<List<ConversationModel>> getMessage(Context context,
+                                  String phoneNumber) {
+        Call<BaseResponse<List<ConversationModel>>> call = getApiPath(context).getMessage(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), phoneNumber);
+        try {
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /*-----------------------------------------CALL----------------------------------------*/

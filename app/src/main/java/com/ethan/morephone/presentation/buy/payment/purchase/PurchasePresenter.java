@@ -3,6 +3,7 @@ package com.ethan.morephone.presentation.buy.payment.purchase;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.android.morephone.data.database.DatabaseHelpper;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
@@ -52,7 +53,7 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
             @Override
             public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
                 if (response.isSuccessful()) {
-                    PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, buyPhoneNumber, "");
+                    PhoneService.startServiceRegisterPhoneNumber(context, response.body().getResponse());
                     mView.buyIncomingPhoneNumberSuccess(buyPhoneNumber);
                     mView.showLoading(false);
                 }else {
@@ -86,7 +87,7 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
             @Override
             public void onResponse(Call<BaseResponse<PhoneNumber>> call, Response<BaseResponse<PhoneNumber>> response) {
                 if (response.isSuccessful()) {
-                    PhoneService.startServiceWithAction(context, PhoneService.ACTION_REGISTER_PHONE_NUMBER, buyPhoneNumber, "");
+                    PhoneService.startServiceRegisterPhoneNumber(context, response.body().getResponse());
                     mView.buyIncomingPhoneNumberSuccess(buyPhoneNumber);
                     mView.showLoading(false);
                 }else {

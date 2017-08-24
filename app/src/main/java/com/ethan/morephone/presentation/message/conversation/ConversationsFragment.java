@@ -21,10 +21,10 @@ import android.widget.Toast;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.fcm.NotifyFirebaseMessagingService;
-import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
@@ -265,8 +265,7 @@ public class ConversationsFragment extends BaseFragment implements
                         List<ConversationModel> conversationModels = mConversationListAdapter.getData();
                         if (conversationModels != null && !conversationModels.isEmpty()) {
                             for (ConversationModel model : conversationModels) {
-                                DebugTool.logD("PHONE NUMBER: " + model.getPhoneNumber());
-                                if (model.getPhoneNumber().trim().equals(toPhoneNumber.trim())) {
+                                if (model.mPhoneNumber.trim().equals(toPhoneNumber.trim())) {
                                     EventBus.getDefault().postSticky(model);
                                     Intent intent = new Intent(getActivity(), MessageListActivity.class);
                                     Bundle bundle = new Bundle();

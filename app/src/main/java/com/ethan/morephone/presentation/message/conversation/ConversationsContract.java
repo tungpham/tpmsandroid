@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
-import com.ethan.morephone.model.ConversationModel;
+import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 

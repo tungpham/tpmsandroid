@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.ethan.morephone.R;
-import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TextDrawable;
 
@@ -56,10 +56,10 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
     @Override
     public void onBindViewHolder(ConversationListViewHolder holder, int position) {
         final ConversationModel conversationModel = mConversationModels.get(position);
-        List<MessageItem> messageItems = conversationModel.getMessageItems();
+        List<MessageItem> messageItems = conversationModel.mMessageItems;
         MessageItem messageItem = messageItems.get(messageItems.size() - 1);
 
-        holder.textSmsTitle.setText(conversationModel.getPhoneNumber());
+        holder.textSmsTitle.setText(conversationModel.mPhoneNumber);
         holder.textSmsDescription.setText(messageItem.body);
         if (!TextUtils.isEmpty(messageItem.dateSent)) {
             holder.textSmsTime.setText(Utils.formatDate(messageItem.dateSent));
@@ -70,7 +70,7 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
                 mOnItemConversationClickListener.onItemClick(conversationModel);
             }
         });
-        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(conversationModel.getPhoneNumber().charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
+        holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(conversationModel.mPhoneNumber.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
     }
 
     @Override

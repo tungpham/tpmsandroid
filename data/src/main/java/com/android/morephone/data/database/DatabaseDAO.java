@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import com.android.morephone.data.repository.phonenumbers.incoming.source.local.PhoneNumberPersistenceContract;
+
 
 /**
  * Created by aspsine on 15-4-19.
@@ -20,17 +22,28 @@ public class DatabaseDAO extends SQLiteOpenHelper {
 
     private static final String TEXT_TYPE = " TEXT";
 
+
     private static final String INTEGER_TYPE = " INTEGER";
 
     private static final String COMMA_SEP = ",";
 
-    private static void createTableTask(SQLiteDatabase db) {
+    private static void createTablePhoneNumber(SQLiteDatabase db) {
         String sql =
-                "CREATE TABLE " + TaskPersistenceContract.TaskEntry.TABLE_NAME
+                "CREATE TABLE " + PhoneNumberPersistenceContract.PhoneNumberEntry.TABLE_NAME
                         + " ("
                         + BaseColumns._ID + INTEGER_TYPE  + " PRIMARY KEY AUTOINCREMENT " + COMMA_SEP
-                        + TaskPersistenceContract.TaskEntry.COL_STATUS + TEXT_TYPE + COMMA_SEP
-                        + TaskPersistenceContract.TaskEntry.COL_CREATED_AT + TEXT_TYPE
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_ID + TEXT_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_SID + TEXT_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_PHONE_NUMBER + TEXT_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_FRIENDLY_NAME + TEXT_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_IS_FORWARD + INTEGER_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_USER_ID + TEXT_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_EXPIRE + INTEGER_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_POOL + INTEGER_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_FORWARD_PHONE_NUMBER + TEXT_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_FORWARD_EMAIL + TEXT_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_CREATED_AT + INTEGER_TYPE + COMMA_SEP
+                        + PhoneNumberPersistenceContract.PhoneNumberEntry.COL_UPDATED_AT + INTEGER_TYPE
                         + ")";
 
         db.execSQL(sql);
@@ -60,7 +73,7 @@ public class DatabaseDAO extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // creating required tables
-        createTableTask(db);
+        createTablePhoneNumber(db);
     }
 
     @Override

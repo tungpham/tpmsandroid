@@ -23,4 +23,17 @@ public class DateUtils {
         return null;
     }
 
+    public static Date getDateMessage(String date) {
+//        2017-08-04T07:57:46.000Z
+        SimpleDateFormat in = new SimpleDateFormat("yyyy-MMM-dEHH, d MMM yyyy HH:mm:ss Z");
+
+        try {
+            Date time = in.parse(date);
+            return time;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

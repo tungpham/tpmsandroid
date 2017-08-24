@@ -17,11 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.R;
-import com.ethan.morephone.model.ConversationModel;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
