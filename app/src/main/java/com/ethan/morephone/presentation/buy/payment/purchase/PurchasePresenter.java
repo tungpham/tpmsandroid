@@ -72,11 +72,14 @@ public class PurchasePresenter implements PurchaseContract.Presenter {
 
     @Override
     public void buyPoolPhoneNumber(final Context context, final String buyPhoneNumber, long expire) {
-        PhoneNumber phoneNumber = PhoneNumber.getBuilder().userId(MyPreference.getUserId(context))
+        mView.showLoading(true);
+        PhoneNumber phoneNumber = PhoneNumber.getBuilder()
+                .userId(MyPreference.getUserId(context))
                 .accountSid(TwilioManager.getSid(context))
                 .authToken(TwilioManager.getAuthCode(context))
                 .applicationSid(TwilioManager.getApplicationSid(context))
                 .expire(expire)
+                .pool(true)
                 .phoneNumber(buyPhoneNumber).build();
 
         ApiMorePhone.buyPoolPhoneNumber(context, phoneNumber, new Callback<BaseResponse<PhoneNumber>>() {

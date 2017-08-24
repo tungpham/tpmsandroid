@@ -161,10 +161,11 @@ public class PurchaseFragment extends BaseFragment implements
                     if (mCurrentDate < System.currentTimeMillis()) {
                         Toast.makeText(getContext(), getString(R.string.purchase_expire_date_alert), Toast.LENGTH_SHORT).show();
                     } else {
-
+                        mPresenter.buyPoolPhoneNumber(getContext(), mPhoneNumber, mCurrentDate);
                     }
+                }else {
+                    mPresenter.buyIncomingPhoneNumber(getContext(), mPhoneNumber);
                 }
-                mPresenter.buyIncomingPhoneNumber(getContext(), mPhoneNumber);
                 break;
             case R.id.relative_expire:
                 ChooseDateDialog recordDialog = ChooseDateDialog.getInstance(mCurrentDate);
