@@ -7,6 +7,7 @@ import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
+import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.usage.UsageItem;
 import com.android.morephone.data.entity.user.User;
@@ -89,6 +90,16 @@ interface ApiMorePhonePath {
                                            @Field("account_sid") String accountSid,
                                            @Field("auth_token") String authToken,
                                            @Field("application_sid") String application_sid);
+
+    @GET("call/records")
+    Call<BaseResponse<List<Record>>> getRecords(@Query("account_sid") String accountSid,
+                                                @Query("auth_token") String authToken,
+                                                @Query("phone_number") String phoneNumber);
+
+    @GET("call/logs")
+    Call<BaseResponse<List<com.android.morephone.data.entity.call.Call>>> getCallLogs(@Query("account_sid") String accountSid,
+                                                                                      @Query("auth_token") String authToken,
+                                                                                      @Query("phone_number") String phoneNumber);
 
     /*-----------------------------------------USAGE-----------------------------------------*/
 

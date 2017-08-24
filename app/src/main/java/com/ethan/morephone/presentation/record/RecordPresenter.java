@@ -1,8 +1,10 @@
 package com.ethan.morephone.presentation.record;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.call.Call;
 import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.entity.record.mapper.RecordDataMapper;
@@ -10,13 +12,16 @@ import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
+import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.call.GetCall;
 import com.android.morephone.domain.usecase.record.DeleteRecord;
 import com.android.morephone.domain.usecase.record.GetRecords;
+import com.ethan.morephone.presentation.phone.log.CallLogPresenter;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,26 +82,28 @@ public class RecordPresenter implements RecordContract.Presenter {
 
     @Override
     public void loadRecords(final Context context, final String phoneNumber) {
-        mView.showLoading(true);
-        GetRecords.RequestValue requestValue = new GetRecords.RequestValue();
-        mUseCaseHandler.execute(mGetRecords, requestValue, new UseCase.UseCaseCallback<GetRecords.ResponseValue>() {
-            @Override
-            public void onSuccess(GetRecords.ResponseValue response) {
-                RecordListResourceResponse recordListResourceResponse = response.getRecordListResourceResponse();
-                if (recordListResourceResponse.recordings != null && !recordListResourceResponse.recordings.isEmpty()) {
-                    executeData(context, phoneNumber, recordListResourceResponse.recordings);
-                } else {
+        new RecordPresenter.DataAsync(context, this, phoneNumber).execute();
 
-                }
-
-                mView.showLoading(false);
-            }
-
-            @Override
-            public void onError() {
-                mView.showLoading(false);
-            }
-        });
+//        mView.showLoading(true);
+//        GetRecords.RequestValue requestValue = new GetRecords.RequestValue();
+//        mUseCaseHandler.execute(mGetRecords, requestValue, new UseCase.UseCaseCallback<GetRecords.ResponseValue>() {
+//            @Override
+//            public void onSuccess(GetRecords.ResponseValue response) {
+//                RecordListResourceResponse recordListResourceResponse = response.getRecordListResourceResponse();
+//                if (recordListResourceResponse.recordings != null && !recordListResourceResponse.recordings.isEmpty()) {
+//                    executeData(context, phoneNumber, recordListResourceResponse.recordings);
+//                } else {
+//
+//                }
+//
+//                mView.showLoading(false);
+//            }
+//
+//            @Override
+//            public void onError() {
+//                mView.showLoading(false);
+//            }
+//        });
     }
 
     @Override
@@ -161,6 +168,52 @@ public class RecordPresenter implements RecordContract.Presenter {
 //            });
         }
 
+    }
+
+
+    private static class DataAsync extends AsyncTask<Void, Integer, Void> {
+        private final WeakReference<RecordPresenter> mWeakReference;
+        private final String mPhoneNumber;
+        private final Context mContext;
+
+        public DataAsync(Context context, RecordPresenter presenter, String phoneNumber) {
+            mWeakReference = new WeakReference<>(presenter);
+            this.mPhoneNumber = phoneNumber;
+            mContext = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            RecordPresenter presenter = mWeakReference.get();
+            if(presenter != null){
+                presenter.mView.showLoading(true);
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            RecordPresenter presenter = mWeakReference.get();
+            if (presenter != null) {
+                BaseResponse<List<Record>> baseResponse = ApiMorePhone.getRecords(mContext, mPhoneNumber);
+                if(baseResponse != null && baseResponse.getResponse() != null) {
+                    presenter.mRecords = baseResponse.getResponse();
+                }
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            RecordPresenter presenter = mWeakReference.get();
+            if(presenter != null){
+                presenter.mView.showRecords(presenter.mRecords);
+                presenter.mView.showLoading(false);
+            }
+            DebugTool.logD("POST EXECUTE");
+        }
     }
 
 }

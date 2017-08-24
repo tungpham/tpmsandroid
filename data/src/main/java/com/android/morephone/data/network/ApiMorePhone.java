@@ -9,6 +9,7 @@ import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
+import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.usage.UsageItem;
 import com.android.morephone.data.entity.user.User;
@@ -167,8 +168,8 @@ public class ApiMorePhone {
     }
 
     public static void buyPoolPhoneNumber(Context context,
-                                         PhoneNumber phoneNumber,
-                                         Callback<BaseResponse<PhoneNumber>> callback) {
+                                          PhoneNumber phoneNumber,
+                                          Callback<BaseResponse<PhoneNumber>> callback) {
         Call<BaseResponse<PhoneNumber>> call = getApiPath(context).buyPoolPhoneNumber(phoneNumber);
         call.enqueue(callback);
     }
@@ -211,7 +212,7 @@ public class ApiMorePhone {
     }
 
     public static BaseResponse<List<ConversationModel>> getMessage(Context context,
-                                  String phoneNumber) {
+                                                                   String phoneNumber) {
         Call<BaseResponse<List<ConversationModel>>> call = getApiPath(context).getMessage(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), phoneNumber);
         try {
             return call.execute().body();
@@ -228,6 +229,28 @@ public class ApiMorePhone {
                                    Callback<BaseResponse<String>> callback) {
         Call<BaseResponse<String>> call = getApiPath(context).createToken(client, TwilioManager.getSid(context), TwilioManager.getAuthCode(context), TwilioManager.getApplicationSid(context));
         call.enqueue(callback);
+    }
+
+    public static BaseResponse<List<Record>> getRecords(Context context,
+                                                        String phoneNumber) {
+        Call<BaseResponse<List<Record>>> call = getApiPath(context).getRecords(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), phoneNumber);
+        try {
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static BaseResponse<List<com.android.morephone.data.entity.call.Call>> getCallLogs(Context context,
+                                                                                              String phoneNumber) {
+        Call<BaseResponse<List<com.android.morephone.data.entity.call.Call>>> call = getApiPath(context).getCallLogs(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), phoneNumber);
+        try {
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
      /*-----------------------------------------USAGE----------------------------------------*/

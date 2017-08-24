@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.call.Call;
 import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
+import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.call.GetCallsIncoming;
@@ -126,15 +128,20 @@ public class CallLogPresenter implements CallLogContract.Presenter {
         protected Void doInBackground(Void... params) {
             CallLogPresenter presenter = mWeakReference.get();
             if (presenter != null) {
-                Calls callIncoming = ApiManager.getCallsIncoming(mContext, mPhoneNumber, 0);
-                Calls callOutgoing = ApiManager.getCallsOutgoing(mContext, mPhoneNumber, 0);
+//                Calls callIncoming = ApiManager.getCallsIncoming(mContext, mPhoneNumber, 0);
+//                Calls callOutgoing = ApiManager.getCallsOutgoing(mContext, mPhoneNumber, 0);
+//
+//                if (callIncoming != null && callIncoming.calls != null && !callIncoming.calls.isEmpty()) {
+//                    presenter.executeData(callIncoming);
+//                }
+//
+//                if (callOutgoing != null && callOutgoing.calls != null && !callOutgoing.calls.isEmpty()) {
+//                    presenter.executeData(callOutgoing);
+//                }
 
-                if (callIncoming != null && callIncoming.calls != null && !callIncoming.calls.isEmpty()) {
-                    presenter.executeData(callIncoming);
-                }
-
-                if (callOutgoing != null && callOutgoing.calls != null && !callOutgoing.calls.isEmpty()) {
-                    presenter.executeData(callOutgoing);
+                BaseResponse<List<Call>> baseResponse = ApiMorePhone.getCallLogs(mContext, mPhoneNumber);
+                if(baseResponse != null && baseResponse.getResponse() != null) {
+                    presenter.mCalls = baseResponse.getResponse();
                 }
             }
             return null;
