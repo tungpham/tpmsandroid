@@ -203,38 +203,38 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".gcm.VoiceGCMListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
+        <!--<service-->
+            <!--android:name=".gcm.VoiceGCMListenerService"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
 
-        <service
-            android:name=".gcm.VoiceInstanceIDListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
-            </intent-filter>
-        </service>
+        <!--<service-->
+            <!--android:name=".gcm.VoiceInstanceIDListenerService"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.gms.iid.InstanceID" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
 
-        <service
-            android:name=".gcm.GCMRegistrationService"
-            android:exported="false" />
+        <!--<service-->
+            <!--android:name=".gcm.GCMRegistrationService"-->
+            <!--android:exported="false" />-->
 
-        <!-- [START fcm_listener] -->
+        <!--&lt;!&ndash; [START fcm_listener] &ndash;&gt;-->
 
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@mipmap/ic_launcher" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/blue_color" />
+        <!--<meta-data-->
+            <!--android:name="com.google.firebase.messaging.default_notification_icon"-->
+            <!--android:resource="@mipmap/ic_launcher" />-->
+        <!--<meta-data-->
+            <!--android:name="com.google.firebase.messaging.default_notification_color"-->
+            <!--android:resource="@color/blue_color" />-->
 
-        <service
-            android:name=".fcm.BindingIntentService"
-            android:exported="false" />
+        <!--<service-->
+            <!--android:name=".fcm.BindingIntentService"-->
+            <!--android:exported="false" />-->
 
         <service android:name=".fcm.NotifyFirebaseMessagingService">
             <intent-filter>

@@ -12,8 +12,6 @@ android {
     compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
     buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
 
-    useLibrary  'org.apache.http.legacy'
-
     signingConfigs {
         debug {
             storeFile file("${keystore}")
@@ -29,7 +27,6 @@ android {
         targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
         versionCode globalConfiguration.getAt("androidVersionCode")
         versionName globalConfiguration.getAt("androidVersionName")
-        multiDexEnabled = true
     }
 
     buildTypes {
@@ -79,14 +76,22 @@ android {
 //    }
 }
 
+buildscript {
+    repositories {
+        mavenCentral() // or jcenter()
+    }
+
+    dependencies {
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.7.3'
+    }
+}
+
 dependencies {
     def presentationDependencies = rootProject.ext.presentationDependencies
     compile presentationDependencies.appcompat
     compile presentationDependencies.design
     compile presentationDependencies.cardview
-    compile presentationDependencies.servicesGcm
     compile presentationDependencies.servicesAuth
-    compile presentationDependencies.servicesWallet
     compile presentationDependencies.supportV4
     compile presentationDependencies.firebaseMessage
     compile presentationDependencies.firebaseCrash
@@ -96,11 +101,7 @@ dependencies {
     compile 'com.twilio:client-android:1.2.20'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.android.exoplayer:exoplayer:r2.3.1'
-    compile 'com.github.ozodrukh:CircularReveal:1.0.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'io.jsonwebtoken:jjwt:0.7.0'
-    compile 'com.google.guava:guava:22.0-android'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'pub.devrel:easypermissions:0.4.3'
 
@@ -115,3 +116,4 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.getkeepsafe.dexcount'

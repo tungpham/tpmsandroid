@@ -14,6 +14,8 @@ import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.usage.UsageItem;
 import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.utils.TwilioManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -89,7 +91,6 @@ public class ApiMorePhone {
         }
         return mRetrofit;
     }
-
 
     //Singleton for ApiPath
     private static ApiMorePhonePath getApiPath(Context context) {
@@ -236,7 +237,7 @@ public class ApiMorePhone {
         Call<BaseResponse<List<Record>>> call = getApiPath(context).getRecords(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), phoneNumber);
         try {
             return call.execute().body();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -247,7 +248,7 @@ public class ApiMorePhone {
         Call<BaseResponse<List<com.android.morephone.data.entity.call.Call>>> call = getApiPath(context).getCallLogs(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), phoneNumber);
         try {
             return call.execute().body();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

@@ -3,7 +3,6 @@ package com.ethan.morephone.presentation.buy.payment.stripe;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
-import com.google.android.gms.wallet.WalletConstants;
 
 /**
  * Created by Ethan on 5/26/17.
@@ -12,7 +11,7 @@ import com.google.android.gms.wallet.WalletConstants;
 public class PaymentActivity extends FragmentActivity {
     //keep track of your current environment,
     //change to WalletConstants.ENVIRONMENT_PRODUCTION when you're ready to go live
-    public static final int mEnvironment = WalletConstants.ENVIRONMENT_TEST;
+//    public static final int mEnvironment = WalletConstants.ENVIRONMENT_TEST;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

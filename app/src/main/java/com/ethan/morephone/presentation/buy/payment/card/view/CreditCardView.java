@@ -20,8 +20,8 @@ import com.ethan.morephone.presentation.buy.payment.card.CardSelector;
 import com.ethan.morephone.presentation.buy.payment.card.CreditCardUtils;
 import com.ethan.morephone.presentation.buy.payment.card.FlipAnimator;
 
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
+//import io.codetail.animation.SupportAnimator;
+//import io.codetail.animation.ViewAnimationUtils;
 
 /**
  * Created by Ethan on 5/3/17.
@@ -319,21 +319,21 @@ public class CreditCardView extends FrameLayout {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
 
 
-            SupportAnimator animator =
-                    ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, 0, radius);
-            animator.setInterpolator(new AccelerateDecelerateInterpolator());
-            animator.setDuration(duration);
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    cardContainer.setBackgroundResource(drawableId);
-                }
-            }, duration);
-
-            mRevealView.setVisibility(View.VISIBLE);
-            animator.start();
-            mCurrentDrawable = drawableId;
+//            SupportAnimator animator =
+//                    ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, 0, radius);
+//            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+//            animator.setDuration(duration);
+//
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    cardContainer.setBackgroundResource(drawableId);
+//                }
+//            }, duration);
+//
+//            mRevealView.setVisibility(View.VISIBLE);
+//            animator.start();
+//            mCurrentDrawable = drawableId;
 
         } else {
             Animator anim = android.view.ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, 0, radius);

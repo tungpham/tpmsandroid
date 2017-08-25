@@ -1,7 +1,6 @@
 package com.ethan.morephone.presentation.buy.payment.androidpay;
 
 import com.ethan.morephone.R;
-import com.google.android.gms.wallet.WalletConstants;
 
 /**
  * Created by Ethan on 5/8/17.
@@ -10,7 +9,7 @@ import com.google.android.gms.wallet.WalletConstants;
 public class Constants {
 
     // Environment to use when creating an instance of Wallet.WalletOptions
-    public static final int WALLET_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST;
+//    public static final int WALLET_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST;
 
     public static final String MERCHANT_NAME = "Awesome Bike Store";
 

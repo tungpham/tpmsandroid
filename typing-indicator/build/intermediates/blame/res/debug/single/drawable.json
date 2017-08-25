@@ -16,12 +16,12 @@
         "source": "/Users/truongnguyen/.android/build-cache/40438dcf771a314943d08e56185d84037ac53b67/output/res/drawable/abc_cab_background_top_material.xml"
     },
     {
-        "merged": "/Users/truongnguyen/Data/Android/Source/widgetlab-master/typing-indicator/build/intermediates/res/merged/debug/drawable/abc_textfield_search_material.xml",
-        "source": "/Users/truongnguyen/.android/build-cache/40438dcf771a314943d08e56185d84037ac53b67/output/res/drawable/abc_textfield_search_material.xml"
-    },
-    {
         "merged": "/Users/truongnguyen/Data/Android/USA/Workspace/MorePhone/typing-indicator/build/intermediates/res/merged/debug/drawable/abc_spinner_textfield_background_material.xml",
         "source": "/Users/truongnguyen/.android/build-cache/40438dcf771a314943d08e56185d84037ac53b67/output/res/drawable/abc_spinner_textfield_background_material.xml"
+    },
+    {
+        "merged": "/Users/truongnguyen/Data/Android/Source/widgetlab-master/typing-indicator/build/intermediates/res/merged/debug/drawable/abc_textfield_search_material.xml",
+        "source": "/Users/truongnguyen/.android/build-cache/40438dcf771a314943d08e56185d84037ac53b67/output/res/drawable/abc_textfield_search_material.xml"
     },
     {
         "merged": "/Users/truongnguyen/Data/Android/USA/Workspace/MorePhone/typing-indicator/build/intermediates/res/merged/debug/drawable/abc_btn_borderless_material.xml",
@@ -48,12 +48,12 @@
         "source": "/Users/truongnguyen/.android/build-cache/40438dcf771a314943d08e56185d84037ac53b67/output/res/drawable/abc_btn_colored_material.xml"
     },
     {
-        "merged": "/Users/truongnguyen/Data/Android/Source/widgetlab-master/typing-indicator/build/intermediates/res/merged/debug/drawable/abc_list_selector_holo_light.xml",
-        "source": "/Users/truongnguyen/.android/build-cache/40438dcf771a314943d08e56185d84037ac53b67/output/res/drawable/abc_list_selector_holo_light.xml"
-    },
-    {
         "merged": "/Users/truongnguyen/Data/Android/USA/Workspace/MorePhone/typing-indicator/build/intermediates/res/merged/debug/drawable/abc_item_background_holo_light.xml",
         "source": "/Users/truongnguyen/.android/build-cache/40438dcf771a314943d08e56185d84037ac53b67/output/res/drawable/abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "/Users/truongnguyen/Data/Android/Source/widgetlab-master/typing-indicator/build/intermediates/res/merged/debug/drawable/abc_list_selector_holo_light.xml",
+        "source": "/Users/truongnguyen/.android/build-cache/40438dcf771a314943d08e56185d84037ac53b67/output/res/drawable/abc_list_selector_holo_light.xml"
     },
     {
         "merged": "/Users/truongnguyen/Data/Android/Source/widgetlab-master/typing-indicator/build/intermediates/res/merged/debug/drawable/notification_icon_background.xml",

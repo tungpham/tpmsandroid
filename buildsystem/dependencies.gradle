@@ -16,8 +16,8 @@ ext {
 
     //Google Libraries
     supportVersion = '25.0.1'
-    servicesVersion = '11.0.1'
-    firebaseVersion = '11.0.1'
+    servicesVersion = '11.2.0'
+    firebaseVersion = '11.2.0'
     mapVersion = '11.0.1'
     guavaVersion = '18.0'
     multidexVersion = '1.0.1'

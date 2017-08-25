@@ -3,7 +3,6 @@ package com.ethan.morephone.presentation.buy.payment.stripe;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.wallet.MaskedWallet;
 
 import java.util.Currency;
 import java.util.Locale;
@@ -24,7 +23,7 @@ public class AndroidPayActivity {
 //    private ListViewController mListViewController;
 //    private ProgressDialogController mProgressDialogController;
 
-    private MaskedWallet mPossibleConfirmedMaskedWallet;
+//    private MaskedWallet mPossibleConfirmedMaskedWallet;
 
     private TextView mItemsPriceDisplay;
     private TextView mShippingDisplay;
