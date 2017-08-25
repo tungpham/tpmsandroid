@@ -31,12 +31,12 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
-    <permission
-        android:name="com.morephone.tpms.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
+    <!--<permission-->
+        <!--android:name="com.morephone.tpms.permission.C2D_MESSAGE"-->
+        <!--android:protectionLevel="signature" />-->
 
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.morephone.tpms.permission.C2D_MESSAGE" />
+    <!--<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />-->
+    <!--<uses-permission android:name="com.morephone.tpms.permission.C2D_MESSAGE" />-->
 
     <application
         android:name=".MyApplication"
@@ -136,9 +136,9 @@
         <activity
             android:name=".presentation.buy.result.AvailablePhoneNumberActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".presentation.buy.payment.card.CardActivity"
-            android:screenOrientation="portrait" />
+        <!--<activity-->
+            <!--android:name=".presentation.buy.payment.card.CardActivity"-->
+            <!--android:screenOrientation="portrait" />-->
         <activity
             android:name=".presentation.buy.payment.PaymentActivity"
             android:screenOrientation="portrait" />
@@ -191,17 +191,17 @@
             android:exported="false"
             android:stopWithTask="true" />
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+        <!--<receiver-->
+            <!--android:name="com.google.android.gms.gcm.GcmReceiver"-->
+            <!--android:exported="true"-->
+            <!--android:permission="com.google.android.c2dm.permission.SEND">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+                <!--<action android:name="com.google.android.c2dm.intent.REGISTRATION" />-->
 
-                <category android:name="com.twilio.voice.quickstart" />
-            </intent-filter>
-        </receiver>
+                <!--<category android:name="com.twilio.voice.quickstart" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <!--<service-->
             <!--android:name=".gcm.VoiceGCMListenerService"-->
@@ -236,6 +236,15 @@
             <!--android:name=".fcm.BindingIntentService"-->
             <!--android:exported="false" />-->
 
+        <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver" android:exported="false" />
+        <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.morephone.tpms" />
+            </intent-filter>
+        </receiver>
+
         <service android:name=".fcm.NotifyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -243,7 +252,8 @@
         </service>
         <!-- [END fcm_listener] -->
         <!-- [START instanceId_listener] -->
-        <service android:name=".fcm.NotifyFirebaseInstanceIDService">
+        <service android:name=".fcm.NotifyFirebaseInstanceIDService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

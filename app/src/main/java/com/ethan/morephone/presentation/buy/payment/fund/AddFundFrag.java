@@ -83,15 +83,16 @@ public class AddFundFrag extends BaseFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        final Activity activity = (Activity) context;
+        final Billing billing = MyApplication.get(getActivity()).getBilling();
+        mUiCheckout = Checkout.forUi(new MyIntentStarter(this), this, billing);
         mUiCheckout.start();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        final Activity activity = (Activity) context;
-        final Billing billing = MyApplication.get(activity).getBilling();
-        mUiCheckout = Checkout.forUi(new MyIntentStarter(this), this, billing);
+
     }
 
     @Nullable

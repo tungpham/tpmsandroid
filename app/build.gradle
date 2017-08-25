@@ -27,6 +27,7 @@ android {
         targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
         versionCode globalConfiguration.getAt("androidVersionCode")
         versionName globalConfiguration.getAt("androidVersionName")
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -104,6 +105,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'pub.devrel:easypermissions:0.4.3'
+
+    compile 'com.android.support:multidex:1.0.1'
 
     compile project(':domain')
 

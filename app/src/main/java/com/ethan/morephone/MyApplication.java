@@ -1,10 +1,11 @@
 package com.ethan.morephone;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 
 import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
@@ -18,7 +19,7 @@ import javax.annotation.Nonnull;
  * Created by Ethan on 2/23/17.
  */
 
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     @Nonnull
     private final Billing mBilling = new Billing(this, new Billing.DefaultConfiguration() {
