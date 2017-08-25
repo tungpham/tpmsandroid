@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.buy.payment.card.CardActivity;
 
 /**
  * Created by Ethan on 5/3/17.
@@ -57,7 +56,7 @@ public class PaymentFragment extends BaseFragment implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_payment_add:
-                startActivity(new Intent(getActivity(), CardActivity.class));
+//                startActivity(new Intent(getActivity(), CardActivity.class));
                 break;
             case R.id.text_payment_paypal:
 //                PayPalPayment thingToBuy = getThingToBuy(PayPalPayment.PAYMENT_INTENT_SALE);

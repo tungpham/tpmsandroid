@@ -17,8 +17,6 @@ import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.buy.payment.card.CardActivity;
-import com.ethan.morephone.presentation.buy.payment.card.CreditCardUtils;
 import com.ethan.morephone.presentation.buy.payment.checkout.ActivityCheckout;
 import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
 import com.ethan.morephone.presentation.buy.payment.checkout.BillingRequests;
@@ -145,7 +143,7 @@ public class AddFundFragment extends BaseFragment implements
 //            startActivityForResult(intent, REQUEST_CODE_PAYMENT);
 
         } else if (paymentMethods == PaymentMethodsDialog.PAYMENT_VIA_CREDIT) {
-            startActivityForResult(new Intent(getActivity(), CardActivity.class), REQUEST_CODE_PAYMENT_VISA);
+//            startActivityForResult(new Intent(getActivity(), CardActivity.class), REQUEST_CODE_PAYMENT_VISA);
         }
     }
 
@@ -188,15 +186,15 @@ public class AddFundFragment extends BaseFragment implements
 //                DebugTool.logD("An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
 //            }
         } else if (requestCode == REQUEST_CODE_PAYMENT_VISA) {
-            String cardNumber = data.getStringExtra(CreditCardUtils.EXTRA_CARD_NUMBER);
-            String cardCvv = data.getStringExtra(CreditCardUtils.EXTRA_CARD_CVV);
-            String cardExpiry = data.getStringExtra(CreditCardUtils.EXTRA_CARD_EXPIRY);
-            String cardHolderName = data.getStringExtra(CreditCardUtils.EXTRA_CARD_HOLDER_NAME);
+//            String cardNumber = data.getStringExtra(CreditCardUtils.EXTRA_CARD_NUMBER);
+//            String cardCvv = data.getStringExtra(CreditCardUtils.EXTRA_CARD_CVV);
+//            String cardExpiry = data.getStringExtra(CreditCardUtils.EXTRA_CARD_EXPIRY);
+//            String cardHolderName = data.getStringExtra(CreditCardUtils.EXTRA_CARD_HOLDER_NAME);
 
-            DebugTool.logD("CardNumber: " + cardNumber);
-            DebugTool.logD("cardHolderName: " + cardHolderName);
-            DebugTool.logD("cardExpiry: " + cardExpiry);
-            DebugTool.logD("cardCvv: " + cardCvv);
+//            DebugTool.logD("CardNumber: " + cardNumber);
+//            DebugTool.logD("cardHolderName: " + cardHolderName);
+//            DebugTool.logD("cardExpiry: " + cardExpiry);
+//            DebugTool.logD("cardCvv: " + cardCvv);
         }
     }
 

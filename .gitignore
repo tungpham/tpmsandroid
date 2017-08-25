@@ -31,6 +31,7 @@ local.properties
 /.idea/libraries
 /build
 /captures
+/typing-indicator/build
 
 # Crashlytics configuations
 com_crashlytics_export_strings.xml

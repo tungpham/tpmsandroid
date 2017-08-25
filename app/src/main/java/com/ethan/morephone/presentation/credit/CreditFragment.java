@@ -24,8 +24,6 @@ import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.buy.payment.card.CardActivity;
-import com.ethan.morephone.presentation.buy.payment.card.CreditCardUtils;
 import com.ethan.morephone.presentation.buy.payment.checkout.ActivityCheckout;
 import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
 import com.ethan.morephone.presentation.buy.payment.checkout.BillingRequests;
