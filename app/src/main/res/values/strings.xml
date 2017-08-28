@@ -20,6 +20,8 @@
 
     <string name="all_price_buy_phone_number">3 credits</string>
 
+    <string name="all_in_app_billing_error">In-app billing service is unavailable, please upgrade Android Market/Play to version >= 3.9.16</string>
+
     <!-- NOTIFICATION -->
     <string name="notification_money_title">More Phone</string>
     <string name="notification_money_description">Your more phone is out of money. Please add money to your account.</string>

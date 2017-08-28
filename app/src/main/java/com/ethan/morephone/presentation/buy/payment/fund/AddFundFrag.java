@@ -1,10 +1,10 @@
 package com.ethan.morephone.presentation.buy.payment.fund;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,19 +12,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.ethan.morephone.Constant;
-import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.payment.checkout.ActivityCheckout;
-import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
-import com.ethan.morephone.presentation.buy.payment.checkout.BillingRequests;
-import com.ethan.morephone.presentation.buy.payment.checkout.Checkout;
 import com.ethan.morephone.presentation.buy.payment.checkout.EmptyRequestListener;
 import com.ethan.morephone.presentation.buy.payment.checkout.IntentStarter;
 import com.ethan.morephone.presentation.buy.payment.checkout.Inventory;
@@ -53,9 +52,13 @@ import static com.ethan.morephone.presentation.buy.payment.checkout.ProductTypes
  */
 
 public class AddFundFrag extends BaseFragment implements
-        View.OnClickListener, AddFundAdapter.OnItemPurchaseClickListener,
-        UiCheckout.DestroyCheckoutListener{
+        View.OnClickListener,
+        AddFundAdapter.OnItemPurchaseClickListener,
+        UiCheckout.DestroyCheckoutListener,
+        BillingProcessor.IBillingHandler {
 
+    private BillingProcessor mBillingProcessor;
+    private boolean readyToPurchase = false;
 
     public static AddFundFrag getInstance() {
         return new AddFundFrag();
@@ -68,7 +71,7 @@ public class AddFundFrag extends BaseFragment implements
 
     private ActivityCheckout mCheckout;
 
-    private UiCheckout mUiCheckout;
+    //    private UiCheckout mUiCheckout;
     @Nullable
     private Purchase mPurchase;
 
@@ -84,9 +87,18 @@ public class AddFundFrag extends BaseFragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        final Activity activity = (Activity) context;
-        final Billing billing = MyApplication.get(getActivity()).getBilling();
-        mUiCheckout = Checkout.forUi(new MyIntentStarter(this), this, billing);
-        mUiCheckout.start();
+//        final Billing billing = MyApplication.get(getActivity()).getBilling();
+//        mUiCheckout = Checkout.forUi(new MyIntentStarter(this), this, billing);
+//        mUiCheckout.start();
+
+        if (!BillingProcessor.isIabServiceAvailable(getActivity())) {
+            Toast.makeText(getContext(), getString(R.string.all_in_app_billing_error), Toast.LENGTH_SHORT).show();
+//            showToast("In-app billing service is unavailable, please upgrade Android Market/Play to version >= 3.9.16");
+        } else {
+            mBillingProcessor = new BillingProcessor(getActivity(), "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhziPq0YT4evePmkFel/p8/paiABLGTbCCRqc9rSU1OypyOqpSD851o6VeeC7hDJyyYPbQnGtB/7sHYP+brFNr2Nqrlmb90aVh0FO/40DQO0/aMuhgyECpLJ7IJXZ9MLuqOscZ2qnatVBbpTHy7sJb/a8ZCXOXlMHpPlcYI7kaCJ+0nm2t16ltDF0CxMz5FUoUyb6KfqFkHMe/48HcGfQVoxP3JOpDe5tP3KITAXDsOEXCLWpYVNFtvM0wImOYmAc6BqRHvNL2WTIex87DWtnQfxt3qrRfn0jv/rDv8t5hguutsToHC9pr/DWEY4wPkkGFdU308tMe+l9HkWpxK/jqQIDAQAB", this);
+            mBillingProcessor.initialize();
+        }
+
     }
 
     @Override
@@ -105,15 +117,17 @@ public class AddFundFrag extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
+        view.findViewById(R.id.button_purchase_add_fund).setOnClickListener(this);
+
         mAddFundAdapter = new AddFundAdapter(getContext(), new ArrayList<SkuItem>(), this);
         recyclerView.setAdapter(mAddFundAdapter);
 
-        mInventoryCallbacks.add(mAddFundAdapter);
-
-        final Billing billing = MyApplication.get(getActivity()).getBilling();
-        mCheckout = Checkout.forActivity(getActivity(), billing);
-        mCheckout.start();
-        reloadInventory();
+//        mInventoryCallbacks.add(mAddFundAdapter);
+//
+//        final Billing billing = MyApplication.get(getActivity()).getBilling();
+//        mCheckout = Checkout.forActivity(getActivity(), billing);
+//        mCheckout.start();
+//        reloadInventory();
 
         return view;
     }
@@ -134,6 +148,9 @@ public class AddFundFrag extends BaseFragment implements
 //                        }
 //                    });
 //                }
+                DebugTool.logD("READY: " + readyToPurchase);
+                if (readyToPurchase)
+                    mBillingProcessor.consumePurchase("add_fund");
                 break;
             default:
                 break;
@@ -149,22 +166,27 @@ public class AddFundFrag extends BaseFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mUiCheckout.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+//        mUiCheckout.onActivityResult(requestCode, resultCode, data);
+        if (!mBillingProcessor.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+//        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onDestroy() {
-        mUiCheckout.stop();
+//        mUiCheckout.stop();
+        if (mBillingProcessor != null)
+            mBillingProcessor.release();
         super.onDestroy();
     }
 
 
     @Override
     public void onItemClick(SkuItem skuItem) {
-        if(isApprovalBuy) {
-            mUiCheckout.loadInventory(Inventory.Request.create().loadAllPurchases(), new InventoryCallback(skuItem.getSku()));
-            mUiCheckout.setDestroyCheckoutListener(this);
+        if (isApprovalBuy) {
+//            mUiCheckout.loadInventory(Inventory.Request.create().loadAllPurchases(), new InventoryCallback(skuItem.getSku()));
+//            mUiCheckout.setDestroyCheckoutListener(this);
             isApprovalBuy = !isApprovalBuy;
         }
     }
@@ -180,6 +202,7 @@ public class AddFundFrag extends BaseFragment implements
         mCheckout.loadInventory(request, new Inventory.Callback() {
             @Override
             public void onLoaded(@Nonnull Inventory.Products products) {
+                DebugTool.logD("PRODUCTS: " + products.size());
                 for (Inventory.Callback callback : mInventoryCallbacks) {
                     callback.onLoaded(products);
                 }
@@ -191,6 +214,42 @@ public class AddFundFrag extends BaseFragment implements
     @Override
     public void onDestroyCheckout() {
         isApprovalBuy = !isApprovalBuy;
+    }
+
+    @Override
+    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
+        DebugTool.logD("PRODUCCT ID: " + productId);
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+        DebugTool.logD("HISTORY");
+    }
+
+    @Override
+    public void onBillingError(int errorCode, @Nullable Throwable error) {
+        DebugTool.logD("ERROR");
+    }
+
+    @Override
+    public void onBillingInitialized() {
+        DebugTool.logD("Initialized");
+        readyToPurchase = true;
+        for (String s : mBillingProcessor.listOwnedProducts()) {
+            DebugTool.logD("BILIING: " + s);
+        }
+
+        for (String s : mBillingProcessor.listOwnedSubscriptions()) {
+            DebugTool.logD("BILIING DES: " + s);
+        }
+        boolean isPurchase = mBillingProcessor.isPurchased("add_fund");
+        if (isPurchase) {
+            DebugTool.logD("PURCHAED");
+        } else {
+            DebugTool.logD("PURCHAED FAIL");
+        }
+
+
     }
 
 
@@ -276,16 +335,16 @@ public class AddFundFrag extends BaseFragment implements
     private void purchase(final Sku sku) {
         if (mPurchase == null) {
             DebugTool.logD("PURCHASE NULL");
-            mUiCheckout.startPurchaseFlow(sku, null, new PurchaseListener());
+//            mUiCheckout.startPurchaseFlow(sku, null, new PurchaseListener());
 //            mUiCheckout.startPurchaseFlow(ProductTypes.IN_APP, skus, null, new PurchaseListener());
         } else {
             DebugTool.logD("PURCHASE OK");
-            mUiCheckout.whenReady(new Checkout.EmptyListener() {
-                @Override
-                public void onReady(@Nonnull BillingRequests requests) {
-                    requests.consume(mPurchase.token, new ConsumeListener(sku));
-                }
-            });
+//            mUiCheckout.whenReady(new Checkout.EmptyListener() {
+//                @Override
+//                public void onReady(@Nonnull BillingRequests requests) {
+//                    requests.consume(mPurchase.token, new ConsumeListener(sku));
+//                }
+//            });
         }
     }
 

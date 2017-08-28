@@ -108,9 +108,12 @@ dependencies {
 
     compile 'com.android.support:multidex:1.0.1'
 
+//    compile 'com.anjlab.android.iab.v3:library:1.0.44'
+
     compile project(':domain')
 
     compile project(':typing-indicator')
+    compile project(':library')
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

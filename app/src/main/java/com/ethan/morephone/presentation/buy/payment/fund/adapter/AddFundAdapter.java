@@ -76,6 +76,13 @@ public class AddFundAdapter extends RecyclerView.Adapter<AddFundViewHolder> impl
 
     @Override
     public void onLoaded(@Nonnull Inventory.Products products) {
+
+        for(Inventory.Product product : products){
+            for (Sku sku : product.getSkus()) {
+                DebugTool.logD("SKU PRODUCT: " + sku.getDisplayTitle());
+            }
+            DebugTool.logD("PRODUCTS:" + product.getSkus().size());
+        }
         final Inventory.Product product = products.get(IN_APP);
         for (Inventory.Product pro : products) {
             for (Purchase purchase : pro.getPurchases()) {

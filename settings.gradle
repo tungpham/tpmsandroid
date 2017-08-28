@@ -1,1 +1,1 @@
-include ':app', ':data', ':domain', ':typing-indicator'
+include ':app', ':data', ':domain', ':typing-indicator', ':library'
