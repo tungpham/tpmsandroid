@@ -1,6 +1,8 @@
 
 package com.ethan.morephone.presentation.buy.payment.checkout;
 
+import com.android.morephone.data.log.DebugTool;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -81,6 +83,7 @@ public interface Inventory {
 
         Products() {
             for (String product : ProductTypes.ALL) {
+                DebugTool.logD("Iventory PRODUCT: " + product);
                 mMap.put(product, new Product(product, false));
             }
         }

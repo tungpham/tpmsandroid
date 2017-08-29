@@ -37,7 +37,7 @@ public class AddFundActivity extends BaseActivity {
                 getSupportFragmentManager(),
                 mAddFundFrag,
                 R.id.content_frame,
-                AddFundFragment.class.getSimpleName());
+                AddFundFrag.class.getSimpleName());
     }
 
     @Override

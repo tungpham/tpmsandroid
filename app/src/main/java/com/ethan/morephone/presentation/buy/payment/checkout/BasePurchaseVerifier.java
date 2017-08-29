@@ -25,6 +25,8 @@ package com.ethan.morephone.presentation.buy.payment.checkout;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.android.morephone.data.log.DebugTool;
+
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -49,7 +51,7 @@ public abstract class BasePurchaseVerifier implements PurchaseVerifier {
     }
 
     protected BasePurchaseVerifier(@Nonnull Handler handler) {
-        this(handler, 2, defaultThreadFactory());
+        this(handler, 4, defaultThreadFactory());
     }
 
     protected BasePurchaseVerifier(@Nonnull Handler handler, int threadCount, @Nonnull ThreadFactory threadFactory) {
@@ -76,10 +78,12 @@ public abstract class BasePurchaseVerifier implements PurchaseVerifier {
             mBackground.execute(new Runnable() {
                 @Override
                 public void run() {
+                    DebugTool.logD("BACKGROUND DO VERIFY");
                     doVerify(purchases, new MainThreadRequestListener(listener));
                 }
             });
         } else {
+            DebugTool.logD("DO VERIFY");
             doVerify(purchases, listener);
         }
     }

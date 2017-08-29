@@ -3,6 +3,7 @@ package com.ethan.morephone.presentation.buy.payment.checkout;
 import android.os.Bundle;
 import android.os.RemoteException;
 
+import com.android.morephone.data.log.DebugTool;
 import com.android.vending.billing.IInAppBillingService;
 
 import org.json.JSONException;
@@ -98,6 +99,7 @@ final class GetPurchasesRequest extends Request<Purchases> {
             mProduct = product;
             mContinuationToken = continuationToken;
             mOriginalThread = Thread.currentThread();
+            DebugTool.logD("mContinuationToken = " + mContinuationToken);
         }
 
         @Override
@@ -105,6 +107,7 @@ final class GetPurchasesRequest extends Request<Purchases> {
             Check.equals(mOriginalThread, Thread.currentThread(), "Must be called on the same thread");
             mCalled = true;
             mRequest.onSuccess(new Purchases(mProduct, verifiedPurchases, mContinuationToken));
+            DebugTool.logD("SUCCESS = ");
         }
 
         @Override
@@ -114,6 +117,7 @@ final class GetPurchasesRequest extends Request<Purchases> {
             if (response == EXCEPTION) {
                 mRequest.onError(e);
             } else {
+                DebugTool.logD("FAIL = ");
                 mRequest.onError(response);
             }
         }

@@ -51,16 +51,17 @@ public class MyApplication extends MultiDexApplication {
         super.onCreate();
 
 //        if (BuildConfig.DEBUG) {
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build());
+//        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//                .detectAll()
+//                .penaltyLog()
+//                .build());
 //        }
 
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build());
+//        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+//                .detectAll()
+//                .penaltyLog()
+//                .penaltyDeath()
+//                .build());
 
 //        mPrefs = getSharedPreferences(USER_PREFS, MODE_PRIVATE);
 //        mUserName = mPrefs.getString(KEY_USERNAME, null);
