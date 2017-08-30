@@ -16,13 +16,29 @@
             style="@style/ViewDivider"
             android:layout_centerVertical="true"
             android:layout_marginLeft="2dp"
-            android:visibility="invisible"
-            android:background="@android:color/white" />
+            android:background="@android:color/white"
+            android:visibility="invisible" />
 
-        <com.ethan.morephone.widget.MyTextView
-            android:id="@+id/text_number"
+        <RelativeLayout
+            android:id="@+id/relative_number"
             style="@style/TextNumberItem"
-            android:paddingLeft="@dimen/item_number_space" />
+            android:paddingLeft="@dimen/item_number_space"
+            android:paddingRight="@dimen/item_number_space"
+            android:layout_centerVertical="true">
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_number"
+                style="@style/ViewCommon"
+                android:gravity="center_vertical"
+                android:textSize="18sp" />
+
+            <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_expire"
+                style="@style/ViewCommon"
+                android:layout_below="@+id/text_number"
+                android:layout_marginTop="4dp"
+                android:textSize="10sp" />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/image_delete"
@@ -58,8 +74,8 @@
             android:layout_margin="8dp"
             android:layout_toLeftOf="@+id/view_0"
             android:text="4"
-            android:visibility="gone"
-            android:textColor="@color/colorPink" />
+            android:textColor="@color/colorPink"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/image_voice"
@@ -89,8 +105,8 @@
             android:layout_margin="8dp"
             android:layout_toLeftOf="@+id/view_2"
             android:text="2"
-            android:visibility="gone"
-            android:textColor="@color/colorPink" />
+            android:textColor="@color/colorPink"
+            android:visibility="gone" />
 
 
     </RelativeLayout>

@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="CountDownView">
+        <attr name="showHour" format="boolean"/>
+        <attr name="showMin" format="boolean"/>
+        <attr name="showSec" format="boolean"/>
+        <attr name="showMilli" format="boolean"/>
+        <attr name="numberColor" format="reference"/>
+        <attr name="unitColor" format="reference"/>
+    </declare-styleable>
+
+
+
     <declare-styleable name="NavigationTabStrip">
         <attr name="nts_color" format="color"/>
         <attr name="nts_size" format="dimension"/>

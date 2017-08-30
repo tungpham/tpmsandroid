@@ -51,6 +51,9 @@
     <dimen name="item_number_space">8dp</dimen>
     <dimen name="image_avatar_default_width_height">96dp</dimen>
     <dimen name="item_number_padding">12dp</dimen>
+    <dimen name="unit_spacing">8dp</dimen>
+
+    <dimen name="count_down_text_size">20dp</dimen>
 
     <!-- Fragment Voice -->
 

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
+import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.utils.DateUtils;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 
@@ -54,14 +56,23 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
         holder.textNumber.setText(numberEntity.getPhoneNumber());
 
         if (numberEntity.isPool()) {
-            holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+            DebugTool.logD("EXPIRE NUMBER: " + DateUtils.formatDateExpire(numberEntity.getExpire()));
+            String expire = expireRemain(numberEntity.getExpire());
+            if (!expire.equals(mContext.getString(R.string.incoming_phone_number_expired))) {
+                holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+            } else {
+                holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            }
+            holder.textExpire.setVisibility(View.VISIBLE);
+            holder.textExpire.setText(expire);
         } else {
+            holder.textExpire.setVisibility(View.GONE);
             holder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
         }
 
 //        validatePhoneNumberSelected(holder, numberEntity.phoneNumber);
 
-        holder.textNumber.setOnClickListener(new View.OnClickListener() {
+        holder.relativeNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mOnItemNumberClickListener != null)
@@ -129,6 +140,49 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
 //            mCurrentHolder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
         }
     }
+
+    private String expireRemain(long date) {
+        long different = date - System.currentTimeMillis();
+        if (different < 0) {
+            return mContext.getResources().getString(R.string.incoming_phone_number_expired);
+        }
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = different / daysInMilli;
+        different = different % daysInMilli;
+
+        long elapsedHours = different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+
+        String result = mContext.getResources().getString(R.string.incoming_phone_number_remain);
+        if (elapsedDays != 0) {
+            result += mContext.getResources().getQuantityString(R.plurals.elapsed_day, (int) elapsedDays, elapsedDays);
+        }
+
+        if (elapsedHours != 0) {
+            result += " " + mContext.getResources().getQuantityString(R.plurals.elapsed_hour, (int) elapsedHours, elapsedHours);
+        }
+
+        if (elapsedMinutes != 0) {
+            result += " " + mContext.getResources().getQuantityString(R.plurals.elapsed_min, (int) elapsedMinutes, elapsedMinutes);
+        }
+
+        if (elapsedSeconds != 0) {
+            result += " " + mContext.getResources().getQuantityString(R.plurals.elapsed_second, (int) elapsedSeconds, elapsedSeconds);
+        }
+
+        return result;
+    }
+
 
     public interface OnItemNumberClickListener {
         void onItemClick(IncomingPhoneNumbersViewHolder holder, int pos);

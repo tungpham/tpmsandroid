@@ -534,7 +534,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             } else {
                 mDevices.get(phoneNumber).updateCapabilityToken(token);
             }
-        } catch (CapabilityToken.DomainException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

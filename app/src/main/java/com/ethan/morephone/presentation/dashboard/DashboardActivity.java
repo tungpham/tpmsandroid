@@ -26,6 +26,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.presentation.authentication.login.forgot.ForgotPasswordActivity;
+import com.ethan.morephone.presentation.dashboard.expire.ExpireActivity;
 import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.presentation.setting.SettingActivity;
@@ -50,7 +51,7 @@ public class DashboardActivity extends BaseActivity {
     private String mPhoneNumberId;
     private String mPhoneNumber;
 
-    public static void starter(Activity activity, PhoneNumber phoneNumber, int mode){
+    public static void starter(Activity activity, PhoneNumber phoneNumber, int mode) {
         Intent intent = new Intent(activity, DashboardActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, phoneNumber.getId());
@@ -115,13 +116,24 @@ public class DashboardActivity extends BaseActivity {
                 finish();
                 break;
 
-            case R.id.menu_setting:
+            case R.id.menu_expire: {
+                Intent intent = new Intent(DashboardActivity.this, ExpireActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(BUNDLE_PHONE_NUMBER_ID, mPhoneNumberId);
+                bundle.putString(BUNDLE_PHONE_NUMBER, mPhoneNumber);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+            break;
+
+            case R.id.menu_setting: {
                 Intent intent = new Intent(DashboardActivity.this, SettingActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(BUNDLE_PHONE_NUMBER_ID, mPhoneNumberId);
                 intent.putExtras(bundle);
                 startActivity(intent);
-                break;
+            }
+            break;
 
 
             default:

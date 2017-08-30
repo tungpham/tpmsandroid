@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
+
+    <com.ethan.morephone.widget.countdown.CountDownView
+        android:id="@+id/count_down_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:showHour="true"
+        custom:showMin="true"
+        custom:showSec="true"/>
+
+</RelativeLayout>

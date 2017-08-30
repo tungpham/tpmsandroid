@@ -459,4 +459,14 @@
         <item name="android:layout_marginTop">@dimen/activity_main_margin</item>
     </style>
 
+    <style name="ToolbarRelative" parent="ViewCommon">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:paddingRight">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingLeft">@dimen/activity_vertical_margin</item>
+        <!--<item name="android:background">@drawable/tb_item_selector</item>-->
+    </style>
+
 </resources>

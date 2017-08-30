@@ -3,6 +3,7 @@ package com.ethan.morephone.presentation.numbers.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ethan.morephone.R;
@@ -13,7 +14,9 @@ import com.ethan.morephone.R;
 
 public class IncomingPhoneNumbersViewHolder extends RecyclerView.ViewHolder {
 
+    public RelativeLayout relativeNumber;
     public TextView textNumber;
+    public TextView textExpire;
     public ImageView imageDelete;
     public ImageView imageMessage;
     public ImageView imageVoice;
@@ -25,7 +28,9 @@ public class IncomingPhoneNumbersViewHolder extends RecyclerView.ViewHolder {
 
     public IncomingPhoneNumbersViewHolder(View itemView) {
         super(itemView);
+        relativeNumber = (RelativeLayout) itemView.findViewById(R.id.relative_number);
         textNumber = (TextView) itemView.findViewById(R.id.text_number);
+        textExpire = (TextView) itemView.findViewById(R.id.text_expire);
         imageDelete = (ImageView) itemView.findViewById(R.id.image_delete);
         imageMessage = (ImageView) itemView.findViewById(R.id.image_message);
         imageVoice = (ImageView) itemView.findViewById(R.id.image_voice);
