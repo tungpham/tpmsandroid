@@ -106,6 +106,7 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
             @Override
             public void onResponse(Call<BaseResponse<List<PhoneNumber>>> call, Response<BaseResponse<List<PhoneNumber>>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getResponse() != null && !response.body().getResponse().isEmpty()) {
+                    DatabaseHelpper.deleteAllPhoneNumber(context);
                     for (final PhoneNumber incomingPhoneNumber : response.body().getResponse()) {
                         PhoneService.startServiceRegisterPhoneNumber(context, incomingPhoneNumber);
                     }
