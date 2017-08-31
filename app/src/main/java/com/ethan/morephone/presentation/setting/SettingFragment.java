@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
@@ -13,10 +14,12 @@ import android.widget.TextView;
 
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.utils.DateUtils;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
+import com.ethan.morephone.presentation.dashboard.expire.ExpireActivity;
 import com.ethan.morephone.utils.Injection;
 
 /**
@@ -50,6 +53,9 @@ public class SettingFragment extends BaseFragment implements
     private RelativeLayout mRelativeEmail;
     private TextView mTextEmailForward;
 
+    private TextView mTextExpire;
+    private RelativeLayout mRelativeExpire;
+
     private String mPhoneNumberId;
 
     @Override
@@ -66,6 +72,9 @@ public class SettingFragment extends BaseFragment implements
         mTextPhoneNumber = (TextView) view.findViewById(R.id.text_setting_phone_number);
 
         mTextFriendlyName = (TextView) view.findViewById(R.id.text_setting_friendly_name_set);
+        mTextExpire = (TextView) view.findViewById(R.id.text_setting_expire_set);
+        mRelativeExpire = (RelativeLayout) view.findViewById(R.id.relative_setting_expire);
+        mRelativeExpire.setOnClickListener(this);
 
         view.findViewById(R.id.relative_setting_friendly_name).setOnClickListener(this);
 //        view.findViewById(R.id.relative_setting_enable_record).setOnClickListener(this);
@@ -121,6 +130,15 @@ public class SettingFragment extends BaseFragment implements
                 changeFriendlyNameDialog.setChangeFriendlyNameListener(this);
                 break;
 
+            case R.id.relative_setting_expire:
+                Intent intent = new Intent(getActivity(), ExpireActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, mPhoneNumberId);
+                bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, mTextPhoneNumber.getText().toString());
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+
 //            case R.id.relative_setting_enable_record:
 //                mSwitchRecord.setChecked(!mSwitchRecord.isChecked());
 //                break;
@@ -174,6 +192,11 @@ public class SettingFragment extends BaseFragment implements
             mTextPhoneNumber.setText(phoneNumber.getPhoneNumber());
             mTextFriendlyName.setText(phoneNumber.getFriendlyName());
             mSwitchConfigure.setChecked(phoneNumber.isForward());
+
+            if(phoneNumber.isPool()){
+                mRelativeExpire.setVisibility(View.VISIBLE);
+                mTextExpire.setText(DateUtils.formatDateExpire(phoneNumber.getExpire()));
+            }
 
             showConfigure(phoneNumber.isForward());
 

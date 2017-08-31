@@ -607,8 +607,14 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             Device device = mDevices.get(fromPhoneNumber);
             mActiveConnection = mDevices.get(fromPhoneNumber).connect(params, this);
             DebugTool.logD("MAKE A CALL : " + toPhoneNumber + " EXPERI: " + mDevices.get(fromPhoneNumber).getCapabilities().toString());
+
             if (device.getCapabilities().isEmpty()) {
-                device.updateCapabilityToken(getToken(fromPhoneNumber));
+                PhoneNumber phoneNumber = DatabaseHelpper.findPhoneNumber(getApplicationContext(), fromPhoneNumber);
+                if (!phoneNumber.isPool()) {
+                    retrieveCapabilityTokenOffline(fromPhoneNumber);
+                } else {
+                    retrieveCapabilityTokenOnline(getApplicationContext(), fromPhoneNumber);
+                }
                 device.setDeviceListener(this);
                 Toast.makeText(getApplicationContext(), "device don't allow outgoing", Toast.LENGTH_SHORT).show();
             }

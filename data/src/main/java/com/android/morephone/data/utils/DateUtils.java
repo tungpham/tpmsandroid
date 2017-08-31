@@ -29,7 +29,6 @@ public class DateUtils {
         SimpleDateFormat out = new SimpleDateFormat("MMM d, HH:mm a");
         Date time = new Date(date);
         return out.format(time);
-
     }
 
     public static long elapsedDay(long different){

@@ -195,6 +195,7 @@
 
     <string name="setting_version">Version\u0020</string>
     <string name="setting_friendly_name">Friendly name</string>
+    <string name="setting_expire">Expire</string>
     <string name="setting_configure_sms_forwarding">Configure SMS Forwarding</string>
     <string name="setting_configure_sms_forwarding_summary">Configure SMS Forwarding</string>
     <string name="setting_phone">Phone</string>

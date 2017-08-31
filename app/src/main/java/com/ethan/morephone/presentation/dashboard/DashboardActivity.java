@@ -116,15 +116,15 @@ public class DashboardActivity extends BaseActivity {
                 finish();
                 break;
 
-            case R.id.menu_expire: {
-                Intent intent = new Intent(DashboardActivity.this, ExpireActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(BUNDLE_PHONE_NUMBER_ID, mPhoneNumberId);
-                bundle.putString(BUNDLE_PHONE_NUMBER, mPhoneNumber);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-            break;
+//            case R.id.menu_expire: {
+//                Intent intent = new Intent(DashboardActivity.this, ExpireActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putString(BUNDLE_PHONE_NUMBER_ID, mPhoneNumberId);
+//                bundle.putString(BUNDLE_PHONE_NUMBER, mPhoneNumber);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+//            }
+//            break;
 
             case R.id.menu_setting: {
                 Intent intent = new Intent(DashboardActivity.this, SettingActivity.class);

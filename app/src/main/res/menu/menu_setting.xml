@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appcompat="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/menu_expire"
-        android:title="@string/menu_expire"
-        appcompat:showAsAction="always"
-        android:icon="@drawable/ic_calendar"/>
+    <!--<item-->
+        <!--android:id="@+id/menu_expire"-->
+        <!--android:title="@string/menu_expire"-->
+        <!--appcompat:showAsAction="always"-->
+        <!--android:icon="@drawable/ic_calendar"/>-->
 
     <item
         android:id="@+id/menu_setting"
