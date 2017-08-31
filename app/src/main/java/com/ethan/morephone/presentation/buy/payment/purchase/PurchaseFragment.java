@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.utils.DateUtils;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -63,6 +64,7 @@ public class PurchaseFragment extends BaseFragment implements
     private RelativeLayout mRelativeExpire;
 
     private long mCurrentDate = System.currentTimeMillis();
+    private long mMinDate = mCurrentDate;
 
     private boolean isPool;
     @Nullable
@@ -158,7 +160,8 @@ public class PurchaseFragment extends BaseFragment implements
         switch (view.getId()) {
             case R.id.button_purchase_pay_now:
                 if (isPool) {
-                    if (mCurrentDate < System.currentTimeMillis()) {
+                    long diffDate = DateUtils.getDifferenceDays(new Date(mMinDate), new Date(mCurrentDate));
+                    if (diffDate < 1) {
                         Toast.makeText(getContext(), getString(R.string.purchase_expire_date_alert), Toast.LENGTH_SHORT).show();
                     } else {
                         mPresenter.buyPoolPhoneNumber(getContext(), mPhoneNumber, mCurrentDate);
@@ -168,7 +171,7 @@ public class PurchaseFragment extends BaseFragment implements
                 }
                 break;
             case R.id.relative_expire:
-                ChooseDateDialog recordDialog = ChooseDateDialog.getInstance(mCurrentDate);
+                ChooseDateDialog recordDialog = ChooseDateDialog.getInstance(mCurrentDate, mMinDate);
                 recordDialog.setCancelable(false);
                 recordDialog.show(getChildFragmentManager(), ChooseDateDialog.class.getSimpleName());
                 recordDialog.setChooseDateDialogListener(this);
@@ -219,7 +222,7 @@ public class PurchaseFragment extends BaseFragment implements
     public void chooseDate(long date) {
         mCurrentDate = date;
         mTextPurchaseExpireSummary.setText(Utils.formatDatePurchase(date));
-        long diffDate = Utils.getDifferenceDays(new Date(System.currentTimeMillis()), new Date(date));
-        mTextPurchasePrice.setText(String.valueOf((diffDate + 1) * Constant.CREDIT_BUY_PHONE));
+        long diffDate = DateUtils.getDifferenceDays(new Date(mMinDate), new Date(date));
+        mTextPurchasePrice.setText(getResources().getQuantityString(R.plurals.credits, (int) diffDate, String.valueOf(diffDate * Constant.CREDIT_BUY_PHONE)));
     }
 }

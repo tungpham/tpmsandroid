@@ -138,7 +138,7 @@ public class CreditFragment extends BaseFragment implements
     }
 
     private void showBalance() {
-        mTextTitle.setText(getString(R.string.usage_balance) + ": " + (double) Math.round(mBalance * 100) / 100 + getString(R.string.all_price_unit));
+        mTextTitle.setText(getString(R.string.usage_balance) + ": " + (double) Math.round(mBalance * 100) / 100 + " " + getString(R.string.all_price_unit));
     }
 
 

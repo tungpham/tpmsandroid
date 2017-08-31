@@ -72,7 +72,7 @@ public class CountDownView extends RelativeLayout {
 
         TypedArray values = context.obtainStyledAttributes(attrs, R.styleable.CountDownView);
         int numColorId = R.color.colorPrimary;
-        int unitColorId = R.color.colorDivider;
+        int unitColorId = R.color.colorText;
 
         if(values.getBoolean(R.styleable.CountDownView_showHour, false)) {
             View v = ((ViewStub) findViewById(R.id.hours_stub)).inflate();

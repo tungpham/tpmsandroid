@@ -242,9 +242,12 @@
     <string name="purchase_fail">Purchase fail</string>
     <string name="purchase_success">Purchase a phone number success</string>
     <string name="purchase_expire">Expire</string>
+    <string name="purchase_expire_now">Expire now</string>
     <string name="purchase_expire_summary">Tap for choose expire date</string>
-    <string name="purchase_expire_date_error">Expire date must after today</string>
+    <string name="purchase_expire_date_error">Minimum usage phone number one day</string>
     <string name="purchase_expire_date_alert">Please choose expire date</string>
+    <string name="purchase_expire_update_success">Update expire success</string>
+    <string name="purchase_expire_update_fail">Update expire fail</string>
 
     <!-- Fragment Credit -->
     <string name="credit_label">Credit</string>
@@ -263,6 +266,11 @@
 
     <string name="incoming_phone_number_expired">Expired</string>
     <string name="incoming_phone_number_remain">Remain </string>
+
+    <plurals name="credits">
+        <item quantity="one">%s credit</item>
+        <item quantity="other">%s credits</item>
+    </plurals>
 
     <plurals name="elapsed_day">
         <item quantity="one">%d d</item>

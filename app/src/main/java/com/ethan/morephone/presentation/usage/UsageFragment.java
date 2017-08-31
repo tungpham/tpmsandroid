@@ -95,8 +95,7 @@ public class UsageFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void showUsage(UsageItem usage) {
-
-        mTextBalance.setText(getString(R.string.usage_balance) + ": " + (double)Math.round(usage.getBalance() * 100) / 100 + getString(R.string.all_price_unit));
+        mTextBalance.setText(getString(R.string.usage_balance) + ": " + (double)Math.round(usage.getBalance() * 100) / 100 + " " + getString(R.string.all_price_unit));
         mTextMessageIncoming.setText(String.valueOf(usage.getMessageIncoming()));
         mTextMessageOutgoing.setText(String.valueOf(usage.getMessageOutgoing()));
         mTextVoiceIncoming.setText(String.valueOf(usage.getCallIncoming()));

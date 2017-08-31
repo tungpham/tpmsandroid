@@ -15,9 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.utils.DateUtils;
 import com.ethan.morephone.R;
+import com.ethan.morephone.utils.Utils;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Ethan on 12/28/16.
@@ -26,10 +29,12 @@ import java.util.Calendar;
 public class ChooseDateDialog extends DialogFragment {
 
     private static final String BUNDLE_CURRENT_DATE = "BUNDLE_CURRENT_DATE";
+    private static final String BUNDLE_MIN_DATE = "BUNDLE_MIN_DATE";
 
-    public static ChooseDateDialog getInstance(long date) {
+    public static ChooseDateDialog getInstance(long date, long minDate) {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_CURRENT_DATE, date);
+        bundle.putLong(BUNDLE_MIN_DATE, minDate);
         ChooseDateDialog configureEmailDialog = new ChooseDateDialog();
         configureEmailDialog.setArguments(bundle);
         return configureEmailDialog;
@@ -38,6 +43,7 @@ public class ChooseDateDialog extends DialogFragment {
     private ChooseDateDialogListener mChooseDateDialogListener;
 
     private long mCurrentDate = System.currentTimeMillis();
+    private long mMinDate = System.currentTimeMillis();
 
     @Override
     public void show(FragmentManager manager, String tag) {
@@ -65,10 +71,15 @@ public class ChooseDateDialog extends DialogFragment {
         lp.rightMargin = 16;
         calendarView.setLayoutParams(lp);
         builder.setView(calendarView);
-        calendarView.setMinDate(System.currentTimeMillis());
+
+        mMinDate = getArguments().getLong(BUNDLE_MIN_DATE);
+        calendarView.setMinDate(mMinDate);
 
         mCurrentDate = getArguments().getLong(BUNDLE_CURRENT_DATE);
         calendarView.setDate(mCurrentDate);
+
+        final Calendar currentCalendar = Calendar.getInstance();
+        currentCalendar.setTimeInMillis(mMinDate);
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -79,17 +90,21 @@ public class ChooseDateDialog extends DialogFragment {
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year, month, dayOfMonth);
-                mCurrentDate = calendar.getTimeInMillis();
+                mCurrentDate = DateUtils.getStartOfDay(calendar.getTime()) + mMinDate - DateUtils.getStartOfDay(new Date(mMinDate));
+//                mCurrentDate = calendar.getTimeInMillis();
             }
         });
 
         builder.setPositiveButton(getString(R.string.configure_email_dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (mCurrentDate < System.currentTimeMillis()) {
+                long diffDate = DateUtils.getDifferenceDays(new Date(mMinDate), new Date(mCurrentDate));
+                if (diffDate < 1) {
                     Toast.makeText(getContext(), getString(R.string.purchase_expire_date_error), Toast.LENGTH_SHORT).show();
+                } else {
+                    if (mChooseDateDialogListener != null)
+                        mChooseDateDialogListener.chooseDate(mCurrentDate);
                 }
-                if (mChooseDateDialogListener != null) mChooseDateDialogListener.chooseDate(mCurrentDate);
             }
         });
 

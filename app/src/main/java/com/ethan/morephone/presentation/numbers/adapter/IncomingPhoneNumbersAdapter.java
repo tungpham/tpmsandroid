@@ -165,7 +165,7 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
 
         String result = mContext.getResources().getString(R.string.incoming_phone_number_remain);
         if (elapsedDays != 0) {
-            result += mContext.getResources().getQuantityString(R.plurals.elapsed_day, (int) elapsedDays, elapsedDays);
+            result += " " + mContext.getResources().getQuantityString(R.plurals.elapsed_day, (int) elapsedDays, elapsedDays);
         }
 
         if (elapsedHours != 0) {

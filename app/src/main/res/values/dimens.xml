@@ -53,7 +53,7 @@
     <dimen name="item_number_padding">12dp</dimen>
     <dimen name="unit_spacing">8dp</dimen>
 
-    <dimen name="count_down_text_size">20dp</dimen>
+    <dimen name="count_down_text_size">40dp</dimen>
 
     <!-- Fragment Voice -->
 
@@ -133,5 +133,7 @@
     <dimen name="center_image_height">75dp</dimen>
 
     <dimen name="image_nav_header_width_height">96dp</dimen>
+
+    <dimen name="expire_margin_top">48dp</dimen>
 
 </resources>

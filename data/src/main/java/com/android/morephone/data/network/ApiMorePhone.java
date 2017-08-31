@@ -182,11 +182,20 @@ public class ApiMorePhone {
     }
 
     public static void deletePhoneNumber(Context context,
-                                         String id,
-                                         String accountToken,
-                                         String authToken,
-                                         Callback<BaseResponse<String>> callback) {
+                                          String id,
+                                          String accountToken,
+                                          String authToken,
+                                          Callback<BaseResponse<String>> callback) {
         Call<BaseResponse<String>> call = getApiPath(context).deletePhoneNumber(id, accountToken, authToken);
+        call.enqueue(callback);
+    }
+
+    public static void updateExpire(Context context,
+                                         String id,
+                                         String userId,
+                                         long expire,
+                                         Callback<BaseResponse<PhoneNumber>> callback) {
+        Call<BaseResponse<PhoneNumber>> call = getApiPath(context).updateExpire(id, userId, expire);
         call.enqueue(callback);
     }
 

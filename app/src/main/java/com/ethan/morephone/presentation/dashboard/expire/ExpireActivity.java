@@ -1,17 +1,20 @@
 package com.ethan.morephone.presentation.dashboard.expire;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
+import com.ethan.morephone.presentation.setting.SettingActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 
 
@@ -45,5 +48,19 @@ public class ExpireActivity extends BaseActivity {
                 expireFragment,
                 R.id.content_frame,
                 ExpireFragment.class.getSimpleName());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                finish();
+                break;
+
+            default:
+                break;
+        }
+        return true;
     }
 }

@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -70,11 +71,6 @@ public class Utils {
             e.printStackTrace();
         }
         return "";
-    }
-
-    public static long getDifferenceDays(Date d1, Date d2) {
-        long diff = d2.getTime() - d1.getTime();
-        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     public static String formatDatePurchase(long date) {

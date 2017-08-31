@@ -91,7 +91,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         mIncomingPhoneNumbersAdapter = new IncomingPhoneNumbersAdapter(getContext(), new ArrayList<PhoneNumber>(), this);
         recyclerView.setAdapter(mIncomingPhoneNumbersAdapter);
 
-        mPresenter.loadIncomingPhoneNumbers(getContext());
         setHasOptionsMenu(true);
 
         view.setOnKeyListener(new View.OnKeyListener() {
@@ -113,7 +112,13 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         return view;
     }
 
-//    private void setUpNavigation(View view) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.loadIncomingPhoneNumbers(getContext());
+    }
+
+    //    private void setUpNavigation(View view) {
 //        NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
 //    }

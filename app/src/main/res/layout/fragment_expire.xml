@@ -8,8 +8,63 @@
         android:id="@+id/count_down_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/expire_margin_top"
         custom:showHour="true"
         custom:showMin="true"
+        custom:showMilli="true"
         custom:showSec="true"/>
+
+    <RelativeLayout
+        android:id="@+id/relative_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/count_down_view"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_purchase_price"
+            style="@style/TextPurchasePrice"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_divider_1"
+        style="@style/Divider"
+        android:layout_width="@dimen/width_divider_short"
+        android:layout_below="@+id/relative_price"
+        android:layout_marginTop="@dimen/activity_main_margin" />
+
+    <RelativeLayout
+        android:id="@+id/relative_expire"
+        style="@style/RelativePurchase"
+        android:layout_below="@+id/view_divider_1">
+
+        <ImageView
+            android:id="@+id/image_purchase_expire"
+            style="@style/TextPurchaseImage"
+            android:src="@drawable/ic_clock" />
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_purchase_expire"
+            style="@style/TextPurchaseTitle"
+            android:layout_toRightOf="@+id/image_purchase_expire"
+            android:text="@string/purchase_expire" />
+
+        <com.ethan.morephone.widget.MyTextView
+            android:id="@+id/text_purchase_expire_summary"
+            style="@style/TextPurchaseSummary"
+            android:layout_below="@+id/text_purchase_expire"
+            android:layout_toRightOf="@+id/image_purchase_expire"
+            android:text="@string/purchase_expire_summary" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_purchase_expire_now"
+        style="@style/ButtonBlue"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@string/purchase_expire_now" />
 
 </RelativeLayout>

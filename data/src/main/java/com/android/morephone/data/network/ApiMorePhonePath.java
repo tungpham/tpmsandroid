@@ -66,6 +66,9 @@ interface ApiMorePhonePath {
     @PUT("phone-number/{id}/forward/enable")
     Call<BaseResponse<PhoneNumber>> enableForward(@Path("id") String id, @Query("is_forward") boolean isEnable);
 
+    @PUT("phone-number/{id}/expire")
+    Call<BaseResponse<PhoneNumber>> updateExpire(@Path("id") String id, @Query("user_id") String userId, @Query("expire") long expire);
+
     /*-----------------------------------------MESSAGE-----------------------------------------*/
 
     @FormUrlEncoded
