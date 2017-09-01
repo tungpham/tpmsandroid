@@ -59,6 +59,8 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
     private static final String FCM_BINDING_TYPE = "fcm";
 
+    public static final int REQUEST_DASHBOARD = 103;
+
     public static IncomingPhoneNumbersFragment getInstance() {
         return new IncomingPhoneNumbersFragment();
     }
@@ -93,6 +95,8 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
         setHasOptionsMenu(true);
 
+        mPresenter.loadIncomingPhoneNumbers(getContext());
+
         view.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -115,7 +119,15 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.loadIncomingPhoneNumbers(getContext());
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_DASHBOARD && resultCode == Activity.RESULT_OK){
+            mPresenter.loadIncomingPhoneNumbers(getContext());
+        }
     }
 
     //    private void setUpNavigation(View view) {

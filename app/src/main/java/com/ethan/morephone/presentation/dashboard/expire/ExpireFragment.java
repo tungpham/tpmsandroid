@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.dashboard.expire;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
@@ -24,6 +25,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.payment.purchase.ChooseDateDialog;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
+import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.presentation.setting.ChangeFriendlyNameDialog;
 import com.ethan.morephone.presentation.setting.ConfigureEmailDialog;
 import com.ethan.morephone.presentation.setting.ConfigurePhoneDialog;
@@ -31,6 +33,7 @@ import com.ethan.morephone.presentation.setting.SettingContract;
 import com.ethan.morephone.presentation.setting.SettingPresenter;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
+import com.ethan.morephone.widget.TimerListener;
 import com.ethan.morephone.widget.countdown.CountDownView;
 
 import java.util.Date;
@@ -78,10 +81,17 @@ public class ExpireFragment extends BaseFragment implements View.OnClickListener
         long duration = mPhoneNumberDTO.getExpire() - System.currentTimeMillis();
         mMinDate = mCurrentDate = mPhoneNumberDTO.getExpire();
 
-
         CountDownView countDownView = (CountDownView) view.findViewById(R.id.count_down_view);
         countDownView.setInitialTime(duration); // Initial time of 30 seconds.
         countDownView.start();
+        countDownView.setListener(new TimerListener() {
+            @Override
+            public void timerElapsed() {
+                PhoneService.startServiceUnregisterPhoneNumber(getContext(), mPhoneNumberDTO.getPhoneNumber(), mPhoneNumberDTO.getSid());
+                getActivity().setResult(Activity.RESULT_OK);
+                getActivity().finish();
+            }
+        });
 
         mTextPurchasePrice = (TextView) view.findViewById(R.id.text_purchase_price);
         mTextPurchaseExpireSummary = (TextView) view.findViewById(R.id.text_purchase_expire_summary);

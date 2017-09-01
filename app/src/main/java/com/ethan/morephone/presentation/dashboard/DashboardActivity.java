@@ -28,6 +28,7 @@ import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.presentation.authentication.login.forgot.ForgotPasswordActivity;
 import com.ethan.morephone.presentation.dashboard.expire.ExpireActivity;
 import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
+import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.presentation.setting.SettingActivity;
 import com.ethan.morephone.utils.ActivityUtils;
@@ -41,6 +42,8 @@ import com.twilio.client.Device;
 public class DashboardActivity extends BaseActivity {
 
     private final int MIC_PERMISSION_REQUEST_CODE = 101;
+
+    private final int REQUEST_SETTING = 102;
 
     public static final String BUNDLE_PHONE_NUMBER_ID = "BUNDLE_PHONE_NUMBER_ID";
     public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
@@ -58,7 +61,7 @@ public class DashboardActivity extends BaseActivity {
         bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, phoneNumber.getPhoneNumber());
         bundle.putInt(DashboardActivity.BUNDLE_FRAGMENT_MODE, mode);
         intent.putExtras(bundle);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, IncomingPhoneNumbersFragment.REQUEST_DASHBOARD);
 
         MyPreference.setPhoneNumber(activity.getApplicationContext(), phoneNumber.getPhoneNumber());
     }
@@ -131,7 +134,7 @@ public class DashboardActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString(BUNDLE_PHONE_NUMBER_ID, mPhoneNumberId);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_SETTING);
             }
             break;
 
@@ -235,6 +238,15 @@ public class DashboardActivity extends BaseActivity {
                 }
 
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_SETTING && resultCode == RESULT_OK){
+            setResult(RESULT_OK);
+            finish();
         }
     }
 }

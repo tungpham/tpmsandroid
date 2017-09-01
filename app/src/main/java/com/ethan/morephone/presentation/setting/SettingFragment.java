@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.setting;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,6 +40,8 @@ public class SettingFragment extends BaseFragment implements
         fragment.setArguments(bundle);
         return fragment;
     }
+
+    private final int REQUEST_EXPIRE = 100;
 
     private SettingContract.Presenter mPresenter;
     private TextView mTextPhoneNumber;
@@ -136,7 +139,7 @@ public class SettingFragment extends BaseFragment implements
                 bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, mPhoneNumberId);
                 bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, mTextPhoneNumber.getText().toString());
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_EXPIRE);
                 break;
 
 //            case R.id.relative_setting_enable_record:
@@ -164,6 +167,15 @@ public class SettingFragment extends BaseFragment implements
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_EXPIRE && resultCode == Activity.RESULT_OK){
+            getActivity().setResult(Activity.RESULT_OK);
+            getActivity().finish();
         }
     }
 

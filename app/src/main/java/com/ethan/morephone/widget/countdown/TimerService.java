@@ -20,9 +20,9 @@ import java.io.IOException;
  * Created by truongnguyen on 8/30/17.
  */
 
-public class TimerService extends Service implements MediaPlayer.OnErrorListener {
-    private MediaPlayer mMediaPlayer;
-    private Vibrator mShakeyThing;
+public class TimerService extends Service{
+//    private MediaPlayer mMediaPlayer;
+//    private Vibrator mShakeyThing;
     private long mCurrentMillis;
     private CountDownTimer mTimer;
     private Messenger mMessenger;
@@ -31,7 +31,7 @@ public class TimerService extends Service implements MediaPlayer.OnErrorListener
     @Override
     public void onCreate() {
         super.onCreate();
-        mShakeyThing = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//        mShakeyThing = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class TimerService extends Service implements MediaPlayer.OnErrorListener
             public void onFinish() {
                 postTime(0);
                 mTimer = null;
-                playAlarm();
+//                playAlarm();
             }
         }.start();
         return START_NOT_STICKY;
@@ -80,34 +80,34 @@ public class TimerService extends Service implements MediaPlayer.OnErrorListener
     }
 
     private void playAlarm() {
-        if(hasAlarmSound()) {
-            mMediaPlayer = new MediaPlayer();
-            mMediaPlayer.setOnErrorListener(this);
-            try {
-                AssetFileDescriptor afd = getAssets().openFd(mAlarmSound);
-                mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-                mMediaPlayer.setLooping(true);
-                mMediaPlayer.prepare();
-                mMediaPlayer.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(mShakeyThing != null)
-            mShakeyThing.vibrate(new long[] {0, 500, 300}, 0);
+//        if(hasAlarmSound()) {
+//            mMediaPlayer = new MediaPlayer();
+//            mMediaPlayer.setOnErrorListener(this);
+//            try {
+//                AssetFileDescriptor afd = getAssets().openFd(mAlarmSound);
+//                mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+//                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+//                mMediaPlayer.setLooping(true);
+//                mMediaPlayer.prepare();
+//                mMediaPlayer.start();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        if(mShakeyThing != null)
+//            mShakeyThing.vibrate(new long[] {0, 500, 300}, 0);
     }
 
     private void stopAlarm() {
-        if(mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-            mMediaPlayer = null;
-        }
-
-        if(mShakeyThing != null)
-            mShakeyThing.cancel();
+//        if(mMediaPlayer != null) {
+//            mMediaPlayer.stop();
+//            mMediaPlayer.release();
+//            mMediaPlayer = null;
+//        }
+//
+//        if(mShakeyThing != null)
+//            mShakeyThing.cancel();
     }
 
     @Override
@@ -116,17 +116,17 @@ public class TimerService extends Service implements MediaPlayer.OnErrorListener
         if(mTimer != null) {
             mTimer.cancel();
         }
-        stopAlarm();
+//        stopAlarm();
     }
 
-    @Override
-    public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
-        Log.e("TimerService", "Error occurred while playing audio.");
-        mediaPlayer.stop();
-        mediaPlayer.release();
-        mMediaPlayer = null;
-        return true;
-    }
+//    @Override
+//    public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
+//        Log.e("TimerService", "Error occurred while playing audio.");
+//        mediaPlayer.stop();
+//        mediaPlayer.release();
+////        mMediaPlayer = null;
+//        return true;
+//    }
 
     private boolean hasAlarmSound() {
         return mAlarmSound != null;

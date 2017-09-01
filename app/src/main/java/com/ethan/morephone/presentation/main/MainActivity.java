@@ -245,6 +245,11 @@ public class MainActivity extends BaseActivity implements
                     checkRequirePhoneNumber();
                 }
                 break;
+            case IncomingPhoneNumbersFragment.REQUEST_DASHBOARD:
+                if (resultCode == RESULT_OK) {
+                    checkRequirePhoneNumber();
+                }
+                break;
 
             default:
                 break;

@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.numbers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,4 +34,8 @@ public class IncomingPhoneNumbersActivity extends BaseActivity{
                 IncomingPhoneNumbersFragment.class.getSimpleName());
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

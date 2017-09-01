@@ -1,5 +1,7 @@
 package com.ethan.morephone.presentation.dashboard;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -58,5 +60,14 @@ public class DashboardFrag extends BaseFragment {
 
         mViewPager.setCurrentItem(mode);
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == REQUEST_SETTING && requestCode == Activity.RESULT_OK){
+//            getActivity().setResult(Activity.RESULT_OK);
+//            getActivity().finish();
+//        }
+//    }
 
 }

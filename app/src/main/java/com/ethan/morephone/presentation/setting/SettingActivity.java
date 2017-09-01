@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,5 +33,10 @@ public class SettingActivity extends BaseActivity {
                 composeFragment,
                 R.id.content_frame,
                 SettingFragment.class.getSimpleName());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
