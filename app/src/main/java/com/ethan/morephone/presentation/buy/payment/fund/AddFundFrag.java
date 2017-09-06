@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
-import com.android.morephone.data.network.ApiPurchaseManager;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.MyPreference;

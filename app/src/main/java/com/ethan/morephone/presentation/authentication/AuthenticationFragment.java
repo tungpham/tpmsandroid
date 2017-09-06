@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.auth0.android.Auth0;
@@ -198,7 +199,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     private void doLogin() {
         WebAuthProvider.init(auth0)
                 .withScheme("https")
-                .withScope("openid offline_access")
+                .withScope("write:phone-number delete:phone-number write:pool-phone-number read:pool-phone-numbers read:phone-numbers read:phone-number write:forward-phone-number write:expire-phone-number write:user write:user-token write:call-token read:records read:call-logs write:send-message read:messages read:usage write:purchase")
                 .start(getActivity(), callback);
     }
 
@@ -225,6 +226,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
 
         @Override
         public void onSuccess(@NonNull Credentials credentials) {
+            DebugTool.logD("ACC: " + credentials.getAccessToken());
             CredentialsManager.saveCredentials(getContext(), credentials);
             startActivity(new Intent(getActivity(), SplashActivity.class));
             getActivity().finish();
@@ -250,8 +252,8 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
                             if (payload != null
                                     && payload.getUserMetadata() != null
                                     && payload.getUserMetadata().containsKey("sid")
-                                    && payload.getUserMetadata().containsKey("auth_code")) {
-                                TwilioManager.saveTwilio(getContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_code").toString());
+                                    && payload.getUserMetadata().containsKey("auth_token")) {
+                                TwilioManager.saveTwilio(getContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_token").toString());
                             }
 //                            hideProgress();
                             nextActivity();

@@ -10,11 +10,11 @@
 
     <string name="fb_login_protocol_scheme">fb749741551871573</string>
 
-    <string name="auth0_client_id">F4yBiH4tGmxuPd0WaE4IASazuvAFHgdx</string>
-    <string name="auth0_domain">morephone.auth0.com</string>
+    <!--<string name="auth0_client_id">F4yBiH4tGmxuPd0WaE4IASazuvAFHgdx</string>-->
+    <!--<string name="auth0_domain">morephone.auth0.com</string>-->
 
-    <!--<string name="auth0_client_id">JYPws2eLK9Re7Ff5iZlN9T7tQ2sRcN40</string>-->
-    <!--<string name="auth0_domain">coderdaudat.auth0.com</string>-->
+    <string name="auth0_client_id">JYPws2eLK9Re7Ff5iZlN9T7tQ2sRcN40</string>
+    <string name="auth0_domain">coderdaudat.auth0.com</string>
 
     <string name="all_price_unit">credits</string>
 
