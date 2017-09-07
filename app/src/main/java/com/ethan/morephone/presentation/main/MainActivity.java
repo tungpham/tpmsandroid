@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.android.morephone.data.database.DatabaseHelpper;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.network.Auth0Service;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.auth0.android.Auth0;
@@ -55,6 +57,12 @@ import com.ethan.morephone.utils.ActivityUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import org.apache.http.auth.AUTH;
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -62,6 +70,9 @@ import java.util.Set;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -105,6 +116,7 @@ public class MainActivity extends BaseActivity implements
         MyPreference.setTimesUse(getApplicationContext(), MyPreference.getTimesUse(getApplicationContext()) + 1);
 
         recordPermission();
+
     }
 
     @Override
@@ -150,7 +162,20 @@ public class MainActivity extends BaseActivity implements
         mDrawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.nav_card:
-                startActivity(new Intent(this, CreditActivity.class));
+//                startActivity(new Intent(this, CreditActivity.class));
+
+//                Auth0Service.authorize(getApplicationContext(), new Callback<String>() {
+//                    @Override
+//                    public void onResponse(Call<String> call, Response<String> response) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<String> call, Throwable t) {
+//
+//                    }
+//                });
+
                 break;
             case R.id.nav_buy_number:
                 OptionBuyPhoneNumberDialog optionBuyPhoneNumberDialog = OptionBuyPhoneNumberDialog.getInstance();
@@ -255,6 +280,8 @@ public class MainActivity extends BaseActivity implements
                 break;
         }
 
+        Credentials credentials;
+
     }
 
     private void checkRequirePhoneNumber() {
@@ -270,7 +297,7 @@ public class MainActivity extends BaseActivity implements
     private AuthenticationAPIClient authenticationClient;
 
     private void setUpAuthentication() {
-        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
+        Auth0 auth0 = new Auth0(getString(R.string.com_auth0_client_id), getString(R.string.com_auth0_domain));
         auth0.setLoggingEnabled(true);
         auth0.setOIDCConformant(true);
         authenticationClient = new AuthenticationAPIClient(auth0);

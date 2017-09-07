@@ -1,11 +1,19 @@
 package com.android.morephone.data.network;
 
 import android.content.Context;
+import android.util.Base64;
 
+import com.android.morephone.data.BaseUrl;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.token.CredentialsEntity;
+import com.android.morephone.data.entity.token.TokenRequest;
 import com.android.morephone.data.utils.TwilioManager;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Authenticator;
@@ -26,11 +34,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Auth0Service {
 
-    private static final String BASE_URL = "https://api.twilio.com/2010-04-01/";
+    private static final String BASE_URL = "https://coderdaudat.auth0.com/";
 
     private static final int PAGE_SIZE = 50;
 
-    private static ApiPath mApiPath;
+    private static Auth0Path mApiPath;
 
     private static volatile Retrofit mRetrofit;
 
@@ -69,24 +77,60 @@ public class Auth0Service {
 
 
     //Singleton for ApiPath
-    private static ApiPath getApiPath(Context context) {
+    private static Auth0Path getApiPath(Context context) {
         if (mApiPath == null) {
             synchronized (ApiManager.class) {
                 if (mApiPath == null) {
-                    mApiPath = getRetrofit(context).create(ApiPath.class);
+                    mApiPath = getRetrofit(context).create(Auth0Path.class);
                 }
             }
         }
         return mApiPath;
     }
 
-    public static void createMessage(Context context,
-                                     String to,
-                                     String from,
-                                     String body,
-                                     Callback<MessageItem> callback) {
-        Call<MessageItem> call = getApiPath(context).createMessage(TwilioManager.getSid(context), from, to, body);
+    public static void authorize(Context context, Callback<String> callback) {
+        Call<String> call = getApiPath(context).authorize(BaseUrl.API_IDENTIFIER,
+                BaseUrl.SCOPE,
+                BaseUrl.RESPONSE_TYPE,
+                BaseUrl.CLIENT_ID,
+                BaseUrl.REDIRECT_URI,
+                createCodeChallenge(createCodeVerifier()),
+                BaseUrl.CODE_CHALLENGE_METHOD);
         call.enqueue(callback);
     }
+
+    public static void token(Context context, String code, Callback<CredentialsEntity> callback) {
+        TokenRequest tokenRequest = new TokenRequest(BaseUrl.GRANT_TYPE, BaseUrl.CLIENT_ID, BaseUrl.CODE_VERIFIER, code, BaseUrl.REDIRECT_URI);
+        Call<CredentialsEntity> call = getApiPath(context).token(tokenRequest);
+        call.enqueue(callback);
+    }
+
+    private static String createCodeVerifier(){
+        SecureRandom sr = new SecureRandom();
+        byte[] code = new byte[32];
+        sr.nextBytes(code);
+        String verifier = Base64.encodeToString(code, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
+        return verifier;
+    }
+
+    private static String createCodeChallenge(String verifier){
+        byte[] bytes = new byte[0];
+        try {
+            bytes = verifier.getBytes("US-ASCII");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        md.update(bytes, 0, bytes.length);
+        byte[] digest = md.digest();
+        String challenge = Base64.encodeToString(digest, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
+        return challenge;
+    }
+
 
 }

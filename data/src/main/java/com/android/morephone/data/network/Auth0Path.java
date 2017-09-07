@@ -1,9 +1,12 @@
 package com.android.morephone.data.network;
 
-import com.android.morephone.data.entity.FakeData;
+import com.android.morephone.data.entity.token.CredentialsEntity;
+import com.android.morephone.data.entity.token.TokenRequest;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -20,5 +23,9 @@ public interface Auth0Path {
                            @Query("redirect_uri") String redirectUri,
                            @Query("code_challenge") String codeChallenge,
                            @Query("code_challenge_method") String codeChallengeMethod);
+
+
+    @POST("oauth/token")
+    Call<CredentialsEntity> token(@Body TokenRequest tokenRequest);
 
 }

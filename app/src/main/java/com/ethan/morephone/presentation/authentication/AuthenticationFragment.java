@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.morephone.data.BaseUrl;
+import com.android.morephone.data.entity.token.CredentialsEntity;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
@@ -76,11 +78,11 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         view.findViewById(R.id.button_authentication_facebook).setOnClickListener(this);
         view.findViewById(R.id.button_authentication_create_account).setOnClickListener(this);
 
-        auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
+        auth0 = new Auth0(getActivity());
         auth0.setOIDCConformant(true);
 
         String accessToken = "";
-        Credentials credentials = CredentialsManager.getCredentials(getContext());
+        CredentialsEntity credentials = CredentialsManager.getCredentials(getContext());
         if (credentials != null) accessToken = credentials.getAccessToken();
 
         checkAccessToken(accessToken);
@@ -199,7 +201,8 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     private void doLogin() {
         WebAuthProvider.init(auth0)
                 .withScheme("https")
-                .withScope("write:phone-number delete:phone-number write:pool-phone-number read:pool-phone-numbers read:phone-numbers read:phone-number write:forward-phone-number write:expire-phone-number write:user write:user-token write:call-token read:records read:call-logs write:send-message read:messages read:usage write:purchase")
+                .withScope("user_metadata openid email profile write:phone-number delete:phone-number write:pool-phone-number read:pool-phone-numbers read:phone-numbers read:phone-number write:forward-phone-number write:expire-phone-number write:user write:user-token write:call-token read:records read:call-logs write:send-message read:messages read:usage write:purchase")
+                .withAudience(BaseUrl.API_IDENTIFIER)
                 .start(getActivity(), callback);
     }
 
@@ -226,8 +229,9 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
 
         @Override
         public void onSuccess(@NonNull Credentials credentials) {
+            DebugTool.logD("KQ: " + credentials.getIdToken());
             DebugTool.logD("ACC: " + credentials.getAccessToken());
-            CredentialsManager.saveCredentials(getContext(), credentials);
+            CredentialsManager.saveCredentials(getContext(), new CredentialsEntity(credentials.getIdToken(), credentials.getAccessToken(), credentials.getType(), credentials.getRefreshToken(), credentials.getExpiresIn()));
             startActivity(new Intent(getActivity(), SplashActivity.class));
             getActivity().finish();
 //            checkAccessToken(credentials.getAccessToken());

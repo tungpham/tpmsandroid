@@ -5,9 +5,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.application.Applications;
+import com.android.morephone.data.entity.token.CredentialsEntity;
 import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
@@ -18,6 +20,8 @@ import com.auth0.android.Auth0;
 import com.auth0.android.authentication.AuthenticationAPIClient;
 import com.auth0.android.authentication.AuthenticationException;
 import com.auth0.android.callback.BaseCallback;
+import com.auth0.android.management.ManagementException;
+import com.auth0.android.management.UsersAPIClient;
 import com.auth0.android.result.Credentials;
 import com.auth0.android.result.UserProfile;
 import com.ethan.morephone.MyPreference;
@@ -30,6 +34,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.twilio.client.Twilio;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,7 +54,7 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_splash);
 
-        auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
+        auth0 = new Auth0(this);
         auth0.setOIDCConformant(true);
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
@@ -80,47 +86,75 @@ public class SplashActivity extends BaseActivity {
 
 
         String accessToken = "";
-        Credentials credentials = CredentialsManager.getCredentials(getApplicationContext());
-        if (credentials != null) accessToken = credentials.getAccessToken();
+        CredentialsEntity credentials = CredentialsManager.getCredentials(getApplicationContext());
+        if (credentials != null) {
+            accessToken = credentials.getAccessToken();
+            DebugTool.logD("accessToken: " + accessToken);
+            DebugTool.logD("ID: " + credentials.getIdToken());
+            DebugTool.logD("REfresh: " + credentials.getRefreshToken());
+        }
 
         if (!TextUtils.isEmpty(accessToken)) {
+
             AuthenticationAPIClient aClient = new AuthenticationAPIClient(auth0);
             aClient.userInfo(accessToken)
                     .start(new BaseCallback<UserProfile, AuthenticationException>() {
                         @Override
                         public void onSuccess(final UserProfile payload) {
                             if (payload != null) {
-                                DebugTool.logD("PAYLOAD: " + payload.toString());
-                                DebugTool.logD("CREATE ACCOUTN: " + payload.getUserMetadata().toString());
-                                if (payload.getUserMetadata() != null
-                                        && payload.getUserMetadata().containsKey("sid")
-                                        && payload.getUserMetadata().containsKey("auth_token")) {
-                                    DebugTool.logD("SID: " + payload.getUserMetadata().get("sid").toString());
+
+                                final UsersAPIClient usersClient = new UsersAPIClient(auth0, CredentialsManager.getCredentials(getApplicationContext()).getIdToken());
+                                usersClient.getProfile(payload.getId()).start(new BaseCallback<UserProfile, ManagementException>() {
+                                    @Override
+                                    public void onSuccess(UserProfile payload) {
+                                        DebugTool.logD("USER METADATA: " + payload.getUserMetadata().toString());
+
+                                        if (payload.getUserMetadata() != null
+                                                && payload.getUserMetadata().containsKey("sid")
+                                                && payload.getUserMetadata().containsKey("auth_token")) {
+                                            DebugTool.logD("SID: " + payload.getUserMetadata().get("sid").toString());
 
 
-                                    TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_token").toString());
-                                }
+                                            TwilioManager.saveTwilio(getApplicationContext(), payload.getUserMetadata().get("sid").toString(), payload.getUserMetadata().get("auth_token").toString());
+                                        }
 
 
-                                if (TextUtils.isEmpty(MyPreference.getUserId(getApplicationContext()))) {
-                                    MyPreference.setUserEmail(getApplicationContext(), payload.getEmail());
-                                    MyPreference.setUserName(getApplicationContext(), payload.getName());
-                                    MyPreference.setGivenName(getApplicationContext(), payload.getGivenName());
-                                    MyPreference.setNickName(getApplicationContext(), payload.getNickname());
-                                    MyPreference.setUserPicture(getApplicationContext(), payload.getPictureURL());
+                                        if (TextUtils.isEmpty(MyPreference.getUserId(getApplicationContext()))) {
+                                            MyPreference.setUserEmail(getApplicationContext(), payload.getEmail());
+                                            MyPreference.setUserName(getApplicationContext(), payload.getName());
+                                            MyPreference.setGivenName(getApplicationContext(), payload.getGivenName());
+                                            MyPreference.setNickName(getApplicationContext(), payload.getNickname());
+                                            MyPreference.setUserPicture(getApplicationContext(), payload.getPictureURL());
 
-                                    User user = User.getBuilder()
-                                            .email(payload.getEmail())
-                                            .accountSid(TwilioManager.getSid(getApplicationContext()))
-                                            .authToken(TwilioManager.getAuthCode(getApplicationContext()))
-                                            .token(FirebaseInstanceId.getInstance().getToken())
-                                            .platform("Android")
-                                            .build();
-                                    DebugTool.logD("TOKEN FCM: " + FirebaseInstanceId.getInstance().getToken());
-                                    new ApiAsync(SplashActivity.this, user).execute();
-                                } else {
-                                    new ApiAsync(SplashActivity.this, null).execute();
-                                }
+                                            User user = User.getBuilder()
+                                                    .email(payload.getEmail())
+                                                    .accountSid(TwilioManager.getSid(getApplicationContext()))
+                                                    .authToken(TwilioManager.getAuthCode(getApplicationContext()))
+                                                    .token(FirebaseInstanceId.getInstance().getToken())
+                                                    .platform("Android")
+                                                    .build();
+
+                                            new ApiAsync(SplashActivity.this, user).execute();
+                                        } else {
+                                            new ApiAsync(SplashActivity.this, null).execute();
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(ManagementException error) {
+                                        CredentialsManager.deleteCredentials(getApplicationContext());
+                                        startActivity(new Intent(SplashActivity.this, AuthenticationActivity.class));
+                                        finish();
+                                    }
+                                });
+
+//                                DebugTool.logD("PAYLOAD: " + payload.toString());
+//                                DebugTool.logD("APP METADATA: " + payload.getAppMetadata().toString());
+//                                DebugTool.logD("Email: " + payload.getEmail());
+//                                DebugTool.logD("CREATE ACCOUTN: " + payload.getUserMetadata().toString());
+//                                DebugTool.logD("EXTRA: " + payload.getExtraInfo().toString());
+
                             }
 
 
@@ -128,6 +162,7 @@ public class SplashActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(AuthenticationException error) {
+                            DebugTool.logD("FAILURE: " + error.getMessage());
                             CredentialsManager.deleteCredentials(getApplicationContext());
                             startActivity(new Intent(SplashActivity.this, AuthenticationActivity.class));
                             finish();
@@ -186,18 +221,18 @@ public class SplashActivity extends BaseActivity {
                         if (baseResponse != null && baseResponse.getResponse() != null) {
                             DebugTool.logD("APPLICATION SID: " + baseResponse.getResponse().getApplicationSid());
 
-                            if(TextUtils.isEmpty(baseResponse.getResponse().getApplicationSid())){
+                            if (TextUtils.isEmpty(baseResponse.getResponse().getApplicationSid())) {
                                 Applications applications = ApiManager.getApplications(activity.getApplicationContext());
                                 if (applications != null && !applications.applications.isEmpty()) {
                                     TwilioManager.setApplicationSid(activity.getApplicationContext(), applications.applications.get(0).sid);
                                 }
-                            }else{
+                            } else {
                                 TwilioManager.setApplicationSid(activity.getApplicationContext(), baseResponse.getResponse().getApplicationSid());
                             }
 
                             MyPreference.setUserId(activity.getApplicationContext(), baseResponse.getResponse().getId());
                         }
-                    } else if(mUser == null && TextUtils.isEmpty(TwilioManager.getApplicationSid(activity.getApplicationContext()))){
+                    } else if (mUser == null && TextUtils.isEmpty(TwilioManager.getApplicationSid(activity.getApplicationContext()))) {
                         Applications applications = ApiManager.getApplications(activity.getApplicationContext());
                         if (applications != null && !applications.applications.isEmpty()) {
                             TwilioManager.setApplicationSid(activity.getApplicationContext(), applications.applications.get(0).sid);

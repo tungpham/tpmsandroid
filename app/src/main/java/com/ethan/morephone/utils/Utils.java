@@ -17,10 +17,12 @@ import android.util.Log;
 import android.util.TypedValue;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.ParseException;
@@ -228,6 +230,5 @@ public class Utils {
         }
         return "";
     }
-
 
 }

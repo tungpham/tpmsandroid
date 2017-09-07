@@ -28,6 +28,7 @@ android {
         versionCode globalConfiguration.getAt("androidVersionCode")
         versionName globalConfiguration.getAt("androidVersionName")
         multiDexEnabled = true
+        manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "https"]
     }
 
     buildTypes {
@@ -89,7 +90,6 @@ buildscript {
 
 dependencies {
     def presentationDependencies = rootProject.ext.presentationDependencies
-    compile presentationDependencies.appcompat
     compile presentationDependencies.design
     compile presentationDependencies.cardview
     compile presentationDependencies.servicesAuth
@@ -105,6 +105,9 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'pub.devrel:easypermissions:0.4.3'
+
+    compile 'com.auth0.android:auth0:1.10.0'
+    compile 'com.auth0.android:jwtdecode:1.1.1'
 
     compile 'com.android.support:multidex:1.0.1'
 

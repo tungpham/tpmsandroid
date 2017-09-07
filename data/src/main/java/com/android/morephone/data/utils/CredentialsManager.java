@@ -3,7 +3,7 @@ package com.android.morephone.data.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.auth0.android.result.Credentials;
+import com.android.morephone.data.entity.token.CredentialsEntity;
 
 public class CredentialsManager {
 
@@ -14,7 +14,7 @@ public class CredentialsManager {
     private final static String TOKEN_TYPE = "token_type";
     private final static String EXPIRES_IN = "expires_in";
 
-    public static void saveCredentials(Context context, Credentials credentials) {
+    public static void saveCredentials(Context context, CredentialsEntity credentials) {
         SharedPreferences sp = context.getSharedPreferences(
                 PREFERENCES_NAME, Context.MODE_PRIVATE);
 
@@ -27,11 +27,11 @@ public class CredentialsManager {
                 .apply();
     }
 
-    public static Credentials getCredentials(Context context) {
+    public static CredentialsEntity getCredentials(Context context) {
         SharedPreferences sp = context.getSharedPreferences(
                 PREFERENCES_NAME, Context.MODE_PRIVATE);
 
-        return new Credentials(
+        return new CredentialsEntity(
                 sp.getString(ID_TOKEN, null),
                 sp.getString(ACCESS_TOKEN, null),
                 sp.getString(TOKEN_TYPE, null),

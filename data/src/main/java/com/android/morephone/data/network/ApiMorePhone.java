@@ -1,6 +1,7 @@
 package com.android.morephone.data.network;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.android.morephone.data.BaseUrl;
 import com.android.morephone.data.entity.BaseResponse;
@@ -11,6 +12,7 @@ import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.entity.register.BindingRequest;
+import com.android.morephone.data.entity.token.CredentialsEntity;
 import com.android.morephone.data.entity.usage.UsageItem;
 import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.log.DebugTool;
@@ -18,7 +20,6 @@ import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.Credentials;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,49 +51,36 @@ public class ApiMorePhone {
     //Singleton for Retrofit
     private static Retrofit getRetrofit(final Context context, final String accessToken) {
         if (mRetrofit == null) {
-            synchronized (ApiMorePhone.class) {
-                if (mRetrofit == null) {
 
-                    //Set log
-                    HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-                    boolean isLog = true;
-                    logging.setLevel(isLog ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+            //Set log
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            boolean isLog = true;
+            logging.setLevel(isLog ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
 
-                    //Create cache
+            //Create cache
 //                    File file = new File(context.getCacheDir(), "response");
 
-                    //Add log and set time out
-                    final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                            .authenticator(new Authenticator() {
-                                @Override
-                                public Request authenticate(Route route, okhttp3.Response response) throws IOException {
-//                                    System.out.println("Authenticating for response: " + response);
-//                                    System.out.println("Challenges: " + response.challenges());
-                                    return response.request().newBuilder()
-                                            .header("Authorization", "Bearer " + accessToken)
-                                            .build();
-                                }
-                            })
-//                            .addInterceptor(new Interceptor() {
-//                                @Override
-//                                public Response intercept(Chain chain) throws IOException {
-//                                    Request.Builder ongoing = chain.request().newBuilder();
-//                                    ongoing.addHeader("Accept", "application/json");
-//                                    return chain.proceed(ongoing.build());
-//                                }
-//                            })
-                            .readTimeout(60, TimeUnit.SECONDS)
-                            .connectTimeout(60, TimeUnit.SECONDS)
-                            .addInterceptor(logging)
-//                            .addNetworkInterceptor((Interceptor) new StethoInterceptor())
-                            .build();
+            //Add log and set time out
+            final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .authenticator(new Authenticator() {
+                        @Override
+                        public Request authenticate(Route route, okhttp3.Response response) throws IOException {
+                            return response.request().newBuilder()
+                                    .header("Authorization", "Bearer " + accessToken)
+                                    .build();
+                        }
+                    })
 
-                    mRetrofit = new Retrofit.Builder()
-                            .baseUrl(BaseUrl.BASE_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .client(okHttpClient).build();
-                }
-            }
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .addInterceptor(logging)
+//                            .addNetworkInterceptor((Interceptor) new StethoInterceptor())
+                    .build();
+
+            mRetrofit = new Retrofit.Builder()
+                    .baseUrl(BaseUrl.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(okHttpClient).build();
         }
         return mRetrofit;
     }
@@ -100,17 +88,14 @@ public class ApiMorePhone {
     //Singleton for ApiPath
     private static ApiMorePhonePath getApiPath(Context context) {
         if (mApiPath == null) {
-            synchronized (ApiMorePhone.class) {
-                if (mApiPath == null) {
-                    com.auth0.android.result.Credentials credentials = CredentialsManager.getCredentials(context);
-                    String accessToken = "";
-                    if (credentials != null) {
-                        accessToken = credentials.getAccessToken();
-                        DebugTool.logD("ACCESS TOKEN: " + accessToken);
-                    }
-                    mApiPath = getRetrofit(context, "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9URTVOVVJFTmpaRlFrWTVSVFEzTmpsRk1UQkJRakpFTVVVek9VRXlRamd3TkRoQ1FUTTJNdyJ9.eyJpc3MiOiJodHRwczovL2NvZGVyZGF1ZGF0LmF1dGgwLmNvbS8iLCJzdWIiOiJ3Tk1WNGJqNXZFYmVUUUJ2eGJWR2dyMUhWazRzOG9MWkBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly90cG1zc2VydmljZS5oZXJva3VhcHAuY29tIiwiZXhwIjoxNTA0NzcwMjc0LCJpYXQiOjE1MDQ2ODM4NzQsInNjb3BlIjoid3JpdGU6cGhvbmUtbnVtYmVyIGRlbGV0ZTpwaG9uZS1udW1iZXIgd3JpdGU6cG9vbC1waG9uZS1udW1iZXIgcmVhZDpwb29sLXBob25lLW51bWJlcnMgcmVhZDpwaG9uZS1udW1iZXJzIHJlYWQ6cGhvbmUtbnVtYmVyIHdyaXRlOmZvcndhcmQtcGhvbmUtbnVtYmVyIHdyaXRlOmV4cGlyZS1waG9uZS1udW1iZXIgd3JpdGU6dXNlciB3cml0ZTp1c2VyLXRva2VuIHdyaXRlOmNhbGwtdG9rZW4gcmVhZDpyZWNvcmRzIHJlYWQ6Y2FsbC1sb2dzIHdyaXRlOnNlbmQtbWVzc2FnZSByZWFkOm1lc3NhZ2VzIHJlYWQ6dXNhZ2Ugd3JpdGU6cHVyY2hhc2UifQ.EvToj44_ObsYvhdMuJVe1akkudLDlQwN4XtmawOjaRaG3t5lKLBHSrBQ_xFXVYqgkdenFLjJwkQED2H-TZpU0hKrasCgg0x0cpj2OJiaRVj1kBcF3x56xDJV6h175SM7WT5ejMnHhitKHT0vny_IMF0xIMeeC3QrLM_ERLS0PiP1yNib--vPM7GAt4C2vcVFUpavk233wYrqeL7cjx_uv7qLK-yokel320da9crff5mNFj0Ii_ddEFrlE5Q4eU8MQ5Dk9cFtJENNWJtHKotRw6hDG5wVB9yxgZ_2QNv9IzQYLyfI8iYrxEMgnOP5pfGf39j76ngN3FskisPV6Q0ylw").create(ApiMorePhonePath.class);
-                }
+            CredentialsEntity credentials = CredentialsManager.getCredentials(context);
+            String accessToken = "";
+            if (credentials != null) {
+                accessToken = credentials.getAccessToken();
+                mApiPath = getRetrofit(context, accessToken).create(ApiMorePhonePath.class);
+                DebugTool.logD("ACCESS TOKEN: " + accessToken);
             }
+
         }
         return mApiPath;
     }

@@ -65,23 +65,7 @@
 
         <activity
             android:name=".presentation.authentication.AuthenticationActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="@string/auth0_domain"
-                    android:pathPrefix="/android/com.morephone.tpms/callback"
-                    android:scheme="https" />
-            </intent-filter>
-
-        </activity>
-
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.main.MainActivity"
