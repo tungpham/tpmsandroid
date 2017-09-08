@@ -162,7 +162,7 @@ public class MainActivity extends BaseActivity implements
         mDrawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.nav_card:
-//                startActivity(new Intent(this, CreditActivity.class));
+                startActivity(new Intent(this, CreditActivity.class));
 
 //                Auth0Service.authorize(getApplicationContext(), new Callback<String>() {
 //                    @Override

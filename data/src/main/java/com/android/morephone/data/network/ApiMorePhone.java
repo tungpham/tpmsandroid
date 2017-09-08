@@ -115,6 +115,12 @@ public class ApiMorePhone {
         return null;
     }
 
+    public static void createUser2(Context context,
+                                                User user, Callback<BaseResponse<User>> callback) {
+        Call<BaseResponse<User>> call = getApiPath(context).createUser(user);
+        call.enqueue(callback);
+    }
+
     public static void updateFcmToken(Context context,
                                       String id,
                                       String token,
