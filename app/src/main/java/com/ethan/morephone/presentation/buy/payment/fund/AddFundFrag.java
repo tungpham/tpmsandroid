@@ -275,6 +275,7 @@ public class AddFundFrag extends BaseFragment implements
     }
 
     private void purchase(final Sku sku) {
+        DebugTool.logD("SKU: " + sku.title);
         if (mPurchase == null) {
             DebugTool.logD("PURCHASE NULL");
             mUiCheckout.startPurchaseFlow(sku, null, new PurchaseListener());

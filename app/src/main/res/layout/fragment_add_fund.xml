@@ -22,7 +22,7 @@
         style="@style/ButtonBlue"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:visibility="visible"
+        android:visibility="gone"
         android:text="@string/add_fund_button" />
 
 </RelativeLayout>

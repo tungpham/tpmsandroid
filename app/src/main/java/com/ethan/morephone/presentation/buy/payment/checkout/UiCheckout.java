@@ -209,6 +209,7 @@ public abstract class UiCheckout extends Checkout {
             throw new IllegalArgumentException("Purchase flow associated with requestCode=" + requestCode + " already exists");
         }
         if (oneShot) {
+            DebugTool.logD("ONE SHOT");
             listener = new OneShotRequestListener(listener, requestCode);
         }
         flow = mBilling.createPurchaseFlow(makeIntentStarter(), requestCode, listener);
@@ -270,17 +271,20 @@ public abstract class UiCheckout extends Checkout {
 
         @Override
         public void onError(int response, @Nonnull Exception e) {
+            DebugTool.logD("ERORR: " + e.toString());
             destroyPurchaseFlow(mRequestCode);
             super.onError(response, e);
         }
 
         @Override
         public void onCancel() {
+            DebugTool.logD("CANCEL: ");
             destroyPurchaseFlow(mRequestCode);
         }
 
         @Override
         public void onSuccess(@Nonnull Purchase result) {
+            DebugTool.logD("SUCCESS: ");
             destroyPurchaseFlow(mRequestCode);
             super.onSuccess(result);
         }

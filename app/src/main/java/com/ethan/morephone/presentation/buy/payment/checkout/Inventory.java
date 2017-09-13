@@ -188,11 +188,14 @@ public interface Inventory {
 
         @Nullable
         public Purchase getPurchaseInState(@Nonnull String sku, @Nonnull Purchase.State state) {
+            if(mPurchases != null) DebugTool.logD("PUR SIZE: " + mPurchases.size());
+
             return Purchases.getPurchaseInState(mPurchases, sku, state);
         }
 
         @Nullable
         public Purchase getPurchaseInState(@Nonnull Sku sku, @Nonnull Purchase.State state) {
+            DebugTool.logD("SKU CODE: " + sku.id.code + " STATE:  " + state);
             return getPurchaseInState(sku.id.code, state);
         }
 
@@ -206,6 +209,7 @@ public interface Inventory {
         }
 
         void setPurchases(@Nonnull List<Purchase> purchases) {
+            if(purchases != null) DebugTool.logD("PUR SIZE: " + purchases.size());
             Check.isTrue(mPurchases.isEmpty(), "Must be called only once");
             mPurchases.addAll(Purchases.neutralize(purchases));
             sort(mPurchases, PurchaseComparator.latestFirst());

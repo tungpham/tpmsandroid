@@ -94,6 +94,8 @@ public class ApiMorePhone {
                 accessToken = credentials.getAccessToken();
                 mApiPath = getRetrofit(context, accessToken).create(ApiMorePhonePath.class);
                 DebugTool.logD("ACCESS TOKEN: " + accessToken);
+            } else {
+                DebugTool.logD("ACCESS TOKEN 2: " + accessToken);
             }
 
         }
@@ -116,7 +118,7 @@ public class ApiMorePhone {
     }
 
     public static void createUser2(Context context,
-                                                User user, Callback<BaseResponse<User>> callback) {
+                                   User user, Callback<BaseResponse<User>> callback) {
         Call<BaseResponse<User>> call = getApiPath(context).createUser(user);
         call.enqueue(callback);
     }

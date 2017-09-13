@@ -24,6 +24,8 @@ package com.ethan.morephone.presentation.buy.payment.checkout;
 
 import android.os.Bundle;
 
+import com.android.morephone.data.log.DebugTool;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,6 +112,7 @@ public final class Purchases {
     @Nullable
     static Purchase getPurchaseInState(@Nonnull List<Purchase> purchases, @Nonnull String sku, @Nonnull Purchase.State state) {
         for (Purchase purchase : purchases) {
+            DebugTool.logD("PUR: " + purchase.sku + "    ||    " + sku + "   STATEe: " + state);
             if (purchase.sku.equals(sku)) {
                 if (purchase.state == state) {
                     return purchase;
