@@ -32,5 +32,7 @@ public interface CallLogContract {
 
         void clearData();
 
+        boolean hasNextPage();
+
     }
 }

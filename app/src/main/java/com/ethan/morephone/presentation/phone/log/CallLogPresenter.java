@@ -3,10 +3,12 @@ package com.ethan.morephone.presentation.phone.log;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.call.Call;
 import com.android.morephone.data.entity.call.Calls;
+import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.network.ApiMorePhone;
@@ -31,7 +33,9 @@ public class CallLogPresenter implements CallLogContract.Presenter {
     private final GetCallsIncoming mGetCallsIncoming;
     private final GetCallsOutgoing mGetCallsOutgoing;
 
-    private List<Call> mCalls;
+//    private List<Call> mCalls;
+
+    private ResourceCall mResourceCall;
 
     public CallLogPresenter(@NonNull CallLogContract.View view,
                             @NonNull UseCaseHandler useCaseHandler,
@@ -43,7 +47,7 @@ public class CallLogPresenter implements CallLogContract.Presenter {
         mGetCallsIncoming = getCallsIncoming;
         mGetCallsOutgoing = getCallsOutgoing;
 
-        mCalls = new ArrayList<>();
+//        mCalls = new ArrayList<>();
 
         mView.setPresenter(this);
     }
@@ -96,11 +100,20 @@ public class CallLogPresenter implements CallLogContract.Presenter {
 
     @Override
     public void clearData() {
-        mCalls.clear();
+//        mCalls.clear();
+        mResourceCall = null;
+    }
+
+    @Override
+    public boolean hasNextPage() {
+        if(mResourceCall != null && (!TextUtils.isEmpty(mResourceCall.incomingNextPageUri) || !TextUtils.isEmpty(mResourceCall.outgoingNextPageUri))){
+            return true;
+        }
+        return false;
     }
 
     private void executeData(Calls calls) {
-        mCalls.addAll(calls.calls);
+//        mCalls.addAll(calls.calls);
     }
 
 
@@ -119,7 +132,7 @@ public class CallLogPresenter implements CallLogContract.Presenter {
         protected void onPreExecute() {
             super.onPreExecute();
             CallLogPresenter presenter = mWeakReference.get();
-            if(presenter != null){
+            if (presenter != null) {
                 presenter.mView.showLoading(true);
             }
         }
@@ -138,10 +151,20 @@ public class CallLogPresenter implements CallLogContract.Presenter {
 //                if (callOutgoing != null && callOutgoing.calls != null && !callOutgoing.calls.isEmpty()) {
 //                    presenter.executeData(callOutgoing);
 //                }
+                String pageIncoming = "";
+                String pageOutgoing = "";
+                if (presenter.mResourceCall != null) {
+                    pageIncoming = presenter.mResourceCall.incomingNextPageUri;
+                    pageOutgoing = presenter.mResourceCall.outgoingNextPageUri;
 
-                BaseResponse<List<Call>> baseResponse = ApiMorePhone.getCallLogs(mContext, mPhoneNumber);
-                if(baseResponse != null && baseResponse.getResponse() != null) {
-                    presenter.mCalls = baseResponse.getResponse();
+                    presenter.mResourceCall.incomingNextPageUri = "";
+                    presenter.mResourceCall.outgoingNextPageUri = "";
+                }
+
+                BaseResponse<ResourceCall> baseResponse = ApiMorePhone.getCallLogs(mContext, mPhoneNumber, pageIncoming, pageOutgoing);
+
+                if (baseResponse != null && baseResponse.getResponse() != null) {
+                    presenter.mResourceCall = baseResponse.getResponse();
                 }
             }
             return null;
@@ -152,8 +175,10 @@ public class CallLogPresenter implements CallLogContract.Presenter {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             CallLogPresenter presenter = mWeakReference.get();
-            if(presenter != null){
-                presenter.mView.showCallLog(presenter.mCalls);
+            if (presenter != null) {
+                if (presenter.mResourceCall != null && presenter.mResourceCall.records != null) {
+                    presenter.mView.showCallLog(presenter.mResourceCall.records);
+                }
                 presenter.mView.showLoading(false);
             }
             DebugTool.logD("POST EXECUTE");

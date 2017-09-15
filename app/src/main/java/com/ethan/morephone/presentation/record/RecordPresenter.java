@@ -3,10 +3,13 @@ package com.ethan.morephone.presentation.record;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.call.Call;
+import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.record.Record;
+import com.android.morephone.data.entity.record.ResourceRecord;
 import com.android.morephone.data.entity.record.mapper.RecordDataMapper;
 import com.android.morephone.data.entity.twilio.record.RecordItem;
 import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
@@ -41,7 +44,9 @@ public class RecordPresenter implements RecordContract.Presenter {
     private final GetCall mGetCall;
     private final DeleteRecord mDeleteRecord;
 
-    private List<Record> mRecords;
+//    private List<Record> mRecords;
+
+    private ResourceRecord mResourceRecord;
 
     public RecordPresenter(@NonNull RecordContract.View view,
                            @NonNull UseCaseHandler useCaseHandler,
@@ -54,7 +59,7 @@ public class RecordPresenter implements RecordContract.Presenter {
         mDeleteRecord = deleteRecord;
         mGetCall = getCall;
 
-        mRecords = new ArrayList<>();
+//        mRecords = new ArrayList<>();
 
         mView.setPresenter(this);
     }
@@ -112,12 +117,21 @@ public class RecordPresenter implements RecordContract.Presenter {
 
     @Override
     public void clearData() {
-        mRecords.clear();
+//        mRecords.clear();
+        mResourceRecord = null;
+    }
+
+    @Override
+    public boolean hasNextPage() {
+        if(mResourceRecord != null && !TextUtils.isEmpty(mResourceRecord.nextPageUri)){
+            return true;
+        }
+        return false;
     }
 
     private void executeData(Context context, final String phoneNumber, List<RecordItem> records) {
         DebugTool.logD("RECORDS SIZE: " + records.size() + " PHONE NUMBER: " + phoneNumber);
-        mRecords.clear();
+//        mRecords.clear();
         for (final RecordItem recordItem : records) {
             DebugTool.logD("RecordItem: " + recordItem.uri);
             DebugTool.logD("RecordItem CALL SID: " + recordItem.callSid);
@@ -128,8 +142,8 @@ public class RecordPresenter implements RecordContract.Presenter {
                     if (response.isSuccessful()) {
                         com.android.morephone.data.entity.call.Call call = response.body();
                         if (phoneNumber.equals(call.to)) {
-                            mRecords.add(RecordDataMapper.transform(false, call.from, recordItem));
-                            mView.showRecords(mRecords);
+//                            mRecords.add(RecordDataMapper.transform(false, call.from, recordItem));
+//                            mView.showRecords(mRecords);
                         } else {
 
                         }
@@ -195,9 +209,16 @@ public class RecordPresenter implements RecordContract.Presenter {
         protected Void doInBackground(Void... params) {
             RecordPresenter presenter = mWeakReference.get();
             if (presenter != null) {
-                BaseResponse<List<Record>> baseResponse = ApiMorePhone.getRecords(mContext, mPhoneNumber);
+
+                String page = "";
+                if (presenter.mResourceRecord != null) {
+                    page = presenter.mResourceRecord.nextPageUri;
+                    presenter.mResourceRecord.nextPageUri = "";
+                }
+
+                BaseResponse<ResourceRecord> baseResponse = ApiMorePhone.getRecords(mContext, mPhoneNumber, page);
                 if(baseResponse != null && baseResponse.getResponse() != null) {
-                    presenter.mRecords = baseResponse.getResponse();
+                    presenter.mResourceRecord = baseResponse.getResponse();
                 }
             }
             return null;
@@ -209,7 +230,9 @@ public class RecordPresenter implements RecordContract.Presenter {
             super.onPostExecute(aVoid);
             RecordPresenter presenter = mWeakReference.get();
             if(presenter != null){
-                presenter.mView.showRecords(presenter.mRecords);
+                if(presenter.mResourceRecord != null && presenter.mResourceRecord.records != null) {
+                    presenter.mView.showRecords(presenter.mResourceRecord.records);
+                }
                 presenter.mView.showLoading(false);
             }
             DebugTool.logD("POST EXECUTE");

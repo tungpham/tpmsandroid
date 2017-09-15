@@ -9,7 +9,9 @@ import android.text.TextUtils;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.conversation.ConversationModel;
+import com.android.morephone.data.entity.conversation.ResourceMessage;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
@@ -41,8 +43,10 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     private final CreateMessage mCreateMessage;
 
     private List<MessageItem> mMessageItems;
-    private List<ConversationModel> mConversationModels;
-    private ArrayMap<String, List<MessageItem>> mArrayMap;
+//    private List<ConversationModel> mConversationModels;
+//    private ArrayMap<String, List<MessageItem>> mArrayMap;
+
+    private ResourceMessage mResourceMessage;
 
     public ConversationsPresenter(@NonNull ConversationsContract.View view,
                                   @NonNull UseCaseHandler useCaseHandler,
@@ -58,8 +62,8 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         mCreateMessage = createMessage;
 
         mMessageItems = new ArrayList<>();
-        mConversationModels = new ArrayList<>();
-        mArrayMap = new ArrayMap<>();
+//        mConversationModels = new ArrayList<>();
+//        mArrayMap = new ArrayMap<>();
 
         mView.setPresenter(this);
     }
@@ -114,60 +118,60 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
 
     @Override
     public void clearData() {
-        mArrayMap.clear();
+//        mArrayMap.clear();
+
+        mResourceMessage = null;
     }
 
     @Override
     public void parseFakeData(FakeData fakeData, String phoneNumber) {
-        mArrayMap.clear();
+//        mArrayMap.clear();
         List<MessageItem> messageItemsIncoming = parseMessageIncoming(fakeData, phoneNumber);
         List<MessageItem> messageItemsOutgoing = parseMessageOutgoing(fakeData, phoneNumber);
-        executeData(messageItemsIncoming, true);
-        executeData(messageItemsOutgoing, false);
     }
 
-    private void executeData(List<MessageItem> messageItems, boolean isComing) {
-        if (isComing) {
-            for (MessageItem messageItem : messageItems) {
-                if(!TextUtils.isEmpty(messageItem.status) && messageItem.status.equals("received")){
-                    if (mArrayMap.containsKey(messageItem.from)) {
-                        mArrayMap.get(messageItem.from).add(messageItem);
-                    } else {
-                        List<MessageItem> items = new ArrayList<>();
-                        items.add(messageItem);
-                        mArrayMap.put(messageItem.from, items);
-                    }
-                }
-
-            }
-        } else {
-            for (MessageItem messageItem : messageItems) {
-                if(!TextUtils.isEmpty(messageItem.status) && messageItem.status.equals("delivered")){
-                    if (mArrayMap.containsKey(messageItem.to)) {
-                        mArrayMap.get(messageItem.to).add(messageItem);
-                    } else {
-                        List<MessageItem> items = new ArrayList<>();
-                        items.add(messageItem);
-                        mArrayMap.put(messageItem.to, items);
-                    }
-                }
-            }
-        }
-        mConversationModels.clear();
-        for (Map.Entry entry : mArrayMap.entrySet()) {
-            List<MessageItem> items = mArrayMap.get(entry.getKey());
-            if (items != null && !items.isEmpty()) {
-                Collections.sort(items);
-                String dateCreated = items.get(items.size() - 1).dateCreated;
-                DebugTool.logD("DATE CREATED: " + dateCreated);
-                mConversationModels.add(new ConversationModel(entry.getKey().toString(), dateCreated, items));
-            }
-
-        }
-
-        DebugTool.logD("SIZE CONVERSATION: " + mConversationModels.size());
-
-    }
+//    private void executeData(List<MessageItem> messageItems, boolean isComing) {
+//        if (isComing) {
+//            for (MessageItem messageItem : messageItems) {
+//                if(!TextUtils.isEmpty(messageItem.status) && messageItem.status.equals("received")){
+//                    if (mArrayMap.containsKey(messageItem.from)) {
+//                        mArrayMap.get(messageItem.from).add(messageItem);
+//                    } else {
+//                        List<MessageItem> items = new ArrayList<>();
+//                        items.add(messageItem);
+//                        mArrayMap.put(messageItem.from, items);
+//                    }
+//                }
+//
+//            }
+//        } else {
+//            for (MessageItem messageItem : messageItems) {
+//                if(!TextUtils.isEmpty(messageItem.status) && messageItem.status.equals("delivered")){
+//                    if (mArrayMap.containsKey(messageItem.to)) {
+//                        mArrayMap.get(messageItem.to).add(messageItem);
+//                    } else {
+//                        List<MessageItem> items = new ArrayList<>();
+//                        items.add(messageItem);
+//                        mArrayMap.put(messageItem.to, items);
+//                    }
+//                }
+//            }
+//        }
+//        mConversationModels.clear();
+//        for (Map.Entry entry : mArrayMap.entrySet()) {
+//            List<MessageItem> items = mArrayMap.get(entry.getKey());
+//            if (items != null && !items.isEmpty()) {
+//                Collections.sort(items);
+//                String dateCreated = items.get(items.size() - 1).dateCreated;
+//                DebugTool.logD("DATE CREATED: " + dateCreated);
+//                mConversationModels.add(new ConversationModel(entry.getKey().toString(), dateCreated, items));
+//            }
+//
+//        }
+//
+//        DebugTool.logD("SIZE CONVERSATION: " + mConversationModels.size());
+//
+//    }
 
 
     public List<MessageItem> parseMessageIncoming(FakeData mFakeData, String phoneNumberIncoming) {
@@ -254,6 +258,14 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         });
     }
 
+    @Override
+    public boolean hasNextPage() {
+        if(mResourceMessage != null && (!TextUtils.isEmpty(mResourceMessage.incomingNextPageUri) || !TextUtils.isEmpty(mResourceMessage.outgoingNextPageUri))){
+            return true;
+        }
+        return false;
+    }
+
     private static class DataAsync extends AsyncTask<Void, Integer, Void> {
         private final WeakReference<ConversationsPresenter> mWeakReference;
         private final String mPhoneNumber;
@@ -281,9 +293,19 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
             ConversationsPresenter presenter = mWeakReference.get();
             if (presenter != null) {
 
-                BaseResponse<List<ConversationModel>> baseResponse = ApiMorePhone.getMessage(mContext, mPhoneNumber);
+                String pageIncoming = "";
+                String pageOutgoing = "";
+                if (presenter.mResourceMessage != null) {
+                    pageIncoming = presenter.mResourceMessage.incomingNextPageUri;
+                    pageOutgoing = presenter.mResourceMessage.outgoingNextPageUri;
+
+                    presenter.mResourceMessage.incomingNextPageUri = "";
+                    presenter.mResourceMessage.outgoingNextPageUri = "";
+                }
+
+                BaseResponse<ResourceMessage> baseResponse = ApiMorePhone.getMessage(mContext, mPhoneNumber, pageIncoming, pageOutgoing);
                 if(baseResponse != null && baseResponse.getResponse() != null){
-                    presenter.mConversationModels = baseResponse.getResponse();
+                    presenter.mResourceMessage = baseResponse.getResponse();
                 }
 
 //                MessageListResourceResponse messageIncoming = ApiManager.getMessagesIncoming(mContext, mPhoneNumber);
@@ -306,7 +328,9 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
             super.onPostExecute(aVoid);
             ConversationsPresenter presenter = mWeakReference.get();
             if(presenter != null){
-                presenter.mView.showListMessage(presenter.mConversationModels);
+                if (presenter.mResourceMessage != null && presenter.mResourceMessage.records != null) {
+                    presenter.mView.showListMessage(presenter.mResourceMessage.records);
+                }
                 presenter.mView.showLoading(false);
             }
             DebugTool.logD("POST EXECUTE");

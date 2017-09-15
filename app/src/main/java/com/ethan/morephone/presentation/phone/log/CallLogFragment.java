@@ -49,8 +49,8 @@ public class CallLogFragment extends BaseFragment implements
 
     private CallLogContract.Presenter mPresenter;
 
-    private int mPageOutgoing = 0;
-    private int mPageIncoming = 0;
+    //    private int mPageOutgoing = 0;
+//    private int mPageIncoming = 0;
     private boolean isLoading = true;
     private int lastVisibleItem, totalItemCount;
 
@@ -88,10 +88,11 @@ public class CallLogFragment extends BaseFragment implements
 
                 if (!isLoading && totalItemCount <= (lastVisibleItem + 5)) {
                     isLoading = true;
-                    mPageIncoming++;
-                    mPageOutgoing++;
-                    DebugTool.logD("PAGE: " + mPageOutgoing);
-//                    loadData();
+//                    mPageIncoming++;
+//                    mPageOutgoing++;
+//                    DebugTool.logD("PAGE: " + mPageOutgoing);
+                    if (mPresenter.hasNextPage())
+                        loadData();
 //                    mPresenter.getTasks(mCurrPage);
                 }
             }
@@ -112,8 +113,9 @@ public class CallLogFragment extends BaseFragment implements
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            mPageIncoming = 0;
-                            mPageOutgoing = 0;
+//                            mPageIncoming = 0;
+//                            mPageOutgoing = 0;
+
                             mCallLogAdapter.getData().clear();
                             loadData();
                         }
@@ -159,7 +161,7 @@ public class CallLogFragment extends BaseFragment implements
             phoneNumber = call.from;
         }
         DebugTool.logD("PHONE NUMBER: " + phoneNumber);
-        if(phoneNumber.startsWith("client:")){
+        if (phoneNumber.startsWith("client:")) {
             phoneNumber = phoneNumber.replace("client:", "");
             DebugTool.logD("NOT REPLACE");
         }

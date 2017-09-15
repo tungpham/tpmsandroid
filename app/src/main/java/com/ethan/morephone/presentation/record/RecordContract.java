@@ -34,5 +34,7 @@ public interface RecordContract {
 
         void clearData();
 
+        boolean hasNextPage();
+
     }
 }

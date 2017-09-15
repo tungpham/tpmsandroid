@@ -4,10 +4,13 @@ package com.android.morephone.data.network;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.Response;
+import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.conversation.ConversationModel;
+import com.android.morephone.data.entity.conversation.ResourceMessage;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.record.Record;
+import com.android.morephone.data.entity.record.ResourceRecord;
 import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.usage.UsageItem;
 import com.android.morephone.data.entity.user.User;
@@ -81,9 +84,11 @@ interface ApiMorePhonePath {
                                                   @Field("body") String body);
 
     @GET("message/retrieve")
-    Call<BaseResponse<List<ConversationModel>>> getMessage(@Query("account_sid") String accountSid,
-                                                           @Query("auth_token") String authToken,
-                                                           @Query("phone_number") String phoneNumber);
+    Call<BaseResponse<ResourceMessage>> getMessage(@Query("account_sid") String accountSid,
+                                                   @Query("auth_token") String authToken,
+                                                   @Query("phone_number") String phoneNumber,
+                                                   @Query("page_incoming") String pageIncoming,
+                                                   @Query("page_outgoing") String pageOutgoing);
 
     /*-----------------------------------------CALL-----------------------------------------*/
 
@@ -95,14 +100,17 @@ interface ApiMorePhonePath {
                                            @Field("application_sid") String application_sid);
 
     @GET("call/records")
-    Call<BaseResponse<List<Record>>> getRecords(@Query("account_sid") String accountSid,
-                                                @Query("auth_token") String authToken,
-                                                @Query("phone_number") String phoneNumber);
+    Call<BaseResponse<ResourceRecord>> getRecords(@Query("account_sid") String accountSid,
+                                                  @Query("auth_token") String authToken,
+                                                  @Query("phone_number") String phoneNumber,
+                                                  @Query("page") String page);
 
     @GET("call/logs")
-    Call<BaseResponse<List<com.android.morephone.data.entity.call.Call>>> getCallLogs(@Query("account_sid") String accountSid,
-                                                                                      @Query("auth_token") String authToken,
-                                                                                      @Query("phone_number") String phoneNumber);
+    Call<BaseResponse<ResourceCall>> getCallLogs(@Query("account_sid") String accountSid,
+                                                 @Query("auth_token") String authToken,
+                                                 @Query("phone_number") String phoneNumber,
+                                                 @Query("page_incoming") String pageIncoming,
+                                                 @Query("page_outgoing") String pageOutgoing);
 
     /*-----------------------------------------USAGE-----------------------------------------*/
 

@@ -109,6 +109,9 @@ public class RecordFragment extends BaseFragment implements
     private ScheduledExecutorService mExecutorService;
     private ScheduledFuture<?> mScheduleFuture;
 
+    private boolean isLoading = true;
+    private int lastVisibleItem, totalItemCount;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +144,32 @@ public class RecordFragment extends BaseFragment implements
         mRecyclerView.setAdapter(mRecordAdapter);
         mRecordAdapter.setRecyclerView(mRecyclerView);
 
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (linearLayoutManager != null) {
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    linearLayoutManager.findFirstVisibleItemPosition();
+                }
+
+                if (!isLoading && totalItemCount <= (lastVisibleItem + 5)) {
+                    isLoading = true;
+//                    mPageIncoming++;
+//                    mPageOutgoing++;
+//                    DebugTool.logD("PAGE: " + mPageOutgoing);
+                    if (mPresenter.hasNextPage())
+                        loadData();
+//                    mPresenter.getTasks(mCurrPage);
+                }
+            }
+        });
+
+
 
         mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 
@@ -156,6 +185,7 @@ public class RecordFragment extends BaseFragment implements
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
+                            mRecordAdapter.getData().clear();
                             loadData();
                         }
                     });
@@ -213,7 +243,11 @@ public class RecordFragment extends BaseFragment implements
 
     @Override
     public void showRecords(List<Record> records) {
-        mRecordAdapter.replaceData(records);
+        if(isAdded()) {
+            mRecordAdapter.getData().addAll(records);
+            mRecordAdapter.replaceData(mRecordAdapter.getData());
+            isLoading = false;
+        }
     }
 
     @Override

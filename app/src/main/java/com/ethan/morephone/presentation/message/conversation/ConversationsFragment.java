@@ -73,6 +73,9 @@ public class ConversationsFragment extends BaseFragment implements
 
     private String mPhoneNumber;
 
+    private boolean isLoading = true;
+    private int lastVisibleItem, totalItemCount;
+
     private UpdateMessageReceiver mUpdateMessageReceiver = new UpdateMessageReceiver();
 
     @Override
@@ -109,6 +112,32 @@ public class ConversationsFragment extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (linearLayoutManager != null) {
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    linearLayoutManager.findFirstVisibleItemPosition();
+                }
+
+                if (!isLoading && totalItemCount <= (lastVisibleItem + 5)) {
+                    isLoading = true;
+//                    mPageIncoming++;
+//                    mPageOutgoing++;
+//                    DebugTool.logD("PAGE: " + mPageOutgoing);
+                    if (mPresenter.hasNextPage())
+                        loadData(true);
+//                    mPresenter.getTasks(mCurrPage);
+                }
+            }
+        });
+
 //
 //        layoutManager.setReverseLayout(true);
 //        layoutManager.setStackFromEnd(true);
@@ -207,8 +236,11 @@ public class ConversationsFragment extends BaseFragment implements
 
     @Override
     public void showListMessage(List<ConversationModel> conversationModels) {
-
-        mConversationListAdapter.replaceData(conversationModels);
+        if(isAdded()) {
+            mConversationListAdapter.getData().addAll(conversationModels);
+            mConversationListAdapter.replaceData(mConversationListAdapter.getData());
+            isLoading = false;
+        }
     }
 
     @Override

@@ -42,5 +42,7 @@ public interface ConversationsContract {
 
         void createMessage(String userId, String to, String from, String body, int position);
 
+        boolean hasNextPage();
+
     }
 }
