@@ -38,8 +38,6 @@ public class CallLogPresenter implements CallLogContract.Presenter {
 
     private ResourceCall mResourceCall;
 
-    private boolean isFirst;
-
     public CallLogPresenter(@NonNull CallLogContract.View view,
                             @NonNull UseCaseHandler useCaseHandler,
                             @NonNull GetCallsIncoming getCallsIncoming,
@@ -122,7 +120,6 @@ public class CallLogPresenter implements CallLogContract.Presenter {
     public void clearData() {
 //        mCalls.clear();
         mResourceCall = new ResourceCall(new ArrayList<Call>(), "", Constant.FIRST_PAGE, "", "", "",Constant.FIRST_PAGE, "", "", 0);
-        isFirst = false;
     }
 
     @Override

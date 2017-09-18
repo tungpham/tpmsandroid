@@ -186,6 +186,7 @@ public class RecordFragment extends BaseFragment implements
                         @Override
                         public void run() {
                             mRecordAdapter.getData().clear();
+                            mPresenter.clearData();
                             loadData();
                         }
                     });
@@ -203,7 +204,6 @@ public class RecordFragment extends BaseFragment implements
 
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
-            mPresenter.clearData();
             mPresenter.loadRecords(getContext(), mPhoneNumber);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();

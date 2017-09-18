@@ -22,6 +22,7 @@ import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.call.GetCall;
 import com.android.morephone.domain.usecase.record.DeleteRecord;
 import com.android.morephone.domain.usecase.record.GetRecords;
+import com.ethan.morephone.Constant;
 import com.ethan.morephone.presentation.phone.log.CallLogPresenter;
 
 import java.lang.ref.WeakReference;
@@ -59,6 +60,7 @@ public class RecordPresenter implements RecordContract.Presenter {
         mDeleteRecord = deleteRecord;
         mGetCall = getCall;
 
+        mResourceRecord = new ResourceRecord(new ArrayList<Record>(), "", Constant.FIRST_PAGE, "", "", 0);
 //        mRecords = new ArrayList<>();
 
         mView.setPresenter(this);
@@ -87,7 +89,20 @@ public class RecordPresenter implements RecordContract.Presenter {
 
     @Override
     public void loadRecords(final Context context, final String phoneNumber) {
-        new RecordPresenter.DataAsync(context, this, phoneNumber).execute();
+
+        String page = "";
+        if (mResourceRecord != null) {
+
+            page = mResourceRecord.nextPageUri;
+
+            mResourceRecord.nextPageUri = "";
+        }
+
+        if(!TextUtils.isEmpty(page)){
+            new RecordPresenter.DataAsync(context, this, phoneNumber, page).execute();
+        }
+
+
 
 //        mView.showLoading(true);
 //        GetRecords.RequestValue requestValue = new GetRecords.RequestValue();
@@ -118,7 +133,7 @@ public class RecordPresenter implements RecordContract.Presenter {
     @Override
     public void clearData() {
 //        mRecords.clear();
-        mResourceRecord = null;
+        mResourceRecord = new ResourceRecord(new ArrayList<Record>(), "", Constant.FIRST_PAGE, "", "", 0);
     }
 
     @Override
@@ -188,11 +203,13 @@ public class RecordPresenter implements RecordContract.Presenter {
     private static class DataAsync extends AsyncTask<Void, Integer, Void> {
         private final WeakReference<RecordPresenter> mWeakReference;
         private final String mPhoneNumber;
+        private final String mPage;
         private final Context mContext;
 
-        public DataAsync(Context context, RecordPresenter presenter, String phoneNumber) {
+        public DataAsync(Context context, RecordPresenter presenter, String phoneNumber, String page) {
             mWeakReference = new WeakReference<>(presenter);
             this.mPhoneNumber = phoneNumber;
+            mPage = page;
             mContext = context;
         }
 
@@ -210,13 +227,7 @@ public class RecordPresenter implements RecordContract.Presenter {
             RecordPresenter presenter = mWeakReference.get();
             if (presenter != null) {
 
-                String page = "";
-                if (presenter.mResourceRecord != null) {
-                    page = presenter.mResourceRecord.nextPageUri;
-                    presenter.mResourceRecord.nextPageUri = "";
-                }
-
-                BaseResponse<ResourceRecord> baseResponse = ApiMorePhone.getRecords(mContext, mPhoneNumber, page);
+                BaseResponse<ResourceRecord> baseResponse = ApiMorePhone.getRecords(mContext, mPhoneNumber, mPage);
                 if(baseResponse != null && baseResponse.getResponse() != null) {
                     presenter.mResourceRecord = baseResponse.getResponse();
                 }
@@ -235,7 +246,6 @@ public class RecordPresenter implements RecordContract.Presenter {
                 }
                 presenter.mView.showLoading(false);
             }
-            DebugTool.logD("POST EXECUTE");
         }
     }
 
