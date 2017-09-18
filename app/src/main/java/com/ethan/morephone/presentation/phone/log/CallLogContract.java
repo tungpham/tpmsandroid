@@ -24,7 +24,7 @@ public interface CallLogContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadCalls(Context context, String phoneNumberIncoming, int pageIncoming);
+        void loadCalls(Context context, String phoneNumberIncoming);
 
         void loadCallsIncoming(String phoneNumberIncoming, int pageIncoming);
 

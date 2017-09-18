@@ -16,6 +16,7 @@ import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.call.GetCallsIncoming;
 import com.android.morephone.domain.usecase.call.GetCallsOutgoing;
+import com.ethan.morephone.Constant;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class CallLogPresenter implements CallLogContract.Presenter {
 
     private ResourceCall mResourceCall;
 
+    private boolean isFirst;
+
     public CallLogPresenter(@NonNull CallLogContract.View view,
                             @NonNull UseCaseHandler useCaseHandler,
                             @NonNull GetCallsIncoming getCallsIncoming,
@@ -49,6 +52,7 @@ public class CallLogPresenter implements CallLogContract.Presenter {
 
 //        mCalls = new ArrayList<>();
 
+        mResourceCall = new ResourceCall(new ArrayList<Call>(), "", Constant.FIRST_PAGE, "", "", "",Constant.FIRST_PAGE, "", "", 0);
         mView.setPresenter(this);
     }
 
@@ -58,8 +62,24 @@ public class CallLogPresenter implements CallLogContract.Presenter {
     }
 
     @Override
-    public void loadCalls(Context context, String phoneNumberIncoming, int pageIncoming) {
-        new DataAsync(context, this, phoneNumberIncoming).execute();
+    public void loadCalls(Context context, String phoneNumberIncoming) {
+
+        String pageIncoming = "";
+        String pageOutgoing = "";
+        if (mResourceCall != null) {
+
+            pageIncoming = mResourceCall.incomingNextPageUri;
+            pageOutgoing = mResourceCall.outgoingNextPageUri;
+
+            mResourceCall.incomingNextPageUri = "";
+            mResourceCall.outgoingNextPageUri = "";
+        }
+
+        if(!TextUtils.isEmpty(pageIncoming) || !TextUtils.isEmpty(pageOutgoing)){
+            new DataAsync(context, this, phoneNumberIncoming, pageIncoming, pageOutgoing).execute();
+        }
+
+
     }
 
     @Override
@@ -101,12 +121,13 @@ public class CallLogPresenter implements CallLogContract.Presenter {
     @Override
     public void clearData() {
 //        mCalls.clear();
-        mResourceCall = null;
+        mResourceCall = new ResourceCall(new ArrayList<Call>(), "", Constant.FIRST_PAGE, "", "", "",Constant.FIRST_PAGE, "", "", 0);
+        isFirst = false;
     }
 
     @Override
     public boolean hasNextPage() {
-        if(mResourceCall != null && (!TextUtils.isEmpty(mResourceCall.incomingNextPageUri) || !TextUtils.isEmpty(mResourceCall.outgoingNextPageUri))){
+        if (mResourceCall != null && (!TextUtils.isEmpty(mResourceCall.incomingNextPageUri) || !TextUtils.isEmpty(mResourceCall.outgoingNextPageUri))) {
             return true;
         }
         return false;
@@ -120,12 +141,16 @@ public class CallLogPresenter implements CallLogContract.Presenter {
     private static class DataAsync extends AsyncTask<Void, Integer, Void> {
         private final WeakReference<CallLogPresenter> mWeakReference;
         private final String mPhoneNumber;
+        private final String mPageIncoming;
+        private final String mPageOutgoing;
         private final Context mContext;
 
-        public DataAsync(Context context, CallLogPresenter presenter, String phoneNumber) {
+        public DataAsync(Context context, CallLogPresenter presenter, String phoneNumber, String pageIncoming, String pageOutgoing) {
             mWeakReference = new WeakReference<>(presenter);
             this.mPhoneNumber = phoneNumber;
             mContext = context;
+            mPageIncoming = pageIncoming;
+            mPageOutgoing = pageOutgoing;
         }
 
         @Override
@@ -151,21 +176,13 @@ public class CallLogPresenter implements CallLogContract.Presenter {
 //                if (callOutgoing != null && callOutgoing.calls != null && !callOutgoing.calls.isEmpty()) {
 //                    presenter.executeData(callOutgoing);
 //                }
-                String pageIncoming = "";
-                String pageOutgoing = "";
-                if (presenter.mResourceCall != null) {
-                    pageIncoming = presenter.mResourceCall.incomingNextPageUri;
-                    pageOutgoing = presenter.mResourceCall.outgoingNextPageUri;
 
-                    presenter.mResourceCall.incomingNextPageUri = "";
-                    presenter.mResourceCall.outgoingNextPageUri = "";
-                }
-
-                BaseResponse<ResourceCall> baseResponse = ApiMorePhone.getCallLogs(mContext, mPhoneNumber, pageIncoming, pageOutgoing);
+                BaseResponse<ResourceCall> baseResponse = ApiMorePhone.getCallLogs(mContext, mPhoneNumber, mPageIncoming, mPageOutgoing);
 
                 if (baseResponse != null && baseResponse.getResponse() != null) {
                     presenter.mResourceCall = baseResponse.getResponse();
                 }
+
             }
             return null;
         }
@@ -181,7 +198,6 @@ public class CallLogPresenter implements CallLogContract.Presenter {
                 }
                 presenter.mView.showLoading(false);
             }
-            DebugTool.logD("POST EXECUTE");
         }
     }
 }

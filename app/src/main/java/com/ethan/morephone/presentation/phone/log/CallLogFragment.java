@@ -117,6 +117,7 @@ public class CallLogFragment extends BaseFragment implements
 //                            mPageOutgoing = 0;
 
                             mCallLogAdapter.getData().clear();
+                            mPresenter.clearData();
                             loadData();
                         }
                     });
@@ -171,10 +172,9 @@ public class CallLogFragment extends BaseFragment implements
 
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
-            mPresenter.clearData();
 //            mPresenter.loadCallsIncoming(mPhoneNumber, mPageIncoming);
 //            mPresenter.loadCallsOutgoing(mPhoneNumber, mPageOutgoing);
-            mPresenter.loadCalls(getContext(), mPhoneNumber, 0);
+            mPresenter.loadCalls(getContext(), mPhoneNumber);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }

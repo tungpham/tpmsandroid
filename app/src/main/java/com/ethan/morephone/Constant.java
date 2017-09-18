@@ -15,4 +15,6 @@ public class Constant {
 
     public static final double CREDIT_BUY_PHONE = 1;
 
+    public static final String FIRST_PAGE = "first";
+
 }
