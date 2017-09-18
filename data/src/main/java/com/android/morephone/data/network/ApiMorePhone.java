@@ -235,7 +235,7 @@ public class ApiMorePhone {
         Call<BaseResponse<ResourceMessage>> call = getApiPath(context).getMessage(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), phoneNumber, pageIncoming, pageOutgoing);
         try {
             return call.execute().body();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
