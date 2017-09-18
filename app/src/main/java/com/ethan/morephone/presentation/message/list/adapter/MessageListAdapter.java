@@ -153,7 +153,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (item == null) return INCOMING_ITEM;
         String isSent = item.status;
 
-        if (isSent.equals(Constant.MESSAGE_STATUS_RECEIVED)) {
+        if (isSent.equalsIgnoreCase(Constant.MESSAGE_STATUS_RECEIVED)) {
             return INCOMING_ITEM;
         } else {
             return OUTGOING_ITEM;

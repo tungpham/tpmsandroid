@@ -161,6 +161,8 @@ public class ConversationsFragment extends BaseFragment implements
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
+                            mConversationListAdapter.getData().clear();
+                            mPresenter.clearData();
                             loadData(false);
                         }
                     });
@@ -178,7 +180,7 @@ public class ConversationsFragment extends BaseFragment implements
 
     public void loadData(boolean isShowLoading) {
         if (Utils.isNetworkAvailable(getActivity())) {
-            mPresenter.clearData();
+
             mPresenter.loadListMessageResource(getContext(), mPhoneNumber, isShowLoading);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();

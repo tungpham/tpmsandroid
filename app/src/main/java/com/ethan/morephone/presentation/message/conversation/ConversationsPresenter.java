@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.call.Call;
 import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.conversation.ResourceMessage;
@@ -22,6 +23,7 @@ import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.GetAllMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
+import com.ethan.morephone.Constant;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -65,6 +67,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
 //        mConversationModels = new ArrayList<>();
 //        mArrayMap = new ArrayMap<>();
 
+        mResourceMessage = new ResourceMessage(new ArrayList<ConversationModel>(), "", Constant.FIRST_PAGE, "", "", "",Constant.FIRST_PAGE, "", "", 0);
         mView.setPresenter(this);
     }
 
@@ -75,7 +78,19 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
 
     @Override
     public void loadListMessageResource(Context context, String phoneNumber, boolean isShowLoading) {
-        new DataAsync(context, this, phoneNumber, isShowLoading).execute();
+
+        String pageIncoming = "";
+        String pageOutgoing = "";
+        if (mResourceMessage != null) {
+
+            pageIncoming = mResourceMessage.incomingNextPageUri;
+            pageOutgoing = mResourceMessage.outgoingNextPageUri;
+
+            mResourceMessage.incomingNextPageUri = "";
+            mResourceMessage.outgoingNextPageUri = "";
+        }
+
+        new DataAsync(context, this, phoneNumber, isShowLoading, pageIncoming, pageOutgoing).execute();
     }
 
     @Override
@@ -120,7 +135,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     public void clearData() {
 //        mArrayMap.clear();
 
-        mResourceMessage = null;
+        mResourceMessage = new ResourceMessage(new ArrayList<ConversationModel>(), "", Constant.FIRST_PAGE, "", "", "",Constant.FIRST_PAGE, "", "", 0);
     }
 
     @Override
@@ -270,13 +285,17 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         private final WeakReference<ConversationsPresenter> mWeakReference;
         private final String mPhoneNumber;
         private final Context mContext;
+        private final String mPageIncoming;
+        private final String mPageOutgoing;
         private final boolean isShowLoading;
 
-        public DataAsync(Context context, ConversationsPresenter presenter, String phoneNumber, boolean isShowLoading) {
+        public DataAsync(Context context, ConversationsPresenter presenter, String phoneNumber, boolean isShowLoading, String pageIncoming, String pageOutgoing) {
             mWeakReference = new WeakReference<>(presenter);
             this.mPhoneNumber = phoneNumber;
             mContext = context;
             this.isShowLoading = isShowLoading;
+            mPageIncoming = pageIncoming;
+            mPageOutgoing = pageOutgoing;
         }
 
         @Override
@@ -293,17 +312,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
             ConversationsPresenter presenter = mWeakReference.get();
             if (presenter != null) {
 
-                String pageIncoming = "";
-                String pageOutgoing = "";
-                if (presenter.mResourceMessage != null) {
-                    pageIncoming = presenter.mResourceMessage.incomingNextPageUri;
-                    pageOutgoing = presenter.mResourceMessage.outgoingNextPageUri;
-
-                    presenter.mResourceMessage.incomingNextPageUri = "";
-                    presenter.mResourceMessage.outgoingNextPageUri = "";
-                }
-
-                BaseResponse<ResourceMessage> baseResponse = ApiMorePhone.getMessage(mContext, mPhoneNumber, pageIncoming, pageOutgoing);
+                BaseResponse<ResourceMessage> baseResponse = ApiMorePhone.getMessage(mContext, mPhoneNumber, mPageIncoming, mPageOutgoing);
                 if(baseResponse != null && baseResponse.getResponse() != null){
                     presenter.mResourceMessage = baseResponse.getResponse();
                 }
