@@ -6,6 +6,7 @@
         <item>Voice</item>
         <item>Call Logs</item>
         <item>Dial</item>
+        <item>Contact</item>
     </string-array>
 
     <string-array name="usage_titles">

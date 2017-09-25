@@ -53,7 +53,7 @@ public class DashboardFrag extends BaseFragment {
     private void setUpViewPager(View view, int mode) {
         PagerSlidingTabStrip navigationTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_strip);
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setOffscreenPageLimit(5);
         DashboardViewPagerAdapter myViewPagerAdapter = new DashboardViewPagerAdapter(getContext(), getChildFragmentManager(), mPhoneNumber);
         mViewPager.setAdapter(myViewPagerAdapter);
         navigationTabStrip.setViewPager(mViewPager);

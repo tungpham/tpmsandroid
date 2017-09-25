@@ -469,4 +469,8 @@
         <!--<item name="android:background">@drawable/tb_item_selector</item>-->
     </style>
 
+    <style name="SelectableItem" parent="@android:style/Theme.Material.Light">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
 </resources>

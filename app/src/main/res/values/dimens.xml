@@ -136,4 +136,52 @@
 
     <dimen name="expire_margin_top">48dp</dimen>
 
+    <item name="letter_to_tile_ratio" type="dimen">67%</item>
+
+    <dimen name="frequently_contacted_title_top_margin_when_first_row">16dp</dimen>
+
+    <dimen name="frequently_contacted_title_top_margin">57dp</dimen>
+
+    <!-- Size of the title text for a ExpandingEntryCardView -->
+    <dimen name="expanding_entry_card_title_text_size">16sp</dimen>
+    <!-- Padding for the title text for a ExpandingEntryCardView -->
+    <dimen name="expanding_entry_card_title_padding">16dp</dimen>
+    <!-- Extra top padding if the title is set to null -->
+    <dimen name="expanding_entry_card_null_title_top_extra_padding">2dp</dimen>
+
+    <!-- Height of the separator between entries in an ExpandingEntryCardView and contact editor. -->
+    <dimen name="divider_line_height">1dp</dimen>
+
+    <!-- Dimensions for an entry in ExpandingEntryCardView -->
+    <dimen name="expanding_entry_card_item_padding_start">20dp</dimen>
+    <dimen name="expanding_entry_card_item_padding_end">8dp</dimen>
+    <dimen name="expanding_entry_card_item_padding_top">13dp</dimen>
+    <dimen name="expanding_entry_card_item_padding_bottom">16dp</dimen>
+    <dimen name="expanding_entry_card_item_image_spacing">27dp</dimen>
+
+    <!-- Dimensions for a button in ExpandingEntryCardView -->
+    <dimen name="expanding_entry_card_button_padding_vertical">18dp</dimen>
+
+    <dimen name="expanding_entry_card_item_text_icon_margin_top">7dp</dimen>
+    <dimen name="expanding_entry_card_item_text_icon_margin_right">7dp</dimen>
+    <dimen name="expanding_entry_card_item_sub_header_icon_margin_right">4dp</dimen>
+    <dimen name="expanding_entry_card_item_sub_header_icon_margin_bottom">14dp</dimen>
+
+    <dimen name="expanding_entry_card_item_icon_margin_top">12dp</dimen>
+    <dimen name="expanding_entry_card_item_icon_margin_bottom">12dp</dimen>
+    <dimen name="expanding_entry_card_item_icon_margin_left">12dp</dimen>
+    <dimen name="expanding_entry_card_item_icon_margin_right">12dp</dimen>
+    <dimen name="expanding_entry_card_item_header_only_margin_top">6dp</dimen>
+
+    <dimen name="expanding_entry_card_badge_separator_margin">8dp</dimen>
+    <dimen name="expanding_entry_card_card_corner_radius">2dp</dimen>
+    <dimen name="expanding_entry_card_header_margin_bottom">2dp</dimen>
+    <!-- The top margin when the sub header and text views are both gone -->
+    <dimen name="expanding_entry_card_item_header_only_margin_bottom">2dp</dimen>
+    <dimen name="expanding_entry_card_item_no_icon_margin_top">6dp</dimen>
+
+
+    <dimen name="expanding_entry_card_item_icon_height">24dp</dimen>
+    <dimen name="expanding_entry_card_item_icon_width">24dp</dimen>
+
 </resources>
