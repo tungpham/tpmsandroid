@@ -173,4 +173,20 @@
     <color name="quickcontact_name_detail_background">#66000000</color>
     <color name="quickcontact_entry_sub_header_text_color">#737373</color>
     <color name="quickcontact_entry_header_text_color">#202020</color>
+    <color name="frequently_contacted_title_color">@color/actionbar_background_color</color>
+    <color name="actionbar_background_color">@color/colorPrimary</color>
+    <color name="card_margin_color">#f4f4f4</color>
+
+    <color name="expanding_entry_card_background_color">#ffffff</color>
+
+    <color name="actionbar_text_color">#ffffff</color>
+    <color name="actionbar_unselected_text_color">#a6ffffff</color>
+
+    <!-- The default color used for tinting photos when no color can be extracted via Palette,
+        this is Blue Grey 500 -->
+    <color name="quickcontact_default_photo_tint_color">#607D8B</color>
+    <!-- The default secondary color when no color can be extracted via Palette,
+            this is Blue Grey 700 -->
+    <color name="quickcontact_default_photo_tint_color_dark">#455A64</color>
+    <color name="image_placeholder">#DDDDDD</color>
 </resources>

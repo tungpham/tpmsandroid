@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.contact;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,23 +8,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.credit.CreditFragment;
+import com.ethan.morephone.presentation.contact.detail.QuickContactActivity;
 import com.ethan.morephone.widget.RecyclerViewFastScroller;
 
 /**
  * Created by truongnguyen on 9/25/17.
  */
 
-public class ContactFragment extends BaseFragment {
+public class ContactFragment extends BaseFragment implements ContactAdapter.ContactItemClick {
 
     public static ContactFragment getInstance() {
         return new ContactFragment();
     }
-
 
     @Nullable
     @Override
@@ -33,6 +32,7 @@ public class ContactFragment extends BaseFragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         final ContactAdapter adapter = new ContactAdapter(100);
         recyclerView.setAdapter(adapter);
+        adapter.setContactItemClick(this);
         final RecyclerViewFastScroller fastScroller = (RecyclerViewFastScroller) view.findViewById(R.id.fastscroller);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
             @Override
@@ -57,5 +57,11 @@ public class ContactFragment extends BaseFragment {
         fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
 
         return view;
+    }
+
+
+    @Override
+    public void onContactItemClick() {
+        startActivity(new Intent(getActivity(), QuickContactActivity.class));
     }
 }

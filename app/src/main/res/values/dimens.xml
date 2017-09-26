@@ -184,4 +184,68 @@
     <dimen name="expanding_entry_card_item_icon_height">24dp</dimen>
     <dimen name="expanding_entry_card_item_icon_width">24dp</dimen>
 
+    <dimen name="frequently_contacted_title_text_size">24sp</dimen>
+    <dimen name="first_card_marginTop">12dp</dimen>
+
+    <!-- Elevation of an ExpandingEntryCard, for the sake of shadow casting -->
+    <dimen name="expanding_entry_card_elevation">2dp</dimen>
+    <!-- Elevation of the QuickContact's Toolbar, for the sake of shadow casting -->
+    <dimen name="quick_contact_toolbar_elevation">4.5dp</dimen>
+
+    <!-- Padding of the rounded plus/minus/expand/collapse buttons in the editor  -->
+    <dimen name="editor_round_button_padding_left">16dip</dimen>
+    <dimen name="editor_round_button_padding_right">16dip</dimen>
+    <dimen name="editor_round_button_padding_top">16dip</dimen>
+    <dimen name="editor_round_button_padding_bottom">16dip</dimen>
+
+
+    <dimen name="quickcontact_suggestion_card_icon_height">40dp</dimen>
+    <dimen name="quickcontact_suggestion_card_icon_width">40dp</dimen>
+    <dimen name="quickcontact_suggestion_card_image_spacing">20dp</dimen>
+    <dimen name="quickcontact_suggestion_card_layout_margin">8dp</dimen>
+    <dimen name="quickcontact_suggestion_card_checkbox_right_margin">16dp</dimen>
+    <dimen name="quickcontact_collapse_view_height">48dp</dimen>
+    <dimen name="quickcontact_collapse_icon_size">24dp</dimen>
+    <dimen name="quickcontact_collapse_text_padding">12dp</dimen>
+    <dimen name="quickcontact_collapse_image_padding">20dp</dimen>
+    <dimen name="quickcontact_expanding_help_text_size">14sp</dimen>
+    <dimen name="quickcontact_expanding_button_right_padding">16dp</dimen>
+    <dimen name="quickcontact_expanding_item_height">72dp</dimen>
+    <dimen name="quickcontact_expanding_item_padding">8dp</dimen>
+    <dimen name="quickcontact_expanding_item_image_padding">12dp</dimen>
+    <dimen name="quickcontact_expanding_button_section_height">48dp</dimen>
+    <dimen name="quickcontact_expanding_button_section_padding">8dp</dimen>
+
+    <!-- Margins for ExpandingEntryCardView -->
+    <dimen name="expanding_entry_card_marginStartEnd">8dp</dimen>
+    <dimen name="expanding_entry_card_marginBottom">12dp</dimen>
+    <!-- Width of the grey border surrounding the expanding entry cards. If we ever add
+         a rounded corner to the expanding entry cards, than we will need to increase this value -->
+    <dimen name="expanding_entry_card_border_width">12dp</dimen>
+
+    <!-- Initial height of transparent space above QuickContacts -->
+    <dimen name="quickcontact_starting_empty_height">150dp</dimen>
+    <!-- Initial size of QuickContact's title size -->
+    <dimen name="quickcontact_maximum_title_size">32dp</dimen>
+    <!-- Initial size of QuickContact's phonetic name size -->
+    <dimen name="quickcontact_maximum_phonetic_name_size">28dp</dimen>
+    <!-- When QC is uncollapsed, the title has this much margin on its left and right. -->
+    <dimen name="quickcontact_title_initial_margin">16dp</dimen>
+    <!-- When QC is uncollapsed, the title has this much margin on its bottom -->
+    <dimen name="quickcontact_title_initial_bottom_margin">8dp</dimen>
+    <!-- The ratio of width:height for the contact's photo in landscape -->
+    <item name="quickcontact_landscape_photo_ratio" type="dimen" format="float">0.7</item>
+    <!-- How far QuickContacts can be dragged and released from the top of the window before we dismiss it. -->
+    <dimen name="quickcontact_dismiss_distance_on_release">40dp</dimen>
+    <!-- How far QuickContacts can be dragged from the top of the window before we dismiss it. -->
+    <dimen name="quickcontact_dismiss_distance_on_scroll">100dp</dimen>
+    <!-- When first flinging QuickContacts towards the top of the window if the fling is
+        predicted to scroll past the window top by less than this amount, then QuickContacts
+        snaps to the top of the window. -->
+    <dimen name="quickcontact_snap_to_top_slop_height">33dp</dimen>
+
+    <dimen name="floating_action_button_translation_z">8dp</dimen>
+
+    <dimen name="floating_action_button_list_bottom_padding">88dp</dimen>
+    <dimen name="contact_browser_list_item_photo_size">40dp</dimen>
 </resources>

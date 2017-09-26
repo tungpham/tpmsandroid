@@ -16,6 +16,8 @@ import java.util.List;
 public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements RecyclerViewFastScroller.BubbleTextGetter {
     private final List<String> items;
 
+    private ContactItemClick mContactItemClick;
+
     public ContactAdapter(int numberOfItems) {
         List<String> items = new ArrayList<>();
         java.util.Random r = new java.util.Random();
@@ -35,6 +37,12 @@ public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         String text = items.get(position);
         holder.setText(text);
+        holder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mContactItemClick != null) mContactItemClick.onContactItemClick();
+            }
+        });
     }
 
     @Override
@@ -45,6 +53,10 @@ public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Vi
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public void setContactItemClick(ContactItemClick contactItemClick) {
+        this.mContactItemClick = contactItemClick;
     }
 
     public static final class ViewHolder extends RecyclerView.ViewHolder {
@@ -58,5 +70,9 @@ public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Vi
         public void setText(CharSequence text) {
             textView.setText(text);
         }
+    }
+
+    public interface ContactItemClick {
+        void onContactItemClick();
     }
 }

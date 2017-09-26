@@ -53,7 +53,7 @@ public class ApiMorePhone {
 
     //Singleton for Retrofit
     private static Retrofit getRetrofit(final Context context, final String accessToken) {
-        if (mRetrofit == null) {
+//        if (mRetrofit == null) {
 
             //Set log
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -84,24 +84,24 @@ public class ApiMorePhone {
                     .baseUrl(BaseUrl.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okHttpClient).build();
-        }
+//        }
         return mRetrofit;
     }
 
     //Singleton for ApiPath
     private static ApiMorePhonePath getApiPath(Context context) {
-        if (mApiPath == null) {
+//        if (mApiPath == null) {
             CredentialsEntity credentials = CredentialsManager.getCredentials(context);
             String accessToken = "";
             if (credentials != null) {
                 accessToken = credentials.getAccessToken();
                 mApiPath = getRetrofit(context, accessToken).create(ApiMorePhonePath.class);
-                DebugTool.logD("ACCESS TOKEN: " + accessToken);
+                DebugTool.logD("ACCESS TOKENNN : " + accessToken);
             } else {
                 DebugTool.logD("ACCESS TOKEN 2: " + accessToken);
             }
 
-        }
+//        }
         return mApiPath;
     }
 

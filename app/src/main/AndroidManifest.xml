@@ -177,6 +177,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
+        <activity
+            android:name=".presentation.contact.detail.QuickContactActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
         <service
             android:name="com.twilio.client.TwilioClientService"
             android:exported="false"

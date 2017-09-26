@@ -1173,7 +1173,7 @@ public class ExpandingEntryCardView extends CardView {
         }
     }
 
-    static final class EntryTag {
+    public static final class EntryTag {
         private final int mId;
         private final Intent mIntent;
 

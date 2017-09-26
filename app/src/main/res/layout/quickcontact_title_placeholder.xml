@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent" >
+
+    <!-- Marks the location and size of the Activity title -->
+    <TextView
+        android:id="@+id/placeholder_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/TextAppearance.Material.Widget.ActionBar.Title" />
+
+</FrameLayout>
+
+
