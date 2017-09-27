@@ -1,8 +1,13 @@
 package com.ethan.morephone.widget;
 
+import android.accounts.Account;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -11,14 +16,14 @@ import com.ethan.morephone.R;
 /**
  * An {@link ImageView} designed to display QuickContact's contact photo. When requested to draw
  * {@link LetterTileDrawable}'s, this class instead draws a different default avatar drawable.
- *
+ * <p>
  * In addition to supporting {@link ImageView#setColorFilter} this also supports a {@link #setTint}
  * method.
- *
+ * <p>
  * This entire class can be deleted once use of LetterTileDrawable is no longer used
  * inside QuickContactsActivity at all.
  */
-public class QuickContactImageView extends ImageView {
+public class QuickContactImageView extends AppCompatImageView {
 
     private Drawable mOriginalDrawable;
     private BitmapDrawable mBitmapDrawable;
@@ -60,20 +65,8 @@ public class QuickContactImageView extends ImageView {
     public void setImageDrawable(Drawable drawable) {
         // There is no way to avoid all this casting. Blending modes aren't equally
         // supported for all drawable types.
-        final BitmapDrawable bitmapDrawable;
-        if (drawable == null || drawable instanceof BitmapDrawable) {
-            bitmapDrawable = (BitmapDrawable) drawable;
-        } else if (drawable instanceof LetterTileDrawable) {
-            if (!mIsBusiness) {
-                bitmapDrawable = (BitmapDrawable) getResources().getDrawable(
-                        R.drawable.person_white_540dp);
-            } else {
-                bitmapDrawable = (BitmapDrawable) getResources().getDrawable(
-                        R.drawable.generic_business_white_540dp);
-            }
-        } else {
-            throw new IllegalArgumentException("Does not support this type of drawable");
-        }
+        final BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(
+                R.drawable.person_white_540dp);
 
         mOriginalDrawable = drawable;
         mBitmapDrawable = bitmapDrawable;
@@ -84,5 +77,18 @@ public class QuickContactImageView extends ImageView {
     @Override
     public Drawable getDrawable() {
         return mOriginalDrawable;
+    }
+
+    public static Drawable getDefaultImageForContact(Context context, Resources resources) {
+        final LetterTileDrawable drawable = new LetterTileDrawable(
+                resources, context, 22);
+
+        drawable.setLetterAndColorFromContactDetails();
+        drawable.setContactType(LetterTileDrawable.TYPE_PERSON);
+        drawable.setScale(1.0f);
+        drawable.setOffset(0.0f);
+        drawable.setIsCircular(false);
+
+        return drawable;
     }
 }

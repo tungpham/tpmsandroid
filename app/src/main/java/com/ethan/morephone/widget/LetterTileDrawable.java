@@ -73,6 +73,31 @@ public class LetterTileDrawable extends Drawable {
         this(res, null, null);
     }
 
+    public LetterTileDrawable(final Resources res, final Context context, int index) {
+        if (sColors == null) {
+            sColors = res.obtainTypedArray(R.array.letter_tile_colors);
+            sDefaultColor = res.getColor(R.color.letter_tile_default_color);
+            sTileFontColor = res.getColor(R.color.letter_tile_font_color);
+            sLetterToTileRatio = res.getFraction(R.dimen.letter_to_tile_ratio, 1, 1);
+            DEFAULT_PERSON_AVATAR = BitmapFactory.decodeResource(res,
+                    R.drawable.ic_person_white_120dp);
+            DEFAULT_BUSINESS_AVATAR = BitmapFactory.decodeResource(res,
+                    R.drawable.ic_business_white_120dp);
+            DEFAULT_VOICEMAIL_AVATAR = BitmapFactory.decodeResource(res,
+                    R.drawable.ic_voicemail_avatar);
+            DEFAULT_SIM_PERSON_AVATAR = BitmapFactory.decodeResource(res,
+                    R.drawable.ic_contact_picture_sim);
+
+            sPaint.setTextAlign(Align.CENTER);
+            sPaint.setAntiAlias(true);
+        }
+        mPaint = new Paint();
+        mPaint.setFilterBitmap(true);
+        mPaint.setDither(true);
+        mColor = sColors.getColor(index, sDefaultColor);
+        mContext = context;
+    }
+
     public LetterTileDrawable(final Resources res, final Context context, final Account account) {
         if (sColors == null) {
             sColors = res.obtainTypedArray(R.array.letter_tile_colors);
@@ -88,8 +113,6 @@ public class LetterTileDrawable extends Drawable {
             DEFAULT_SIM_PERSON_AVATAR = BitmapFactory.decodeResource(res,
                     R.drawable.ic_contact_picture_sim);
 
-            sPaint.setTypeface(Typeface.create(
-                    res.getString(R.string.letter_tile_letter_font_family), Typeface.NORMAL));
             sPaint.setTextAlign(Align.CENTER);
             sPaint.setAntiAlias(true);
         }
@@ -165,9 +188,9 @@ public class LetterTileDrawable extends Drawable {
      * Returns a deterministic color based on the provided contact identifier string.
      */
     private int pickColor(final String identifier) {
-        if (TextUtils.isEmpty(identifier) || mContactType == TYPE_VOICEMAIL) {
-            return sDefaultColor;
-        }
+//        if (TextUtils.isEmpty(identifier) || mContactType == TYPE_VOICEMAIL) {
+//            return sDefaultColor;
+//        }
         // String.hashCode() implementation is not supposed to change across java versions, so
         // this should guarantee the same email address always maps to the same color.
         // The email should already have been normalized by the ContactRequest.
@@ -250,8 +273,23 @@ public class LetterTileDrawable extends Drawable {
         return this;
     }
 
+    public LetterTileDrawable setLetterAndColorFromContactDetails() {
+
+        final int color = 54 % sColors.length();
+        mColor = sColors.getColor(color, sDefaultColor);
+//        if (displayName != null && displayName.length() > 0
+//                && isEnglishLetter(displayName.charAt(0))) {
+//            mLetter = Character.toUpperCase(displayName.charAt(0));
+//        } else {
+//            mLetter = null;
+//        }
+//        mColor = pickColor(identifier);
+        return this;
+    }
+
     public LetterTileDrawable setLetterAndColorFromContactDetails(final String displayName,
                                                                   final String identifier) {
+
         if (displayName != null && displayName.length() > 0
                 && isEnglishLetter(displayName.charAt(0))) {
             mLetter = Character.toUpperCase(displayName.charAt(0));

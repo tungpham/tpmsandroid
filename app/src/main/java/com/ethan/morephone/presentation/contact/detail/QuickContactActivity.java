@@ -1060,7 +1060,7 @@ public class QuickContactActivity extends ContactsActivity {
         Trace.endSection();
         Trace.beginSection("Set display photo & name");
 
-        mPhotoView.setIsBusiness(false);
+        mPhotoView.setIsBusiness(true);
         mPhotoSetter.setupContactPhoto(mPhotoView);
 //        extractAndApplyTintFromPhotoViewAsynchronously();
 //        final String displayName = ContactDisplayUtils.getDisplayName(this, data).toString();

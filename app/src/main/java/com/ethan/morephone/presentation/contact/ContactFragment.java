@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.contact.detail.ContactDetailActivity;
 import com.ethan.morephone.presentation.contact.detail.QuickContactActivity;
 import com.ethan.morephone.widget.RecyclerViewFastScroller;
 
@@ -62,6 +63,6 @@ public class ContactFragment extends BaseFragment implements ContactAdapter.Cont
 
     @Override
     public void onContactItemClick() {
-        startActivity(new Intent(getActivity(), QuickContactActivity.class));
+        startActivity(new Intent(getActivity(), ContactDetailActivity.class));
     }
 }

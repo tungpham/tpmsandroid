@@ -667,4 +667,50 @@
     <string name="missing_app">No app was found to handle this action.</string>
     <string name="recent_card_title">Recent</string>
     <string name="missing_name">(No name)</string>
+
+    <!-- The menu item to share the currently viewed contact [CHAR LIMIT=30] -->
+
+    <!-- The menu item to add the the currently viewed contact to your contacts [CHAR LIMIT=30] -->
+    <string name="menu_add_contact">Add to contacts</string>
+    <string name="menu_refresh">Refresh</string>
+
+    <!-- Menu item used to edit a specific contact -->
+    <string name="menu_editContact">Edit</string>
+
+    <!-- Menu item used to delete a specific contact -->
+    <string name="menu_deleteContact">Delete</string>
+
+    <!-- Menu item used to change the photo for a specific contact [CHAR LIMIT=30]-->
+    <string name="menu_change_photo">Change photo</string>
+
+    <!-- Menu item used to create a contact shortcut when viewing contact details. [CHAR LIMIT=30] -->
+    <string name="menu_create_contact_shortcut">Place on Home screen</string>
+
+    <!-- Menu item used to call a specific contact when viewing the details of that contact. -->
+    <string name="menu_call">Call contact</string>
+
+    <!-- Menu item used to send an SMS or MMS message to a specific phone number or a contacts default phone number -->
+    <string name="menu_sendSMS">Text contact</string>
+
+    <!-- Menu item that splits an item from the contact detail into a separate aggregate -->
+    <string name="menu_splitAggregate">Unlink</string>
+
+    <!-- Menu item that edits the currently selected group [CHAR LIMIT=30] -->
+    <string name="menu_editGroup">Edit</string>
+
+    <!-- Menu item that deletes the currently selected group [CHAR LIMIT=30] -->
+    <string name="menu_deleteGroup">Delete</string>
+
+    <!-- Menu item (in the action bar) that creates a new contact [CHAR LIMIT=30] -->
+    <string name="menu_new_contact_action_bar">Add Contact</string>
+
+    <!-- Menu item (in the action bar) that creates a new group [CHAR LIMIT=30] -->
+    <string name="menu_new_group_action_bar">Add Group</string>
+
+    <string name="contact_add_field_display">Name</string>
+    <string name="contact_add_field_phone_number">Phone</string>
+    <string name="contact_add_field_email">Email</string>
+    <string name="contact_add_field_address">Address</string>
+    <string name="contact_add_field_relationship">Relationship</string>
+    <string name="contact_add_field_note">Note</string>
 </resources>

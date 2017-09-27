@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.widget.LetterTileDrawable;
 
 import java.util.Arrays;
@@ -78,6 +79,7 @@ public class ImageViewDrawableSetter {
             // identical. This takes about 1ms (more with high-res photos). A
             // possible optimization is to sparsely sample chunks of the arrays
             // to compare.
+            DebugTool.logD("PREVERIOS");
             return previousBitmap();
         }
 
@@ -128,7 +130,7 @@ public class ImageViewDrawableSetter {
         ContactPhotoManager.DefaultImageRequest request = new ContactPhotoManager.DefaultImageRequest(null, "Truong", 1,
                 false /* isCircular */);
         int contactType = ContactPhotoManager.TYPE_DEFAULT;
-
+        DebugTool.logD("DEFAULT DRAWABLE");
         return ContactPhotoManager.getDefaultAvatarDrawableForContact(
                 c, resources, true, request, account);
     }
@@ -147,6 +149,7 @@ public class ImageViewDrawableSetter {
             final int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
             bitmap = ThumbnailUtils.extractThumbnail(bitmap, size, size);
         }
+        DebugTool.logD("DECDOED");
         return new BitmapDrawable(rsrc, bitmap);
     }
 }

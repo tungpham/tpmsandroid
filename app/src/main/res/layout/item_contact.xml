@@ -10,6 +10,8 @@
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:gravity="center_vertical"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"/>
 
 </LinearLayout>

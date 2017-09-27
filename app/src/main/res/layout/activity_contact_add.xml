@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/tool_bar" />
+
+    <ImageView
+        android:id="@+id/image_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_profile"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tool_bar"
+        android:layout_marginTop="@dimen/activity_main_margin"/>
+
+    <View
+        android:id="@+id/view_0"
+        style="@style/EditTextDivider"
+        android:layout_below="@+id/image_profile"
+        android:layout_marginTop="@dimen/activity_main_margin"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_display_name"
+        style="@style/EditTextContactField"
+        android:layout_below="@+id/view_0"
+        android:hint="@string/contact_add_field_display" />
+
+    <View
+        android:id="@+id/view_1"
+        style="@style/EditTextDivider"
+        android:layout_below="@+id/edit_text_display_name" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_phone_number"
+        style="@style/EditTextContactField"
+        android:layout_below="@+id/view_1"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:hint="@string/contact_add_field_phone_number" />
+
+    <View
+        android:id="@+id/view_2"
+        style="@style/EditTextDivider"
+        android:layout_below="@+id/edit_text_phone_number" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_email"
+        style="@style/EditTextContactField"
+        android:layout_below="@+id/view_2"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:hint="@string/contact_add_field_email" />
+
+    <View
+        android:id="@+id/view_3"
+        style="@style/EditTextDivider"
+        android:layout_below="@+id/edit_text_email" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_address"
+        style="@style/EditTextContactField"
+        android:layout_below="@+id/view_3"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:hint="@string/contact_add_field_address" />
+
+    <View
+        android:id="@+id/view_4"
+        style="@style/EditTextDivider"
+        android:layout_below="@+id/edit_text_address" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_relationship"
+        style="@style/EditTextContactField"
+        android:layout_below="@+id/view_4"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:hint="@string/contact_add_field_relationship" />
+
+    <View
+        android:id="@+id/view_5"
+        style="@style/EditTextDivider"
+        android:layout_below="@+id/edit_text_relationship" />
+</RelativeLayout>
