@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.contact;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.contact.Contact;
 import com.ethan.morephone.R;
 import com.ethan.morephone.widget.RecyclerViewFastScroller;
 
@@ -14,17 +17,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements RecyclerViewFastScroller.BubbleTextGetter {
-    private final List<String> items;
+    private List<Contact> mContacts;
 
     private ContactItemClick mContactItemClick;
 
-    public ContactAdapter(int numberOfItems) {
-        List<String> items = new ArrayList<>();
-        java.util.Random r = new java.util.Random();
-        for (int i = 0; i < numberOfItems; i++)
-            items.add(((char) ('A' + r.nextInt('Z' - 'A'))) + " " + Integer.toString(i));
-        java.util.Collections.sort(items);
-        this.items = items;
+    public ContactAdapter(Context context, List<Contact> contacts, ContactItemClick contactItemClick) {
+        this.mContacts = contacts;
+        mContactItemClick = contactItemClick;
+    }
+
+    public void replaceData(List<Contact> contacts) {
+        mContacts = contacts;
+        notifyDataSetChanged();
+    }
+
+    public List<Contact> getData() {
+        return mContacts;
     }
 
     @Override
@@ -35,9 +43,9 @@ public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String text = items.get(position);
-        holder.setText(text);
-        holder.textView.setOnClickListener(new View.OnClickListener() {
+        Contact contact = mContacts.get(position);
+        holder.textDisplayName.setText(contact.getDisplayName());
+        holder.textDisplayName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(mContactItemClick != null) mContactItemClick.onContactItemClick();
@@ -47,28 +55,20 @@ public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Vi
 
     @Override
     public String getTextToShowInBubble(final int pos) {
-        return Character.toString(items.get(pos).charAt(0));
+        return Character.toString(mContacts.get(pos).getDisplayName().charAt(0));
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
-    }
-
-    public void setContactItemClick(ContactItemClick contactItemClick) {
-        this.mContactItemClick = contactItemClick;
+        return mContacts.size();
     }
 
     public static final class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+        private final TextView textDisplayName;
 
         private ViewHolder(View itemView) {
             super(itemView);
-            this.textView = (TextView) itemView.findViewById(R.id.text);
-        }
-
-        public void setText(CharSequence text) {
-            textView.setText(text);
+            this.textDisplayName = (TextView) itemView.findViewById(R.id.text);
         }
     }
 

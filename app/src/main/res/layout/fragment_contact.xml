@@ -22,13 +22,14 @@
         android:layout_alignTop="@id/recyclerview" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:clickable="true"
-        android:src="@drawable/ab_arrow_back" />
+        android:src="@drawable/ic_person_add_24dp" />
 
 
 </RelativeLayout>
