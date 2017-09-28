@@ -6,12 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import com.android.morephone.data.repository.contact.source.local.ContactPersistenceContract;
 import com.android.morephone.data.repository.phonenumbers.incoming.source.local.PhoneNumberPersistenceContract;
 
 
-/**
- * Created by aspsine on 15-4-19.
- */
 public class DatabaseDAO extends SQLiteOpenHelper {
 
     // Database Version
@@ -49,6 +47,28 @@ public class DatabaseDAO extends SQLiteOpenHelper {
         db.execSQL(sql);
     }
 
+    private static void createTableContact(SQLiteDatabase db) {
+        String sql =
+                "CREATE TABLE " + ContactPersistenceContract.ContactEntry.TABLE_NAME
+                        + " ("
+                        + BaseColumns._ID + INTEGER_TYPE  + " PRIMARY KEY AUTOINCREMENT " + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_ID + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_DISPLAY_NAME + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_PHOTO_URI + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER_ID + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_ADDRESS + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_EMAIL + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_BIRTHDAY + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_RELATIONSHIP + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_NOTE + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_CREATED_AT + INTEGER_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_UPDATED_AT + INTEGER_TYPE
+                        + ")";
+
+        db.execSQL(sql);
+    }
+
     private int mOpenCounter;
 
     private SQLiteDatabase database;
@@ -74,6 +94,7 @@ public class DatabaseDAO extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // creating required tables
         createTablePhoneNumber(db);
+        createTableContact(db);
     }
 
     @Override
