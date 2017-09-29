@@ -6,6 +6,10 @@
 
     <string name="message_error_send">Send message error</string>
 
+    <string name="message_error_create_contact">Create contact error</string>
+
+    <string name="message_missing_info">Please enter all information</string>
+
     <string name="facebook_app_id">749741551871573</string>
 
     <string name="fb_login_protocol_scheme">fb749741551871573</string>

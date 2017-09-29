@@ -998,7 +998,7 @@ public class QuickContactActivity extends ContactsActivity {
 
         Trace.endSection();
 
-        mContactData = new Contact("dsf"
+        mContactData = new Contact("","dsf"
         ,"Tai sao", "+84974878244", "asdf", "df", "hanoi", "coderdaudat@gmail.com", "asf", "asdf", "asfd");
         bindContactData();
     }

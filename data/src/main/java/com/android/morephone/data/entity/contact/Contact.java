@@ -18,10 +18,11 @@ public class Contact {
     private String birthday;
     private String relationship;
     private String note;
+    private String userId;
     private long createdAt;
     private long updatedAt;
 
-    public Contact(String id, String displayName, String phoneNumber, String photoUri, String phoneNumberId, String address, String email, String birthday, String relationship, String note) {
+    public Contact(String id, String displayName, String phoneNumber, String photoUri, String phoneNumberId, String address, String email, String birthday, String relationship, String note, String userId) {
         this.id = id;
         this.displayName = displayName;
         this.phoneNumber = phoneNumber;
@@ -32,6 +33,7 @@ public class Contact {
         this.birthday = birthday;
         this.relationship = relationship;
         this.note = note;
+        this.userId = userId;
     }
 
     public String getId() {
@@ -128,5 +130,13 @@ public class Contact {
 
     public void setUpdatedAt(long updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

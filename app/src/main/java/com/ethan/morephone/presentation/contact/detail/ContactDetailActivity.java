@@ -79,7 +79,7 @@ public class ContactDetailActivity extends BaseActivity {
             }
         });
 
-        mContactData = new Contact("dsf"
+        mContactData = new Contact("","dsf"
                 ,"Tai sao", "+84974878244", "asdf", "df", "hanoi", "coderdaudat@gmail.com", "asf", "asdf", "asfd");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

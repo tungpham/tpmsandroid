@@ -21,11 +21,13 @@ import com.ethan.morephone.presentation.record.RecordFragment;
 public class DashboardViewPagerAdapter extends FragmentPagerAdapter {
 
     private final String mPhoneNumber;
+    private final String mPhoneNumbeId;
     private final Context mContext;
 
-    public DashboardViewPagerAdapter(Context context, FragmentManager fm, String phoneNumber) {
+    public DashboardViewPagerAdapter(Context context, FragmentManager fm, String phoneNumber, String phoneNumberId) {
         super(fm);
         mPhoneNumber = phoneNumber;
+        mPhoneNumbeId = phoneNumberId;
         this.mContext = context;
     }
 
@@ -49,7 +51,7 @@ public class DashboardViewPagerAdapter extends FragmentPagerAdapter {
             case 3:
                 return DialFragment.getInstance(mPhoneNumber, "");
             case 4:
-                return ContactFragment.getInstance();
+                return ContactFragment.getInstance(mPhoneNumbeId);
             default:
                 return null;
         }

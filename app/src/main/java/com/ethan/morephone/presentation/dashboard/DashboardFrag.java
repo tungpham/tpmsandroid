@@ -34,6 +34,7 @@ public class DashboardFrag extends BaseFragment {
     }
 
     private String mPhoneNumber;
+    private String mPhoneNumberId;
     private ViewPager mViewPager;
 
     @Nullable
@@ -42,7 +43,7 @@ public class DashboardFrag extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mPhoneNumber = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
-
+        mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
         int mode = getArguments().getInt(DashboardActivity.BUNDLE_FRAGMENT_MODE);
 
         setUpViewPager(view, mode);
@@ -54,7 +55,7 @@ public class DashboardFrag extends BaseFragment {
         PagerSlidingTabStrip navigationTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_strip);
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(5);
-        DashboardViewPagerAdapter myViewPagerAdapter = new DashboardViewPagerAdapter(getContext(), getChildFragmentManager(), mPhoneNumber);
+        DashboardViewPagerAdapter myViewPagerAdapter = new DashboardViewPagerAdapter(getContext(), getChildFragmentManager(), mPhoneNumber, mPhoneNumberId);
         mViewPager.setAdapter(myViewPagerAdapter);
         navigationTabStrip.setViewPager(mViewPager);
 

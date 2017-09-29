@@ -8,6 +8,7 @@ import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.call.ResourceCall;
+import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.conversation.ResourceMessage;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
@@ -301,4 +302,34 @@ public class ApiMorePhone {
         call.enqueue(callback);
     }
 
+
+    /*-----------------------------------------CONTACT-----------------------------------------*/
+
+    public static void createContact(Context context,
+                                     Contact contact,
+                                     Callback<BaseResponse<Contact>> callback) {
+        Call<BaseResponse<Contact>> call = getApiPath(context).createContact(contact);
+        call.enqueue(callback);
+    }
+
+    public static void deleteContact(Context context,
+                                     String id,
+                                     Callback<Response> callback) {
+        Call<Response> call = getApiPath(context).deleteContact(id);
+        call.enqueue(callback);
+    }
+
+    public static void loadContacts(Context context,
+                                     String phoneNumberId,
+                                     Callback<BaseResponse<List<Contact>>> callback) {
+        Call<BaseResponse<List<Contact>>> call = getApiPath(context).loadContacts(phoneNumberId);
+        call.enqueue(callback);
+    }
+
+    public static void updateContact(Context context,
+                                     Contact contact,
+                                     Callback<BaseResponse<Contact>> callback) {
+        Call<BaseResponse<Contact>> call = getApiPath(context).updateContact(contact);
+        call.enqueue(callback);
+    }
 }

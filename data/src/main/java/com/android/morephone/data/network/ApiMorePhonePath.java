@@ -5,6 +5,7 @@ import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.call.ResourceCall;
+import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.conversation.ResourceMessage;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
@@ -130,5 +131,19 @@ interface ApiMorePhonePath {
     @POST("phone/binding")
     Call<Response> binding(@Body BindingRequest bindingRequest);
 
+
+    /*-----------------------------------------CONTACT-----------------------------------------*/
+
+    @POST("contact")
+    Call<BaseResponse<Contact>> createContact(@Body Contact contact);
+
+    @DELETE("contact/{id}")
+    Call<Response> deleteContact(@Path("id") String id);
+
+    @GET("contact")
+    Call<BaseResponse<List<Contact>>> loadContacts(@Query("phone_number_id") String phone_number_id);
+
+    @PUT("contact")
+    Call<BaseResponse<Contact>> updateContact(@Body Contact contact);
 
 }
