@@ -1,8 +1,11 @@
 package com.ethan.morephone.presentation.contact;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +25,7 @@ import com.ethan.morephone.presentation.contact.detail.ContactDetailActivity;
 import com.ethan.morephone.presentation.contact.detail.QuickContactActivity;
 import com.ethan.morephone.presentation.contact.editor.ContactEditorActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
+import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
 import com.ethan.morephone.widget.RecyclerViewFastScroller;
 import com.google.gson.Gson;
 
@@ -39,7 +43,10 @@ import java.util.List;
 public class ContactFragment extends BaseFragment implements
         ContactAdapter.ContactItemClick,
         View.OnClickListener,
-        ContactContract.View{
+        ContactContract.View {
+
+    public static final String EXTRA_CONTACT = "EXTRA_CONTACT";
+    private final int REQUEST_CREATE_CONTACT = 100;
 
     public static ContactFragment getInstance(String phoneNumberId) {
         ContactFragment contactFragment = new ContactFragment();
@@ -53,6 +60,8 @@ public class ContactFragment extends BaseFragment implements
 
     private ContactAdapter mContactAdapter;
     private ContactContract.Presenter mPresenter;
+
+    private MultiSwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,30 +102,32 @@ public class ContactFragment extends BaseFragment implements
 
         view.findViewById(R.id.button_create).setOnClickListener(this);
 
-//        Gson gson = new Gson();
-//        List<Contact> contacts = new ArrayList();
-//        Contact contact = new Contact("123", "A Truong", "0974878244", "photoUri", "phonenumberId", "Hanoi", "coderdaudat@gmail.com", "20-02-1991", "Friend", "");
-//        contacts.add(contact);
-//        contact = new Contact("1234", "A Hoang", "0974878243", "photoUri", "phonenumberId", "Hanoi", "coderdaudat@gmail.com", "20-02-1991", "Friend", "");
-//        contacts.add(contact);
-//        contact = new Contact("12345", "A Nguyen", "0974878242", "photoUri", "phonenumberId", "Hanoi", "coderdaudat@gmail.com", "20-02-1991", "Friend", "");
-//        contacts.add(contact);
-//        contact = new Contact("123456", "Bac Sac", "0974878242", "photoUri", "phonenumberId", "Hanoi", "coderdaudat@gmail.com", "20-02-1991", "Friend", "");
-//        contacts.add(contact);
-//        contact = new Contact("123457", "Co Trang", "0974878242", "photoUri", "phonenumberId", "Hanoi", "coderdaudat@gmail.com", "20-02-1991", "Friend", "");
-//        contacts.add(contact);
-//        contact = new Contact("123459", "Xe Bao Yen", "0974878242", "photoUri", "phonenumberId", "Hanoi", "coderdaudat@gmail.com", "20-02-1991", "Friend", "");
-//        contacts.add(contact);
-//        contact = new Contact("123453", "Mom", "0974878242", "photoUri", "phonenumberId", "Hanoi", "coderdaudat@gmail.com", "20-02-1991", "Friend", "");
-//        contacts.add(contact);
-//        contact = new Contact("123450", "Dad", "0974878242", "photoUri", "phonenumberId", "Hanoi", "coderdaudat@gmail.com", "20-02-1991", "Friend", "");
-//        contacts.add(contact);
-//
-//        adapter.replaceData(contacts);
+        mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+
+         /*-------------------Pull to request ----------------*/
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setColorSchemeResources(
+                    R.color.refresh_progress_1,
+                    R.color.refresh_progress_2,
+                    R.color.refresh_progress_3);
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            mContactAdapter.getData().clear();
+                            mPresenter.loadContact(getContext(), mPhoneNumberId);
+                        }
+                    });
+
+                }
+            });
+        }
 
         mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
 
-//        DebugTool.logD("KQ: " + gson.toJson(contact));
         mPresenter.loadContact(getContext(), mPhoneNumberId);
         return view;
     }
@@ -133,7 +144,7 @@ public class ContactFragment extends BaseFragment implements
             case R.id.button_create:
                 Intent intent = new Intent(getActivity(), ContactEditorActivity.class);
                 intent.putExtra(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, mPhoneNumberId);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CREATE_CONTACT);
                 break;
             default:
                 break;
@@ -141,21 +152,15 @@ public class ContactFragment extends BaseFragment implements
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEvent(Contact contact) {
-        mContactAdapter.getData().add(contact);
-        mContactAdapter.replaceData(mContactAdapter.getData());
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CREATE_CONTACT && resultCode == Activity.RESULT_OK) {
+            Contact contact = data.getParcelableExtra(EXTRA_CONTACT);
+            if(contact != null) {
+                mContactAdapter.getData().add(contact);
+                mContactAdapter.replaceData(mContactAdapter.getData());
+            }
+        }
     }
 
     @Override
@@ -165,15 +170,15 @@ public class ContactFragment extends BaseFragment implements
 
     @Override
     public void showLoading(boolean isActive) {
-        if(isAdded()){
-            if(isActive) showProgress();
-            else hideProgress();
+        if (isAdded()) {
+            if (isActive) mSwipeRefreshLayout.setRefreshing(true);
+            else mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
     @Override
     public void showAllContact(List<Contact> contacts) {
-        if(isAdded()){
+        if (isAdded()) {
             mContactAdapter.replaceData(contacts);
         }
     }

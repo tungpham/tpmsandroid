@@ -1,12 +1,14 @@
 package com.android.morephone.data.entity.contact;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by truongnguyen on 9/26/17.
  */
 
-public class Contact {
+public class Contact implements Parcelable {
 
     private String id;
     private String displayName;
@@ -35,6 +37,56 @@ public class Contact {
         this.note = note;
         this.userId = userId;
     }
+
+    protected Contact(Parcel in) {
+        id = in.readString();
+        displayName = in.readString();
+        phoneNumber = in.readString();
+        photoUri = in.readString();
+        phoneNumberId = in.readString();
+        address = in.readString();
+        email = in.readString();
+        birthday = in.readString();
+        relationship = in.readString();
+        note = in.readString();
+        userId = in.readString();
+        createdAt = in.readLong();
+        updatedAt = in.readLong();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(displayName);
+        dest.writeString(phoneNumber);
+        dest.writeString(photoUri);
+        dest.writeString(phoneNumberId);
+        dest.writeString(address);
+        dest.writeString(email);
+        dest.writeString(birthday);
+        dest.writeString(relationship);
+        dest.writeString(note);
+        dest.writeString(userId);
+        dest.writeLong(createdAt);
+        dest.writeLong(updatedAt);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Contact> CREATOR = new Creator<Contact>() {
+        @Override
+        public Contact createFromParcel(Parcel in) {
+            return new Contact(in);
+        }
+
+        @Override
+        public Contact[] newArray(int size) {
+            return new Contact[size];
+        }
+    };
 
     public String getId() {
         return id;

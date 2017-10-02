@@ -38,8 +38,7 @@ public class ContactEditorPresenter implements ContactEditorContract.Presenter {
             @Override
             public void onResponse(Call<BaseResponse<Contact>> call, Response<BaseResponse<Contact>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    EventBus.getDefault().postSticky(response.body().getResponse());
-                    mView.createContactSuccess();
+                    mView.createContactSuccess(response.body().getResponse());
                 } else {
                     mView.createContactFail();
                 }

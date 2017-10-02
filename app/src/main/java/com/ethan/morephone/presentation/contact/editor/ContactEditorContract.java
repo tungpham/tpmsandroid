@@ -20,7 +20,7 @@ public interface ContactEditorContract {
 
         void showLoading(boolean isActive);
 
-        void createContactSuccess();
+        void createContactSuccess(Contact contact);
 
         void createContactFail();
     }

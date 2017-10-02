@@ -140,8 +140,10 @@ public class CallLogFragment extends BaseFragment implements
 
     @Override
     public void showLoading(boolean isActive) {
-        if (isActive) mSwipeRefreshLayout.setRefreshing(true);
-        else mSwipeRefreshLayout.setRefreshing(false);
+        if(isAdded()) {
+            if (isActive) mSwipeRefreshLayout.setRefreshing(true);
+            else mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override

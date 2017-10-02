@@ -1,5 +1,7 @@
 package com.ethan.morephone.presentation.contact.editor;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
@@ -22,6 +24,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberContract;
+import com.ethan.morephone.presentation.contact.ContactFragment;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -141,7 +144,10 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
     }
 
     @Override
-    public void createContactSuccess() {
+    public void createContactSuccess(Contact contact) {
+        Intent intent = new Intent();
+        intent.putExtra(ContactFragment.EXTRA_CONTACT, contact);
+        getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
     }
 

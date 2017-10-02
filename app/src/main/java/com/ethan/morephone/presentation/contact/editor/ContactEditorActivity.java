@@ -1,5 +1,6 @@
 package com.ethan.morephone.presentation.contact.editor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,5 +32,10 @@ public class ContactEditorActivity extends BaseActivity {
                 contactEditorFragment,
                 R.id.content_frame,
                 ContactEditorFragment.class.getSimpleName());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
