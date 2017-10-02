@@ -49,15 +49,17 @@ public class ContactFragment extends BaseFragment implements
     private final int REQUEST_CREATE_CONTACT = 100;
     private final int REQUEST_DETAIL_CONTACT = 101;
 
-    public static ContactFragment getInstance(String phoneNumberId) {
+    public static ContactFragment getInstance(String phoneNumberId, String phoneNumber) {
         ContactFragment contactFragment = new ContactFragment();
         Bundle bundle = new Bundle();
         bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, phoneNumberId);
+        bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, phoneNumber);
         contactFragment.setArguments(bundle);
         return contactFragment;
     }
 
     private String mPhoneNumberId;
+    private String mPhoneNumber;
 
     private ContactAdapter mContactAdapter;
     private ContactContract.Presenter mPresenter;
@@ -129,6 +131,7 @@ public class ContactFragment extends BaseFragment implements
         }
 
         mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
+        mPhoneNumber = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
 
         mPresenter.loadContact(getContext(), mPhoneNumberId);
         return view;
@@ -140,6 +143,7 @@ public class ContactFragment extends BaseFragment implements
         mContactItem = contact;
         Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
         intent.putExtra(EXTRA_CONTACT, mContactItem);
+        intent.putExtra(DashboardActivity.BUNDLE_PHONE_NUMBER, mPhoneNumber);
         startActivityForResult(intent, REQUEST_DETAIL_CONTACT);
     }
 
@@ -166,11 +170,17 @@ public class ContactFragment extends BaseFragment implements
                 mContactAdapter.replaceData(mContactAdapter.getData());
             }
         } else if (requestCode == REQUEST_DETAIL_CONTACT && resultCode == Activity.RESULT_OK) {
-            Contact contact = data.getParcelableExtra(EXTRA_CONTACT);
-            if (contact != null && mContactItem != null) {
+            boolean isDelete = data.getBooleanExtra(ContactDetailActivity.EXTRA_DELETE_CONTACT, false);
+            if (isDelete) {
                 mContactAdapter.getData().remove(mContactItem);
-                mContactAdapter.getData().add(contact);
                 mContactAdapter.replaceData(mContactAdapter.getData());
+            } else {
+                Contact contact = data.getParcelableExtra(EXTRA_CONTACT);
+                if (contact != null && mContactItem != null) {
+                    mContactAdapter.getData().remove(mContactItem);
+                    mContactAdapter.getData().add(contact);
+                    mContactAdapter.replaceData(mContactAdapter.getData());
+                }
             }
         }
 

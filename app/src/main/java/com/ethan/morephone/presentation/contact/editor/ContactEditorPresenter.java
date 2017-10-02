@@ -37,12 +37,13 @@ public class ContactEditorPresenter implements ContactEditorContract.Presenter {
         ApiMorePhone.createContact(context, contact, new Callback<BaseResponse<Contact>>() {
             @Override
             public void onResponse(Call<BaseResponse<Contact>> call, Response<BaseResponse<Contact>> response) {
+                mView.showLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
                     mView.createContactSuccess(response.body().getResponse());
                 } else {
                     mView.createContactFail();
                 }
-                mView.showLoading(false);
+
             }
 
             @Override
@@ -59,12 +60,13 @@ public class ContactEditorPresenter implements ContactEditorContract.Presenter {
         ApiMorePhone.updateContact(context, contact, new Callback<BaseResponse<Contact>>() {
             @Override
             public void onResponse(Call<BaseResponse<Contact>> call, Response<BaseResponse<Contact>> response) {
+                mView.showLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
                     mView.updateContactSuccess(response.body().getResponse());
                 } else {
                     mView.updateContactFail();
                 }
-                mView.showLoading(false);
+
             }
 
             @Override

@@ -51,7 +51,7 @@ public class DashboardViewPagerAdapter extends FragmentPagerAdapter {
             case 3:
                 return DialFragment.getInstance(mPhoneNumber, "");
             case 4:
-                return ContactFragment.getInstance(mPhoneNumbeId);
+                return ContactFragment.getInstance(mPhoneNumbeId, mPhoneNumber);
             default:
                 return null;
         }

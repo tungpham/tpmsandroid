@@ -5,27 +5,21 @@
     <!-- Icon and titles are set in code for menu_star and menu_edit -->
 
     <item
-        android:id="@+id/menu_star"
-        app:showAsAction="always|collapseActionView"
-        android:icon="@drawable/ic_star_border_white_24dp"
-        android:title="Star"/>
-
-    <item
-        android:id="@+id/menu_refresh"
-        android:title="@string/menu_refresh" />
-
-    <item
         android:id="@+id/menu_edit"
         app:showAsAction="always|collapseActionView"
-        android:title="Edit"/>
+        android:title="@string/menu_editContact"/>
 
     <item
         android:id="@+id/menu_delete"
-        android:title="@string/menu_deleteContact" />
+        app:showAsAction="always|collapseActionView"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:title="@string/menu_deleteContact"/>
+
 
     <item
         android:id="@+id/menu_share"
         android:title="@string/menu_share"
-        android:alphabeticShortcut="s" />
+        app:showAsAction="always|collapseActionView"
+        android:icon="@drawable/ic_share_white_24dp" />
 
 </menu>
