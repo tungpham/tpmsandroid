@@ -52,4 +52,26 @@ public class ContactEditorPresenter implements ContactEditorContract.Presenter {
             }
         });
     }
+
+    @Override
+    public void updateContact(Context context, Contact contact) {
+        mView.showLoading(true);
+        ApiMorePhone.updateContact(context, contact, new Callback<BaseResponse<Contact>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<Contact>> call, Response<BaseResponse<Contact>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    mView.updateContactSuccess(response.body().getResponse());
+                } else {
+                    mView.updateContactFail();
+                }
+                mView.showLoading(false);
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<Contact>> call, Throwable t) {
+                mView.updateContactFail();
+                mView.showLoading(false);
+            }
+        });
+    }
 }

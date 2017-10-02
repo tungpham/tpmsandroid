@@ -23,9 +23,15 @@ public interface ContactEditorContract {
         void createContactSuccess(Contact contact);
 
         void createContactFail();
+
+        void updateContactSuccess(Contact contact);
+
+        void updateContactFail();
     }
 
     interface Presenter extends BasePresenter {
         void createContact(Context context, Contact contact);
+
+        void updateContact(Context context, Contact contact);
     }
 }

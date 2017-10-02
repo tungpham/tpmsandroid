@@ -40,10 +40,11 @@ import retrofit2.Response;
 public class ContactEditorFragment extends BaseFragment implements ContactEditorContract.View {
 
 
-    public static ContactEditorFragment getInstance(String phoneNumberId) {
+    public static ContactEditorFragment getInstance(String phoneNumberId, Contact contact) {
         ContactEditorFragment contactEditorFragment = new ContactEditorFragment();
         Bundle bundle = new Bundle();
         bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, phoneNumberId);
+        bundle.putParcelable(ContactFragment.EXTRA_CONTACT, contact);
         contactEditorFragment.setArguments(bundle);
         return contactEditorFragment;
     }
@@ -57,6 +58,8 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
     private String mPhoneNumberId;
 
     private ContactEditorContract.Presenter mPresenter;
+
+    private Contact mContact;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +85,16 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
 
         mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
 
+        mContact = getArguments().getParcelable(ContactFragment.EXTRA_CONTACT);
+
+        if (mContact != null) {
+            mEditTextName.setText(mContact.getDisplayName());
+            mEditTextPhoneNumber.setText(mContact.getPhoneNumber());
+            mEditTextEmail.setText(mContact.getEmail());
+            mEditTextAddress.setText(mContact.getAddress());
+            mEditTextRelationship.setText(mContact.getRelationship());
+        }
+
         setHasOptionsMenu(true);
         return view;
     }
@@ -102,19 +115,29 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
 
             case R.id.menu_done:
                 if (checkConditionContact()) {
-                    Contact contact = new Contact(
-                            "",
-                            mEditTextName.getText().toString(),
-                            mEditTextPhoneNumber.getText().toString(),
-                            "",
-                            mPhoneNumberId,
-                            mEditTextAddress.getText().toString(),
-                            mEditTextEmail.getText().toString(),
-                            "",
-                            mEditTextRelationship.getText().toString(),
-                            "",
-                            MyPreference.getUserId(getContext()));
-                    mPresenter.createContact(getContext(), contact);
+                    if (mContact == null) {
+                        Contact contact = new Contact(
+                                "",
+                                mEditTextName.getText().toString(),
+                                mEditTextPhoneNumber.getText().toString(),
+                                "",
+                                mPhoneNumberId,
+                                mEditTextAddress.getText().toString(),
+                                mEditTextEmail.getText().toString(),
+                                "",
+                                mEditTextRelationship.getText().toString(),
+                                "",
+                                MyPreference.getUserId(getContext()));
+                        mPresenter.createContact(getContext(), contact);
+                    } else {
+                        mContact.setDisplayName(mEditTextName.getText().toString());
+                        mContact.setPhoneNumber(mEditTextPhoneNumber.getText().toString());
+                        mContact.setAddress(mEditTextAddress.getText().toString());
+                        mContact.setEmail(mEditTextEmail.getText().toString());
+                        mContact.setRelationship(mEditTextRelationship.getText().toString());
+
+                        mPresenter.updateContact(getContext(), mContact);
+                    }
                 } else {
                     Toast.makeText(getContext(), R.string.message_missing_info, Toast.LENGTH_SHORT).show();
                 }
@@ -154,5 +177,18 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
     @Override
     public void createContactFail() {
         Toast.makeText(getContext(), R.string.message_error_create_contact, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateContactSuccess(Contact contact) {
+        Intent intent = new Intent();
+        intent.putExtra(ContactFragment.EXTRA_CONTACT, contact);
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        getActivity().finish();
+    }
+
+    @Override
+    public void updateContactFail() {
+        Toast.makeText(getContext(), R.string.message_error_update_contact, Toast.LENGTH_SHORT).show();
     }
 }

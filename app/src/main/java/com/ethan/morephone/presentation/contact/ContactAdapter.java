@@ -43,12 +43,12 @@ public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Contact contact = mContacts.get(position);
+        final Contact contact = mContacts.get(position);
         holder.textDisplayName.setText(contact.getDisplayName());
         holder.textDisplayName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mContactItemClick != null) mContactItemClick.onContactItemClick();
+                if(mContactItemClick != null) mContactItemClick.onContactItemClick(contact);
             }
         });
     }
@@ -73,6 +73,6 @@ public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Vi
     }
 
     public interface ContactItemClick {
-        void onContactItemClick();
+        void onContactItemClick(Contact contact);
     }
 }

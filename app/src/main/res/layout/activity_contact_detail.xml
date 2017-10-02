@@ -50,12 +50,12 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             <com.ethan.morephone.widget.MyTextView
+                android:id="@+id/text_display_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_marginLeft="@dimen/activity_main_margin"
-                android:text="A Truong"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -96,7 +96,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textStyle="bold"
-                    android:text="0974878244"
                     android:textColor="@color/colorText"
                     android:layout_toRightOf="@+id/image_call"
                     android:layout_marginLeft="@dimen/activity_vertical_margin"/>

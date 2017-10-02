@@ -47,6 +47,7 @@ public class ContactFragment extends BaseFragment implements
 
     public static final String EXTRA_CONTACT = "EXTRA_CONTACT";
     private final int REQUEST_CREATE_CONTACT = 100;
+    private final int REQUEST_DETAIL_CONTACT = 101;
 
     public static ContactFragment getInstance(String phoneNumberId) {
         ContactFragment contactFragment = new ContactFragment();
@@ -60,6 +61,7 @@ public class ContactFragment extends BaseFragment implements
 
     private ContactAdapter mContactAdapter;
     private ContactContract.Presenter mPresenter;
+    private Contact mContactItem;
 
     private MultiSwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -134,8 +136,11 @@ public class ContactFragment extends BaseFragment implements
 
 
     @Override
-    public void onContactItemClick() {
-        startActivity(new Intent(getActivity(), ContactDetailActivity.class));
+    public void onContactItemClick(Contact contact) {
+        mContactItem = contact;
+        Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
+        intent.putExtra(EXTRA_CONTACT, mContactItem);
+        startActivityForResult(intent, REQUEST_DETAIL_CONTACT);
     }
 
     @Override
@@ -156,11 +161,19 @@ public class ContactFragment extends BaseFragment implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CREATE_CONTACT && resultCode == Activity.RESULT_OK) {
             Contact contact = data.getParcelableExtra(EXTRA_CONTACT);
-            if(contact != null) {
+            if (contact != null) {
+                mContactAdapter.getData().add(contact);
+                mContactAdapter.replaceData(mContactAdapter.getData());
+            }
+        } else if (requestCode == REQUEST_DETAIL_CONTACT && resultCode == Activity.RESULT_OK) {
+            Contact contact = data.getParcelableExtra(EXTRA_CONTACT);
+            if (contact != null && mContactItem != null) {
+                mContactAdapter.getData().remove(mContactItem);
                 mContactAdapter.getData().add(contact);
                 mContactAdapter.replaceData(mContactAdapter.getData());
             }
         }
+
     }
 
     @Override

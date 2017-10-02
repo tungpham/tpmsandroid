@@ -21,10 +21,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.morephone.data.entity.contact.Contact;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.contact.ContactFragment;
+import com.ethan.morephone.presentation.contact.editor.ContactEditorActivity;
 import com.ethan.morephone.utils.SchedulingUtils;
 import com.ethan.morephone.widget.QuickContactImageView;
 
@@ -37,6 +40,8 @@ import java.util.Random;
 
 public class ContactDetailActivity extends BaseActivity {
 
+    private final int REQUEST_EDITTOR_CONTACT = 100;
+
     private View mPhotoViewContainer;
     private int mMaximumPortraitHeaderHeight;
     private View mCoordinatorLayout;
@@ -47,6 +52,9 @@ public class ContactDetailActivity extends BaseActivity {
     private Contact mContactData;
     private ImageView mImageCall;
     private ImageView mImageMessage;
+
+    private TextView mTextDisplayName;
+    private TextView mTextPhoneNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,8 +87,13 @@ public class ContactDetailActivity extends BaseActivity {
             }
         });
 
-        mContactData = new Contact("","dsf"
-                ,"Tai sao", "+84974878244", "asdf", "df", "hanoi", "coderdaudat@gmail.com", "asf", "asdf", "asfd");
+        mContactData = getIntent().getParcelableExtra(ContactFragment.EXTRA_CONTACT);
+
+        mTextDisplayName = (TextView) findViewById(R.id.text_display_name);
+        mTextPhoneNumber = (TextView) findViewById(R.id.text_phone_number);
+
+        loadData();
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         enableActionBar(toolbar, false);
@@ -96,31 +109,31 @@ public class ContactDetailActivity extends BaseActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 //        if (mContactData != null) {
-            final MenuItem starredMenuItem = menu.findItem(R.id.menu_star);
+        final MenuItem starredMenuItem = menu.findItem(R.id.menu_star);
 //            ContactDisplayUtils.configureStarredMenuItem(starredMenuItem,
 //                    mContactData.isDirectoryEntry(), mContactData.isUserProfile(),
 //                    mContactData.getStarred());
-            // Configure edit MenuItem
-            final MenuItem editMenuItem = menu.findItem(R.id.menu_edit);
-            editMenuItem.setVisible(true);
+        // Configure edit MenuItem
+        final MenuItem editMenuItem = menu.findItem(R.id.menu_edit);
+        editMenuItem.setVisible(true);
 //            if (DirectoryContactUtil.isDirectoryContact(mContactData) || InvisibleContactUtil
 //                    .isInvisibleAndAddable(mContactData, this)) {
 //                editMenuItem.setIcon(R.drawable.ic_person_add_tinted_24dp);
 //                editMenuItem.setTitle(R.string.menu_add_contact);
 //            } else if (isContactEditable()) {
-                editMenuItem.setIcon(R.drawable.ic_create_24dp);
-                editMenuItem.setTitle(R.string.menu_editContact);
+        editMenuItem.setIcon(R.drawable.ic_create_24dp);
+        editMenuItem.setTitle(R.string.menu_editContact);
 //            } else {
 //                editMenuItem.setVisible(false);
 //            }
 
-            final MenuItem refreshMenuItem = menu.findItem(R.id.menu_refresh);
-            refreshMenuItem.setVisible(false);
+        final MenuItem refreshMenuItem = menu.findItem(R.id.menu_refresh);
+        refreshMenuItem.setVisible(false);
 
-            final MenuItem deleteMenuItem = menu.findItem(R.id.menu_delete);
+        final MenuItem deleteMenuItem = menu.findItem(R.id.menu_delete);
 //            deleteMenuItem.setVisible(isContactEditable() && !mContactData.isUserProfile());
 
-            final MenuItem shareMenuItem = menu.findItem(R.id.menu_share);
+        final MenuItem shareMenuItem = menu.findItem(R.id.menu_share);
 //            shareMenuItem.setVisible(isContactShareable());
 
 //            final MenuItem helpMenu = menu.findItem(R.id.menu_help);
@@ -129,8 +142,7 @@ public class ContactDetailActivity extends BaseActivity {
 //            String accoutType = null;
 
 
-
-            return true;
+        return true;
 //        }
 //        return false;
     }
@@ -138,68 +150,19 @@ public class ContactDetailActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case android.R.id.home:
+                finish();
+                return true;
+
+
             case R.id.menu_star:
 //                toggleStar(item);
                 return true;
             case R.id.menu_edit:
-//                if (DirectoryContactUtil.isDirectoryContact(mContactData)) {
-//                    // This action is used to launch the contact selector, with the option of
-//                    // creating a new contact. Creating a new contact is an INSERT, while selecting
-//                    // an exisiting one is an edit. The fields in the edit screen will be
-//                    // prepopulated with data.
-//
-//                    final Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
-//                    intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-//
-//                    ArrayList<ContentValues> values = mContactData.getContentValues();
-//
-//                    // Only pre-fill the name field if the provided display name is an nickname
-//                    // or better (e.g. structured name, nickname)
-//                    if (mContactData.getDisplayNameSource() >= ContactsContract.DisplayNameSources.NICKNAME) {
-//                        intent.putExtra(ContactsContract.Intents.Insert.NAME, mContactData.getDisplayName());
-//                    } else if (mContactData.getDisplayNameSource()
-//                            == ContactsContract.DisplayNameSources.ORGANIZATION) {
-//                        // This is probably an organization. Instead of copying the organization
-//                        // name into a name entry, copy it into the organization entry. This
-//                        // way we will still consider the contact an organization.
-//                        final ContentValues organization = new ContentValues();
-//                        organization.put(ContactsContract.CommonDataKinds.Organization.COMPANY, mContactData.getDisplayName());
-//                        organization.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE);
-//                        values.add(organization);
-//                    }
-//
-//                    // Last time used and times used are aggregated values from the usage stat
-//                    // table. They need to be removed from data values so the SQL table can insert
-//                    // properly
-//                    for (ContentValues value : values) {
-//                        value.remove(ContactsContract.Data.LAST_TIME_USED);
-//                        value.remove(ContactsContract.Data.TIMES_USED);
-//                    }
-//                    intent.putExtra(ContactsContract.Intents.Insert.DATA, values);
-//
-//                    // If the contact can only export to the same account, add it to the intent.
-//                    // Otherwise the ContactEditorFragment will show a dialog for selecting an
-//                    // account.
-//                    if (mContactData.getDirectoryExportSupport() ==
-//                            ContactsContract.Directory.EXPORT_SUPPORT_SAME_ACCOUNT_ONLY) {
-//                        intent.putExtra(ContactsContract.Intents.Insert.EXTRA_ACCOUNT,
-//                                new Account(mContactData.getDirectoryAccountName(),
-//                                        mContactData.getDirectoryAccountType()));
-//                        intent.putExtra(ContactsContract.Intents.Insert.EXTRA_DATA_SET,
-//                                mContactData.getRawContacts().get(0).getDataSet());
-//                    }
-//
-//                    // Add this flag to disable the delete menu option on directory contact joins
-//                    // with local contacts. The delete option is ambiguous when joining contacts.
-//                    intent.putExtra(ContactEditorFragment.INTENT_EXTRA_DISABLE_DELETE_MENU_OPTION,
-//                            true);
-//
-//                    startActivityForResult(intent, REQUEST_CODE_CONTACT_SELECTION_ACTIVITY);
-//                } else if (InvisibleContactUtil.isInvisibleAndAddable(mContactData, this)) {
-//                    InvisibleContactUtil.addToDefaultGroup(mContactData, this);
-//                } else if (isContactEditable()) {
-//                    editContact();
-//                }
+                Intent intent = new Intent(this, ContactEditorActivity.class);
+                intent.putExtra(ContactFragment.EXTRA_CONTACT, mContactData);
+                startActivityForResult(intent, REQUEST_EDITTOR_CONTACT);
                 return true;
             case R.id.menu_refresh:
 //                reFreshContact();
@@ -220,10 +183,31 @@ public class ContactDetailActivity extends BaseActivity {
         }
     }
 
-    public void setHeaderHeight(int height) {
-        final ViewGroup.LayoutParams toolbarLayoutParams
-                = mPhotoViewContainer.getLayoutParams();
+    private void setHeaderHeight(int height) {
+        final ViewGroup.LayoutParams toolbarLayoutParams = mPhotoViewContainer.getLayoutParams();
         toolbarLayoutParams.height = height;
         mPhotoViewContainer.setLayoutParams(toolbarLayoutParams);
+    }
+
+    private void loadData() {
+        mTextDisplayName.setText(mContactData.getDisplayName());
+        mTextPhoneNumber.setText(mContactData.getPhoneNumber());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EDITTOR_CONTACT && resultCode == RESULT_OK) {
+            mContactData = data.getParcelableExtra(ContactFragment.EXTRA_CONTACT);
+            loadData();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(ContactFragment.EXTRA_CONTACT, mContactData);
+        setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 }
