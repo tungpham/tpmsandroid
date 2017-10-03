@@ -21,7 +21,7 @@ import java.util.List;
  * Created by truongnguyen on 8/14/17.
  */
 
-public class DatabaseHelpper {
+public class PhoneNumberDatabaseHelper {
 
     public static void insert(Context context, PhoneNumber phoneNumber) {
         if (existsPhoneNumber(context, phoneNumber.getSid())) {

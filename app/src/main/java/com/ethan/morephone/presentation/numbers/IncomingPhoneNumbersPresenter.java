@@ -4,11 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.android.morephone.data.database.DatabaseHelpper;
+import com.android.morephone.data.database.ContactDatabaseHelper;
+import com.android.morephone.data.database.PhoneNumberDatabaseHelper;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.FakeData;
-import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
-import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumbers;
+import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
@@ -22,7 +22,6 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
 
 import java.util.List;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,7 +73,7 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
     }
 
     @Override
-    public void deleteIncomingPhoneNumber(final Context context, final String phoneNumber, final String incomingPhoneNumberSid) {
+    public void deleteIncomingPhoneNumber(final Context context, final String phoneNumber, final String incomingPhoneNumberSid, final String phoneNumberId) {
         ApiMorePhone.deletePhoneNumber(context, incomingPhoneNumberSid, TwilioManager.getSid(context), TwilioManager.getAuthCode(context), new Callback<BaseResponse<String>>() {
             @Override
             public void onResponse(Call<BaseResponse<String>> call, Response<BaseResponse<String>> response) {
@@ -86,7 +85,8 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
 //                    phoneNumberUsage.remove(phoneNumber);
 //                    MyPreference.setPhoneNumberUsage(context, phoneNumberUsage);
 
-                    DatabaseHelpper.deletePhoneNumber(context, incomingPhoneNumberSid);
+                    PhoneNumberDatabaseHelper.deletePhoneNumber(context, incomingPhoneNumberSid);
+                    ContactDatabaseHelper.deleteAllContact(context, phoneNumberId);
                 }
             }
 
@@ -106,7 +106,7 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
             @Override
             public void onResponse(Call<BaseResponse<List<PhoneNumber>>> call, Response<BaseResponse<List<PhoneNumber>>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getResponse() != null && !response.body().getResponse().isEmpty()) {
-                    DatabaseHelpper.deleteAllPhoneNumber(context);
+                    PhoneNumberDatabaseHelper.deleteAllPhoneNumber(context);
                     for (final PhoneNumber incomingPhoneNumber : response.body().getResponse()) {
                         PhoneService.startServiceRegisterPhoneNumber(context, incomingPhoneNumber);
                     }

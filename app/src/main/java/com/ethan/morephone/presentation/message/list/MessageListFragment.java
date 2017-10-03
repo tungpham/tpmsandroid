@@ -16,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.adapter.MessageListAdapter;
 import com.ethan.morephone.presentation.message.list.adapter.MessageOutViewHolder;
+import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 
@@ -134,11 +137,24 @@ public class MessageListFragment extends BaseFragment implements
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_message, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
             case android.R.id.home:
                 getActivity().finish();
+                break;
+
+            case R.id.menu_call:
+                PhoneActivity.starterOutgoing(getActivity(), mPhoneNumberFrom, mPhoneNumberTo);
+                break;
+            case R.id.menu_contact:
+
                 break;
 
             default:

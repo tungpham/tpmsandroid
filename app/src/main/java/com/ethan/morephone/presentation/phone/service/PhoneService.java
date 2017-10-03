@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -16,7 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.android.morephone.data.database.DatabaseHelpper;
+import com.android.morephone.data.database.PhoneNumberDatabaseHelper;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.user.User;
@@ -43,13 +42,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -140,7 +137,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         Intent intent = new Intent(context, PhoneService.class);
         intent.putExtra(EXTRA_FROM_PHONE_NUMBER, phoneNumber.getPhoneNumber());
         intent.setAction(ACTION_REGISTER_PHONE_NUMBER);
-        DatabaseHelpper.insert(context, phoneNumber);
+        PhoneNumberDatabaseHelper.insert(context, phoneNumber);
         context.startService(intent);
     }
 
@@ -148,7 +145,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         Intent intent = new Intent(context, PhoneService.class);
         intent.putExtra(EXTRA_FROM_PHONE_NUMBER, phoneNumber);
         intent.setAction(ACTION_UNREGISTER_PHONE_NUMBER);
-        DatabaseHelpper.deletePhoneNumber(context, sid);
+        PhoneNumberDatabaseHelper.deletePhoneNumber(context, sid);
         context.startService(intent);
     }
 
@@ -258,12 +255,12 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     public void onStartListening(Device device) {
         DebugTool.logD("START LISTENING: " + device.getCapabilities().toString());
         DebugTool.logD("START LISTENING STATE: " + device.getState().name());
-//        DatabaseHelpper.insert(getApplicationContext(), device.getState().name());
+//        PhoneNumberDatabaseHelper.insert(getApplicationContext(), device.getState().name());
 //
 //        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
 //            Device value = entry.getValue();
 //            if (value == device) {
-//                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
+//                PhoneNumberDatabaseHelper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
 //            }
 //        }
         updateDeviceState(device.getState());
@@ -285,13 +282,13 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     @Override
     public void onStopListening(Device device) {
         DebugTool.logD("STOP LISTENING: " + device.getState().name());
-//        DatabaseHelpper.insert(getApplicationContext(), device.getState().name());
+//        PhoneNumberDatabaseHelper.insert(getApplicationContext(), device.getState().name());
         updateDeviceState(device.getState());
 //
 //        for (Map.Entry<String, Device> entry : mDevices.entrySet()) {
 //            Device value = entry.getValue();
 //            if (value == device) {
-//                DatabaseHelpper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
+//                PhoneNumberDatabaseHelper.insert(getApplicationContext(), device.getState().name() + " PHONE " + entry.getKey());
 //            }
 //        }
 
@@ -390,7 +387,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
 //                            DebugTool.logD("PHONE STATE: " + mPhoneState);
 //                            if (mPhoneState != PHONE_STATE_OUTGOING && mPhoneState != PHONE_STATE_IN_CALL && mPhoneState != PHONE_STATE_INCOMING) {
 //                                registerPhoneNumberAgain();
-////                                DatabaseHelpper.insert(getApplicationContext(), "REGISTER DEVICE");
+////                                PhoneNumberDatabaseHelper.insert(getApplicationContext(), "REGISTER DEVICE");
 //                            }
 //                        }
 //                    },
@@ -409,7 +406,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     private void registerPhoneNumberAgain() {
 //        final Set<String> phoneNumberUsages = MyPreference.getPhoneNumberUsage(getApplicationContext());
 
-        final List<PhoneNumber> phoneNumberUsages = DatabaseHelpper.findAll(getApplicationContext());
+        final List<PhoneNumber> phoneNumberUsages = PhoneNumberDatabaseHelper.findAll(getApplicationContext());
 
         if (phoneNumberUsages != null) {
             DebugTool.logD("REGISTER PHONE USAGE: " + phoneNumberUsages.size());
@@ -457,7 +454,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
     }
 
     private void retrieveCapabilityToken(String phoneNumber) {
-        PhoneNumber number = DatabaseHelpper.findPhoneNumber(getApplicationContext(), phoneNumber);
+        PhoneNumber number = PhoneNumberDatabaseHelper.findPhoneNumber(getApplicationContext(), phoneNumber);
         if (number != null) {
             if (number.isPool()) {
                 retrieveCapabilityTokenOnline(getApplicationContext(), phoneNumber);
@@ -609,7 +606,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             DebugTool.logD("MAKE A CALL : " + toPhoneNumber + " EXPERI: " + mDevices.get(fromPhoneNumber).getCapabilities().toString());
 
             if (device.getCapabilities().isEmpty()) {
-                PhoneNumber phoneNumber = DatabaseHelpper.findPhoneNumber(getApplicationContext(), fromPhoneNumber);
+                PhoneNumber phoneNumber = PhoneNumberDatabaseHelper.findPhoneNumber(getApplicationContext(), fromPhoneNumber);
                 if (!phoneNumber.isPool()) {
                     retrieveCapabilityTokenOffline(fromPhoneNumber);
                 } else {

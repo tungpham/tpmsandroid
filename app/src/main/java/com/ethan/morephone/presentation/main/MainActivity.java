@@ -14,13 +14,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.ArraySet;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +26,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.morephone.data.database.DatabaseHelpper;
+import com.android.morephone.data.database.ContactDatabaseHelper;
+import com.android.morephone.data.database.PhoneNumberDatabaseHelper;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.Auth0Service;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.auth0.android.Auth0;
@@ -44,35 +42,23 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
-import com.ethan.morephone.presentation.buy.payment.fund.AddFundActivity;
 import com.ethan.morephone.presentation.buy.pool.PoolPhoneNumberActivity;
 import com.ethan.morephone.presentation.credit.CreditActivity;
 import com.ethan.morephone.presentation.license.LicenseActivity;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.presentation.review.AlertReviewDialog;
-import com.ethan.morephone.presentation.setting.SettingActivity;
 import com.ethan.morephone.presentation.usage.UsageActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
-import org.apache.http.auth.AUTH;
-
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Ethan on 3/4/17.
@@ -210,10 +196,11 @@ public class MainActivity extends BaseActivity implements
                 TwilioManager.setApplicationSid(getApplicationContext(), "");
 
 //                Set<String> phoneNumbersUsage = MyPreference.getPhoneNumberUsage(getApplicationContext());
-                List<PhoneNumber> phoneNumbers = DatabaseHelpper.findAll(getApplicationContext());
+                List<PhoneNumber> phoneNumbers = PhoneNumberDatabaseHelper.findAll(getApplicationContext());
                 for (PhoneNumber phoneNumber : phoneNumbers) {
                     PhoneService.startServiceUnregisterPhoneNumber(getApplicationContext(), phoneNumber.getPhoneNumber(), phoneNumber.getSid());
                 }
+                ContactDatabaseHelper.deleteAllContact(getApplicationContext());
 
 //                MyPreference.setPhoneNumberUsage(getApplicationContext(), new ArraySet<String>());
 

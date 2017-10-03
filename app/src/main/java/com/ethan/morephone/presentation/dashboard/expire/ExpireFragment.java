@@ -3,20 +3,16 @@ package com.ethan.morephone.presentation.dashboard.expire;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.morephone.data.database.DatabaseHelpper;
+import com.android.morephone.data.database.PhoneNumberDatabaseHelper;
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
-import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.DateUtils;
 import com.ethan.morephone.Constant;
@@ -26,12 +22,6 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.payment.purchase.ChooseDateDialog;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
-import com.ethan.morephone.presentation.setting.ChangeFriendlyNameDialog;
-import com.ethan.morephone.presentation.setting.ConfigureEmailDialog;
-import com.ethan.morephone.presentation.setting.ConfigurePhoneDialog;
-import com.ethan.morephone.presentation.setting.SettingContract;
-import com.ethan.morephone.presentation.setting.SettingPresenter;
-import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TimerListener;
 import com.ethan.morephone.widget.countdown.CountDownView;
@@ -76,7 +66,7 @@ public class ExpireFragment extends BaseFragment implements View.OnClickListener
         String phoneNumber = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
         mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
 
-        mPhoneNumberDTO = DatabaseHelpper.findPhoneNumber(getContext(), phoneNumber);
+        mPhoneNumberDTO = PhoneNumberDatabaseHelper.findPhoneNumber(getContext(), phoneNumber);
 
         long duration = mPhoneNumberDTO.getExpire() - System.currentTimeMillis();
         mMinDate = mCurrentDate = mPhoneNumberDTO.getExpire();
@@ -140,7 +130,7 @@ public class ExpireFragment extends BaseFragment implements View.OnClickListener
                                 Toast.makeText(getContext(), getString(R.string.purchase_expire_update_success), Toast.LENGTH_SHORT).show();
                                 mPhoneNumberDTO.setExpire(mCurrentDate);
                                 mMinDate = mCurrentDate;
-                                DatabaseHelpper.updatePhoneNumber(getContext(), mPhoneNumberDTO);
+                                PhoneNumberDatabaseHelper.updatePhoneNumber(getContext(), mPhoneNumberDTO);
                             } else {
                                 Toast.makeText(getContext(), getString(R.string.purchase_expire_update_fail) + "22", Toast.LENGTH_SHORT).show();
                             }

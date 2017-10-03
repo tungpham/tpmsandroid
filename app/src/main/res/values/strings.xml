@@ -683,6 +683,8 @@
     <!-- Menu item used to edit a specific contact -->
     <string name="menu_editContact">Edit</string>
 
+    <string name="menu_contact">Contact</string>
+
     <!-- Menu item used to delete a specific contact -->
     <string name="menu_deleteContact">Delete</string>
 

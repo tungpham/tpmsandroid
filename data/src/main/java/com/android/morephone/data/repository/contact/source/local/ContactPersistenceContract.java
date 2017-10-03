@@ -23,6 +23,7 @@ public class ContactPersistenceContract {
         public static final String COL_BIRTHDAY = "birthday";
         public static final String COL_RELATIONSHIP = "relationship";
         public static final String COL_NOTE = "note";
+        public static final String COL_USER_ID = "user_id";
         public static final String COL_CREATED_AT = "created_at";
         public static final String COL_UPDATED_AT = "updated_at";
     }

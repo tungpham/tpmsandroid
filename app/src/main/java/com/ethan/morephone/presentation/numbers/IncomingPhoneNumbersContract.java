@@ -31,7 +31,7 @@ public interface IncomingPhoneNumbersContract {
 
         void getFakeData(Context context);
 
-        void deleteIncomingPhoneNumber(Context context, String phoneNumber, String incomingPhoneNumberSid);
+        void deleteIncomingPhoneNumber(Context context, String phoneNumber, String incomingPhoneNumberSid, String phoneNumberId);
 
         void loadIncomingPhoneNumbers(Context context);
 

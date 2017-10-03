@@ -17,11 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.database.DatabaseHelpper;
 import com.android.morephone.data.entity.FakeData;
-import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
-import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
@@ -246,7 +243,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         PhoneNumber incomingPhoneNumber = mIncomingPhoneNumbersAdapter.getData().get(position);
         mIncomingPhoneNumbersAdapter.getData().remove(incomingPhoneNumber);
         mIncomingPhoneNumbersAdapter.notifyDataSetChanged();
-        mPresenter.deleteIncomingPhoneNumber(getContext(), incomingPhoneNumber.getPhoneNumber(), incomingPhoneNumber.getSid());
+        mPresenter.deleteIncomingPhoneNumber(getContext(), incomingPhoneNumber.getPhoneNumber(), incomingPhoneNumber.getSid(), incomingPhoneNumber.getId());
     }
 
     @Override
