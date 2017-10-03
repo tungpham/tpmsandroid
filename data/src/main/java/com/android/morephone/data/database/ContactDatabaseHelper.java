@@ -22,26 +22,30 @@ import java.util.List;
 public class ContactDatabaseHelper {
 
     public static void insert(Context context, Contact contact) {
-        SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
+//        if(existsContact(context, contact.getId())){
+//            updateContact(context, contact);
+//        }else {
+            SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_ID, contact.getId());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_DISPLAY_NAME, contact.getDisplayName());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER, contact.getPhoneNumber());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_PHOTO_URI, contact.getPhotoUri());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER_ID, contact.getPhoneNumberId());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_ADDRESS, contact.getAddress());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_EMAIL, contact.getEmail());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_BIRTHDAY, contact.getBirthday());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_RELATIONSHIP, contact.getRelationship());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_NOTE, contact.getNote());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_USER_ID, contact.getUserId());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_CREATED_AT, contact.getCreatedAt());
-        contentValues.put(ContactPersistenceContract.ContactEntry.COL_UPDATED_AT, contact.getUpdatedAt());
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_ID, contact.getId());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_DISPLAY_NAME, contact.getDisplayName());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER, contact.getPhoneNumber());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_PHOTO_URI, contact.getPhotoUri());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER_ID, contact.getPhoneNumberId());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_ADDRESS, contact.getAddress());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_EMAIL, contact.getEmail());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_BIRTHDAY, contact.getBirthday());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_RELATIONSHIP, contact.getRelationship());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_NOTE, contact.getNote());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_USER_ID, contact.getUserId());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_CREATED_AT, contact.getCreatedAt());
+            contentValues.put(ContactPersistenceContract.ContactEntry.COL_UPDATED_AT, contact.getUpdatedAt());
 
 
-        long id = db.insert(ContactPersistenceContract.ContactEntry.TABLE_NAME, null, contentValues);
-        DebugTool.logD("INSERT OK: " + id);
+            long id = db.insert(ContactPersistenceContract.ContactEntry.TABLE_NAME, null, contentValues);
+            DebugTool.logD("INSERT OK: " + id);
+//        }
     }
 
     public static Contact findContact(Context context, String contactId) {
@@ -174,6 +178,22 @@ public class ContactDatabaseHelper {
         }
         DebugTool.logD("SIZE PHONE SQL: " + contacts.size());
         return contacts;
+    }
+
+    public static boolean existsContact(Context context, String id) {
+        SQLiteDatabase db = DatabaseDAO.getInstance(context).getReadableDatabase();
+
+        String[] projection = {
+                BaseColumns._ID,
+                ContactPersistenceContract.ContactEntry.COL_ID,
+        };
+
+
+        Cursor cursor = db.query(
+                ContactPersistenceContract.ContactEntry.TABLE_NAME, projection, ContactPersistenceContract.ContactEntry.COL_ID + " = ?", new String[]{String.valueOf(id)}, null, null, BaseColumns._ID + " DESC LIMIT 0,1");
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
     }
 
     public static void deleteContact(Context context, String id) {
