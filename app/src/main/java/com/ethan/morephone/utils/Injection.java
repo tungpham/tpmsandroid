@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.android.morephone.data.repository.call.CallRepository;
 import com.android.morephone.data.repository.call.source.remote.CallRemoteDataSource;
+import com.android.morephone.data.repository.contact.ContactRepository;
+import com.android.morephone.data.repository.contact.source.local.ContactLocalDataSource;
+import com.android.morephone.data.repository.contact.source.remote.ContactRemoteDataSource;
 import com.android.morephone.data.repository.message.MessageRepository;
 import com.android.morephone.data.repository.message.source.remote.MessageRemoteDataSource;
 import com.android.morephone.data.repository.phonenumbers.incoming.IncomingPhoneNumberRepository;
@@ -21,6 +24,8 @@ import com.android.morephone.domain.usecase.call.GetCall;
 import com.android.morephone.domain.usecase.call.GetCalls;
 import com.android.morephone.domain.usecase.call.GetCallsIncoming;
 import com.android.morephone.domain.usecase.call.GetCallsOutgoing;
+import com.android.morephone.domain.usecase.contact.ContactFactory;
+import com.android.morephone.domain.usecase.contact.GetContacts;
 import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.DeleteMessage;
 import com.android.morephone.domain.usecase.message.GetAllMessages;
@@ -156,4 +161,14 @@ public class Injection {
     public static GetUsageAllTime providerGetUsageAllTime(@NonNull Context context) {
         return new GetUsageAllTime(providerUsageRepository(context));
     }
+
+    /*-------------------------------------------CONTACT-----------------------------------------*/
+    private static ContactRepository providerContactRepository(@NonNull Context context) {
+        return ContactRepository.getInstance(ContactRemoteDataSource.getInstance(context), ContactLocalDataSource.getInstance(context));
+    }
+
+    public static GetContacts providerGetContacts(@NonNull Context context) {
+        return new GetContacts(providerContactRepository(context), new ContactFactory());
+    }
+
 }

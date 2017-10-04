@@ -25,6 +25,7 @@ import com.ethan.morephone.presentation.contact.detail.ContactDetailActivity;
 import com.ethan.morephone.presentation.contact.detail.QuickContactActivity;
 import com.ethan.morephone.presentation.contact.editor.ContactEditorActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
+import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
 import com.ethan.morephone.widget.RecyclerViewFastScroller;
 import com.google.gson.Gson;
@@ -70,7 +71,7 @@ public class ContactFragment extends BaseFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new ContactPresenter(this);
+        new ContactPresenter(this, Injection.providerUseCaseHandler(), Injection.providerGetContacts(getContext()));
     }
 
     @Nullable
