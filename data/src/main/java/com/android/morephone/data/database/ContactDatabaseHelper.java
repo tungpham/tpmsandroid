@@ -90,7 +90,86 @@ public class ContactDatabaseHelper {
                 long createdAt = c.getLong(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_CREATED_AT));
                 long updatedAt = c.getLong(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_UPDATED_AT));
 
-                contact = new Contact(id, displayName, phoneNumber, photoUri, phoneNumberId, address, email, birthday, relationship, note, userId);
+                contact = Contact.getBuilder()
+                        .id(id)
+                        .displayName(displayName)
+                        .phoneNumber(phoneNumber)
+                        .photoUri(photoUri)
+                        .phoneNumberId(phoneNumberId)
+                        .address(address)
+                        .email(email)
+                        .birthday(birthday)
+                        .relationship(relationship)
+                        .note(note)
+                        .userId(userId)
+                        .build();
+
+                contact.setCreatedAt(createdAt);
+                contact.setUpdatedAt(updatedAt);
+            }
+        }
+        if (c != null) {
+            c.close();
+        }
+        return contact;
+    }
+
+    public static Contact findContactBuyPhoneNumber(Context context, String phoneNumberInput) {
+        SQLiteDatabase db = DatabaseDAO.getInstance(context).getReadableDatabase();
+
+        String[] projection = {
+                BaseColumns._ID,
+                ContactPersistenceContract.ContactEntry.COL_ID,
+                ContactPersistenceContract.ContactEntry.COL_DISPLAY_NAME,
+                ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER,
+                ContactPersistenceContract.ContactEntry.COL_PHOTO_URI,
+                ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER_ID,
+                ContactPersistenceContract.ContactEntry.COL_ADDRESS,
+                ContactPersistenceContract.ContactEntry.COL_EMAIL,
+                ContactPersistenceContract.ContactEntry.COL_BIRTHDAY,
+                ContactPersistenceContract.ContactEntry.COL_RELATIONSHIP,
+                ContactPersistenceContract.ContactEntry.COL_NOTE,
+                ContactPersistenceContract.ContactEntry.COL_USER_ID,
+                ContactPersistenceContract.ContactEntry.COL_CREATED_AT,
+                ContactPersistenceContract.ContactEntry.COL_UPDATED_AT
+        };
+
+
+        Cursor c = db.query(
+                ContactPersistenceContract.ContactEntry.TABLE_NAME, projection, ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER + " = ?", new String[]{String.valueOf(phoneNumberInput)}, null, null, BaseColumns._ID + " DESC LIMIT 0,1");
+
+        Contact contact = null;
+
+        if (c != null && c.getCount() > 0) {
+            while (c.moveToNext()) {
+                String id = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_ID));
+                String displayName = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_DISPLAY_NAME));
+                String phoneNumber = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER));
+                String photoUri = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_PHOTO_URI));
+                String phoneNumberId = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER_ID));
+                String address = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_ADDRESS));
+                String email = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_EMAIL));
+                String birthday = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_BIRTHDAY));
+                String relationship = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_RELATIONSHIP));
+                String note = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_NOTE));
+                String userId = c.getString(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_USER_ID));
+                long createdAt = c.getLong(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_CREATED_AT));
+                long updatedAt = c.getLong(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_UPDATED_AT));
+
+                contact = Contact.getBuilder()
+                        .id(id)
+                        .displayName(displayName)
+                        .phoneNumber(phoneNumber)
+                        .photoUri(photoUri)
+                        .phoneNumberId(phoneNumberId)
+                        .address(address)
+                        .email(email)
+                        .birthday(birthday)
+                        .relationship(relationship)
+                        .note(note)
+                        .userId(userId)
+                        .build();
+
                 contact.setCreatedAt(createdAt);
                 contact.setUpdatedAt(updatedAt);
             }
@@ -166,7 +245,21 @@ public class ContactDatabaseHelper {
                 long createdAt = c.getLong(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_CREATED_AT));
                 long updatedAt = c.getLong(c.getColumnIndexOrThrow(ContactPersistenceContract.ContactEntry.COL_UPDATED_AT));
 
-                Contact contact = new Contact(id, displayName, phoneNumber, photoUri, phoneNumberId, address, email, birthday, relationship, note, userId);
+                Contact contact = Contact.getBuilder()
+                        .id(id)
+                        .displayName(displayName)
+                        .phoneNumber(phoneNumber)
+                        .photoUri(photoUri)
+                        .phoneNumberId(phoneNumberId)
+                        .address(address)
+                        .email(email)
+                        .birthday(birthday)
+                        .relationship(relationship)
+                        .note(note)
+                        .userId(userId)
+                        .build();
+
+
                 contact.setCreatedAt(createdAt);
                 contact.setUpdatedAt(updatedAt);
 

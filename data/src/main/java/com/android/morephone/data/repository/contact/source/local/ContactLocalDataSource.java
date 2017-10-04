@@ -57,6 +57,16 @@ public class ContactLocalDataSource implements ContactDataSource {
     }
 
     @Override
+    public void getContactBuyPhoneNumber(@NonNull String phoneNumber, @NonNull GetContactCallback callback) {
+        Contact contact = ContactDatabaseHelper.findContactBuyPhoneNumber(mContext, phoneNumber);
+        if (contact != null) {
+            callback.onContactLoaded(contact);
+        } else {
+            callback.onDataNotAvailable();
+        }
+    }
+
+    @Override
     public void saveContact(@NonNull Contact contact) {
         ContactDatabaseHelper.insert(mContext, contact);
     }

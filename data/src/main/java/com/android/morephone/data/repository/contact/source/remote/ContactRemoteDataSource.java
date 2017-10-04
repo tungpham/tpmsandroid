@@ -82,6 +82,14 @@ public class ContactRemoteDataSource implements ContactDataSource {
     }
 
     @Override
+    public void getContactBuyPhoneNumber(@NonNull String phoneNumber, @NonNull GetContactCallback callback) {
+        Contact contact = TASKS_SERVICE_DATA.get(phoneNumber);
+        if (contact != null)
+            callback.onContactLoaded(contact);
+        else callback.onDataNotAvailable();
+    }
+
+    @Override
     public void saveContact(@NonNull Contact contact) {
         ApiMorePhone.createContact(mContext, contact, new Callback<BaseResponse<Contact>>() {
             @Override

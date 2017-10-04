@@ -24,7 +24,7 @@ public class ContactRepository implements ContactDataSource {
 
     private final ContactDataSource mContactLocalDataSource;
 
-    Map<String, Contact> mCachedTasks;
+    Map<String, Contact> mCachedContacts;
 
     boolean mCacheIsDirty = false;
 
@@ -55,8 +55,8 @@ public class ContactRepository implements ContactDataSource {
     @Override
     public void getContacts(@NonNull final String phoneNumberId, @NonNull final LoadContactsCallback callback) {
 // Respond immediately with cache if available and not dirty
-        if (mCachedTasks != null && !mCacheIsDirty) {
-            callback.onContactsLoaded(new ArrayList<>(mCachedTasks.values()));
+        if (mCachedContacts != null && !mCacheIsDirty) {
+            callback.onContactsLoaded(new ArrayList<>(mCachedContacts.values()));
             return;
         }
 
@@ -69,7 +69,7 @@ public class ContactRepository implements ContactDataSource {
                 @Override
                 public void onContactsLoaded(List<Contact> tasks) {
                     refreshCache(tasks);
-                    callback.onContactsLoaded(new ArrayList<>(mCachedTasks.values()));
+                    callback.onContactsLoaded(new ArrayList<>(mCachedContacts.values()));
                 }
 
                 @Override
@@ -117,15 +117,51 @@ public class ContactRepository implements ContactDataSource {
     }
 
     @Override
+    public void getContactBuyPhoneNumber(@NonNull final String phoneNumber, @NonNull final GetContactCallback callback) {
+        Contact cachedTask = getContactBuyPhoneNumber(phoneNumber);
+
+        // Respond immediately with cache if available
+        if (cachedTask != null) {
+            callback.onContactLoaded(cachedTask);
+            return;
+        }
+
+        // Load from server/persisted if needed.
+
+        // Is the task in the local data source? If not, query the network.
+        mContactLocalDataSource.getContactBuyPhoneNumber(phoneNumber, new GetContactCallback() {
+            @Override
+            public void onContactLoaded(Contact task) {
+                callback.onContactLoaded(task);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                mContactsRemoteDataSource.getContact(phoneNumber, new GetContactCallback() {
+                    @Override
+                    public void onContactLoaded(Contact contact) {
+                        callback.onContactLoaded(contact);
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+                        callback.onDataNotAvailable();
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
     public void saveContact(@NonNull Contact contact) {
         mContactsRemoteDataSource.saveContact(contact);
         mContactLocalDataSource.saveContact(contact);
 
         // Do in memory cache update to keep the app UI up to date
-        if (mCachedTasks == null) {
-            mCachedTasks = new LinkedHashMap<>();
+        if (mCachedContacts == null) {
+            mCachedContacts = new LinkedHashMap<>();
         }
-        mCachedTasks.put(contact.getId(), contact);
+        mCachedContacts.put(contact.getId(), contact);
     }
 
     @Override
@@ -134,10 +170,10 @@ public class ContactRepository implements ContactDataSource {
         mContactLocalDataSource.updateContact(contact);
 
         // Do in memory cache update to keep the app UI up to date
-        if (mCachedTasks == null) {
-            mCachedTasks = new LinkedHashMap<>();
+        if (mCachedContacts == null) {
+            mCachedContacts = new LinkedHashMap<>();
         }
-        mCachedTasks.put(contact.getId(), contact);
+        mCachedContacts.put(contact.getId(), contact);
     }
 
     @Override
@@ -155,10 +191,10 @@ public class ContactRepository implements ContactDataSource {
         mContactLocalDataSource.deleteContact(contactId);
         mContactsRemoteDataSource.deleteContact(contactId);
 
-        if (mCachedTasks == null) {
-            mCachedTasks = new LinkedHashMap<>();
+        if (mCachedContacts == null) {
+            mCachedContacts = new LinkedHashMap<>();
         }
-        mCachedTasks.remove(contactId);
+        mCachedContacts.remove(contactId);
     }
 
     @Override
@@ -166,10 +202,10 @@ public class ContactRepository implements ContactDataSource {
         mContactLocalDataSource.deleteAllContact(phoneNumberId);
         mContactsRemoteDataSource.deleteAllContact(phoneNumberId);
 
-        if (mCachedTasks == null) {
-            mCachedTasks = new LinkedHashMap<>();
+        if (mCachedContacts == null) {
+            mCachedContacts = new LinkedHashMap<>();
         }
-        Iterator<Map.Entry<String, Contact>> it = mCachedTasks.entrySet().iterator();
+        Iterator<Map.Entry<String, Contact>> it = mCachedContacts.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Contact> entry = it.next();
             if (entry.getValue().getPhoneNumberId().equals(phoneNumberId)) {
@@ -184,7 +220,7 @@ public class ContactRepository implements ContactDataSource {
             public void onContactsLoaded(List<Contact> contacts) {
                 refreshCache(contacts);
                 refreshLocalDataSource(phoneNumberId, contacts);
-                callback.onContactsLoaded(new ArrayList<>(mCachedTasks.values()));
+                callback.onContactsLoaded(new ArrayList<>(mCachedContacts.values()));
             }
 
             @Override
@@ -195,12 +231,12 @@ public class ContactRepository implements ContactDataSource {
     }
 
     private void refreshCache(List<Contact> contacts) {
-        if (mCachedTasks == null) {
-            mCachedTasks = new LinkedHashMap<>();
+        if (mCachedContacts == null) {
+            mCachedContacts = new LinkedHashMap<>();
         }
-        mCachedTasks.clear();
+        mCachedContacts.clear();
         for (Contact contact : contacts) {
-            mCachedTasks.put(contact.getId(), contact);
+            mCachedContacts.put(contact.getId(), contact);
         }
         mCacheIsDirty = false;
     }
@@ -214,10 +250,26 @@ public class ContactRepository implements ContactDataSource {
 
     @Nullable
     private Contact getContactWithId(@NonNull String id) {
-        if (mCachedTasks == null || mCachedTasks.isEmpty()) {
+        if (mCachedContacts == null || mCachedContacts.isEmpty()) {
             return null;
         } else {
-            return mCachedTasks.get(id);
+            return mCachedContacts.get(id);
         }
+    }
+
+    @Nullable
+    private Contact getContactBuyPhoneNumber(@NonNull String phoneNumber) {
+        if (mCachedContacts == null || mCachedContacts.isEmpty()) {
+            return null;
+        } else {
+            Iterator<Map.Entry<String, Contact>> it = mCachedContacts.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, Contact> entry = it.next();
+                if (entry.getValue().getPhoneNumber().equals(phoneNumber)) {
+                   return entry.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

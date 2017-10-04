@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.Constant;
@@ -32,6 +33,10 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.fcm.NotifyFirebaseMessagingService;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.contact.ContactFragment;
+import com.ethan.morephone.presentation.contact.detail.ContactDetailActivity;
+import com.ethan.morephone.presentation.contact.editor.ContactEditorActivity;
+import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.adapter.MessageListAdapter;
 import com.ethan.morephone.presentation.message.list.adapter.MessageOutViewHolder;
@@ -154,7 +159,11 @@ public class MessageListFragment extends BaseFragment implements
                 PhoneActivity.starterOutgoing(getActivity(), mPhoneNumberFrom, mPhoneNumberTo);
                 break;
             case R.id.menu_contact:
-
+                Contact contact = Contact.getBuilder().phoneNumber(mPhoneNumberTo).phoneNumberId(mPhoneNumberFrom).build();
+                Intent intent = new Intent(getActivity(), ContactEditorActivity.class);
+                intent.putExtra(ContactFragment.EXTRA_CONTACT, contact);
+//                startActivityForResult(intent, REQUEST_EDITTOR_CONTACT);
+                startActivity(intent);
                 break;
 
             default:

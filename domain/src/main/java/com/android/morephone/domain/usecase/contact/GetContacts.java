@@ -15,22 +15,22 @@ import java.util.List;
 
 public class GetContacts extends UseCase<GetContacts.RequestValues, GetContacts.ResponseValue> {
 
-    private final ContactRepository mTasksRepository;
+    private final ContactRepository mContactRepository;
 
     private final ContactFactory mFilterFactory;
 
     public GetContacts(@NonNull ContactRepository contactRepository, @NonNull ContactFactory filterFactory) {
-        mTasksRepository = contactRepository;
+        mContactRepository = contactRepository;
         mFilterFactory = filterFactory;
     }
 
     @Override
     protected void executeUseCase(final RequestValues values) {
         if (values.isForceUpdate()) {
-            mTasksRepository.refreshContact();
+            mContactRepository.refreshContact();
         }
 
-        mTasksRepository.getContacts(values.getPhoneNumber(), new ContactDataSource.LoadContactsCallback() {
+        mContactRepository.getContacts(values.getPhoneNumber(), new ContactDataSource.LoadContactsCallback() {
             @Override
             public void onContactsLoaded(List<Contact> tasks) {
                 ContactFilterType currentFiltering = values.getCurrentFiltering();

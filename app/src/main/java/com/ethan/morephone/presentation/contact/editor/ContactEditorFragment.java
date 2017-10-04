@@ -116,18 +116,16 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
             case R.id.menu_done:
                 if (checkConditionContact()) {
                     if (mContact == null) {
-                        Contact contact = new Contact(
-                                "",
-                                mEditTextName.getText().toString(),
-                                mEditTextPhoneNumber.getText().toString(),
-                                "",
-                                mPhoneNumberId,
-                                mEditTextAddress.getText().toString(),
-                                mEditTextEmail.getText().toString(),
-                                "",
-                                mEditTextRelationship.getText().toString(),
-                                "",
-                                MyPreference.getUserId(getContext()));
+                        Contact contact = Contact.getBuilder()
+                                .displayName( mEditTextName.getText().toString())
+                                .phoneNumber(mEditTextPhoneNumber.getText().toString())
+                                .phoneNumberId(mPhoneNumberId)
+                                .address(mEditTextAddress.getText().toString())
+                                .email(mEditTextEmail.getText().toString())
+                                .relationship(mEditTextRelationship.getText().toString())
+                                .userId(MyPreference.getUserId(getContext()))
+                                .build();
+
                         mPresenter.createContact(getContext(), contact);
                     } else {
                         mContact.setDisplayName(mEditTextName.getText().toString());

@@ -142,7 +142,7 @@ public class ConversationsFragment extends BaseFragment implements
 //        layoutManager.setReverseLayout(true);
 //        layoutManager.setStackFromEnd(true);
 
-        mConversationListAdapter = new ConversationListAdapter(getContext(), new ArrayList<ConversationModel>(), this);
+        mConversationListAdapter = new ConversationListAdapter(getContext(), Injection.providerUseCaseHandler(), Injection.providerGetContactByPhoneNumber(getContext()), new ArrayList<ConversationModel>(), this);
         recyclerView.setAdapter(mConversationListAdapter);
 
         view.findViewById(R.id.button_new_compose).setOnClickListener(this);

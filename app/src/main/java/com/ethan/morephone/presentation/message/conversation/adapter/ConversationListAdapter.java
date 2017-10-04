@@ -7,10 +7,17 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.morephone.data.entity.MessageItem;
+import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
+import com.android.morephone.data.repository.contact.source.GetContactCallback;
+import com.android.morephone.domain.UseCaseHandler;
+import com.android.morephone.domain.usecase.contact.GetContact;
+import com.android.morephone.domain.usecase.contact.GetContactByPhoneNumber;
 import com.ethan.morephone.R;
+import com.ethan.morephone.utils.ContactUtil;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TextDrawable;
 
@@ -27,12 +34,16 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
     private OnItemConversationClickListener mOnItemConversationClickListener;
     private TextDrawable.IBuilder mDrawableBuilder;
     private Context mContext;
+    private UseCaseHandler mUseCaseHandler;
+    private GetContactByPhoneNumber mGetContact;
 
-    public ConversationListAdapter(Context context, List<ConversationModel> conversationModels, OnItemConversationClickListener onItemConversationClickListener) {
+    public ConversationListAdapter(Context context, UseCaseHandler useCaseHandler, GetContactByPhoneNumber getContact, List<ConversationModel> conversationModels, OnItemConversationClickListener onItemConversationClickListener) {
         mContext = context;
         mConversationModels = conversationModels;
         mOnItemConversationClickListener = onItemConversationClickListener;
         mDrawableBuilder = TextDrawable.builder().round();
+        mUseCaseHandler = useCaseHandler;
+        mGetContact = getContact;
     }
 
     public void replaceData(List<ConversationModel> conversationModels) {
@@ -60,6 +71,21 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
         MessageItem messageItem = messageItems.get(messageItems.size() - 1);
 
         holder.textSmsTitle.setText(conversationModel.mPhoneNumber);
+
+        ContactUtil.getContactDisplay(holder.textSmsTitle, mUseCaseHandler, mGetContact, conversationModel.mPhoneNumber, new GetContactCallback() {
+            @Override
+            public void onContactLoaded(View view, Contact contact) {
+                if(view instanceof TextView){
+                    ((TextView) view).setText(contact.getDisplayName());
+                }
+            }
+
+            @Override
+            public void onContactNotAvailable() {
+
+            }
+        });
+
         holder.textSmsDescription.setText(messageItem.body);
         if (!TextUtils.isEmpty(messageItem.dateSent)) {
             holder.textSmsTime.setText(Utils.formatDate(messageItem.dateSent));
