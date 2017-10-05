@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.android.morephone.data.entity.contact.Contact;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.repository.contact.source.ContactDataSource;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class ContactRepository implements ContactDataSource {
 
     @Override
     public void getContacts(@NonNull LoadContactsCallback callback) {
-
+        getAllContactsFromRemoteDataSource(callback);
     }
 
     @Override
@@ -91,6 +92,8 @@ public class ContactRepository implements ContactDataSource {
         }
 
         // Load from server/persisted if needed.
+
+        DebugTool.logD("KQ: " + contactId);
 
         // Is the task in the local data source? If not, query the network.
         mContactLocalDataSource.getContact(contactId, new GetContactCallback() {
@@ -153,15 +156,26 @@ public class ContactRepository implements ContactDataSource {
     }
 
     @Override
-    public void saveContact(@NonNull Contact contact) {
-        mContactsRemoteDataSource.saveContact(contact);
-        mContactLocalDataSource.saveContact(contact);
+    public void saveContact(@NonNull Contact contact, @NonNull final GetContactCallback callback) {
+        mContactsRemoteDataSource.saveContact(contact, new GetContactCallback() {
+            @Override
+            public void onContactLoaded(Contact contact) {
+                mContactLocalDataSource.saveContact(contact, null);
 
-        // Do in memory cache update to keep the app UI up to date
-        if (mCachedContacts == null) {
-            mCachedContacts = new LinkedHashMap<>();
-        }
-        mCachedContacts.put(contact.getId(), contact);
+                // Do in memory cache update to keep the app UI up to date
+                if (mCachedContacts == null) {
+                    mCachedContacts = new LinkedHashMap<>();
+                }
+                mCachedContacts.put(contact.getId(), contact);
+                callback.onContactLoaded(contact);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
+
     }
 
     @Override
@@ -214,6 +228,30 @@ public class ContactRepository implements ContactDataSource {
         }
     }
 
+    private void getAllContactsFromRemoteDataSource(@NonNull final LoadContactsCallback callback) {
+        mContactsRemoteDataSource.getContacts(new LoadContactsCallback() {
+            @Override
+            public void onContactsLoaded(List<Contact> contacts) {
+                refreshCache(contacts);
+                refreshLocalDataSource(contacts);
+                callback.onContactsLoaded(new ArrayList<>(mCachedContacts.values()));
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
+    }
+
+    private void refreshLocalDataSource(List<Contact> contacts) {
+        mContactLocalDataSource.deleteAllContact();
+        for (Contact contact : contacts) {
+            mContactLocalDataSource.saveContact(contact, null);
+        }
+    }
+
+
     private void getContactsFromRemoteDataSource(@NonNull final String phoneNumberId, @NonNull final LoadContactsCallback callback) {
         mContactsRemoteDataSource.getContacts(phoneNumberId, new LoadContactsCallback() {
             @Override
@@ -244,7 +282,7 @@ public class ContactRepository implements ContactDataSource {
     private void refreshLocalDataSource(String phoneNumberId, List<Contact> contacts) {
         mContactLocalDataSource.deleteAllContact(phoneNumberId);
         for (Contact contact : contacts) {
-            mContactLocalDataSource.saveContact(contact);
+            mContactLocalDataSource.saveContact(contact, null);
         }
     }
 

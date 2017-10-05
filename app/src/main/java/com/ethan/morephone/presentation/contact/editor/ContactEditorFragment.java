@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.contact.Contact;
+import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
@@ -26,6 +27,7 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberContract;
 import com.ethan.morephone.presentation.contact.ContactFragment;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
+import com.ethan.morephone.utils.Injection;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -61,10 +63,16 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
 
     private Contact mContact;
 
+    private boolean isUpdateContact;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new ContactEditorPresenter(this);
+        new ContactEditorPresenter(this,
+                Injection.providerUseCaseHandler(),
+                Injection.providerCreateContact(getContext()),
+                Injection.providerUpdateContact(getContext()),
+                Injection.providerGetContact(getContext()));
     }
 
     @Nullable
@@ -81,11 +89,20 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
         BaseActivity baseActivity = (BaseActivity) getActivity();
 
         Toolbar mToolbar = (Toolbar) view.findViewById(R.id.tool_bar);
-        baseActivity.setTitleActionBar(mToolbar, getString(R.string.contact_creation_label));
 
         mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
 
         mContact = getArguments().getParcelable(ContactFragment.EXTRA_CONTACT);
+        if (mContact != null && !TextUtils.isEmpty(mContact.getId())) {
+            if(mPresenter != null) {
+                mPresenter.getContact(getContext(), mContact.getId());
+            }
+            baseActivity.setTitleActionBar(mToolbar, getString(R.string.contact_update_label));
+            isUpdateContact = true;
+        } else {
+            baseActivity.setTitleActionBar(mToolbar, getString(R.string.contact_creation_label));
+            isUpdateContact = false;
+        }
 
         if (mContact != null) {
             mEditTextName.setText(mContact.getDisplayName());
@@ -115,9 +132,9 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
 
             case R.id.menu_done:
                 if (checkConditionContact()) {
-                    if (mContact == null) {
+                    if (!isUpdateContact) {
                         Contact contact = Contact.getBuilder()
-                                .displayName( mEditTextName.getText().toString())
+                                .displayName(mEditTextName.getText().toString())
                                 .phoneNumber(mEditTextPhoneNumber.getText().toString())
                                 .phoneNumberId(mPhoneNumberId)
                                 .address(mEditTextAddress.getText().toString())
@@ -188,5 +205,22 @@ public class ContactEditorFragment extends BaseFragment implements ContactEditor
     @Override
     public void updateContactFail() {
         Toast.makeText(getContext(), R.string.message_error_update_contact, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getContactSuccess(Contact contact) {
+        mContact = contact;
+        if (isAdded()) {
+            mEditTextName.setText(mContact.getDisplayName());
+            mEditTextPhoneNumber.setText(mContact.getPhoneNumber());
+            mEditTextEmail.setText(mContact.getEmail());
+            mEditTextAddress.setText(mContact.getAddress());
+            mEditTextRelationship.setText(mContact.getRelationship());
+        }
+    }
+
+    @Override
+    public void getContactFail() {
+
     }
 }

@@ -21,12 +21,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.repository.contact.source.GetContactCallback;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
@@ -41,6 +43,7 @@ import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpac
 import com.ethan.morephone.presentation.message.list.adapter.MessageListAdapter;
 import com.ethan.morephone.presentation.message.list.adapter.MessageOutViewHolder;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
+import com.ethan.morephone.utils.ContactUtil;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 
@@ -62,7 +65,6 @@ public class MessageListFragment extends BaseFragment implements
         MessageListContract.View,
         MessageDialog.MessageDialogListener {
 
-    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
     public static final String BUNDLE_MESSAGE_BODY = "BUNDLE_MESSAGE_BODY";
 
     public static MessageListFragment getInstance(Bundle bundle) {
@@ -80,10 +82,13 @@ public class MessageListFragment extends BaseFragment implements
 
     private String mPhoneNumberTo;
     private String mPhoneNumberFrom;
+    private String mPhoneNumberId;
 
     private RecyclerView mRecyclerView;
 
     private String mMessageBody;
+
+    private Contact mContact;
 
     private UpdateMessageReceiver mUpdateMessageReceiver = new UpdateMessageReceiver();
 
@@ -100,7 +105,6 @@ public class MessageListFragment extends BaseFragment implements
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NotifyFirebaseMessagingService.ACTION_UPDATE_MESSAGE);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mUpdateMessageReceiver, intentFilter);
-
     }
 
 
@@ -110,7 +114,8 @@ public class MessageListFragment extends BaseFragment implements
         View view = inflater.inflate(R.layout.fragment_message_list, container, false);
         setHasOptionsMenu(true);
 
-        mPhoneNumberFrom = getArguments().getString(BUNDLE_PHONE_NUMBER);
+        mPhoneNumberFrom = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
+        mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
         mMessageBody = getArguments().getString(BUNDLE_MESSAGE_BODY);
 
         view.findViewById(R.id.image_send).setOnClickListener(this);
@@ -135,8 +140,6 @@ public class MessageListFragment extends BaseFragment implements
                 mRecyclerView.scrollToPosition(mMessageListAdapter.getItemCount() - 1);
             }
         });
-
-
 //        mPresenter.loadMessages(mPhoneNumberTo, mPhoneNumberFrom);
         return view;
     }
@@ -159,9 +162,12 @@ public class MessageListFragment extends BaseFragment implements
                 PhoneActivity.starterOutgoing(getActivity(), mPhoneNumberFrom, mPhoneNumberTo);
                 break;
             case R.id.menu_contact:
-                Contact contact = Contact.getBuilder().phoneNumber(mPhoneNumberTo).phoneNumberId(mPhoneNumberFrom).build();
+                if(mContact == null) {
+                    mContact = Contact.getBuilder().phoneNumber(mPhoneNumberTo).phoneNumberId(mPhoneNumberId).build();
+                }
                 Intent intent = new Intent(getActivity(), ContactEditorActivity.class);
-                intent.putExtra(ContactFragment.EXTRA_CONTACT, contact);
+                intent.putExtra(ContactFragment.EXTRA_CONTACT, mContact);
+                intent.putExtra(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, mContact.getPhoneNumberId());
 //                startActivityForResult(intent, REQUEST_EDITTOR_CONTACT);
                 startActivity(intent);
                 break;
@@ -280,9 +286,24 @@ public class MessageListFragment extends BaseFragment implements
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(ConversationModel conversationModel) {
-        Toolbar toolbar = (Toolbar) getView().findViewById(R.id.tool_bar);
-        BaseActivity baseActivity = (BaseActivity) getActivity();
+        final Toolbar toolbar = (Toolbar) getView().findViewById(R.id.tool_bar);
+        final BaseActivity baseActivity = (BaseActivity) getActivity();
         baseActivity.setTitleActionBar(toolbar, conversationModel.mPhoneNumber);
+
+        ContactUtil.getContactDisplay(toolbar, Injection.providerUseCaseHandler(), Injection.providerGetContactByPhoneNumber(getContext()), conversationModel.mPhoneNumber, new GetContactCallback() {
+            @Override
+            public void onContactLoaded(View view, Contact contact) {
+                mContact = contact;
+                if(view instanceof Toolbar){
+                    baseActivity.setTitleActionBar(toolbar, contact.getDisplayName());
+                }
+            }
+
+            @Override
+            public void onContactNotAvailable() {
+
+            }
+        });
 
         showMessages(conversationModel.mMessageItems);
         mPhoneNumberTo = conversationModel.mPhoneNumber;

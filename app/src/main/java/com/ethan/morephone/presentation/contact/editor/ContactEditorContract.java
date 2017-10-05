@@ -27,11 +27,17 @@ public interface ContactEditorContract {
         void updateContactSuccess(Contact contact);
 
         void updateContactFail();
+
+        void getContactSuccess(Contact contact);
+
+        void getContactFail();
     }
 
     interface Presenter extends BasePresenter {
         void createContact(Context context, Contact contact);
 
         void updateContact(Context context, Contact contact);
+
+        void getContact(Context context, String contactId);
     }
 }

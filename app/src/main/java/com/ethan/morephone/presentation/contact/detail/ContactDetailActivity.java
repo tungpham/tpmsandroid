@@ -28,6 +28,9 @@ import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.network.ApiMorePhone;
+import com.android.morephone.domain.UseCase;
+import com.android.morephone.domain.UseCaseHandler;
+import com.android.morephone.domain.usecase.contact.DeleteContact;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.buy.AlertGetCountryDialog;
@@ -37,6 +40,7 @@ import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
 import com.ethan.morephone.presentation.message.list.MessageListFragment;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
+import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.SchedulingUtils;
 import com.ethan.morephone.widget.QuickContactImageView;
 
@@ -236,10 +240,12 @@ public class ContactDetailActivity extends BaseActivity implements
     @Override
     public void onDelete() {
         showLoading(true);
-        ApiMorePhone.deleteContact(getApplicationContext(), mContactData.getId(), new Callback<Response>() {
+        UseCaseHandler useCaseHandler = Injection.providerUseCaseHandler();
+        DeleteContact deleteContact = Injection.providerDeleteContact(getApplicationContext());
+        DeleteContact.RequestValues requestValues = new DeleteContact.RequestValues(mContactData.getId());
+        useCaseHandler.execute(deleteContact, requestValues, new UseCase.UseCaseCallback<DeleteContact.ResponseValue>() {
             @Override
-            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                showLoading(false);
+            public void onSuccess(DeleteContact.ResponseValue response) {
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_DELETE_CONTACT, true);
                 setResult(RESULT_OK, intent);
@@ -247,8 +253,8 @@ public class ContactDetailActivity extends BaseActivity implements
             }
 
             @Override
-            public void onFailure(Call<Response> call, Throwable t) {
-                showLoading(false);
+            public void onError() {
+
             }
         });
     }
@@ -261,13 +267,7 @@ public class ContactDetailActivity extends BaseActivity implements
                 break;
             case R.id.image_message:
                 ConversationModel conversationModel = new ConversationModel(mContactData.getPhoneNumber(), "", new ArrayList<MessageItem>());
-
-                EventBus.getDefault().postSticky(conversationModel);
-                Intent intent = new Intent(this, MessageListActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                MessageListActivity.starter(this, mPhoneNumber, mContactData.getPhoneNumberId(), "", conversationModel);
                 break;
             default:
                 break;

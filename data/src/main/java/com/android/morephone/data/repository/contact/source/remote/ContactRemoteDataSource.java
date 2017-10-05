@@ -90,18 +90,21 @@ public class ContactRemoteDataSource implements ContactDataSource {
     }
 
     @Override
-    public void saveContact(@NonNull Contact contact) {
+    public void saveContact(@NonNull Contact contact, @NonNull final GetContactCallback callback) {
         ApiMorePhone.createContact(mContext, contact, new Callback<BaseResponse<Contact>>() {
             @Override
             public void onResponse(Call<BaseResponse<Contact>> call, Response<BaseResponse<Contact>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     TASKS_SERVICE_DATA.put(response.body().getResponse().getId(), response.body().getResponse());
+                    callback.onContactLoaded(response.body().getResponse());
+                } else {
+                    callback.onDataNotAvailable();
                 }
             }
 
             @Override
             public void onFailure(Call<BaseResponse<Contact>> call, Throwable t) {
-
+                callback.onDataNotAvailable();
             }
         });
     }
@@ -111,7 +114,7 @@ public class ContactRemoteDataSource implements ContactDataSource {
         ApiMorePhone.updateContact(mContext, contact, new Callback<BaseResponse<Contact>>() {
             @Override
             public void onResponse(Call<BaseResponse<Contact>> call, Response<BaseResponse<Contact>> response) {
-                if(response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     TASKS_SERVICE_DATA.put(contact.getId(), contact);
                 }
             }

@@ -67,7 +67,7 @@ public class ContactLocalDataSource implements ContactDataSource {
     }
 
     @Override
-    public void saveContact(@NonNull Contact contact) {
+    public void saveContact(@NonNull Contact contact,  @NonNull final GetContactCallback callback) {
         ContactDatabaseHelper.insert(mContext, contact);
     }
 
@@ -83,7 +83,7 @@ public class ContactLocalDataSource implements ContactDataSource {
 
     @Override
     public void deleteAllContact() {
-
+        ContactDatabaseHelper.deleteAllContact(mContext);
     }
 
     @Override

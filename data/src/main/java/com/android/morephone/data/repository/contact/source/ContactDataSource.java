@@ -37,7 +37,7 @@ public interface ContactDataSource {
 
     void getContactBuyPhoneNumber(@NonNull String phoneNumber, @NonNull GetContactCallback callback);
 
-    void saveContact(@NonNull Contact contact);
+    void saveContact(@NonNull Contact contact, @NonNull GetContactCallback callback);
 
     void updateContact(@NonNull Contact contact);
 

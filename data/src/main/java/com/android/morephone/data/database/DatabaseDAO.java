@@ -62,6 +62,7 @@ public class DatabaseDAO extends SQLiteOpenHelper {
                         + ContactPersistenceContract.ContactEntry.COL_BIRTHDAY + TEXT_TYPE + COMMA_SEP
                         + ContactPersistenceContract.ContactEntry.COL_RELATIONSHIP + TEXT_TYPE + COMMA_SEP
                         + ContactPersistenceContract.ContactEntry.COL_NOTE + TEXT_TYPE + COMMA_SEP
+                        + ContactPersistenceContract.ContactEntry.COL_USER_ID + TEXT_TYPE + COMMA_SEP
                         + ContactPersistenceContract.ContactEntry.COL_CREATED_AT + INTEGER_TYPE + COMMA_SEP
                         + ContactPersistenceContract.ContactEntry.COL_UPDATED_AT + INTEGER_TYPE
                         + ")";

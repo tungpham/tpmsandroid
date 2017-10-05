@@ -143,6 +143,9 @@ interface ApiMorePhonePath {
     @GET("contact")
     Call<BaseResponse<List<Contact>>> loadContacts(@Query("phone_number_id") String phone_number_id);
 
+    @GET("contact/user")
+    Call<BaseResponse<List<Contact>>> loadContactsByUser(@Query("user_id") String userId);
+
     @PUT("contact")
     Call<BaseResponse<Contact>> updateContact(@Body Contact contact);
 

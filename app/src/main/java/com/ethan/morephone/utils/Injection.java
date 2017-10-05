@@ -25,9 +25,12 @@ import com.android.morephone.domain.usecase.call.GetCalls;
 import com.android.morephone.domain.usecase.call.GetCallsIncoming;
 import com.android.morephone.domain.usecase.call.GetCallsOutgoing;
 import com.android.morephone.domain.usecase.contact.ContactFactory;
+import com.android.morephone.domain.usecase.contact.CreateContact;
+import com.android.morephone.domain.usecase.contact.DeleteContact;
 import com.android.morephone.domain.usecase.contact.GetContact;
 import com.android.morephone.domain.usecase.contact.GetContactByPhoneNumber;
 import com.android.morephone.domain.usecase.contact.GetContacts;
+import com.android.morephone.domain.usecase.contact.UpdateContact;
 import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.DeleteMessage;
 import com.android.morephone.domain.usecase.message.GetAllMessages;
@@ -179,6 +182,18 @@ public class Injection {
 
     public static GetContactByPhoneNumber providerGetContactByPhoneNumber(@NonNull Context context) {
         return new GetContactByPhoneNumber(providerContactRepository(context));
+    }
+
+    public static CreateContact providerCreateContact(@NonNull Context context) {
+        return new CreateContact(providerContactRepository(context));
+    }
+
+    public static UpdateContact providerUpdateContact(@NonNull Context context) {
+        return new UpdateContact(providerContactRepository(context));
+    }
+
+    public static DeleteContact providerDeleteContact(@NonNull Context context) {
+        return new DeleteContact(providerContactRepository(context));
     }
 
 }

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.morephone.data.entity.contact.Contact;
 import com.ethan.morephone.R;
 
 /**
@@ -19,6 +20,7 @@ public class CallLogViewHolder extends RecyclerView.ViewHolder {
     public TextView textPhoneNumber;
     public TextView textTime;
     public ImageView imageStatus;
+    public Contact contact;
 
 
     public CallLogViewHolder(View itemView) {

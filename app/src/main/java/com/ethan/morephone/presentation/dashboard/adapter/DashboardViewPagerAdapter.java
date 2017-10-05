@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.contact.ContactFragment;
+import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.phone.dial.DialFragment;
@@ -41,13 +42,11 @@ public class DashboardViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                Bundle bundle = new Bundle();
-                bundle.putString(IncomingPhoneNumbersFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
-                return ConversationsFragment.getInstance(bundle);
+                return ConversationsFragment.getInstance(mPhoneNumber, mPhoneNumbeId);
             case 1:
-                return RecordFragment.getInstance(mPhoneNumber);
+                return RecordFragment.getInstance(mPhoneNumber, mPhoneNumbeId);
             case 2:
-                return CallLogFragment.getInstance(mPhoneNumber);
+                return CallLogFragment.getInstance(mPhoneNumber, mPhoneNumbeId);
             case 3:
                 return DialFragment.getInstance(mPhoneNumber, "");
             case 4:

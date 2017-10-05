@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
+import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
 import com.ethan.morephone.utils.ActivityUtils;
 
@@ -22,7 +23,7 @@ public class RecordActivity extends BaseActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        RecordFragment recordFragment = RecordFragment.getInstance(getIntent().getStringExtra(RecordFragment.BUNDLE_PHONE_NUMBER));
+        RecordFragment recordFragment = RecordFragment.getInstance(getIntent().getStringExtra(DashboardActivity.BUNDLE_PHONE_NUMBER), getIntent().getStringExtra(DashboardActivity.BUNDLE_PHONE_NUMBER_ID));
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 recordFragment,

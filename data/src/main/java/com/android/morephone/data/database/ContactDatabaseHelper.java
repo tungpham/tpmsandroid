@@ -104,6 +104,8 @@ public class ContactDatabaseHelper {
                         .userId(userId)
                         .build();
 
+                DebugTool.logD("DB: " + displayName);
+
                 contact.setCreatedAt(createdAt);
                 contact.setUpdatedAt(updatedAt);
             }

@@ -21,7 +21,7 @@ public class ConversationsActivity extends BaseActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (fragment instanceof ConversationsFragment) return;
-        ConversationsFragment browserFragment = ConversationsFragment.getInstance(getIntent().getExtras());
+        ConversationsFragment browserFragment = ConversationsFragment.getInstance("", "");
         ActivityUtils.replaceFragmentToActivity(
                 getSupportFragmentManager(),
                 browserFragment,

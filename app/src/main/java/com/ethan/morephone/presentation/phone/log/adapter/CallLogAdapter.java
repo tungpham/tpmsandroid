@@ -6,10 +6,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.morephone.data.entity.call.Call;
+import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.log.DebugTool;
+import com.android.morephone.data.repository.contact.source.GetContactCallback;
+import com.android.morephone.domain.UseCaseHandler;
+import com.android.morephone.domain.usecase.contact.GetContactByPhoneNumber;
 import com.ethan.morephone.R;
+import com.ethan.morephone.utils.ContactUtil;
+import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TextDrawable;
 
@@ -29,6 +36,8 @@ public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Context mContext;
     private String mPhoneNumber;
     private OnItemCallLogClickListener mOnItemCallLogClickListener;
+    private UseCaseHandler mUseCaseHandler;
+    private GetContactByPhoneNumber mGetContactByPhoneNumber;
 
     public CallLogAdapter(Context context, String phoneNumber, List<Call> conversationEntities, OnItemCallLogClickListener onItemCallLogClickListener) {
         mContext = context;
@@ -36,6 +45,9 @@ public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mCalls = conversationEntities;
         mOnItemCallLogClickListener = onItemCallLogClickListener;
         mDrawableBuilder = TextDrawable.builder().round();
+
+        mUseCaseHandler = Injection.providerUseCaseHandler();
+        mGetContactByPhoneNumber = Injection.providerGetContactByPhoneNumber(context);
     }
 
     public void replaceData(List<Call> calls) {
@@ -71,17 +83,36 @@ public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final int position) {
         if (viewHolder instanceof CallLogViewHolder) {
-            CallLogViewHolder holder = (CallLogViewHolder) viewHolder;
+            String phoneNumber = "";
+            final CallLogViewHolder holder = (CallLogViewHolder) viewHolder;
             final Call callEntity = mCalls.get(position);
             if (callEntity.direction.endsWith("outbound-dial")) {
                 holder.textPhoneNumber.setText(callEntity.toFormatted);
+                phoneNumber = callEntity.toFormatted;
                 holder.imageStatus.setImageResource(R.drawable.ic_call_outgoing_holo_dark);
             } else if (callEntity.direction.endsWith("inbound")) {
                 holder.textPhoneNumber.setText(callEntity.fromFormatted);
+                phoneNumber = callEntity.fromFormatted;
                 holder.imageStatus.setImageResource(R.drawable.ic_call_incoming_holo_dark);
             } else {
                 DebugTool.logD("COME NOW");
             }
+
+            ContactUtil.getContactDisplay(holder.textPhoneNumber, mUseCaseHandler, mGetContactByPhoneNumber, phoneNumber, new GetContactCallback() {
+                @Override
+                public void onContactLoaded(View view, Contact contact) {
+                    holder.contact = contact;
+                    if(view instanceof TextView){
+                        ((TextView) view).setText(contact.getDisplayName());
+                    }
+                }
+
+                @Override
+                public void onContactNotAvailable() {
+
+                }
+            });
+
             holder.textTime.setText(Utils.formatDate(callEntity.dateCreated));
 
             holder.imageIcon.setImageDrawable(mDrawableBuilder.build(String.valueOf(callEntity.from.charAt(0)), ContextCompat.getColor(mContext, R.color.colorBackgroundAvatar)));
@@ -90,7 +121,19 @@ public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOnItemCallLogClickListener.onCall(callEntity);
+                    mOnItemCallLogClickListener.onCallClick(callEntity);
+                }
+            });
+
+            holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if(holder.contact != null) {
+                        mOnItemCallLogClickListener.onCallLongClick(position, holder.contact.getId());
+                    }else{
+                        mOnItemCallLogClickListener.onCallLongClick(position, "");
+                    }
+                    return false;
                 }
             });
         }
@@ -104,6 +147,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface OnItemCallLogClickListener {
-        void onCall(Call call);
+        void onCallClick(Call call);
+        void onCallLongClick(int pos, String contactId);
     }
 }

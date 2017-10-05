@@ -23,6 +23,7 @@ import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
 import com.ethan.morephone.presentation.message.list.MessageListFragment;
@@ -73,16 +74,15 @@ public class RecordFragment extends BaseFragment implements
         ExoPlayer.EventListener,
         AlertDeleteRecordDialog.AlertDeleteRecordListener {
 
-    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
-
     private static final long PROGRESS_UPDATE_INTERNAL = 10;
     private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 10;
     private static final int PROGRESS_MAX = 500;
 
-    public static RecordFragment getInstance(String phoneNumber) {
+    public static RecordFragment getInstance(String phoneNumber, String phoneNumberId) {
         RecordFragment recordFragment = new RecordFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber);
+        bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, phoneNumber);
+        bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, phoneNumberId);
         recordFragment.setArguments(bundle);
         return recordFragment;
     }
@@ -93,6 +93,7 @@ public class RecordFragment extends BaseFragment implements
     private RecordContract.Presenter mPresenter;
 
     private String mPhoneNumber;
+    private String mPhoneNumberId;
 
     private RecyclerView mRecyclerView;
     private MultiSwipeRefreshLayout mSwipeRefreshLayout;
@@ -129,7 +130,8 @@ public class RecordFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_voice, container, false);
 
-        mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
+        mPhoneNumber = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
+        mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -345,12 +347,7 @@ public class RecordFragment extends BaseFragment implements
     public void onMessage(Record record) {
         ConversationModel conversationModel = new ConversationModel(record.phoneNumber, "", new ArrayList<MessageItem>());
 
-        EventBus.getDefault().postSticky(conversationModel);
-        Intent intent = new Intent(getActivity(), MessageListActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        MessageListActivity.starter(getActivity(), mPhoneNumber, mPhoneNumberId, "", conversationModel);
     }
 
 

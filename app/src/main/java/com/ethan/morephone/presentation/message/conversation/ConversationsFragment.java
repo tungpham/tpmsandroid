@@ -26,6 +26,7 @@ import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.fcm.NotifyFirebaseMessagingService;
 import com.ethan.morephone.presentation.BaseFragment;
+import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.ConversationListAdapter;
@@ -55,8 +56,11 @@ public class ConversationsFragment extends BaseFragment implements
         ConversationsContract.View,
         SearchView.OnQueryTextListener {
 
-    public static ConversationsFragment getInstance(Bundle bundle) {
+    public static ConversationsFragment getInstance(String phoneNumber, String phoneNumberId) {
         ConversationsFragment conversationsFragment = new ConversationsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, phoneNumber);
+        bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, phoneNumberId);
         conversationsFragment.setArguments(bundle);
         return conversationsFragment;
     }
@@ -72,6 +76,7 @@ public class ConversationsFragment extends BaseFragment implements
     private MultiSwipeRefreshLayout mSwipeRefreshLayout;
 
     private String mPhoneNumber;
+    private String mPhoneNumberId;
 
     private boolean isLoading = true;
     private int lastVisibleItem, totalItemCount;
@@ -99,7 +104,8 @@ public class ConversationsFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_conversations, container, false);
 
-        mPhoneNumber = getArguments().getString(IncomingPhoneNumbersFragment.BUNDLE_PHONE_NUMBER);
+        mPhoneNumber = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
+        mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
 
 //        mToolbar = (Toolbar) view.findViewById(R.id.tool_bar);
 //        BaseActivity baseActivity = (BaseActivity) getActivity();
@@ -213,12 +219,7 @@ public class ConversationsFragment extends BaseFragment implements
 
     @Override
     public void onItemClick(ConversationModel conversationModel) {
-        EventBus.getDefault().postSticky(conversationModel);
-        Intent intent = new Intent(getActivity(), MessageListActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        MessageListActivity.starter(getActivity(), mPhoneNumber, mPhoneNumberId, "", conversationModel);
     }
 
     @Override
@@ -227,7 +228,7 @@ public class ConversationsFragment extends BaseFragment implements
             case R.id.button_new_compose:
                 Intent intent = new Intent(getActivity(), ComposeActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
+                bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, mPhoneNumber);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, DashboardFrag.REQUEST_COMPOSE);
                 break;
@@ -301,12 +302,7 @@ public class ConversationsFragment extends BaseFragment implements
                             for (ConversationModel model : conversationModels) {
                                 if (model.mPhoneNumber.trim().equals(toPhoneNumber.trim())) {
                                     EventBus.getDefault().postSticky(model);
-                                    Intent intent = new Intent(getActivity(), MessageListActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
-                                    bundle.putString(MessageListFragment.BUNDLE_MESSAGE_BODY, body);
-                                    intent.putExtras(bundle);
-                                    startActivity(intent);
+                                    MessageListActivity.starter(getActivity(), mPhoneNumber, mPhoneNumberId, body, model);
                                     DebugTool.logD("SEND: " + body);
                                     return;
                                 }
@@ -314,13 +310,8 @@ public class ConversationsFragment extends BaseFragment implements
                         }
 
                         ConversationModel model = new ConversationModel(toPhoneNumber, "", new ArrayList<MessageItem>());
-                        EventBus.getDefault().postSticky(model);
-                        Intent intent = new Intent(getActivity(), MessageListActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString(MessageListFragment.BUNDLE_PHONE_NUMBER, mPhoneNumber);
-                        bundle.putString(MessageListFragment.BUNDLE_MESSAGE_BODY, body);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        MessageListActivity.starter(getActivity(), mPhoneNumber, mPhoneNumberId, body, model);
+
                         DebugTool.logD("OUTSIDE: " + body);
 
                     } else {

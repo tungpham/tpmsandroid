@@ -3,15 +3,22 @@ package com.ethan.morephone.presentation.record.adapter;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.record.Record;
+import com.android.morephone.data.repository.contact.source.GetContactCallback;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.call.GetCall;
+import com.android.morephone.domain.usecase.contact.GetContact;
+import com.android.morephone.domain.usecase.contact.GetContactByPhoneNumber;
 import com.ethan.morephone.R;
+import com.ethan.morephone.utils.ContactUtil;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.ExpandableLayout;
@@ -36,6 +43,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
     private RecyclerView mRecyclerView;
 
     private UseCaseHandler mUseCaseHandler;
+    private GetContactByPhoneNumber mGetContactByPhoneNumber;
     private GetCall mGetCall;
 
 
@@ -47,6 +55,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
         mDrawableBuilder = TextDrawable.builder().round();
 
         mUseCaseHandler = Injection.providerUseCaseHandler();
+        mGetContactByPhoneNumber = Injection.providerGetContactByPhoneNumber(context);
         mGetCall = Injection.providerGetCall(context);
     }
 
@@ -75,6 +84,21 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordsViewHolder> {
     public void onBindViewHolder(final RecordsViewHolder holder, final int position) {
         final Record record = mRecords.get(position);
         holder.textPhoneNumber.setText(record.phoneNumber);
+
+        ContactUtil.getContactDisplay(holder.textPhoneNumber, mUseCaseHandler, mGetContactByPhoneNumber, record.phoneNumber, new GetContactCallback() {
+            @Override
+            public void onContactLoaded(View view, Contact contact) {
+                if(view instanceof TextView){
+                    ((TextView) view).setText(contact.getDisplayName());
+                }
+            }
+
+            @Override
+            public void onContactNotAvailable() {
+
+            }
+        });
+
         holder.textTime.setText(Utils.formatDate(record.dateCreated));
 
         if (!TextUtils.isEmpty(record.phoneNumber)) {

@@ -53,7 +53,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
     public static final String BINDING_REGISTRATION = "BINDING_REGISTRATION";
 
-    public static final String BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER";
     private static final String FCM_BINDING_TYPE = "fcm";
 
     public static final int REQUEST_DASHBOARD = 103;
