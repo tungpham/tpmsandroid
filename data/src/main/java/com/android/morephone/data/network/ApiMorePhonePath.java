@@ -8,6 +8,7 @@ import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.conversation.ResourceMessage;
+import com.android.morephone.data.entity.messagegroup.MessageGroup;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.record.Record;
@@ -148,5 +149,19 @@ interface ApiMorePhonePath {
 
     @PUT("contact")
     Call<BaseResponse<Contact>> updateContact(@Body Contact contact);
+
+
+    /*-----------------------------------------MESSAGE GROUP-----------------------------------------*/
+    @POST("message-group")
+    Call<BaseResponse<MessageGroup>> createMessageGroup(@Body MessageGroup messageGroup);
+
+    @DELETE("message-group/{id}")
+    Call<Response> deleteMessageGroup(@Path("id") String id);
+
+    @GET("message-group/user")
+    Call<BaseResponse<List<MessageGroup>>> loadMessageGroupByUser(@Query("user_id") String userId);
+
+    @PUT("message-group")
+    Call<BaseResponse<MessageGroup>> updateMessageGroup(@Body MessageGroup messageGroup);
 
 }

@@ -11,6 +11,7 @@ import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.conversation.ResourceMessage;
+import com.android.morephone.data.entity.messagegroup.MessageGroup;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
 import com.android.morephone.data.entity.record.Record;
@@ -56,35 +57,35 @@ public class ApiMorePhone {
     private static Retrofit getRetrofit(final Context context, final String accessToken) {
 //        if (mRetrofit == null) {
 
-            //Set log
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            boolean isLog = true;
-            logging.setLevel(isLog ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+        //Set log
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        boolean isLog = true;
+        logging.setLevel(isLog ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
 
-            //Create cache
+        //Create cache
 //                    File file = new File(context.getCacheDir(), "response");
 
-            //Add log and set time out
-            final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .authenticator(new Authenticator() {
-                        @Override
-                        public Request authenticate(Route route, okhttp3.Response response) throws IOException {
-                            return response.request().newBuilder()
-                                    .header("Authorization", "Bearer " + accessToken)
-                                    .build();
-                        }
-                    })
+        //Add log and set time out
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .authenticator(new Authenticator() {
+                    @Override
+                    public Request authenticate(Route route, okhttp3.Response response) throws IOException {
+                        return response.request().newBuilder()
+                                .header("Authorization", "Bearer " + accessToken)
+                                .build();
+                    }
+                })
 
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .connectTimeout(60, TimeUnit.SECONDS)
-                    .addInterceptor(logging)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .addInterceptor(logging)
 //                            .addNetworkInterceptor((Interceptor) new StethoInterceptor())
-                    .build();
+                .build();
 
-            mRetrofit = new Retrofit.Builder()
-                    .baseUrl(BaseUrl.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(okHttpClient).build();
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(BaseUrl.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient).build();
 //        }
         return mRetrofit;
     }
@@ -92,15 +93,15 @@ public class ApiMorePhone {
     //Singleton for ApiPath
     private static ApiMorePhonePath getApiPath(Context context) {
 //        if (mApiPath == null) {
-            CredentialsEntity credentials = CredentialsManager.getCredentials(context);
-            String accessToken = "";
-            if (credentials != null) {
-                accessToken = credentials.getAccessToken();
-                mApiPath = getRetrofit(context, accessToken).create(ApiMorePhonePath.class);
-                DebugTool.logD("ACCESS TOKENNN : " + accessToken);
-            } else {
-                DebugTool.logD("ACCESS TOKEN 2: " + accessToken);
-            }
+        CredentialsEntity credentials = CredentialsManager.getCredentials(context);
+        String accessToken = "";
+        if (credentials != null) {
+            accessToken = credentials.getAccessToken();
+            mApiPath = getRetrofit(context, accessToken).create(ApiMorePhonePath.class);
+            DebugTool.logD("ACCESS TOKENNN : " + accessToken);
+        } else {
+            DebugTool.logD("ACCESS TOKEN 2: " + accessToken);
+        }
 
 //        }
         return mApiPath;
@@ -320,8 +321,8 @@ public class ApiMorePhone {
     }
 
     public static void loadContacts(Context context,
-                                     String phoneNumberId,
-                                     Callback<BaseResponse<List<Contact>>> callback) {
+                                    String phoneNumberId,
+                                    Callback<BaseResponse<List<Contact>>> callback) {
         Call<BaseResponse<List<Contact>>> call = getApiPath(context).loadContacts(phoneNumberId);
         call.enqueue(callback);
     }
@@ -330,6 +331,36 @@ public class ApiMorePhone {
                                      Contact contact,
                                      Callback<BaseResponse<Contact>> callback) {
         Call<BaseResponse<Contact>> call = getApiPath(context).updateContact(contact);
+        call.enqueue(callback);
+    }
+
+    /*-----------------------------------------MESSAGE GROUP-----------------------------------------*/
+
+    public static void createMessageGroup(Context context,
+                                          MessageGroup messageGroup,
+                                          Callback<BaseResponse<MessageGroup>> callback) {
+        Call<BaseResponse<MessageGroup>> call = getApiPath(context).createMessageGroup(messageGroup);
+        call.enqueue(callback);
+    }
+
+    public static void deleteMessageGroup(Context context,
+                                          String id,
+                                          Callback<Response> callback) {
+        Call<Response> call = getApiPath(context).deleteMessageGroup(id);
+        call.enqueue(callback);
+    }
+
+    public static void loadMessageGroupByUser(Context context,
+                                              String phoneNumberId,
+                                              Callback<BaseResponse<List<MessageGroup>>> callback) {
+        Call<BaseResponse<List<MessageGroup>>> call = getApiPath(context).loadMessageGroupByUser(phoneNumberId);
+        call.enqueue(callback);
+    }
+
+    public static void updateMessageGroup(Context context,
+                                          MessageGroup messageGroup,
+                                          Callback<BaseResponse<MessageGroup>> callback) {
+        Call<BaseResponse<MessageGroup>> call = getApiPath(context).updateMessageGroup(messageGroup);
         call.enqueue(callback);
     }
 }

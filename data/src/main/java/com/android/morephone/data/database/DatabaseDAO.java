@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import com.android.morephone.data.repository.contact.source.local.ContactPersistenceContract;
+import com.android.morephone.data.repository.messagegroup.source.local.MessageGroupPersistenceContract;
 import com.android.morephone.data.repository.phonenumbers.incoming.source.local.PhoneNumberPersistenceContract;
 
 
@@ -70,6 +71,23 @@ public class DatabaseDAO extends SQLiteOpenHelper {
         db.execSQL(sql);
     }
 
+    private static void createTableMessageGroup(SQLiteDatabase db) {
+        String sql =
+                "CREATE TABLE " + MessageGroupPersistenceContract.MessageGroupEntry.TABLE_NAME
+                        + " ("
+                        + BaseColumns._ID + INTEGER_TYPE  + " PRIMARY KEY AUTOINCREMENT " + COMMA_SEP
+                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_ID + TEXT_TYPE + COMMA_SEP
+                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_NAME + TEXT_TYPE + COMMA_SEP
+                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_GROUP_PHONE + TEXT_TYPE + COMMA_SEP
+                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_PHONE_NUMBER_ID + TEXT_TYPE + COMMA_SEP
+                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_USER_ID + TEXT_TYPE + COMMA_SEP
+                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_CREATED_AT + INTEGER_TYPE + COMMA_SEP
+                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_UPDATED_AT + INTEGER_TYPE
+                        + ")";
+
+        db.execSQL(sql);
+    }
+
     private int mOpenCounter;
 
     private SQLiteDatabase database;
@@ -96,6 +114,7 @@ public class DatabaseDAO extends SQLiteOpenHelper {
         // creating required tables
         createTablePhoneNumber(db);
         createTableContact(db);
+        createTableMessageGroup(db);
     }
 
     @Override

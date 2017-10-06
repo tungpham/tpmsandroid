@@ -231,7 +231,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         public void onSuccess(@NonNull Credentials credentials) {
             DebugTool.logD("KQ: " + credentials.getIdToken());
             DebugTool.logD("ACC: " + credentials.getAccessToken());
-            CredentialsManager.saveCredentials(getContext(), new CredentialsEntity(credentials.getIdToken(), credentials.getAccessToken(), credentials.getType(), credentials.getRefreshToken(), credentials.getExpiresIn()));
+            CredentialsManager.saveCredentials(getActivity(), new CredentialsEntity(credentials.getIdToken(), credentials.getAccessToken(), credentials.getType(), credentials.getRefreshToken(), credentials.getExpiresIn()));
             startActivity(new Intent(getActivity(), SplashActivity.class));
             getActivity().finish();
 //            checkAccessToken(credentials.getAccessToken());
