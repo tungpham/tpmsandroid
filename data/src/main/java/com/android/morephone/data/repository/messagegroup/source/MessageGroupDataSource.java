@@ -34,7 +34,7 @@ public interface MessageGroupDataSource {
 
     void getMessageGroup(@NonNull String messageGroupId, @NonNull GetMessageGroupCallback callback);
 
-    void getMessageGroupByUserId(@NonNull String userId, @NonNull GetMessageGroupCallback callback);
+    void getMessageGroupByUserId(@NonNull String userId, @NonNull LoadMessageGroupsCallback callback);
 
     void saveMessageGroup(@NonNull MessageGroup messageGroup, @NonNull GetMessageGroupCallback callback);
 
