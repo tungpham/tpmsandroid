@@ -10,6 +10,9 @@ import com.android.morephone.data.repository.contact.source.local.ContactLocalDa
 import com.android.morephone.data.repository.contact.source.remote.ContactRemoteDataSource;
 import com.android.morephone.data.repository.message.MessageRepository;
 import com.android.morephone.data.repository.message.source.remote.MessageRemoteDataSource;
+import com.android.morephone.data.repository.messagegroup.MessageGroupRepository;
+import com.android.morephone.data.repository.messagegroup.source.local.MessageGroupLocalDataSource;
+import com.android.morephone.data.repository.messagegroup.source.remote.MessageGroupRemoteDataSource;
 import com.android.morephone.data.repository.phonenumbers.incoming.IncomingPhoneNumberRepository;
 import com.android.morephone.data.repository.phonenumbers.incoming.source.remote.IncomingPhoneNumberRemoteDataSource;
 import com.android.morephone.data.repository.record.RecordRepository;
@@ -37,6 +40,9 @@ import com.android.morephone.domain.usecase.message.GetAllMessages;
 import com.android.morephone.domain.usecase.message.GetMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
+import com.android.morephone.domain.usecase.messagegroup.CreateMessageGroups;
+import com.android.morephone.domain.usecase.messagegroup.GetMessageGroupsByUserId;
+import com.android.morephone.domain.usecase.messagegroup.UpdateMessageGroup;
 import com.android.morephone.domain.usecase.number.BuyIncomingPhoneNumber;
 import com.android.morephone.domain.usecase.number.DeleteIncomingPhoneNumber;
 import com.android.morephone.domain.usecase.number.GetAvailableCountries;
@@ -196,4 +202,20 @@ public class Injection {
         return new DeleteContact(providerContactRepository(context));
     }
 
+    /*-------------------------------------------MESSAGE GROUP-----------------------------------------*/
+    private static MessageGroupRepository providerMessageGroupRepository(@NonNull Context context) {
+        return MessageGroupRepository.getInstance(MessageGroupRemoteDataSource.getInstance(context), MessageGroupLocalDataSource.getInstance(context));
+    }
+
+    public static CreateMessageGroups providerCreateMessageGroup(@NonNull Context context) {
+        return new CreateMessageGroups(providerMessageGroupRepository(context));
+    }
+
+    public static GetMessageGroupsByUserId providerGetMessageGroupById(@NonNull Context context) {
+        return new GetMessageGroupsByUserId(providerMessageGroupRepository(context));
+    }
+
+    public static UpdateMessageGroup providerUpdateMessageGroup(@NonNull Context context) {
+        return new UpdateMessageGroup(providerMessageGroupRepository(context));
+    }
 }

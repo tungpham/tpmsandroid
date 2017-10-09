@@ -17,8 +17,10 @@ import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
+import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.contact.ContactFilterType;
 import com.android.morephone.domain.usecase.contact.GetContacts;
+import com.android.morephone.domain.usecase.messagegroup.GetMessageGroupsByUserId;
 import com.auth0.android.Auth0;
 import com.auth0.android.authentication.AuthenticationAPIClient;
 import com.auth0.android.authentication.AuthenticationException;
@@ -32,6 +34,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.authentication.AuthenticationActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
+import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.twilio.client.Twilio;
@@ -63,6 +66,7 @@ public class SplashActivity extends BaseActivity {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         DebugTool.logD("Refreshed token: " + refreshedToken);
 
+
         if (!TextUtils.isEmpty(MyPreference.getUserId(getApplicationContext()))) {
             ApiMorePhone.updateFcmToken(getApplicationContext(), MyPreference.getUserId(getApplicationContext()), refreshedToken, new Callback<BaseResponse<User>>() {
                 @Override
@@ -83,6 +87,21 @@ public class SplashActivity extends BaseActivity {
                     DebugTool.logD("TOKEN UPDATE ERROR");
                 }
             });
+
+            final UseCaseHandler useCaseHandler = Injection.providerUseCaseHandler();
+            final GetMessageGroupsByUserId getMessageGroupsByUserId = Injection.providerGetMessageGroupById(getApplicationContext());
+            GetMessageGroupsByUserId.RequestValues requestValues = new GetMessageGroupsByUserId.RequestValues(true, MyPreference.getUserId(getApplicationContext()));
+            useCaseHandler.execute(getMessageGroupsByUserId, requestValues, new UseCase.UseCaseCallback<GetMessageGroupsByUserId.ResponseValue>() {
+                @Override
+                public void onSuccess(GetMessageGroupsByUserId.ResponseValue response) {
+                }
+
+                @Override
+                public void onError() {
+                }
+            });
+
+
         } else {
             DebugTool.logD("USER NOT REGISTER");
         }
@@ -139,9 +158,12 @@ public class SplashActivity extends BaseActivity {
 
                                             new ApiAsync(SplashActivity.this, user).execute();
                                         } else {
-                                            new ApiAsync(SplashActivity.this, null).execute();
-                                        }
+                                            if (TextUtils.isEmpty(TwilioManager.getApplicationSid(getApplicationContext()))) {
+                                                new ApiAsync(SplashActivity.this, null).execute();
+                                            } else {
 
+                                            }
+                                        }
                                     }
 
                                     @Override
@@ -240,6 +262,8 @@ public class SplashActivity extends BaseActivity {
                         if (applications != null && !applications.applications.isEmpty()) {
                             TwilioManager.setApplicationSid(activity.getApplicationContext(), applications.applications.get(0).sid);
                         }
+                    } else {
+
                     }
                 }
             }
