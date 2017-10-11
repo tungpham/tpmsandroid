@@ -158,11 +158,11 @@ public class SplashActivity extends BaseActivity {
 
                                             new ApiAsync(SplashActivity.this, user).execute();
                                         } else {
-                                            if (TextUtils.isEmpty(TwilioManager.getApplicationSid(getApplicationContext()))) {
+//                                            if (TextUtils.isEmpty(TwilioManager.getApplicationSid(getApplicationContext()))) {
                                                 new ApiAsync(SplashActivity.this, null).execute();
-                                            } else {
-
-                                            }
+//                                            } else {
+//
+//                                            }
                                         }
                                     }
 

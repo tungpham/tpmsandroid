@@ -13,6 +13,7 @@ import com.android.morephone.data.entity.call.Call;
 import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.conversation.ResourceMessage;
+import com.android.morephone.data.entity.messagegroup.MessageGroup;
 import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
@@ -23,6 +24,7 @@ import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.GetAllMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
+import com.android.morephone.domain.usecase.messagegroup.CreateMessageGroups;
 import com.ethan.morephone.Constant;
 
 import java.lang.ref.WeakReference;
@@ -43,6 +45,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     private final GetMessagesIncoming mGetMessagesIncoming;
     private final GetMessagesOutgoing mGetMessagesOutgoing;
     private final CreateMessage mCreateMessage;
+    private final CreateMessageGroups mCreateMessageGroups;
 
     private List<MessageItem> mMessageItems;
 //    private List<ConversationModel> mConversationModels;
@@ -55,13 +58,15 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
                                   @NonNull GetAllMessages getAllMessages,
                                   @NonNull GetMessagesIncoming getMessagesIncoming,
                                   @NonNull GetMessagesOutgoing getMessagesOutgoing,
-                                  @NonNull CreateMessage createMessage) {
+                                  @NonNull CreateMessage createMessage,
+                                  @NonNull CreateMessageGroups createMessageGroups) {
         mView = view;
         mUseCaseHandler = useCaseHandler;
         mGetAllMessages = getAllMessages;
         mGetMessagesIncoming = getMessagesIncoming;
         mGetMessagesOutgoing = getMessagesOutgoing;
         mCreateMessage = createMessage;
+        mCreateMessageGroups = createMessageGroups;
 
         mMessageItems = new ArrayList<>();
 //        mConversationModels = new ArrayList<>();
@@ -269,6 +274,22 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
 //                mView.showProgress(false, position);
                 mView.showLoading(false);
                 mView.createMessageError();
+            }
+        });
+    }
+
+    @Override
+    public void createMessageGroup(Context context, MessageGroup messageGroup) {
+        CreateMessageGroups.RequestValues requestValue = new CreateMessageGroups.RequestValues(messageGroup);
+        mUseCaseHandler.execute(mCreateMessageGroups, requestValue, new UseCase.UseCaseCallback<CreateMessageGroups.ResponseValue>() {
+            @Override
+            public void onSuccess(CreateMessageGroups.ResponseValue response) {
+
+            }
+
+            @Override
+            public void onError() {
+
             }
         });
     }

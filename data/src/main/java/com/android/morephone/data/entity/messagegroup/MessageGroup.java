@@ -1,6 +1,7 @@
 package com.android.morephone.data.entity.messagegroup;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by truongnguyen on 10/6/17.
@@ -12,6 +13,7 @@ public class MessageGroup {
     private String name;
     private String groupPhone;
     private String phoneNumberId;
+    private List<String> messagesSid;
     private String userId;
     private long createdAt;
     private long updatedAt;
@@ -24,6 +26,7 @@ public class MessageGroup {
         this.name = builder.name;
         this.groupPhone = builder.groupPhone;
         this.phoneNumberId = builder.phoneNumberId;
+        this.messagesSid = builder.messagesSid;
         this.userId = builder.userId;
         Date date = new Date();
         createdAt = date.getTime();
@@ -71,6 +74,14 @@ public class MessageGroup {
         return phoneNumberId;
     }
 
+    public List<String> getMessagesSid() {
+        return messagesSid;
+    }
+
+    public void setMessagesSid(List<String> messagesSid) {
+        this.messagesSid = messagesSid;
+    }
+
     public void setPhoneNumberId(String phoneNumberId) {
         this.phoneNumberId = phoneNumberId;
     }
@@ -106,6 +117,7 @@ public class MessageGroup {
         private String name;
         private String groupPhone;
         private String phoneNumberId;
+        private List<String> messagesSid;
         private String userId;
         private long createdAt;
         private long updatedAt;
@@ -134,6 +146,10 @@ public class MessageGroup {
             return this;
         }
 
+        public Builder messagesSid(List<String> messagesSid) {
+            this.messagesSid = messagesSid;
+            return this;
+        }
 
         public Builder userId(String userId) {
             this.userId = userId;

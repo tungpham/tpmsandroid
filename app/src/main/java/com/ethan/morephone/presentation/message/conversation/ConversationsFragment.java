@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.text.TextUtilsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +24,9 @@ import android.widget.Toast;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.conversation.ConversationModel;
+import com.android.morephone.data.entity.messagegroup.MessageGroup;
 import com.android.morephone.data.log.DebugTool;
+import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.fcm.NotifyFirebaseMessagingService;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -91,7 +95,8 @@ public class ConversationsFragment extends BaseFragment implements
                 Injection.providerGetMessages(getContext()),
                 Injection.providerGetMessagesIncoming(getContext()),
                 Injection.providerGetMessagesOutgoing(getContext()),
-                Injection.providerCreateMessage(getContext()));
+                Injection.providerCreateMessage(getContext()),
+                Injection.providerCreateMessageGroup(getContext()));
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NotifyFirebaseMessagingService.ACTION_UPDATE_MESSAGE);
@@ -315,6 +320,19 @@ public class ConversationsFragment extends BaseFragment implements
                         DebugTool.logD("OUTSIDE: " + body);
 
                     } else {
+                        String groupPhone = TextUtils.join(",", tos);
+                        List<String> messageIds = new ArrayList<>();
+                        messageIds.add("abcd1234");
+                        messageIds.add("abcd5678");
+                        messageIds.add("abcd91011");
+                        MessageGroup messageGroup = MessageGroup.getBuilder()
+                                .name("K20B")
+                                .phoneNumberId(mPhoneNumberId)
+                                .groupPhone(groupPhone)
+                                .messagesSid(messageIds)
+                                .userId(MyPreference.getUserId(getContext()))
+                                .build();
+                        mPresenter.createMessageGroup(getContext(), messageGroup);
 
                         //Send to group
 
