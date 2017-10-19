@@ -1,7 +1,6 @@
 package com.android.morephone.data.network;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.android.morephone.data.BaseUrl;
 import com.android.morephone.data.entity.BaseResponse;
@@ -9,12 +8,10 @@ import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.conversation.ResourceMessage;
-import com.android.morephone.data.entity.messagegroup.MessageGroup;
+import com.android.morephone.data.entity.group.Group;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
-import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.entity.record.ResourceRecord;
 import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.token.CredentialsEntity;
@@ -23,8 +20,6 @@ import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -222,11 +217,21 @@ public class ApiMorePhone {
 
     public static void createMessage(Context context,
                                      String userId,
+                                     String groupId,
+                                     long dateSent,
                                      String to,
                                      String from,
                                      String body,
                                      Callback<BaseResponse<MessageItem>> callback) {
-        Call<BaseResponse<MessageItem>> call = getApiPath(context).createMessage(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), userId, from, to, body);
+        Call<BaseResponse<MessageItem>> call = getApiPath(context).createMessage(
+                TwilioManager.getSid(context),
+                TwilioManager.getAuthCode(context),
+                userId,
+                groupId,
+                dateSent,
+                from,
+                to,
+                body);
         call.enqueue(callback);
     }
 
@@ -334,33 +339,33 @@ public class ApiMorePhone {
         call.enqueue(callback);
     }
 
-    /*-----------------------------------------MESSAGE GROUP-----------------------------------------*/
+    /*-----------------------------------------GROUP-----------------------------------------*/
 
-    public static void createMessageGroup(Context context,
-                                          MessageGroup messageGroup,
-                                          Callback<BaseResponse<MessageGroup>> callback) {
-        Call<BaseResponse<MessageGroup>> call = getApiPath(context).createMessageGroup(messageGroup);
+    public static void createGroup(Context context,
+                                   Group group,
+                                   Callback<BaseResponse<Group>> callback) {
+        Call<BaseResponse<Group>> call = getApiPath(context).createGroup(group);
         call.enqueue(callback);
     }
 
-    public static void deleteMessageGroup(Context context,
-                                          String id,
-                                          Callback<Response> callback) {
-        Call<Response> call = getApiPath(context).deleteMessageGroup(id);
+    public static void deleteGroup(Context context,
+                                   String id,
+                                   Callback<Response> callback) {
+        Call<Response> call = getApiPath(context).deleteGroup(id);
         call.enqueue(callback);
     }
 
-    public static void loadMessageGroupByUser(Context context,
-                                              String phoneNumberId,
-                                              Callback<BaseResponse<List<MessageGroup>>> callback) {
-        Call<BaseResponse<List<MessageGroup>>> call = getApiPath(context).loadMessageGroupByUser(phoneNumberId);
+    public static void loadGroupByUser(Context context,
+                                       String phoneNumberId,
+                                       Callback<BaseResponse<List<Group>>> callback) {
+        Call<BaseResponse<List<Group>>> call = getApiPath(context).loadGroupByUser(phoneNumberId);
         call.enqueue(callback);
     }
 
-    public static void updateMessageGroup(Context context,
-                                          MessageGroup messageGroup,
-                                          Callback<BaseResponse<MessageGroup>> callback) {
-        Call<BaseResponse<MessageGroup>> call = getApiPath(context).updateMessageGroup(messageGroup);
+    public static void updateGroup(Context context,
+                                   Group group,
+                                   Callback<BaseResponse<Group>> callback) {
+        Call<BaseResponse<Group>> call = getApiPath(context).updateGroup(group);
         call.enqueue(callback);
     }
 }

@@ -1,10 +1,8 @@
-package com.android.morephone.data.repository.messagegroup.source;
+package com.android.morephone.data.repository.group.source;
 
 import android.support.annotation.NonNull;
 
-import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.entity.messagegroup.MessageGroup;
-import com.android.morephone.data.repository.contact.source.ContactDataSource;
+import com.android.morephone.data.entity.group.Group;
 
 import java.util.List;
 
@@ -12,18 +10,18 @@ import java.util.List;
  * Created by truongnguyen on 10/6/17.
  */
 
-public interface MessageGroupDataSource {
+public interface GroupDataSource {
 
     interface LoadMessageGroupsCallback {
 
-        void onMessageGroupsLoaded(List<MessageGroup> messageGroups);
+        void onMessageGroupsLoaded(List<Group> groups);
 
         void onDataNotAvailable();
     }
 
     interface GetMessageGroupCallback {
 
-        void onMessageGroupLoaded(MessageGroup messageGroup);
+        void onMessageGroupLoaded(Group group);
 
         void onDataNotAvailable();
     }
@@ -36,9 +34,9 @@ public interface MessageGroupDataSource {
 
     void getMessageGroupByUserId(@NonNull String userId, @NonNull LoadMessageGroupsCallback callback);
 
-    void saveMessageGroup(@NonNull MessageGroup messageGroup, @NonNull GetMessageGroupCallback callback);
+    void saveMessageGroup(@NonNull Group group, @NonNull GetMessageGroupCallback callback);
 
-    void updateMessageGroup(@NonNull MessageGroup messageGroup);
+    void updateMessageGroup(@NonNull Group group);
 
     void refreshMessageGroup();
 

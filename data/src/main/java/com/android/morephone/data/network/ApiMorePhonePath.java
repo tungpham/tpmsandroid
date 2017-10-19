@@ -6,12 +6,10 @@ import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.conversation.ResourceMessage;
-import com.android.morephone.data.entity.messagegroup.MessageGroup;
+import com.android.morephone.data.entity.group.Group;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.entity.purchase.MorePhonePurchase;
-import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.entity.record.ResourceRecord;
 import com.android.morephone.data.entity.register.BindingRequest;
 import com.android.morephone.data.entity.usage.UsageItem;
@@ -81,6 +79,8 @@ interface ApiMorePhonePath {
     Call<BaseResponse<MessageItem>> createMessage(@Field("account_sid") String accountSid,
                                                   @Field("auth_token") String authToken,
                                                   @Field("userId") String userId,
+                                                  @Field("group_id") String groupId,
+                                                  @Field("date_sent") long dateSent,
                                                   @Field("from") String from,
                                                   @Field("to") String to,
                                                   @Field("body") String body);
@@ -151,17 +151,17 @@ interface ApiMorePhonePath {
     Call<BaseResponse<Contact>> updateContact(@Body Contact contact);
 
 
-    /*-----------------------------------------MESSAGE GROUP-----------------------------------------*/
-    @POST("message-group")
-    Call<BaseResponse<MessageGroup>> createMessageGroup(@Body MessageGroup messageGroup);
+    /*-----------------------------------------GROUP-----------------------------------------*/
+    @POST("group")
+    Call<BaseResponse<Group>> createGroup(@Body Group group);
 
-    @DELETE("message-group/{id}")
-    Call<Response> deleteMessageGroup(@Path("id") String id);
+    @DELETE("group/{id}")
+    Call<Response> deleteGroup(@Path("id") String id);
 
-    @GET("message-group/user")
-    Call<BaseResponse<List<MessageGroup>>> loadMessageGroupByUser(@Query("user_id") String userId);
+    @GET("group/user")
+    Call<BaseResponse<List<Group>>> loadGroupByUser(@Query("user_id") String userId);
 
-    @PUT("message-group")
-    Call<BaseResponse<MessageGroup>> updateMessageGroup(@Body MessageGroup messageGroup);
+    @PUT("group")
+    Call<BaseResponse<Group>> updateGroup(@Body Group group);
 
 }

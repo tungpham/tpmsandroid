@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.application.Applications;
@@ -18,16 +17,13 @@ import com.android.morephone.data.utils.CredentialsManager;
 import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
-import com.android.morephone.domain.usecase.contact.ContactFilterType;
-import com.android.morephone.domain.usecase.contact.GetContacts;
-import com.android.morephone.domain.usecase.messagegroup.GetMessageGroupsByUserId;
+import com.android.morephone.domain.usecase.group.GetGroupsByUserId;
 import com.auth0.android.Auth0;
 import com.auth0.android.authentication.AuthenticationAPIClient;
 import com.auth0.android.authentication.AuthenticationException;
 import com.auth0.android.callback.BaseCallback;
 import com.auth0.android.management.ManagementException;
 import com.auth0.android.management.UsersAPIClient;
-import com.auth0.android.result.Credentials;
 import com.auth0.android.result.UserProfile;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
@@ -40,8 +36,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.twilio.client.Twilio;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -89,11 +83,11 @@ public class SplashActivity extends BaseActivity {
             });
 
             final UseCaseHandler useCaseHandler = Injection.providerUseCaseHandler();
-            final GetMessageGroupsByUserId getMessageGroupsByUserId = Injection.providerGetMessageGroupById(getApplicationContext());
-            GetMessageGroupsByUserId.RequestValues requestValues = new GetMessageGroupsByUserId.RequestValues(true, MyPreference.getUserId(getApplicationContext()));
-            useCaseHandler.execute(getMessageGroupsByUserId, requestValues, new UseCase.UseCaseCallback<GetMessageGroupsByUserId.ResponseValue>() {
+            final GetGroupsByUserId getGroupsByUserId = Injection.providerGetMessageGroupById(getApplicationContext());
+            GetGroupsByUserId.RequestValues requestValues = new GetGroupsByUserId.RequestValues(true, MyPreference.getUserId(getApplicationContext()));
+            useCaseHandler.execute(getGroupsByUserId, requestValues, new UseCase.UseCaseCallback<GetGroupsByUserId.ResponseValue>() {
                 @Override
-                public void onSuccess(GetMessageGroupsByUserId.ResponseValue response) {
+                public void onSuccess(GetGroupsByUserId.ResponseValue response) {
                 }
 
                 @Override

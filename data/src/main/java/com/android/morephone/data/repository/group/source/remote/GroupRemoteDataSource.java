@@ -1,14 +1,13 @@
-package com.android.morephone.data.repository.messagegroup.source.remote;
+package com.android.morephone.data.repository.group.source.remote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.entity.messagegroup.MessageGroup;
+import com.android.morephone.data.entity.group.Group;
 import com.android.morephone.data.network.ApiMorePhone;
-import com.android.morephone.data.repository.contact.source.remote.ContactRemoteDataSource;
-import com.android.morephone.data.repository.messagegroup.source.MessageGroupDataSource;
+import com.android.morephone.data.repository.group.source.GroupDataSource;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,10 +21,10 @@ import retrofit2.Response;
  * Created by truongnguyen on 10/7/17.
  */
 
-public class MessageGroupRemoteDataSource implements MessageGroupDataSource {
+public class GroupRemoteDataSource implements GroupDataSource {
 
 
-    private static MessageGroupRemoteDataSource INSTANCE;
+    private static GroupRemoteDataSource INSTANCE;
 
     private static final int SERVICE_LATENCY_IN_MILLIS = 5000;
 
@@ -37,15 +36,15 @@ public class MessageGroupRemoteDataSource implements MessageGroupDataSource {
         TASKS_SERVICE_DATA = new LinkedHashMap<>(2);
     }
 
-    public static MessageGroupRemoteDataSource getInstance(Context context) {
+    public static GroupRemoteDataSource getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new MessageGroupRemoteDataSource(context);
+            INSTANCE = new GroupRemoteDataSource(context);
         }
         return INSTANCE;
     }
 
     // Prevent direct instantiation.
-    private MessageGroupRemoteDataSource(Context context) {
+    private GroupRemoteDataSource(Context context) {
         mContext = context;
     }
 
@@ -67,9 +66,9 @@ public class MessageGroupRemoteDataSource implements MessageGroupDataSource {
 
     @Override
     public void getMessageGroupByUserId(@NonNull String userId, @NonNull final LoadMessageGroupsCallback callback) {
-        ApiMorePhone.loadMessageGroupByUser(mContext, userId, new Callback<BaseResponse<List<MessageGroup>>>() {
+        ApiMorePhone.loadGroupByUser(mContext, userId, new Callback<BaseResponse<List<Group>>>() {
             @Override
-            public void onResponse(Call<BaseResponse<List<MessageGroup>>> call, Response<BaseResponse<List<MessageGroup>>> response) {
+            public void onResponse(Call<BaseResponse<List<Group>>> call, Response<BaseResponse<List<Group>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onMessageGroupsLoaded(response.body().getResponse());
                 } else {
@@ -78,17 +77,17 @@ public class MessageGroupRemoteDataSource implements MessageGroupDataSource {
             }
 
             @Override
-            public void onFailure(Call<BaseResponse<List<MessageGroup>>> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<List<Group>>> call, Throwable t) {
                 callback.onDataNotAvailable();
             }
         });
     }
 
     @Override
-    public void saveMessageGroup(@NonNull MessageGroup messageGroup, @NonNull final GetMessageGroupCallback callback) {
-        ApiMorePhone.createMessageGroup(mContext, messageGroup, new Callback<BaseResponse<MessageGroup>>() {
+    public void saveMessageGroup(@NonNull Group group, @NonNull final GetMessageGroupCallback callback) {
+        ApiMorePhone.createGroup(mContext, group, new Callback<BaseResponse<Group>>() {
             @Override
-            public void onResponse(Call<BaseResponse<MessageGroup>> call, Response<BaseResponse<MessageGroup>> response) {
+            public void onResponse(Call<BaseResponse<Group>> call, Response<BaseResponse<Group>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onMessageGroupLoaded(response.body().getResponse());
                 } else {
@@ -97,24 +96,24 @@ public class MessageGroupRemoteDataSource implements MessageGroupDataSource {
             }
 
             @Override
-            public void onFailure(Call<BaseResponse<MessageGroup>> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<Group>> call, Throwable t) {
                 callback.onDataNotAvailable();
             }
         });
     }
 
     @Override
-    public void updateMessageGroup(@NonNull MessageGroup messageGroup) {
-        ApiMorePhone.updateMessageGroup(mContext, messageGroup, new Callback<BaseResponse<MessageGroup>>() {
+    public void updateMessageGroup(@NonNull Group group) {
+        ApiMorePhone.updateGroup(mContext, group, new Callback<BaseResponse<Group>>() {
             @Override
-            public void onResponse(Call<BaseResponse<MessageGroup>> call, Response<BaseResponse<MessageGroup>> response) {
+            public void onResponse(Call<BaseResponse<Group>> call, Response<BaseResponse<Group>> response) {
                 if (response.isSuccessful() && response.body() != null) {
 
                 }
             }
 
             @Override
-            public void onFailure(Call<BaseResponse<MessageGroup>> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<Group>> call, Throwable t) {
 
             }
         });
@@ -132,7 +131,7 @@ public class MessageGroupRemoteDataSource implements MessageGroupDataSource {
 
     @Override
     public void deleteMessageGroup(@NonNull String messageGroupId) {
-        ApiMorePhone.deleteMessageGroup(mContext, messageGroupId, new Callback<com.android.morephone.data.entity.Response>() {
+        ApiMorePhone.deleteGroup(mContext, messageGroupId, new Callback<com.android.morephone.data.entity.Response>() {
             @Override
             public void onResponse(Call<com.android.morephone.data.entity.Response> call, Response<com.android.morephone.data.entity.Response> response) {
 

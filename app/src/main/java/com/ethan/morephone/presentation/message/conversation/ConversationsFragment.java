@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,9 +23,7 @@ import android.widget.Toast;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.conversation.ConversationModel;
-import com.android.morephone.data.entity.messagegroup.MessageGroup;
 import com.android.morephone.data.log.DebugTool;
-import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.fcm.NotifyFirebaseMessagingService;
 import com.ethan.morephone.presentation.BaseFragment;
@@ -36,8 +33,6 @@ import com.ethan.morephone.presentation.message.compose.ComposeActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.ConversationListAdapter;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
-import com.ethan.morephone.presentation.message.list.MessageListFragment;
-import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
@@ -96,7 +91,7 @@ public class ConversationsFragment extends BaseFragment implements
                 Injection.providerGetMessagesIncoming(getContext()),
                 Injection.providerGetMessagesOutgoing(getContext()),
                 Injection.providerCreateMessage(getContext()),
-                Injection.providerCreateMessageGroup(getContext()));
+                Injection.providerCreateGroup(getContext()));
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NotifyFirebaseMessagingService.ACTION_UPDATE_MESSAGE);
@@ -321,18 +316,8 @@ public class ConversationsFragment extends BaseFragment implements
 
                     } else {
                         String groupPhone = TextUtils.join(",", tos);
-                        List<String> messageIds = new ArrayList<>();
-                        messageIds.add("abcd1234");
-                        messageIds.add("abcd5678");
-                        messageIds.add("abcd91011");
-                        MessageGroup messageGroup = MessageGroup.getBuilder()
-                                .name("K20B")
-                                .phoneNumberId(mPhoneNumberId)
-                                .groupPhone(groupPhone)
-                                .messagesSid(messageIds)
-                                .userId(MyPreference.getUserId(getContext()))
-                                .build();
-                        mPresenter.createMessageGroup(getContext(), messageGroup);
+                        ConversationModel model = new ConversationModel(groupPhone, "", new ArrayList<MessageItem>());
+                        MessageListActivity.starter(getActivity(), mPhoneNumber, mPhoneNumberId, body, model);
 
                         //Send to group
 

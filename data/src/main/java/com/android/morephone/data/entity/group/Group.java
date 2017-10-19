@@ -1,4 +1,4 @@
-package com.android.morephone.data.entity.messagegroup;
+package com.android.morephone.data.entity.group;
 
 import java.util.Date;
 import java.util.List;
@@ -7,34 +7,32 @@ import java.util.List;
  * Created by truongnguyen on 10/6/17.
  */
 
-public class MessageGroup {
+public class Group {
 
     private String id;
     private String name;
-    private String groupPhone;
     private String phoneNumberId;
-    private List<String> messagesSid;
+    private List<String> groupPhone;
     private String userId;
     private long createdAt;
     private long updatedAt;
 
-    public MessageGroup() {
+    public Group() {
     }
 
-    private MessageGroup(MessageGroup.Builder builder) {
+    private Group(Group.Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.groupPhone = builder.groupPhone;
         this.phoneNumberId = builder.phoneNumberId;
-        this.messagesSid = builder.messagesSid;
         this.userId = builder.userId;
         Date date = new Date();
         createdAt = date.getTime();
         updatedAt = date.getTime();
     }
 
-    public static MessageGroup.Builder getBuilder() {
-        return new MessageGroup.Builder();
+    public static Group.Builder getBuilder() {
+        return new Group.Builder();
     }
 
     public String getId() {
@@ -62,24 +60,16 @@ public class MessageGroup {
         this.name = name;
     }
 
-    public String getGroupPhone() {
+    public List<String> getGroupPhone() {
         return groupPhone;
     }
 
-    public void setGroupPhone(String groupPhone) {
+    public void setGroupPhone(List<String> groupPhone) {
         this.groupPhone = groupPhone;
     }
 
     public String getPhoneNumberId() {
         return phoneNumberId;
-    }
-
-    public List<String> getMessagesSid() {
-        return messagesSid;
-    }
-
-    public void setMessagesSid(List<String> messagesSid) {
-        this.messagesSid = messagesSid;
     }
 
     public void setPhoneNumberId(String phoneNumberId) {
@@ -115,12 +105,9 @@ public class MessageGroup {
 
         private String id;
         private String name;
-        private String groupPhone;
+        private List<String> groupPhone;
         private String phoneNumberId;
-        private List<String> messagesSid;
         private String userId;
-        private long createdAt;
-        private long updatedAt;
 
         private Builder() {
         }
@@ -136,7 +123,7 @@ public class MessageGroup {
             return this;
         }
 
-        public Builder groupPhone(String groupPhone) {
+        public Builder groupPhone(List<String> groupPhone) {
             this.groupPhone = groupPhone;
             return this;
         }
@@ -146,18 +133,13 @@ public class MessageGroup {
             return this;
         }
 
-        public Builder messagesSid(List<String> messagesSid) {
-            this.messagesSid = messagesSid;
-            return this;
-        }
-
         public Builder userId(String userId) {
             this.userId = userId;
             return this;
         }
 
-        public MessageGroup build() {
-            MessageGroup build = new MessageGroup(this);
+        public Group build() {
+            Group build = new Group(this);
             return build;
         }
     }

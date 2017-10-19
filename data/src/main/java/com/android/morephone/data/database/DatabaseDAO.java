@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import com.android.morephone.data.repository.contact.source.local.ContactPersistenceContract;
-import com.android.morephone.data.repository.messagegroup.source.local.MessageGroupPersistenceContract;
+import com.android.morephone.data.repository.group.source.local.GroupPersistenceContract;
 import com.android.morephone.data.repository.phonenumbers.incoming.source.local.PhoneNumberPersistenceContract;
 
 
@@ -73,16 +73,16 @@ public class DatabaseDAO extends SQLiteOpenHelper {
 
     private static void createTableMessageGroup(SQLiteDatabase db) {
         String sql =
-                "CREATE TABLE " + MessageGroupPersistenceContract.MessageGroupEntry.TABLE_NAME
+                "CREATE TABLE " + GroupPersistenceContract.MessageGroupEntry.TABLE_NAME
                         + " ("
                         + BaseColumns._ID + INTEGER_TYPE  + " PRIMARY KEY AUTOINCREMENT " + COMMA_SEP
-                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_ID + TEXT_TYPE + COMMA_SEP
-                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_NAME + TEXT_TYPE + COMMA_SEP
-                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_GROUP_PHONE + TEXT_TYPE + COMMA_SEP
-                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_PHONE_NUMBER_ID + TEXT_TYPE + COMMA_SEP
-                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_USER_ID + TEXT_TYPE + COMMA_SEP
-                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_CREATED_AT + INTEGER_TYPE + COMMA_SEP
-                        + MessageGroupPersistenceContract.MessageGroupEntry.COL_UPDATED_AT + INTEGER_TYPE
+                        + GroupPersistenceContract.MessageGroupEntry.COL_ID + TEXT_TYPE + COMMA_SEP
+                        + GroupPersistenceContract.MessageGroupEntry.COL_NAME + TEXT_TYPE + COMMA_SEP
+                        + GroupPersistenceContract.MessageGroupEntry.COL_GROUP_PHONE + TEXT_TYPE + COMMA_SEP
+                        + GroupPersistenceContract.MessageGroupEntry.COL_PHONE_NUMBER_ID + TEXT_TYPE + COMMA_SEP
+                        + GroupPersistenceContract.MessageGroupEntry.COL_USER_ID + TEXT_TYPE + COMMA_SEP
+                        + GroupPersistenceContract.MessageGroupEntry.COL_CREATED_AT + INTEGER_TYPE + COMMA_SEP
+                        + GroupPersistenceContract.MessageGroupEntry.COL_UPDATED_AT + INTEGER_TYPE
                         + ")";
 
         db.execSQL(sql);

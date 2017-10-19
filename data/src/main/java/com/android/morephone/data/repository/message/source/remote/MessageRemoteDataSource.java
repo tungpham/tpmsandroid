@@ -162,8 +162,8 @@ public class MessageRemoteDataSource implements MessageDataSource {
     }
 
     @Override
-    public void createMessage(String userId, String to, String from, String body, @NonNull final GetMessageCallback callback) {
-        ApiMorePhone.createMessage(mContext, userId, to, from, body, new Callback<BaseResponse<MessageItem>>() {
+    public void createMessage(String userId, String groupId, long dateSent, String to, String from, String body, @NonNull final GetMessageCallback callback) {
+        ApiMorePhone.createMessage(mContext, userId, groupId, dateSent, to, from, body, new Callback<BaseResponse<MessageItem>>() {
             @Override
             public void onResponse(Call<BaseResponse<MessageItem>> call, Response<BaseResponse<MessageItem>> response) {
                 if (response.isSuccessful()) {

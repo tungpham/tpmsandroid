@@ -1,12 +1,11 @@
-package com.android.morephone.data.repository.messagegroup.source.local;
+package com.android.morephone.data.repository.group.source.local;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.database.MessageGroupDatabaseHelper;
-import com.android.morephone.data.entity.messagegroup.MessageGroup;
-import com.android.morephone.data.repository.contact.source.local.ContactLocalDataSource;
-import com.android.morephone.data.repository.messagegroup.source.MessageGroupDataSource;
+import com.android.morephone.data.entity.group.Group;
+import com.android.morephone.data.repository.group.source.GroupDataSource;
 
 import java.util.List;
 
@@ -14,20 +13,20 @@ import java.util.List;
  * Created by truongnguyen on 10/7/17.
  */
 
-public class MessageGroupLocalDataSource implements MessageGroupDataSource {
+public class GroupLocalDataSource implements GroupDataSource {
 
-    private static MessageGroupLocalDataSource INSTANCE;
+    private static GroupLocalDataSource INSTANCE;
     private Context mContext;
 
 
     // Prevent direct instantiation.
-    private MessageGroupLocalDataSource(@NonNull Context context) {
+    private GroupLocalDataSource(@NonNull Context context) {
         mContext = context;
     }
 
-    public static MessageGroupLocalDataSource getInstance(@NonNull Context context) {
+    public static GroupLocalDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new MessageGroupLocalDataSource(context);
+            INSTANCE = new GroupLocalDataSource(context);
         }
         return INSTANCE;
     }
@@ -39,9 +38,9 @@ public class MessageGroupLocalDataSource implements MessageGroupDataSource {
 
     @Override
     public void getMessageGroups(@NonNull String phoneNumberId, @NonNull LoadMessageGroupsCallback callback) {
-        List<MessageGroup> messageGroup = MessageGroupDatabaseHelper.findAll(mContext, phoneNumberId);
-        if (messageGroup != null && !messageGroup.isEmpty()) {
-            callback.onMessageGroupsLoaded(messageGroup);
+        List<Group> group = MessageGroupDatabaseHelper.findAll(mContext, phoneNumberId);
+        if (group != null && !group.isEmpty()) {
+            callback.onMessageGroupsLoaded(group);
         } else {
             callback.onDataNotAvailable();
         }
@@ -49,9 +48,9 @@ public class MessageGroupLocalDataSource implements MessageGroupDataSource {
 
     @Override
     public void getMessageGroup(@NonNull String messageGroupId, @NonNull GetMessageGroupCallback callback) {
-        MessageGroup messageGroup = MessageGroupDatabaseHelper.findMessageGroup(mContext, messageGroupId);
-        if (messageGroup != null) {
-            callback.onMessageGroupLoaded(messageGroup);
+        Group group = MessageGroupDatabaseHelper.findMessageGroup(mContext, messageGroupId);
+        if (group != null) {
+            callback.onMessageGroupLoaded(group);
         } else {
             callback.onDataNotAvailable();
         }
@@ -63,13 +62,13 @@ public class MessageGroupLocalDataSource implements MessageGroupDataSource {
     }
 
     @Override
-    public void saveMessageGroup(@NonNull MessageGroup messageGroup, @NonNull GetMessageGroupCallback callback) {
-        MessageGroupDatabaseHelper.insert(mContext, messageGroup);
+    public void saveMessageGroup(@NonNull Group group, @NonNull GetMessageGroupCallback callback) {
+        MessageGroupDatabaseHelper.insert(mContext, group);
     }
 
     @Override
-    public void updateMessageGroup(@NonNull MessageGroup messageGroup) {
-        MessageGroupDatabaseHelper.updateMessageGroup(mContext, messageGroup);
+    public void updateMessageGroup(@NonNull Group group) {
+        MessageGroupDatabaseHelper.updateMessageGroup(mContext, group);
     }
 
     @Override

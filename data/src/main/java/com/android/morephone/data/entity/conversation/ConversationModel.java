@@ -15,15 +15,26 @@ import java.util.List;
  */
 
 public class ConversationModel implements Comparable<ConversationModel> {
+    @SerializedName("group_id")
+    public String mGroupId;
 
     @SerializedName("phone_number")
     public String mPhoneNumber;
+
     @SerializedName("date_created")
     public String mDateCreated;
+
     @SerializedName("message_items")
     public List<MessageItem> mMessageItems;
 
     public ConversationModel(String phoneNumber, String dateCreated, List<MessageItem> messageItems) {
+        this.mPhoneNumber = phoneNumber;
+        this.mDateCreated = dateCreated;
+        this.mMessageItems = messageItems;
+    }
+
+    public ConversationModel(String groupId, String phoneNumber, String dateCreated, List<MessageItem> messageItems) {
+        this.mGroupId = groupId;
         this.mPhoneNumber = phoneNumber;
         this.mDateCreated = dateCreated;
         this.mMessageItems = messageItems;
@@ -35,7 +46,6 @@ public class ConversationModel implements Comparable<ConversationModel> {
 
             Date current = DateUtils.getDate(mDateCreated);
             Date now = DateUtils.getDate(conversationModel.mDateCreated);
-            DebugTool.logD("CURRENT: " + mDateCreated);
             if (current != null && now != null) {
                 if (current.after(now)) {
                     return -1;

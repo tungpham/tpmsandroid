@@ -22,7 +22,12 @@ public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMes
 
     @Override
     protected void executeUseCase(RequestValue requestValue) {
-        mMessageRepository.createMessage(requestValue.getUserId(), requestValue.getPhoneNumberTo(), requestValue.getPhoneNumberFrom(), requestValue.getBody(), new MessageDataSource.GetMessageCallback() {
+        mMessageRepository.createMessage(requestValue.getUserId(),
+                requestValue.getGroupId(),
+                requestValue.getDateSent(),
+                requestValue.getPhoneNumberTo(),
+                requestValue.getPhoneNumberFrom(),
+                requestValue.getBody(), new MessageDataSource.GetMessageCallback() {
             @Override
             public void onMessageLoaded(MessageItem messageItem, int statusCode) {
                 getUseCaseCallback().onSuccess(new ResponseValue(messageItem, statusCode));
@@ -40,12 +45,16 @@ public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMes
         private final String mUserId;
         private final String mPhoneNumberTo;
         private final String mPhoneNumberFrom;
+        private final String mGroupId;
+        private final long mDateSent;
         private final String mBody;
 
-        public RequestValue(String userId, String phoneNumberTo, String phoneNumberFrom, String body) {
+        public RequestValue(String userId, String groupId, long dateSent, String phoneNumberTo, String phoneNumberFrom,  String body) {
             mUserId = userId;
             mPhoneNumberTo = phoneNumberTo;
             mPhoneNumberFrom = phoneNumberFrom;
+            mGroupId = groupId;
+            mDateSent = dateSent;
             mBody = body;
         }
 
@@ -63,6 +72,14 @@ public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMes
 
         public String getBody() {
             return mBody;
+        }
+
+        public String getGroupId() {
+            return mGroupId;
+        }
+
+        public long getDateSent() {
+            return mDateSent;
         }
     }
 

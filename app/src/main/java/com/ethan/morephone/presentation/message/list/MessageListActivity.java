@@ -15,6 +15,9 @@ import com.ethan.morephone.utils.ActivityUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Ethan on 2/16/17.
  */
@@ -26,6 +29,18 @@ public class MessageListActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, phoneNumber);
         bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, phoneNumberId);
+        bundle.putString(MessageListFragment.BUNDLE_MESSAGE_BODY, body);
+        intent.putExtras(bundle);
+        EventBus.getDefault().postSticky(conversationModel);
+        activity.startActivity(intent);
+    }
+
+    public static void starter(Activity activity, String phoneNumber, String phoneNumberId,  List<String> groupPhone, String body, ConversationModel conversationModel) {
+        Intent intent = new Intent(activity, MessageListActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER, phoneNumber);
+        bundle.putString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, phoneNumberId);
+        bundle.putStringArrayList(DashboardActivity.BUNDLE_PHONE_NUMBER_ID, new ArrayList<>(groupPhone));
         bundle.putString(MessageListFragment.BUNDLE_MESSAGE_BODY, body);
         intent.putExtras(bundle);
         EventBus.getDefault().postSticky(conversationModel);

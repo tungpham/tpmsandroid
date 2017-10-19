@@ -71,7 +71,7 @@ public class MessageReplyActivity extends BaseActivity implements View.OnClickLi
             case R.id.image_send:
                 String body = mEditTextMessage.getText().toString();
                 if (!TextUtils.isEmpty(body)) {
-                    mPresenter.createMessage(MyPreference.getUserId(getApplicationContext()), mPhoneNumberFrom, mPhoneNumberTo, body, 0);
+                    mPresenter.createMessage(MyPreference.getUserId(getApplicationContext()), "", System.currentTimeMillis(), mPhoneNumberFrom, mPhoneNumberTo, body, 0);
                     finish();
                 }
                 break;

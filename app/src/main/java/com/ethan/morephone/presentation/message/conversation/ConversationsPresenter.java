@@ -3,20 +3,15 @@ package com.ethan.morephone.presentation.message.conversation;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.MessageItem;
-import com.android.morephone.data.entity.call.Call;
-import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.entity.conversation.ResourceMessage;
-import com.android.morephone.data.entity.messagegroup.MessageGroup;
-import com.android.morephone.data.entity.twilio.MessageListResourceResponse;
+import com.android.morephone.data.entity.group.Group;
 import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
@@ -24,14 +19,12 @@ import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.GetAllMessages;
 import com.android.morephone.domain.usecase.message.GetMessagesIncoming;
 import com.android.morephone.domain.usecase.message.GetMessagesOutgoing;
-import com.android.morephone.domain.usecase.messagegroup.CreateMessageGroups;
+import com.android.morephone.domain.usecase.group.CreateGroup;
 import com.ethan.morephone.Constant;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Ethan on 2/17/17.
@@ -45,7 +38,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     private final GetMessagesIncoming mGetMessagesIncoming;
     private final GetMessagesOutgoing mGetMessagesOutgoing;
     private final CreateMessage mCreateMessage;
-    private final CreateMessageGroups mCreateMessageGroups;
+    private final CreateGroup mCreateGroup;
 
     private List<MessageItem> mMessageItems;
 //    private List<ConversationModel> mConversationModels;
@@ -59,14 +52,14 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
                                   @NonNull GetMessagesIncoming getMessagesIncoming,
                                   @NonNull GetMessagesOutgoing getMessagesOutgoing,
                                   @NonNull CreateMessage createMessage,
-                                  @NonNull CreateMessageGroups createMessageGroups) {
+                                  @NonNull CreateGroup createGroup) {
         mView = view;
         mUseCaseHandler = useCaseHandler;
         mGetAllMessages = getAllMessages;
         mGetMessagesIncoming = getMessagesIncoming;
         mGetMessagesOutgoing = getMessagesOutgoing;
         mCreateMessage = createMessage;
-        mCreateMessageGroups = createMessageGroups;
+        mCreateGroup = createGroup;
 
         mMessageItems = new ArrayList<>();
 //        mConversationModels = new ArrayList<>();
@@ -259,9 +252,9 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     }
 
     @Override
-    public void createMessage(String userId, String to, String from, String body, int position) {
+    public void createMessage(String userId, String groupId, long dateSent, String to, String from, String body, int position) {
         mView.showLoading(true);
-        CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(userId, to, from, body);
+        CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(userId, groupId, dateSent, to, from, body);
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
             public void onSuccess(CreateMessage.ResponseValue response) {
@@ -279,19 +272,8 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     }
 
     @Override
-    public void createMessageGroup(Context context, MessageGroup messageGroup) {
-        CreateMessageGroups.RequestValues requestValue = new CreateMessageGroups.RequestValues(messageGroup);
-        mUseCaseHandler.execute(mCreateMessageGroups, requestValue, new UseCase.UseCaseCallback<CreateMessageGroups.ResponseValue>() {
-            @Override
-            public void onSuccess(CreateMessageGroups.ResponseValue response) {
+    public void createMessageGroup(Context context, Group group) {
 
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });
     }
 
     @Override

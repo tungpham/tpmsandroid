@@ -21,12 +21,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
+import com.android.morephone.data.entity.group.Group;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.repository.contact.source.GetContactCallback;
 import com.ethan.morephone.Constant;
@@ -36,12 +35,10 @@ import com.ethan.morephone.fcm.NotifyFirebaseMessagingService;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.contact.ContactFragment;
-import com.ethan.morephone.presentation.contact.detail.ContactDetailActivity;
 import com.ethan.morephone.presentation.contact.editor.ContactEditorActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.adapter.MessageListAdapter;
-import com.ethan.morephone.presentation.message.list.adapter.MessageOutViewHolder;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.utils.ContactUtil;
 import com.ethan.morephone.utils.Injection;
@@ -52,6 +49,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -81,6 +79,9 @@ public class MessageListFragment extends BaseFragment implements
     private MessageListContract.Presenter mPresenter;
 
     private String mPhoneNumberTo;
+    private String[] mPhoneNumberGroup;
+    private String mGroupId;
+    private String mBody;
     private String mPhoneNumberFrom;
     private String mPhoneNumberId;
 
@@ -100,7 +101,8 @@ public class MessageListFragment extends BaseFragment implements
                 Injection.providerUseCaseHandler(),
                 Injection.providerGetMessagesByToAndFrom(getContext()),
                 Injection.providerCreateMessage(getContext()),
-                Injection.providerDeleteMessage(getContext()));
+                Injection.providerDeleteMessage(getContext()),
+                Injection.providerCreateGroup(getContext()));
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NotifyFirebaseMessagingService.ACTION_UPDATE_MESSAGE);
@@ -162,7 +164,7 @@ public class MessageListFragment extends BaseFragment implements
                 PhoneActivity.starterOutgoing(getActivity(), mPhoneNumberFrom, mPhoneNumberTo);
                 break;
             case R.id.menu_contact:
-                if(mContact == null) {
+                if (mContact == null) {
                     mContact = Contact.getBuilder().phoneNumber(mPhoneNumberTo).phoneNumberId(mPhoneNumberId).build();
                 }
                 Intent intent = new Intent(getActivity(), ContactEditorActivity.class);
@@ -188,7 +190,7 @@ public class MessageListFragment extends BaseFragment implements
     @Override
     public void onResend(int pos) {
         MessageItem messageItem = mMessageListAdapter.getData().get(pos);
-        mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, messageItem.body, pos, true);
+        mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), "", System.currentTimeMillis(), mPhoneNumberTo, mPhoneNumberFrom, messageItem.body, pos, true);
         mMessageListAdapter.getData().get(pos).isSendFail = false;
         mMessageListAdapter.notifyItemChanged(pos);
     }
@@ -199,7 +201,19 @@ public class MessageListFragment extends BaseFragment implements
             case R.id.image_send:
                 String body = mEditTextMessage.getText().toString();
                 mEditTextMessage.setText("");
-                mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, body, mMessageListAdapter.getData().size(), false);
+                long dateSent = System.currentTimeMillis();
+                for (String to : mPhoneNumberGroup) {
+                    mPresenter.createMessage(getContext(),
+                            MyPreference.getUserId(getContext()),
+                            mGroupId,
+                            dateSent,
+                            to,
+                            mPhoneNumberFrom,
+                            body,
+                            mMessageListAdapter.getData().size(), false
+                    );
+                }
+
                 break;
             default:
                 break;
@@ -254,6 +268,29 @@ public class MessageListFragment extends BaseFragment implements
     }
 
     @Override
+    public void createGroupSuccess(Group group) {
+        mGroupId = group.getId();
+        long dateSent = System.currentTimeMillis();
+        for (String to : mPhoneNumberGroup) {
+            mPresenter.createMessage(getContext(),
+                    MyPreference.getUserId(getContext()),
+                    mGroupId,
+                    dateSent,
+                    to,
+                    mPhoneNumberFrom,
+                    mBody,
+                    mMessageListAdapter.getData().size(), false
+            );
+        }
+
+    }
+
+    @Override
+    public void createGroupError() {
+
+    }
+
+    @Override
     public void setPresenter(MessageListContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -294,7 +331,7 @@ public class MessageListFragment extends BaseFragment implements
             @Override
             public void onContactLoaded(View view, Contact contact) {
                 mContact = contact;
-                if(view instanceof Toolbar){
+                if (view instanceof Toolbar) {
                     baseActivity.setTitleActionBar(toolbar, contact.getDisplayName());
                 }
             }
@@ -308,8 +345,25 @@ public class MessageListFragment extends BaseFragment implements
         showMessages(conversationModel.mMessageItems);
         mPhoneNumberTo = conversationModel.mPhoneNumber;
 
+        if (mPhoneNumberTo.contains(",")) {
+            mPhoneNumberGroup = mPhoneNumberTo.split(",");
+
+            if (TextUtils.isEmpty(conversationModel.mGroupId)) {
+                Group group = Group.getBuilder()
+                        .name("K20B")
+                        .phoneNumberId(mPhoneNumberId)
+                        .groupPhone(Arrays.asList(mPhoneNumberGroup))
+                        .userId(MyPreference.getUserId(getContext()))
+                        .build();
+
+                mPresenter.createGroup(getContext(), group);
+            } else {
+                mGroupId = conversationModel.mGroupId;
+            }
+        }
+
         if (!TextUtils.isEmpty(mMessageBody)) {
-            mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size(), false);
+            mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), "", System.currentTimeMillis(), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size(), false);
         }
     }
 

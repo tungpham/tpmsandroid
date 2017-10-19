@@ -1,13 +1,11 @@
-package com.android.morephone.data.repository.messagegroup;
+package com.android.morephone.data.repository.group;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.entity.messagegroup.MessageGroup;
+import com.android.morephone.data.entity.group.Group;
 import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.repository.contact.source.ContactDataSource;
-import com.android.morephone.data.repository.messagegroup.source.MessageGroupDataSource;
+import com.android.morephone.data.repository.group.source.GroupDataSource;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,29 +17,29 @@ import java.util.Map;
  * Created by truongnguyen on 9/28/17.
  */
 
-public class MessageGroupRepository implements MessageGroupDataSource {
+public class GroupRepository implements GroupDataSource {
 
-    private static MessageGroupRepository INSTANCE = null;
+    private static GroupRepository INSTANCE = null;
 
-    private final MessageGroupDataSource mMessageGroupRemoteDataSource;
+    private final GroupDataSource mMessageGroupRemoteDataSource;
 
-    private final MessageGroupDataSource mMessageGroupLocalDataSource;
+    private final GroupDataSource mMessageGroupLocalDataSource;
 
-    Map<String, MessageGroup> mCachedMessageGroups;
+    Map<String, Group> mCachedMessageGroups;
 
     boolean mCacheIsDirty = false;
 
     // Prevent direct instantiation.
-    private MessageGroupRepository(@NonNull MessageGroupDataSource messageGroupRemoteDataSource,
-                                   @NonNull MessageGroupDataSource messageGroupLocalDataSource) {
+    private GroupRepository(@NonNull GroupDataSource messageGroupRemoteDataSource,
+                            @NonNull GroupDataSource messageGroupLocalDataSource) {
         mMessageGroupRemoteDataSource = messageGroupRemoteDataSource;
         mMessageGroupLocalDataSource = messageGroupLocalDataSource;
     }
 
-    public static MessageGroupRepository getInstance(MessageGroupDataSource messageGroupRemoteDataSource,
-                                                     MessageGroupDataSource messageGroupLocalDataSource) {
+    public static GroupRepository getInstance(GroupDataSource messageGroupRemoteDataSource,
+                                              GroupDataSource messageGroupLocalDataSource) {
         if (INSTANCE == null) {
-            INSTANCE = new MessageGroupRepository(messageGroupRemoteDataSource, messageGroupLocalDataSource);
+            INSTANCE = new GroupRepository(messageGroupRemoteDataSource, messageGroupLocalDataSource);
         }
         return INSTANCE;
     }
@@ -69,8 +67,8 @@ public class MessageGroupRepository implements MessageGroupDataSource {
             // Query the local storage if available. If not, query the network.
             mMessageGroupLocalDataSource.getMessageGroups(phoneNumberId, new LoadMessageGroupsCallback() {
                 @Override
-                public void onMessageGroupsLoaded(List<MessageGroup> messageGroups) {
-                    refreshCache(messageGroups);
+                public void onMessageGroupsLoaded(List<Group> groups) {
+                    refreshCache(groups);
                     callback.onMessageGroupsLoaded(new ArrayList<>(mCachedMessageGroups.values()));
                 }
 
@@ -84,7 +82,7 @@ public class MessageGroupRepository implements MessageGroupDataSource {
 
     @Override
     public void getMessageGroup(@NonNull final String messageGroupId, @NonNull final GetMessageGroupCallback callback) {
-        MessageGroup cachedTask = getMessageGroupWithId(messageGroupId);
+        Group cachedTask = getMessageGroupWithId(messageGroupId);
 
         // Respond immediately with cache if available
         if (cachedTask != null) {
@@ -97,16 +95,16 @@ public class MessageGroupRepository implements MessageGroupDataSource {
         DebugTool.logD("KQ: " + messageGroupId);
         mMessageGroupLocalDataSource.getMessageGroup(messageGroupId, new GetMessageGroupCallback() {
             @Override
-            public void onMessageGroupLoaded(MessageGroup messageGroup) {
-                callback.onMessageGroupLoaded(messageGroup);
+            public void onMessageGroupLoaded(Group group) {
+                callback.onMessageGroupLoaded(group);
             }
 
             @Override
             public void onDataNotAvailable() {
                 mMessageGroupRemoteDataSource.getMessageGroup(messageGroupId, new GetMessageGroupCallback() {
                     @Override
-                    public void onMessageGroupLoaded(MessageGroup messageGroup) {
-                        callback.onMessageGroupLoaded(messageGroup);
+                    public void onMessageGroupLoaded(Group group) {
+                        callback.onMessageGroupLoaded(group);
                     }
 
                     @Override
@@ -133,8 +131,8 @@ public class MessageGroupRepository implements MessageGroupDataSource {
             // Query the local storage if available. If not, query the network.
             mMessageGroupLocalDataSource.getMessageGroupByUserId(userId, new LoadMessageGroupsCallback() {
                 @Override
-                public void onMessageGroupsLoaded(List<MessageGroup> messageGroups) {
-                    refreshCache(messageGroups);
+                public void onMessageGroupsLoaded(List<Group> groups) {
+                    refreshCache(groups);
                     callback.onMessageGroupsLoaded(new ArrayList<>(mCachedMessageGroups.values()));
                 }
 
@@ -147,18 +145,18 @@ public class MessageGroupRepository implements MessageGroupDataSource {
     }
 
     @Override
-    public void saveMessageGroup(@NonNull final MessageGroup messageGroup, @NonNull final GetMessageGroupCallback callback) {
-        mMessageGroupRemoteDataSource.saveMessageGroup(messageGroup, new GetMessageGroupCallback() {
+    public void saveMessageGroup(@NonNull final Group group, @NonNull final GetMessageGroupCallback callback) {
+        mMessageGroupRemoteDataSource.saveMessageGroup(group, new GetMessageGroupCallback() {
             @Override
-            public void onMessageGroupLoaded(MessageGroup messageGroup) {
-                mMessageGroupLocalDataSource.saveMessageGroup(messageGroup, null);
+            public void onMessageGroupLoaded(Group group) {
+                mMessageGroupLocalDataSource.saveMessageGroup(group, null);
 
                 // Do in memory cache update to keep the app UI up to date
                 if (mCachedMessageGroups == null) {
                     mCachedMessageGroups = new LinkedHashMap<>();
                 }
-                mCachedMessageGroups.put(messageGroup.getId(), messageGroup);
-                callback.onMessageGroupLoaded(messageGroup);
+                mCachedMessageGroups.put(group.getId(), group);
+                callback.onMessageGroupLoaded(group);
             }
 
             @Override
@@ -169,15 +167,15 @@ public class MessageGroupRepository implements MessageGroupDataSource {
     }
 
     @Override
-    public void updateMessageGroup(@NonNull MessageGroup messageGroup) {
-        mMessageGroupRemoteDataSource.updateMessageGroup(messageGroup);
-        mMessageGroupLocalDataSource.updateMessageGroup(messageGroup);
+    public void updateMessageGroup(@NonNull Group group) {
+        mMessageGroupRemoteDataSource.updateMessageGroup(group);
+        mMessageGroupLocalDataSource.updateMessageGroup(group);
 
         // Do in memory cache update to keep the app UI up to date
         if (mCachedMessageGroups == null) {
             mCachedMessageGroups = new LinkedHashMap<>();
         }
-        mCachedMessageGroups.put(messageGroup.getId(), messageGroup);
+        mCachedMessageGroups.put(group.getId(), group);
     }
 
     @Override
@@ -209,9 +207,9 @@ public class MessageGroupRepository implements MessageGroupDataSource {
         if (mCachedMessageGroups == null) {
             mCachedMessageGroups = new LinkedHashMap<>();
         }
-        Iterator<Map.Entry<String, MessageGroup>> it = mCachedMessageGroups.entrySet().iterator();
+        Iterator<Map.Entry<String, Group>> it = mCachedMessageGroups.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String, MessageGroup> entry = it.next();
+            Map.Entry<String, Group> entry = it.next();
             if (entry.getValue().getPhoneNumberId().equals(phoneNumberId)) {
                 it.remove();
             }
@@ -219,7 +217,7 @@ public class MessageGroupRepository implements MessageGroupDataSource {
     }
 
     @Nullable
-    private MessageGroup getMessageGroupWithId(@NonNull String id) {
+    private Group getMessageGroupWithId(@NonNull String id) {
         if (mCachedMessageGroups == null || mCachedMessageGroups.isEmpty()) {
             return null;
         } else {
@@ -230,9 +228,9 @@ public class MessageGroupRepository implements MessageGroupDataSource {
     private void getContactsFromRemoteDataSource(@NonNull final String phoneNumberId, @NonNull final LoadMessageGroupsCallback callback) {
         mMessageGroupRemoteDataSource.getMessageGroups(phoneNumberId, new LoadMessageGroupsCallback() {
             @Override
-            public void onMessageGroupsLoaded(List<MessageGroup> messageGroups) {
-                refreshCache(messageGroups);
-                refreshLocalDataSource(phoneNumberId, messageGroups);
+            public void onMessageGroupsLoaded(List<Group> groups) {
+                refreshCache(groups);
+                refreshLocalDataSource(phoneNumberId, groups);
                 callback.onMessageGroupsLoaded(new ArrayList<>(mCachedMessageGroups.values()));
             }
 
@@ -246,9 +244,9 @@ public class MessageGroupRepository implements MessageGroupDataSource {
     private void getMessageGroupByUserIdFromRemoteDataSource(@NonNull final String userId, @NonNull final LoadMessageGroupsCallback callback) {
         mMessageGroupRemoteDataSource.getMessageGroupByUserId(userId, new LoadMessageGroupsCallback() {
             @Override
-            public void onMessageGroupsLoaded(List<MessageGroup> messageGroups) {
-                refreshCache(messageGroups);
-                refreshLocalDataSource(userId, messageGroups);
+            public void onMessageGroupsLoaded(List<Group> groups) {
+                refreshCache(groups);
+                refreshLocalDataSource(userId, groups);
                 callback.onMessageGroupsLoaded(new ArrayList<>(mCachedMessageGroups.values()));
             }
 
@@ -259,28 +257,28 @@ public class MessageGroupRepository implements MessageGroupDataSource {
         });
     }
 
-    private void refreshCache(List<MessageGroup> messageGroups) {
+    private void refreshCache(List<Group> groups) {
         if (mCachedMessageGroups == null) {
             mCachedMessageGroups = new LinkedHashMap<>();
         }
         mCachedMessageGroups.clear();
-        for (MessageGroup messageGroup : messageGroups) {
-            mCachedMessageGroups.put(messageGroup.getId(), messageGroup);
+        for (Group group : groups) {
+            mCachedMessageGroups.put(group.getId(), group);
         }
         mCacheIsDirty = false;
     }
 
-    private void refreshLocalDataSource(String phoneNumberId, List<MessageGroup> messageGroups) {
+    private void refreshLocalDataSource(String phoneNumberId, List<Group> groups) {
         mMessageGroupLocalDataSource.deleteAllMessageGroup(phoneNumberId);
-        for (MessageGroup messageGroup : messageGroups) {
-            mMessageGroupLocalDataSource.saveMessageGroup(messageGroup, null);
+        for (Group group : groups) {
+            mMessageGroupLocalDataSource.saveMessageGroup(group, null);
         }
     }
 
-    private void refreshLocalDataSourceByUserId(List<MessageGroup> messageGroups) {
+    private void refreshLocalDataSourceByUserId(List<Group> groups) {
         mMessageGroupLocalDataSource.deleteAllMessageGroup();
-        for (MessageGroup messageGroup : messageGroups) {
-            mMessageGroupLocalDataSource.saveMessageGroup(messageGroup, null);
+        for (Group group : groups) {
+            mMessageGroupLocalDataSource.saveMessageGroup(group, null);
         }
     }
 }

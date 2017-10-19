@@ -1,4 +1,4 @@
-package com.android.morephone.data.repository.messagegroup.source.local;
+package com.android.morephone.data.repository.group.source.local;
 
 import android.provider.BaseColumns;
 
@@ -6,9 +6,9 @@ import android.provider.BaseColumns;
  * Created by truongnguyen on 9/28/17.
  */
 
-public class MessageGroupPersistenceContract {
+public class GroupPersistenceContract {
 
-    private MessageGroupPersistenceContract() {
+    private GroupPersistenceContract() {
     }
 
     public static abstract class MessageGroupEntry implements BaseColumns {
