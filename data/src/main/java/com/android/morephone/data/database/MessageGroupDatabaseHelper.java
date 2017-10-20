@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.text.TextUtils;
 
 import com.android.morephone.data.entity.group.Group;
 import com.android.morephone.data.log.DebugTool;
@@ -12,6 +13,7 @@ import com.android.morephone.data.repository.contact.source.local.ContactPersist
 import com.android.morephone.data.repository.group.source.local.GroupPersistenceContract;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,20 +26,22 @@ public class MessageGroupDatabaseHelper {
 //        if(existsContact(context, contact.getId())){
 //            updateContact(context, contact);
 //        }else {
-            SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
 
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_ID, group.getId());
-            contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_NAME, group.getName());
-            contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_GROUP_PHONE, group.getGroupPhone());
-            contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_PHONE_NUMBER_ID, group.getPhoneNumberId());
-            contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_USER_ID, group.getUserId());
-            contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_CREATED_AT, group.getCreatedAt());
-            contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_UPDATED_AT, group.getUpdatedAt());
+        String groupPhone = TextUtils.join(",", group.getGroupPhone());
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_ID, group.getId());
+        contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_NAME, group.getName());
+        contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_GROUP_PHONE, groupPhone);
+        contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_PHONE_NUMBER_ID, group.getPhoneNumberId());
+        contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_USER_ID, group.getUserId());
+        contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_CREATED_AT, group.getCreatedAt());
+        contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_UPDATED_AT, group.getUpdatedAt());
 
 
-            long id = db.insert(GroupPersistenceContract.MessageGroupEntry.TABLE_NAME, null, contentValues);
-            DebugTool.logD("INSERT OK: " + id);
+        long id = db.insert(GroupPersistenceContract.MessageGroupEntry.TABLE_NAME, null, contentValues);
+        DebugTool.logD("INSERT OK: " + id);
 //        }
     }
 
@@ -71,13 +75,18 @@ public class MessageGroupDatabaseHelper {
                 long createdAt = c.getLong(c.getColumnIndexOrThrow(GroupPersistenceContract.MessageGroupEntry.COL_CREATED_AT));
                 long updatedAt = c.getLong(c.getColumnIndexOrThrow(GroupPersistenceContract.MessageGroupEntry.COL_UPDATED_AT));
 
-                group = Group.getBuilder()
-                        .id(id)
+                Group.Builder builder = Group.getBuilder();
+                builder.id(id)
                         .name(name)
-                        .groupPhone(groupPhone)
                         .phoneNumberId(phoneNumberId)
-                        .userId(userId)
-                        .build();
+                        .userId(userId);
+
+
+                if (!TextUtils.isEmpty(groupPhone) && groupPhone.contains(",")) {
+                    String[] text = groupPhone.split(",");
+                    builder.groupPhone(Arrays.asList(text));
+                }
+                group = builder.build();
 
                 group.setCreatedAt(createdAt);
                 group.setUpdatedAt(updatedAt);
@@ -119,13 +128,19 @@ public class MessageGroupDatabaseHelper {
                 long createdAt = c.getLong(c.getColumnIndexOrThrow(GroupPersistenceContract.MessageGroupEntry.COL_CREATED_AT));
                 long updatedAt = c.getLong(c.getColumnIndexOrThrow(GroupPersistenceContract.MessageGroupEntry.COL_UPDATED_AT));
 
-                group = Group.getBuilder()
-                        .id(id)
+                Group.Builder builder = Group.getBuilder();
+                builder.id(id)
                         .name(name)
-                        .groupPhone(groupPhone)
                         .phoneNumberId(phoneNumberId)
-                        .userId(userId)
-                        .build();
+                        .userId(userId);
+
+
+                if (!TextUtils.isEmpty(groupPhone) && groupPhone.contains(",")) {
+                    String[] text = groupPhone.split(",");
+                    builder.groupPhone(Arrays.asList(text));
+                }
+                group = builder.build();
+
 
                 group.setCreatedAt(createdAt);
                 group.setUpdatedAt(updatedAt);
@@ -140,10 +155,12 @@ public class MessageGroupDatabaseHelper {
     public static void updateMessageGroup(Context context, Group group) {
         SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
 
+        String groupPhone = TextUtils.join(",", group.getGroupPhone());
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_ID, group.getId());
         contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_NAME, group.getName());
-        contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_GROUP_PHONE, group.getGroupPhone());
+        contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_GROUP_PHONE, groupPhone);
         contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_PHONE_NUMBER_ID, group.getPhoneNumberId());
         contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_USER_ID, group.getUserId());
         contentValues.put(GroupPersistenceContract.MessageGroupEntry.COL_CREATED_AT, group.getCreatedAt());
@@ -184,13 +201,18 @@ public class MessageGroupDatabaseHelper {
                 long createdAt = c.getLong(c.getColumnIndexOrThrow(GroupPersistenceContract.MessageGroupEntry.COL_CREATED_AT));
                 long updatedAt = c.getLong(c.getColumnIndexOrThrow(GroupPersistenceContract.MessageGroupEntry.COL_UPDATED_AT));
 
-                Group group = Group.getBuilder()
-                        .id(id)
+                Group.Builder builder = Group.getBuilder();
+                builder.id(id)
                         .name(name)
-                        .groupPhone(groupPhone)
                         .phoneNumberId(phoneNumberId)
-                        .userId(userId)
-                        .build();
+                        .userId(userId);
+
+
+                if (!TextUtils.isEmpty(groupPhone) && groupPhone.contains(",")) {
+                    String[] text = groupPhone.split(",");
+                    builder.groupPhone(Arrays.asList(text));
+                }
+                Group group = builder.build();
 
                 group.setCreatedAt(createdAt);
                 group.setUpdatedAt(updatedAt);

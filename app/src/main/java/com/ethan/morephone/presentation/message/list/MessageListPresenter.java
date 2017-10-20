@@ -63,7 +63,7 @@ public class MessageListPresenter implements MessageListContract.Presenter {
     }
 
     @Override
-    public void createMessage(final Context context, String userId, String groupId, long dateSent,  String to, String from, String body, final int position, boolean isResend) {
+    public void createMessage(final Context context, String userId, String groupId, long dateSent, String to, String from, String body, final int position, boolean isResend, final boolean isGroup) {
         final MessageItem messageItem = new MessageItem(
                 "",
                 "",
@@ -85,48 +85,47 @@ public class MessageListPresenter implements MessageListContract.Presenter {
                 "",
                 "",
                 null);
+        DebugTool.logD("POS: " + position + " GROUP: " + isGroup);
+        if (!isGroup) {
+            if (!isResend) mView.createMessageSuccess(messageItem);
+            mView.showProgress(true, position);
+        }
 
-        DebugTool.logD("TO : " + to);
-        DebugTool.logD("FROM : " + from);
-        DebugTool.logD("BODY : " + body);
-        DebugTool.logD("userId : " + userId);
-        if (!isResend) mView.createMessageSuccess(messageItem);
-        mView.showProgress(true, position);
         CreateMessage.RequestValue requestValue = new CreateMessage.RequestValue(userId.trim(), groupId, dateSent, to.trim(), from.trim(), body.trim());
         mUseCaseHandler.execute(mCreateMessage, requestValue, new UseCase.UseCaseCallback<CreateMessage.ResponseValue>() {
             @Override
             public void onSuccess(CreateMessage.ResponseValue response) {
                 DebugTool.logD("STATUS: " + response.getStatusCode());
-//                if (response.getStatusCode() == HTTPStatus.MONEY.getStatusCode()) {
-//                    NotificationHelpper.moneyNotification(context);
-//                } else {
-//
-//                }
-//                mView.showProgress(false, position);
-                mView.showProgress(false, position);
+                if (!isGroup) {
+                    mView.showProgress(false, position);
+                }
             }
 
             @Override
             public void onError() {
-                mView.createMessageError(position);
-//                mView.showProgress(false, position);
-                mView.showProgress(false, position);
+                if (!isGroup) {
+                    mView.createMessageError(position);
+                    mView.showProgress(false, position);
+                }
             }
         });
     }
 
     @Override
     public void createGroup(Context context, Group group) {
+        mView.showLoading(true);
         CreateGroup.RequestValues requestValue = new CreateGroup.RequestValues(group);
         mUseCaseHandler.execute(mCreateGroup, requestValue, new UseCase.UseCaseCallback<CreateGroup.ResponseValue>() {
             @Override
             public void onSuccess(CreateGroup.ResponseValue response) {
-
+                mView.showLoading(false);
+                mView.createGroupSuccess(response.getMessageGroups());
             }
 
             @Override
             public void onError() {
-
+                mView.createGroupError();
+                mView.showLoading(false);
             }
         });
     }

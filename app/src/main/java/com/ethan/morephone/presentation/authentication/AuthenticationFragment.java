@@ -201,7 +201,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     private void doLogin() {
         WebAuthProvider.init(auth0)
                 .withScheme("https")
-                .withScope("user_metadata openid email profile write:phone-number delete:phone-number write:pool-phone-number read:pool-phone-numbers read:phone-numbers read:phone-number write:forward-phone-number write:expire-phone-number write:user write:user-token write:call-token read:records read:call-logs write:send-message read:messages read:usage write:purchase read:contact write:contact delete:contact read:message-group delete:message-group write:message-group")
+                .withScope("user_metadata openid email profile delete:group read:group write:group delete:contact write:contact read:contact write:phone-number delete:phone-number write:pool-phone-number read:pool-phone-numbers read:phone-numbers read:phone-number write:forward-phone-number write:expire-phone-number write:user write:user-token write:call-token read:records read:call-logs write:send-message read:messages read:usage write:purchase")
                 .withAudience(BaseUrl.API_IDENTIFIER)
                 .start(getActivity(), callback);
     }

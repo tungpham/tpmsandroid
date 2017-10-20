@@ -75,7 +75,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     }
 
     @Override
-    public void loadListMessageResource(Context context, String phoneNumber, boolean isShowLoading) {
+    public void loadListMessageResource(Context context, String phoneNumber, String phoneNumberId, boolean isShowLoading) {
 
         String pageIncoming = "";
         String pageOutgoing = "";
@@ -88,7 +88,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
             mResourceMessage.outgoingNextPageUri = "";
         }
 
-        new DataAsync(context, this, phoneNumber, isShowLoading, pageIncoming, pageOutgoing).execute();
+        new DataAsync(context, this, phoneNumber, phoneNumberId, isShowLoading, pageIncoming, pageOutgoing).execute();
     }
 
     @Override
@@ -287,16 +287,18 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     private static class DataAsync extends AsyncTask<Void, Integer, Void> {
         private final WeakReference<ConversationsPresenter> mWeakReference;
         private final String mPhoneNumber;
+        private final String mPhoneNumberId;
         private final Context mContext;
         private final String mPageIncoming;
         private final String mPageOutgoing;
         private final boolean isShowLoading;
 
-        public DataAsync(Context context, ConversationsPresenter presenter, String phoneNumber, boolean isShowLoading, String pageIncoming, String pageOutgoing) {
+        public DataAsync(Context context, ConversationsPresenter presenter, String phoneNumber, String phoneNumberId, boolean isShowLoading, String pageIncoming, String pageOutgoing) {
             mWeakReference = new WeakReference<>(presenter);
             this.mPhoneNumber = phoneNumber;
             mContext = context;
             this.isShowLoading = isShowLoading;
+            mPhoneNumberId = phoneNumberId;
             mPageIncoming = pageIncoming;
             mPageOutgoing = pageOutgoing;
         }
@@ -315,7 +317,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
             ConversationsPresenter presenter = mWeakReference.get();
             if (presenter != null) {
 
-                BaseResponse<ResourceMessage> baseResponse = ApiMorePhone.getMessage(mContext, mPhoneNumber, mPageIncoming, mPageOutgoing);
+                BaseResponse<ResourceMessage> baseResponse = ApiMorePhone.getMessage(mContext, mPhoneNumber, mPhoneNumberId, mPageIncoming, mPageOutgoing);
                 if(baseResponse != null && baseResponse.getResponse() != null){
                     presenter.mResourceMessage = baseResponse.getResponse();
                 }

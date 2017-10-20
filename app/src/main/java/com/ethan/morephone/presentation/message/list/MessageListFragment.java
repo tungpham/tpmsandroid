@@ -190,7 +190,7 @@ public class MessageListFragment extends BaseFragment implements
     @Override
     public void onResend(int pos) {
         MessageItem messageItem = mMessageListAdapter.getData().get(pos);
-        mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), "", System.currentTimeMillis(), mPhoneNumberTo, mPhoneNumberFrom, messageItem.body, pos, true);
+        mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), "", System.currentTimeMillis(), mPhoneNumberTo, mPhoneNumberFrom, messageItem.body, pos, true, false);
         mMessageListAdapter.getData().get(pos).isSendFail = false;
         mMessageListAdapter.notifyItemChanged(pos);
     }
@@ -199,19 +199,12 @@ public class MessageListFragment extends BaseFragment implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_send:
-                String body = mEditTextMessage.getText().toString();
+                mMessageBody = mEditTextMessage.getText().toString();
                 mEditTextMessage.setText("");
-                long dateSent = System.currentTimeMillis();
-                for (String to : mPhoneNumberGroup) {
-                    mPresenter.createMessage(getContext(),
-                            MyPreference.getUserId(getContext()),
-                            mGroupId,
-                            dateSent,
-                            to,
-                            mPhoneNumberFrom,
-                            body,
-                            mMessageListAdapter.getData().size(), false
-                    );
+                if (TextUtils.isEmpty(mGroupId)) {
+                    mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), "", System.currentTimeMillis(), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size(), false, false);
+                } else {
+                    sendMessageToGroup(mMessageBody);
                 }
 
                 break;
@@ -270,19 +263,7 @@ public class MessageListFragment extends BaseFragment implements
     @Override
     public void createGroupSuccess(Group group) {
         mGroupId = group.getId();
-        long dateSent = System.currentTimeMillis();
-        for (String to : mPhoneNumberGroup) {
-            mPresenter.createMessage(getContext(),
-                    MyPreference.getUserId(getContext()),
-                    mGroupId,
-                    dateSent,
-                    to,
-                    mPhoneNumberFrom,
-                    mBody,
-                    mMessageListAdapter.getData().size(), false
-            );
-        }
-
+        sendMessageToGroup(mMessageBody);
     }
 
     @Override
@@ -350,7 +331,7 @@ public class MessageListFragment extends BaseFragment implements
 
             if (TextUtils.isEmpty(conversationModel.mGroupId)) {
                 Group group = Group.getBuilder()
-                        .name("K20B")
+                        .name(mPhoneNumberTo)
                         .phoneNumberId(mPhoneNumberId)
                         .groupPhone(Arrays.asList(mPhoneNumberGroup))
                         .userId(MyPreference.getUserId(getContext()))
@@ -359,11 +340,31 @@ public class MessageListFragment extends BaseFragment implements
                 mPresenter.createGroup(getContext(), group);
             } else {
                 mGroupId = conversationModel.mGroupId;
+                sendMessageToGroup(mMessageBody);
+            }
+        } else {
+            if (!TextUtils.isEmpty(mMessageBody)) {
+                mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), "", System.currentTimeMillis(), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size(), false, false);
             }
         }
+    }
 
-        if (!TextUtils.isEmpty(mMessageBody)) {
-            mPresenter.createMessage(getContext(), MyPreference.getUserId(getContext()), "", System.currentTimeMillis(), mPhoneNumberTo, mPhoneNumberFrom, mMessageBody, mMessageListAdapter.getData().size(), false);
+    private void sendMessageToGroup(String body) {
+        long dateSent = System.currentTimeMillis();
+        boolean isGroup = false;
+        for (String to : mPhoneNumberGroup) {
+            mPresenter.createMessage(getContext(),
+                    MyPreference.getUserId(getContext()),
+                    mGroupId,
+                    dateSent,
+                    to,
+                    mPhoneNumberFrom,
+                    body,
+                    mMessageListAdapter.getData().size(),
+                    isGroup,
+                    false
+            );
+            isGroup = true;
         }
     }
 

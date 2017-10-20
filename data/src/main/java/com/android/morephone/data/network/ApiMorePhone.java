@@ -237,9 +237,10 @@ public class ApiMorePhone {
 
     public static BaseResponse<ResourceMessage> getMessage(Context context,
                                                            String phoneNumber,
+                                                           String phoneNumberId,
                                                            String pageIncoming,
                                                            String pageOutgoing) {
-        Call<BaseResponse<ResourceMessage>> call = getApiPath(context).getMessage(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), phoneNumber, pageIncoming, pageOutgoing);
+        Call<BaseResponse<ResourceMessage>> call = getApiPath(context).getMessage(TwilioManager.getSid(context), TwilioManager.getAuthCode(context), phoneNumber, phoneNumberId, pageIncoming, pageOutgoing);
         try {
             return call.execute().body();
         } catch (Exception e) {

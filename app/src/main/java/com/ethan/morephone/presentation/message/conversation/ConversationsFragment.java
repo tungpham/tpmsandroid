@@ -187,7 +187,7 @@ public class ConversationsFragment extends BaseFragment implements
     public void loadData(boolean isShowLoading) {
         if (Utils.isNetworkAvailable(getActivity())) {
 
-            mPresenter.loadListMessageResource(getContext(), mPhoneNumber, isShowLoading);
+            mPresenter.loadListMessageResource(getContext(), mPhoneNumber, mPhoneNumberId, isShowLoading);
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }

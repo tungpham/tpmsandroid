@@ -36,7 +36,7 @@ public interface MessageListContract {
 
         void loadMessages(String to, String from);
 
-        void createMessage(Context context, String userId, String groupId, long dateSent, String to, String from, String body, int position, boolean isResend);
+        void createMessage(Context context, String userId, String groupId, long dateSent, String to, String from, String body, int position, boolean isResend, boolean isGroup);
 
         void createGroup(Context context, Group group);
 

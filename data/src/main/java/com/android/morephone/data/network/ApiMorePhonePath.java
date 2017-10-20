@@ -89,6 +89,7 @@ interface ApiMorePhonePath {
     Call<BaseResponse<ResourceMessage>> getMessage(@Query("account_sid") String accountSid,
                                                    @Query("auth_token") String authToken,
                                                    @Query("phone_number") String phoneNumber,
+                                                   @Query("phone_number_id") String phoneNumberId,
                                                    @Query("page_incoming") String pageIncoming,
                                                    @Query("page_outgoing") String pageOutgoing);
 
