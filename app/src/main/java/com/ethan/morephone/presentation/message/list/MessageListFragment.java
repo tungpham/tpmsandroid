@@ -361,8 +361,8 @@ public class MessageListFragment extends BaseFragment implements
                     mPhoneNumberFrom,
                     body,
                     mMessageListAdapter.getData().size(),
-                    isGroup,
-                    false
+                    false,
+                    isGroup
             );
             isGroup = true;
         }
