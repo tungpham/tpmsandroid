@@ -65,7 +65,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
 //        mConversationModels = new ArrayList<>();
 //        mArrayMap = new ArrayMap<>();
 
-        mResourceMessage = new ResourceMessage(new ArrayList<ConversationModel>(), "", Constant.FIRST_PAGE, "", "", "",Constant.FIRST_PAGE, "", "", 0);
+        mResourceMessage = new ResourceMessage(new ArrayList<ConversationModel>(), "", Constant.FIRST_PAGE, "", "", "", Constant.FIRST_PAGE, "", "", 0);
         mView.setPresenter(this);
     }
 
@@ -133,7 +133,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     public void clearData() {
 //        mArrayMap.clear();
 
-        mResourceMessage = new ResourceMessage(new ArrayList<ConversationModel>(), "", Constant.FIRST_PAGE, "", "", "",Constant.FIRST_PAGE, "", "", 0);
+        mResourceMessage = new ResourceMessage(new ArrayList<ConversationModel>(), "", Constant.FIRST_PAGE, "", "", "", Constant.FIRST_PAGE, "", "", 0);
     }
 
     @Override
@@ -278,7 +278,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
 
     @Override
     public boolean hasNextPage() {
-        if(mResourceMessage != null && (!TextUtils.isEmpty(mResourceMessage.incomingNextPageUri) || !TextUtils.isEmpty(mResourceMessage.outgoingNextPageUri))){
+        if (mResourceMessage != null && (!TextUtils.isEmpty(mResourceMessage.incomingNextPageUri) || !TextUtils.isEmpty(mResourceMessage.outgoingNextPageUri))) {
             return true;
         }
         return false;
@@ -307,7 +307,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         protected void onPreExecute() {
             super.onPreExecute();
             ConversationsPresenter presenter = mWeakReference.get();
-            if(presenter != null && isShowLoading){
+            if (presenter != null && isShowLoading) {
                 presenter.mView.showLoading(true);
             }
         }
@@ -318,8 +318,10 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
             if (presenter != null) {
 
                 BaseResponse<ResourceMessage> baseResponse = ApiMorePhone.getMessage(mContext, mPhoneNumber, mPhoneNumberId, mPageIncoming, mPageOutgoing);
-                if(baseResponse != null && baseResponse.getResponse() != null){
+                if (baseResponse != null && baseResponse.getResponse() != null) {
                     presenter.mResourceMessage = baseResponse.getResponse();
+                } else {
+                    presenter.mResourceMessage = null;
                 }
 
 //                MessageListResourceResponse messageIncoming = ApiManager.getMessagesIncoming(mContext, mPhoneNumber);
@@ -341,7 +343,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             ConversationsPresenter presenter = mWeakReference.get();
-            if(presenter != null){
+            if (presenter != null) {
                 if (presenter.mResourceMessage != null && presenter.mResourceMessage.records != null) {
                     presenter.mView.showListMessage(presenter.mResourceMessage.records);
                 }

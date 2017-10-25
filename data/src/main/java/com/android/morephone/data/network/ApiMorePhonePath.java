@@ -76,7 +76,7 @@ interface ApiMorePhonePath {
 
     @FormUrlEncoded
     @POST("message/send-message")
-    Call<BaseResponse<MessageItem>> createMessage(@Field("account_sid") String accountSid,
+    Call<BaseResponse<List<MessageItem>>> createMessage(@Field("account_sid") String accountSid,
                                                   @Field("auth_token") String authToken,
                                                   @Field("userId") String userId,
                                                   @Field("group_id") String groupId,

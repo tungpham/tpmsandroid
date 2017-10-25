@@ -18,6 +18,8 @@ import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 import com.ethan.morephone.widget.TextDrawable;
 
+import java.util.List;
+
 /**
  * Created by Ethan on 7/28/17.
  */
@@ -90,7 +92,7 @@ public class MessageReplyActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
-    public void createMessageSuccess(MessageItem messageItem) {
+    public void createMessageSuccess(List<MessageItem> messageItem) {
         Toast.makeText(getApplicationContext(), getString(R.string.message_send_success), Toast.LENGTH_SHORT).show();
     }
 

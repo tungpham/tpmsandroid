@@ -351,21 +351,21 @@ public class MessageListFragment extends BaseFragment implements
 
     private void sendMessageToGroup(String body) {
         long dateSent = System.currentTimeMillis();
-        boolean isGroup = false;
-        for (String to : mPhoneNumberGroup) {
+//        boolean isGroup = false;
+//        for (String to : mPhoneNumberGroup) {
             mPresenter.createMessage(getContext(),
                     MyPreference.getUserId(getContext()),
                     mGroupId,
                     dateSent,
-                    to,
+                    "",
                     mPhoneNumberFrom,
                     body,
                     mMessageListAdapter.getData().size(),
                     false,
-                    isGroup
+                    false
             );
-            isGroup = true;
-        }
+//            isGroup = true;
+//        }
     }
 
     @Override
@@ -377,7 +377,7 @@ public class MessageListFragment extends BaseFragment implements
     class UpdateMessageReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent == null)
+            if (intent == null || !TextUtils.isEmpty(mGroupId))
                 return;
             if (NotifyFirebaseMessagingService.ACTION_UPDATE_MESSAGE.equals(intent.getAction())) {
 

@@ -11,6 +11,8 @@ import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.repository.message.source.MessageDataSource;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,7 +53,7 @@ public class MessageRemoteDataSource implements MessageDataSource {
                 if (response.isSuccessful()) {
                     MessageListResourceResponse messageListResourceResponse = response.body();
                     if (messageListResourceResponse != null && messageListResourceResponse.messages != null && !messageListResourceResponse.messages.isEmpty()) {
-                        callback.onMessagesLoaded(messageListResourceResponse.messages);
+                        callback.onMessagesLoaded(messageListResourceResponse.messages, response.code());
 
                     } else {
                         callback.onDataNotAvailable();
@@ -77,7 +79,7 @@ public class MessageRemoteDataSource implements MessageDataSource {
                 if (response.isSuccessful()) {
                     MessageListResourceResponse messageListResourceResponse = response.body();
                     if (messageListResourceResponse != null && messageListResourceResponse.messages != null && !messageListResourceResponse.messages.isEmpty()) {
-                        callback.onMessagesLoaded(messageListResourceResponse.messages);
+                        callback.onMessagesLoaded(messageListResourceResponse.messages, response.code());
 
                     } else {
                         callback.onDataNotAvailable();
@@ -102,7 +104,7 @@ public class MessageRemoteDataSource implements MessageDataSource {
                 if (response.isSuccessful()) {
                     MessageListResourceResponse messageListResourceResponse = response.body();
                     if (messageListResourceResponse != null && messageListResourceResponse.messages != null && !messageListResourceResponse.messages.isEmpty()) {
-                        callback.onMessagesLoaded(messageListResourceResponse.messages);
+                        callback.onMessagesLoaded(messageListResourceResponse.messages, response.code());
 
                     } else {
                         callback.onDataNotAvailable();
@@ -133,7 +135,7 @@ public class MessageRemoteDataSource implements MessageDataSource {
                 if (response.isSuccessful()) {
                     MessageListResourceResponse messageListResourceResponse = response.body();
                     if (messageListResourceResponse != null && messageListResourceResponse.messages != null && !messageListResourceResponse.messages.isEmpty()) {
-                        callback.onMessagesLoaded(messageListResourceResponse.messages);
+                        callback.onMessagesLoaded(messageListResourceResponse.messages, response.code());
 
                     } else {
                         callback.onDataNotAvailable();
@@ -162,19 +164,19 @@ public class MessageRemoteDataSource implements MessageDataSource {
     }
 
     @Override
-    public void createMessage(String userId, String groupId, long dateSent, String to, String from, String body, @NonNull final GetMessageCallback callback) {
-        ApiMorePhone.createMessage(mContext, userId, groupId, dateSent, to, from, body, new Callback<BaseResponse<MessageItem>>() {
+    public void createMessage(String userId, String groupId, long dateSent, String to, String from, String body, @NonNull final LoadMessagesCallback callback) {
+        ApiMorePhone.createMessage(mContext, userId, groupId, dateSent, to, from, body, new Callback<BaseResponse<List<MessageItem>>>() {
             @Override
-            public void onResponse(Call<BaseResponse<MessageItem>> call, Response<BaseResponse<MessageItem>> response) {
+            public void onResponse(Call<BaseResponse<List<MessageItem>>> call, Response<BaseResponse<List<MessageItem>>> response) {
                 if (response.isSuccessful()) {
-                    callback.onMessageLoaded(response.body().getResponse(), response.body().getStatus());
+                    callback.onMessagesLoaded(response.body().getResponse(), response.body().getStatus());
                 } else {
                     callback.onDataNotAvailable();
                 }
             }
 
             @Override
-            public void onFailure(Call<BaseResponse<MessageItem>> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<List<MessageItem>>> call, Throwable t) {
                 callback.onDataNotAvailable();
             }
         });

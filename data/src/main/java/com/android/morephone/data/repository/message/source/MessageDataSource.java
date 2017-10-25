@@ -14,7 +14,7 @@ import java.util.List;
 public interface MessageDataSource {
 
     interface LoadMessagesCallback {
-        void onMessagesLoaded(List<MessageItem> messageItems);
+        void onMessagesLoaded(List<MessageItem> messageItems, int statusCode);
 
         void onDataNotAvailable();
     }
@@ -43,7 +43,7 @@ public interface MessageDataSource {
 
     void getMessage(String messageSid, @NonNull GetMessageCallback callback);
 
-    void createMessage(String userId, String groupId, long dateSent, String to, String from, String body, @NonNull GetMessageCallback callback);
+    void createMessage(String userId, String groupId, long dateSent, String to, String from, String body, @NonNull LoadMessagesCallback callback);
 
     void deleteMessage(String messageSid);
 

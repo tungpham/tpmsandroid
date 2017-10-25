@@ -222,8 +222,9 @@ public class ApiMorePhone {
                                      String to,
                                      String from,
                                      String body,
-                                     Callback<BaseResponse<MessageItem>> callback) {
-        Call<BaseResponse<MessageItem>> call = getApiPath(context).createMessage(
+                                     Callback<BaseResponse<List<MessageItem>>> callback) {
+
+        Call<BaseResponse<List<MessageItem>>> call = getApiPath(context).createMessage(
                 TwilioManager.getSid(context),
                 TwilioManager.getAuthCode(context),
                 userId,

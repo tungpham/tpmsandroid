@@ -23,6 +23,8 @@ import com.ethan.morephone.presentation.message.conversation.ConversationsFragme
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.widget.AutoCompleteContactView;
 
+import java.util.List;
+
 /**
  * Created by Ethan on 2/22/17.
  */
@@ -110,7 +112,7 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
-    public void createMessageSuccess(MessageItem messageItem) {
+    public void createMessageSuccess(List<MessageItem> messageItem) {
 //        getActivity().setResult(Activity.RESULT_OK);
 //        getActivity().finish();
     }

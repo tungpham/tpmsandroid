@@ -27,7 +27,7 @@ public class GetMessages extends UseCase<GetMessages.RequestValue, GetMessages.R
     protected void executeUseCase(RequestValue requestValue) {
         mMessageRepository.getMessages(requestValue.getTo(), requestValue.getFrom(), new MessageDataSource.LoadMessagesCallback() {
             @Override
-            public void onMessagesLoaded(List<MessageItem> messageItems) {
+            public void onMessagesLoaded(List<MessageItem> messageItems, int statusCode) {
                 DebugTool.logD("SIZE: " + messageItems.size());
                 getUseCaseCallback().onSuccess(new ResponseValue(messageItems));
             }

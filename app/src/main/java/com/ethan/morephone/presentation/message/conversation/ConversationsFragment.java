@@ -253,7 +253,7 @@ public class ConversationsFragment extends BaseFragment implements
     }
 
     @Override
-    public void createMessageSuccess(MessageItem messageItem) {
+    public void createMessageSuccess(List<MessageItem> messageItem) {
         loadData(false);
     }
 

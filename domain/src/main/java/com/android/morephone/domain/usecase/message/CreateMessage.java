@@ -7,6 +7,8 @@ import com.android.morephone.data.repository.message.MessageRepository;
 import com.android.morephone.data.repository.message.source.MessageDataSource;
 import com.android.morephone.domain.UseCase;
 
+import java.util.List;
+
 /**
  * Created by Ethan on 3/3/17.
  */
@@ -27,9 +29,9 @@ public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMes
                 requestValue.getDateSent(),
                 requestValue.getPhoneNumberTo(),
                 requestValue.getPhoneNumberFrom(),
-                requestValue.getBody(), new MessageDataSource.GetMessageCallback() {
+                requestValue.getBody(), new MessageDataSource.LoadMessagesCallback() {
             @Override
-            public void onMessageLoaded(MessageItem messageItem, int statusCode) {
+            public void onMessagesLoaded(List<MessageItem> messageItem, int statusCode) {
                 getUseCaseCallback().onSuccess(new ResponseValue(messageItem, statusCode));
             }
 
@@ -85,15 +87,15 @@ public class CreateMessage extends UseCase<CreateMessage.RequestValue, CreateMes
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private final MessageItem mMessageItem;
+        private final List<MessageItem> mMessageItem;
         private final int mStatusCode;
 
-        public ResponseValue(@NonNull MessageItem messageItem, @NonNull int statusCode) {
+        public ResponseValue(@NonNull List<MessageItem> messageItem, @NonNull int statusCode) {
             mMessageItem = messageItem;
             mStatusCode = statusCode;
         }
 
-        public MessageItem getMessageItem() {
+        public List<MessageItem> getMessageItem() {
             return mMessageItem;
         }
 

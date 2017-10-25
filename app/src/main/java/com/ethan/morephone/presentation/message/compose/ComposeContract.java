@@ -4,6 +4,8 @@ import com.android.morephone.data.entity.MessageItem;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
 
+import java.util.List;
+
 /**
  * Created by Ethan on 3/4/17.
  */
@@ -11,7 +13,7 @@ import com.ethan.morephone.presentation.BaseView;
 public interface ComposeContract {
 
     interface View extends BaseView<Presenter> {
-        void createMessageSuccess(MessageItem messageItem);
+        void createMessageSuccess(List<MessageItem> messageItem);
 
         void createMessageError();
 

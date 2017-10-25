@@ -67,7 +67,7 @@ public class MessageRepository implements MessageDataSource {
     }
 
     @Override
-    public void createMessage(String userId, String groupId, long dateSent, String to, String from, String body, @NonNull GetMessageCallback callback) {
+    public void createMessage(String userId, String groupId, long dateSent, String to, String from, String body, @NonNull LoadMessagesCallback callback) {
         mMessageRemoteDataSource.createMessage(userId, groupId, dateSent, to, from, body, callback);
     }
 

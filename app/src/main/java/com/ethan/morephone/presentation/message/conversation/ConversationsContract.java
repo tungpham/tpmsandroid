@@ -23,7 +23,7 @@ public interface ConversationsContract {
 
         void showLoading(boolean isActive);
 
-        void createMessageSuccess(MessageItem messageItem);
+        void createMessageSuccess(List<MessageItem> messageItem);
 
         void createMessageError();
 
