@@ -72,8 +72,6 @@ public class AddFundFrag extends BaseFragment implements
     @Nullable
     private Purchase mPurchase;
 
-    private AddFundAdapter mAddFundAdapter;
-
     private final List<Inventory.Callback> mInventoryCallbacks = new ArrayList<>();
 
     private double mBalanceAdd = 0;
@@ -105,7 +103,7 @@ public class AddFundFrag extends BaseFragment implements
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
 
-        mAddFundAdapter = new AddFundAdapter(getContext(), new ArrayList<SkuItem>(), this);
+        AddFundAdapter mAddFundAdapter = new AddFundAdapter(getContext(), new ArrayList<SkuItem>(), this);
         recyclerView.setAdapter(mAddFundAdapter);
 
         mInventoryCallbacks.add(mAddFundAdapter);
@@ -197,7 +195,7 @@ public class AddFundFrag extends BaseFragment implements
 
     private class ConsumeListener extends EmptyRequestListener<Object> {
 
-        private Sku mSku;
+        private final Sku mSku;
 
         public ConsumeListener(Sku sku) {
             mSku = sku;
@@ -251,7 +249,7 @@ public class AddFundFrag extends BaseFragment implements
 
     private class InventoryCallback implements Inventory.Callback {
 
-        private Sku mSku;
+        private final Sku mSku;
 
         public InventoryCallback(Sku sku) {
             mSku = sku;

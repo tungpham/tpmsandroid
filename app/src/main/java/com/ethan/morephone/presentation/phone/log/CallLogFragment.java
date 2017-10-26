@@ -22,7 +22,6 @@ import com.ethan.morephone.presentation.contact.ContactFragment;
 import com.ethan.morephone.presentation.contact.editor.ContactEditorActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
-import com.ethan.morephone.presentation.message.list.MessageDialog;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.presentation.phone.log.adapter.CallLogAdapter;
 import com.ethan.morephone.utils.Injection;

@@ -4,24 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Spinner;
 
-import com.android.morephone.data.log.DebugTool;
-import com.ethan.morephone.Constant;
 import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.buy.payment.checkout.ActivityCheckout;
 import com.ethan.morephone.presentation.buy.payment.checkout.Billing;
 import com.ethan.morephone.presentation.buy.payment.checkout.BillingRequests;
 import com.ethan.morephone.presentation.buy.payment.checkout.Checkout;
@@ -30,25 +24,12 @@ import com.ethan.morephone.presentation.buy.payment.checkout.IntentStarter;
 import com.ethan.morephone.presentation.buy.payment.checkout.Inventory;
 import com.ethan.morephone.presentation.buy.payment.checkout.ProductTypes;
 import com.ethan.morephone.presentation.buy.payment.checkout.Purchase;
-import com.ethan.morephone.presentation.buy.payment.checkout.PurchaseFlow;
-import com.ethan.morephone.presentation.buy.payment.checkout.RequestListener;
-import com.ethan.morephone.presentation.buy.payment.checkout.Sku;
 import com.ethan.morephone.presentation.buy.payment.checkout.UiCheckout;
-import com.ethan.morephone.presentation.buy.payment.fund.adapter.AvailableSkusAdapter;
-import com.ethan.morephone.presentation.buy.payment.fund.adapter.PurchasedSkusAdapter;
-import com.ethan.morephone.presentation.buy.payment.fund.adapter.TargetSkusAdapter;
-import com.ethan.morephone.presentation.buy.payment.fund.model.SkuItem;
-import com.ethan.morephone.presentation.buy.payment.purchase.PaymentMethodsDialog;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
-
-import static com.ethan.morephone.presentation.buy.payment.checkout.ProductTypes.SUBSCRIPTION;
 
 /**
  * Created by Ethan on 5/10/17.
@@ -63,8 +44,6 @@ public class AddFundFragment extends BaseFragment implements
     private static final int REQUEST_CODE_PAYMENT_VISA = 2;
 
     private UiCheckout mCheckout;
-    private RecyclerView mPurchasedSkus;
-    private Spinner mTargetSkus;
     private Spinner mAvailableSkus;
     private final List<Inventory.Callback> mInventoryCallbacks = new ArrayList<>();
 
@@ -97,8 +76,8 @@ public class AddFundFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_subscriptions, container, false);
         view.findViewById(R.id.buy).setOnClickListener(this);
-        mPurchasedSkus = (RecyclerView) view.findViewById(R.id.purchased_skus);
-        mTargetSkus = (Spinner) view.findViewById(R.id.target_skus);
+        RecyclerView mPurchasedSkus = (RecyclerView) view.findViewById(R.id.purchased_skus);
+        Spinner mTargetSkus = (Spinner) view.findViewById(R.id.target_skus);
         mAvailableSkus = (Spinner) view.findViewById(R.id.available_skus);
 
         return view;

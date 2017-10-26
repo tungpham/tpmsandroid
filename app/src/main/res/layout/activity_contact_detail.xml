@@ -107,7 +107,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                     android:layout_toRightOf="@+id/image_call"
                     android:textColor="@color/colorText"
-                    android:text="Other"
+                    android:text="@string/text_group_detail"
                     android:layout_marginLeft="@dimen/activity_vertical_margin"
                     android:layout_below="@+id/text_phone_number"/>
 

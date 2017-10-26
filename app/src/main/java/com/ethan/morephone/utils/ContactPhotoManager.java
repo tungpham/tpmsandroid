@@ -768,7 +768,7 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
         return ((bytes + 1023) / 1024) + "K";
     }
 
-    private static final int safeDiv(int dividend, int divisor) {
+    private static int safeDiv(int dividend, int divisor) {
         return (divisor  == 0) ? 0 : (dividend / divisor);
     }
 

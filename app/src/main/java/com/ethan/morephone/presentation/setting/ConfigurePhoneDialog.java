@@ -80,7 +80,7 @@ public class ConfigurePhoneDialog extends DialogFragment {
             }
         });
 
-        builder.setNegativeButton(getString(R.string.configure_phone_dialog_cancel), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

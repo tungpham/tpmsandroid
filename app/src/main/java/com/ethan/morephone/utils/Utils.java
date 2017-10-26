@@ -86,8 +86,7 @@ public class Utils {
         SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
 
         try {
-            Date time = in.parse(date);
-            return time;
+            return in.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -129,8 +128,7 @@ public class Utils {
             TimeZone tz = TimeZone.getTimeZone("UTC");
             SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
             df.setTimeZone(tz);
-            String time = df.format(new Date(sec * 1000L));
-            return time;
+            return df.format(new Date(sec * 1000L));
         } else {
             return "∞";
         }

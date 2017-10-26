@@ -56,14 +56,13 @@ public class DeletePhoneNumberDialog extends DialogFragment {
                 if(mDeletePhoneNumberListener != null) mDeletePhoneNumberListener.onDelete(position);
             }
         });
-        builder.setNegativeButton(getString(R.string.delete_phone_number_dialog_cancel), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
             }
         });
-        AppCompatDialog dialog = builder.create();
-        return dialog;
+        return builder.create();
     }
 
     public void setDeletePhoneNumberListener(DeletePhoneNumberListener deletePhoneNumberListener) {

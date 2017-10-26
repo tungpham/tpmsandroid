@@ -22,8 +22,7 @@ public class AlertDeleteContactDialog extends DialogFragment {
     private static final String BUNDLE_POSITION = "BUNDLE_POSITION";
 
     public static AlertDeleteContactDialog getInstance() {
-        AlertDeleteContactDialog alertDeleteRecordDialog = new AlertDeleteContactDialog();
-        return alertDeleteRecordDialog;
+        return new AlertDeleteContactDialog();
     }
 
     private AlertDeleteContactListener mAlertDeleteContactListener;
@@ -52,7 +51,7 @@ public class AlertDeleteContactDialog extends DialogFragment {
             if(mAlertDeleteContactListener != null) mAlertDeleteContactListener.onDelete();
             }
         });
-        builder.setNegativeButton(getString(R.string.alert_delete_record_dialog_cancel), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

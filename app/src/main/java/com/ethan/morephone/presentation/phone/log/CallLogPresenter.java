@@ -9,8 +9,6 @@ import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.call.Call;
 import com.android.morephone.data.entity.call.Calls;
 import com.android.morephone.data.entity.call.ResourceCall;
-import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
@@ -20,7 +18,6 @@ import com.ethan.morephone.Constant;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Ethan on 4/25/17.

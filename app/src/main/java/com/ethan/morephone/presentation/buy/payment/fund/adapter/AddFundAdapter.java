@@ -25,13 +25,11 @@ import static com.ethan.morephone.presentation.buy.payment.checkout.ProductTypes
 
 public class AddFundAdapter extends RecyclerView.Adapter<AddFundViewHolder> implements Inventory.Callback {
 
-    private Context mContext;
     private List<SkuItem> mSkuItems;
-    private OnItemPurchaseClickListener mOnItemPurchaseClickListener;
+    private final OnItemPurchaseClickListener mOnItemPurchaseClickListener;
 
 
     public AddFundAdapter(Context context, List<SkuItem> skuItems, OnItemPurchaseClickListener mOnItemPurchaseClickListener) {
-        mContext = context;
         mSkuItems = skuItems;
         this.mOnItemPurchaseClickListener = mOnItemPurchaseClickListener;
     }

@@ -3,6 +3,7 @@ package com.ethan.morephone.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.widget.TextView;
@@ -13,7 +14,7 @@ import com.ethan.morephone.R;
  * Created by Ethan on 12/22/16.
  */
 
-public class MyTextView extends TextView {
+public class MyTextView extends AppCompatTextView {
 
     /*
      * Permissible values ​​for the "typeface" attribute.

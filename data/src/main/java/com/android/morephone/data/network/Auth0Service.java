@@ -4,24 +4,16 @@ import android.content.Context;
 import android.util.Base64;
 
 import com.android.morephone.data.BaseUrl;
-import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.token.CredentialsEntity;
 import com.android.morephone.data.entity.token.TokenRequest;
-import com.android.morephone.data.utils.TwilioManager;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Authenticator;
-import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.Route;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -109,8 +101,7 @@ public class Auth0Service {
         SecureRandom sr = new SecureRandom();
         byte[] code = new byte[32];
         sr.nextBytes(code);
-        String verifier = Base64.encodeToString(code, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
-        return verifier;
+        return Base64.encodeToString(code, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
     }
 
     private static String createCodeChallenge(String verifier){
@@ -128,8 +119,7 @@ public class Auth0Service {
         }
         md.update(bytes, 0, bytes.length);
         byte[] digest = md.digest();
-        String challenge = Base64.encodeToString(digest, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
-        return challenge;
+        return Base64.encodeToString(digest, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
     }
 
 

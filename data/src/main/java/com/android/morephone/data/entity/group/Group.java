@@ -139,8 +139,7 @@ public class Group {
         }
 
         public Group build() {
-            Group build = new Group(this);
-            return build;
+            return new Group(this);
         }
     }
 }

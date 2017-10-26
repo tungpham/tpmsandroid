@@ -109,8 +109,7 @@ public class ApiMorePhone {
                                                 User user) {
         Call<BaseResponse<User>> call = getApiPath(context).createUser(user);
         try {
-            BaseResponse<User> baseResponse = call.execute().body();
-            return baseResponse;
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

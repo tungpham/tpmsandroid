@@ -56,8 +56,7 @@ public class OptionBuyPhoneNumberDialog extends DialogFragment {
             }
         });
 
-        AppCompatDialog dialog = builder.create();
-        return dialog;
+        return builder.create();
     }
 
     public void setOptionPhoneNumberListener(OptionBuyPhoneNumberDialog.OptionBuyPhoneNumberListener optionPhoneNumberListener) {

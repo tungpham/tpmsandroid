@@ -2,6 +2,7 @@ package com.ethan.morephone.widget;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 import com.ethan.morephone.common.FontManager;
 
 
-public class QKTextView extends TextView {
+public class QKTextView extends AppCompatTextView {
     private final String TAG = "QKTextView";
 
     private Context mContext;

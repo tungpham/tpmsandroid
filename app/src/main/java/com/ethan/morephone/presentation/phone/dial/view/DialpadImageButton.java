@@ -4,6 +4,7 @@ package com.ethan.morephone.presentation.phone.dial.view;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +19,7 @@ import android.widget.ImageButton;
  * This class implements lift-to-type interaction when touch exploration is
  * enabled.
  */
-public class DialpadImageButton extends ImageButton {
+public class DialpadImageButton extends AppCompatImageButton {
     /** Accessibility manager instance used to check touch exploration state. */
     private AccessibilityManager mAccessibilityManager;
 

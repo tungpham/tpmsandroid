@@ -241,8 +241,7 @@ public class Contact implements Parcelable {
         }
 
         public Contact build() {
-            Contact build = new Contact(this);
-            return build;
+            return new Contact(this);
         }
     }
 

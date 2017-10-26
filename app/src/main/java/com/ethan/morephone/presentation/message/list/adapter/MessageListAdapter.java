@@ -70,11 +70,9 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private RecyclerView.ViewHolder setupViewHolder(View view, boolean isSent) {
         if (!isSent) {
-            MessageInViewHolder holder = new MessageInViewHolder(view);
-            return holder;
+            return new MessageInViewHolder(view);
         } else {
-            MessageOutViewHolder holder = new MessageOutViewHolder(view);
-            return holder;
+            return new MessageOutViewHolder(view);
         }
     }
 

@@ -47,8 +47,7 @@ public class RequirePhoneNumberDialog extends DialogFragment {
                 if(mRequirePhoneNumberListener != null) mRequirePhoneNumberListener.onBuyPhone();
             }
         });
-        AppCompatDialog dialog = builder.create();
-        return dialog;
+        return builder.create();
     }
 
     public void setRequirePhoneNumberListener(RequirePhoneNumberDialog.RequirePhoneNumberListener requirePhoneNumberListener) {

@@ -61,7 +61,7 @@ public class AlertDeleteRecordDialog extends DialogFragment {
             if(mAlertDeleteRecordListener != null) mAlertDeleteRecordListener.onDelete(callSid, recordSid, position);
             }
         });
-        builder.setNegativeButton(getString(R.string.alert_delete_record_dialog_cancel), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

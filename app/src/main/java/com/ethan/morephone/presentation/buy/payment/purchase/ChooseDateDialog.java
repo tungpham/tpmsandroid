@@ -8,8 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatEditText;
-import android.text.InputType;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.DateUtils;
 import com.ethan.morephone.R;
-import com.ethan.morephone.utils.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -108,7 +105,7 @@ public class ChooseDateDialog extends DialogFragment {
             }
         });
 
-        builder.setNegativeButton(getString(R.string.configure_email_dialog_cancel), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

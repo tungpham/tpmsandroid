@@ -620,8 +620,7 @@ public class MoreContactUtils {
     }
 
     public static String getCustomOperatorLabel(Context context, int slotIndex) {
-        String customLabel = "";
-//        OperatorSimInfo operatorSimInfo = new OperatorSimInfo(context);
+        //        OperatorSimInfo operatorSimInfo = new OperatorSimInfo(context);
 //        boolean isCustomSimFeatureEnabled = operatorSimInfo.isOperatorFeatureEnabled();
 //        if (isCustomSimFeatureEnabled) {
 //            boolean isSimTypeOperator = operatorSimInfo.isSimTypeOperator(slotIndex);
@@ -632,7 +631,7 @@ public class MoreContactUtils {
 //                customLabel = operatorSimInfo.getOperatorNameForSubId(subId);
 //            }
 //        }
-        return customLabel;
+        return "";
     }
 
     public static void setSimOperatorName(String accountName, TextView accountNameTextView,

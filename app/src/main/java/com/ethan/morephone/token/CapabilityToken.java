@@ -48,8 +48,7 @@ public class CapabilityToken {
 
     private static String encodeBase64(byte[] data) throws UnsupportedEncodingException {
         String encodedString = new String(Base64.encodeBase64(data));
-        String safeString = encodedString.replace('+', '-').replace('/', '_').replace("=", "");
-        return safeString;
+        return encodedString.replace('+', '-').replace('/', '_').replace("=", "");
     }
 
     private static String sign(String data, String key) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
@@ -57,8 +56,7 @@ public class CapabilityToken {
         Mac mac = Mac.getInstance("HmacSHA256");
         mac.init(signingKey);
         byte[] rawHmac = mac.doFinal(data.getBytes("UTF-8"));
-        String result = encodeBase64(rawHmac);
-        return result;
+        return encodeBase64(rawHmac);
     }
 
     public static class DomainException extends Exception {

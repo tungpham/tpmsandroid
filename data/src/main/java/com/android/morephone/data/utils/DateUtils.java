@@ -17,8 +17,7 @@ public class DateUtils {
         SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
 
         try {
-            Date time = in.parse(date);
-            return time;
+            return in.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -102,8 +101,7 @@ public class DateUtils {
         SimpleDateFormat in = new SimpleDateFormat("yyyy-MMM-dEHH, d MMM yyyy HH:mm:ss Z");
 
         try {
-            Date time = in.parse(date);
-            return time;
+            return in.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

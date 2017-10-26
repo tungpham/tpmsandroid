@@ -77,8 +77,7 @@ public class TwilioCapability extends CapabilityToken {
             keyValues.add(key + "=" + value);
         }
 
-        String paramsJoined1 = StringUtils.join(keyValues, '&');
-        return paramsJoined1;
+        return StringUtils.join(keyValues, '&');
     }
 
     public void allowClientIncoming(String clientName) {

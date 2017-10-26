@@ -20,8 +20,7 @@ public class AlertGetCountryDialog extends DialogFragment {
 
 
     public static AlertGetCountryDialog getInstance() {
-        AlertGetCountryDialog alertDeleteRecordDialog = new AlertGetCountryDialog();
-        return alertDeleteRecordDialog;
+        return new AlertGetCountryDialog();
     }
 
     private AlertGetCountryListener mAlertGetCountryListener;

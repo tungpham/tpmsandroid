@@ -3,6 +3,7 @@ package com.ethan.morephone.presentation.phone.dial.view;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 import com.ethan.morephone.R;
 
 
-public class SmartDialTextView extends TextView {
+public class SmartDialTextView extends AppCompatTextView {
 
     private final float mPadding;
     private final float mExtraPadding;

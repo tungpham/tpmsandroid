@@ -13,8 +13,7 @@ import android.support.v7.app.AlertDialog;
 public class IncomingDialog extends DialogFragment {
 
     public static IncomingDialog newInstance() {
-        IncomingDialog frag = new IncomingDialog();
-        return frag;
+        return new IncomingDialog();
     }
 
 
