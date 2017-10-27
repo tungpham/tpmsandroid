@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -66,6 +67,10 @@ public class ConversationsFragment extends BaseFragment implements
 
     public static final String EXTRA_MESSAGE_BODY = "EXTRA_MESSAGE_BODY";
     public static final String EXTRA_MESSAGE_TO = "EXTRA_MESSAGE_TO";
+
+    private final String BUNDLE_SAVE_PHONE_NUMBER = "BUNDLE_SAVE_PHONE_NUMBER";
+    private final String BUNDLE_SAVE_PHONE_NUMBER_ID = "BUNDLE_SAVE_PHONE_NUMBER_ID";
+    private final String BUNDLE_SAVE_CONVERSATION = "BUNDLE_SAVE_CONVERSATION";
 
     private ConversationListAdapter mConversationListAdapter;
 
@@ -179,8 +184,9 @@ public class ConversationsFragment extends BaseFragment implements
 
 //        setHasOptionsMenu(true);
 
-        loadData(true);
+//        loadData(true);
 
+        restoreInstanceState(savedInstanceState);
         return view;
     }
 
@@ -191,6 +197,30 @@ public class ConversationsFragment extends BaseFragment implements
         } else {
             Toast.makeText(getContext(), getString(R.string.message_error_lost_internet), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void restoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mPhoneNumber = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER);
+            mPhoneNumberId = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER_ID);
+            List<ConversationModel> conversationModels = savedInstanceState.getParcelableArrayList(BUNDLE_SAVE_CONVERSATION);
+            if (conversationModels != null) {
+                mConversationListAdapter.replaceData(conversationModels);
+            } else {
+                loadData(true);
+            }
+            DebugTool.logD("LOAD DATA FROM INSTANCE");
+        } else {
+            loadData(true);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(BUNDLE_SAVE_PHONE_NUMBER, mPhoneNumber);
+        outState.putString(BUNDLE_SAVE_PHONE_NUMBER_ID, mPhoneNumberId);
+        outState.putParcelableArrayList(BUNDLE_SAVE_CONVERSATION, new ArrayList<Parcelable>(mConversationListAdapter.getData()));
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -216,7 +246,6 @@ public class ConversationsFragment extends BaseFragment implements
     }
 
 
-
     @Override
     public void onItemClick(ConversationModel conversationModel) {
         MessageListActivity.starter(getActivity(), mPhoneNumber, mPhoneNumberId, "", conversationModel);
@@ -239,7 +268,7 @@ public class ConversationsFragment extends BaseFragment implements
 
     @Override
     public void showListMessage(List<ConversationModel> conversationModels) {
-        if(isAdded()) {
+        if (isAdded()) {
             mConversationListAdapter.getData().addAll(conversationModels);
             mConversationListAdapter.replaceData(mConversationListAdapter.getData());
             isLoading = false;

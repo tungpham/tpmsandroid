@@ -17,8 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.entity.FakeData;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
+import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.buy.SearchPhoneNumberActivity;
@@ -32,8 +32,6 @@ import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpac
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersAdapter;
 import com.ethan.morephone.presentation.numbers.adapter.IncomingPhoneNumbersViewHolder;
 import com.ethan.morephone.utils.Injection;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +47,11 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         DeletePhoneNumberDialog.DeletePhoneNumberListener,
         View.OnClickListener,
         RequirePhoneNumberDialog.RequirePhoneNumberListener,
-        OptionBuyPhoneNumberDialog.OptionBuyPhoneNumberListener{
+        OptionBuyPhoneNumberDialog.OptionBuyPhoneNumberListener {
 
     public static final String BINDING_REGISTRATION = "BINDING_REGISTRATION";
+
+    public static final String BUNDLE_SAVE_PHONE_NUMBER = "BUNDLE_SAVE_PHONE_NUMBER";
 
     private static final String FCM_BINDING_TYPE = "fcm";
 
@@ -91,7 +91,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
         setHasOptionsMenu(true);
 
-        mPresenter.loadIncomingPhoneNumbers(getContext());
 
         view.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -109,27 +108,18 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
             }
         });
 
+        restoreInstanceState(savedInstanceState);
+
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_DASHBOARD && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_DASHBOARD && resultCode == Activity.RESULT_OK) {
             mPresenter.loadIncomingPhoneNumbers(getContext());
         }
     }
-
-    //    private void setUpNavigation(View view) {
-//        NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -197,7 +187,7 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 
     @Override
     public void showLoading(boolean isActive) {
-        if(isAdded()) {
+        if (isAdded()) {
             if (isActive) showProgress();
             else hideProgress();
         }
@@ -219,11 +209,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
 //        RequirePhoneNumberDialog requirePhoneNumberDialog = RequirePhoneNumberDialog.getInstance();
 //        requirePhoneNumberDialog.show(getChildFragmentManager(), RequirePhoneNumberDialog.class.getSimpleName());
 //        requirePhoneNumberDialog.setRequirePhoneNumberListener(this);
-    }
-
-    @Override
-    public void showFakeData(FakeData fakeData) {
-        EventBus.getDefault().postSticky(fakeData);
     }
 
     @Override
@@ -256,17 +241,6 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         }
     }
 
-//    @Override
-//    public void onChoosePhone() {
-////        startActivity(new Intent(this, IncomingPhoneNumbersActivity.class));
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        DebugTool.logD("requestCode FRAGMENT: " + requestCode);
-//
-//    }
     @Override
     public void onBuyPhone() {
         getActivity().startActivityForResult(new Intent(getActivity(), SearchPhoneNumberActivity.class), MainActivity.REQUEST_BUY_PHONE_NUMBER);
@@ -279,5 +253,22 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
         } else {
             startActivityForResult(new Intent(getActivity(), SearchPhoneNumberActivity.class), MainActivity.REQUEST_BUY_PHONE_NUMBER);
         }
+    }
+
+
+    private void restoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            List<PhoneNumber> phoneNumbers = savedInstanceState.getParcelableArrayList(BUNDLE_SAVE_PHONE_NUMBER);
+            mIncomingPhoneNumbersAdapter.replaceData(phoneNumbers);
+            DebugTool.logD("LOAD DATA FROM INSTANCE");
+        } else {
+            mPresenter.loadIncomingPhoneNumbers(getContext());
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(BUNDLE_SAVE_PHONE_NUMBER, new ArrayList<>(mIncomingPhoneNumbersAdapter.getData()));
+        super.onSaveInstanceState(outState);
     }
 }

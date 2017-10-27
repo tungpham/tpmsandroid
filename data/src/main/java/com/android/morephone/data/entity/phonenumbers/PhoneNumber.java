@@ -1,10 +1,13 @@
 package com.android.morephone.data.entity.phonenumbers;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Ethan on 7/26/17.
  */
 
-public class PhoneNumber {
+public class PhoneNumber implements Parcelable{
 
     private String id;
     private String sid;
@@ -39,6 +42,36 @@ public class PhoneNumber {
         this.expire = builder.expire;
         this.pool = builder.pool;
     }
+
+    protected PhoneNumber(Parcel in) {
+        id = in.readString();
+        sid = in.readString();
+        phoneNumber = in.readString();
+        friendlyName = in.readString();
+        userId = in.readString();
+        accountSid = in.readString();
+        authToken = in.readString();
+        applicationSid = in.readString();
+        forwardPhoneNumber = in.readString();
+        forwardEmail = in.readString();
+        forward = in.readByte() != 0;
+        pool = in.readByte() != 0;
+        expire = in.readLong();
+        createdAt = in.readLong();
+        updatedAt = in.readLong();
+    }
+
+    public static final Creator<PhoneNumber> CREATOR = new Creator<PhoneNumber>() {
+        @Override
+        public PhoneNumber createFromParcel(Parcel in) {
+            return new PhoneNumber(in);
+        }
+
+        @Override
+        public PhoneNumber[] newArray(int size) {
+            return new PhoneNumber[size];
+        }
+    };
 
     public static Builder getBuilder() {
         return new Builder();
@@ -176,6 +209,30 @@ public class PhoneNumber {
                 this.sid,
                 this.friendlyName
         );
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(sid);
+        parcel.writeString(phoneNumber);
+        parcel.writeString(friendlyName);
+        parcel.writeString(userId);
+        parcel.writeString(accountSid);
+        parcel.writeString(authToken);
+        parcel.writeString(applicationSid);
+        parcel.writeString(forwardPhoneNumber);
+        parcel.writeString(forwardEmail);
+        parcel.writeByte((byte) (forward ? 1 : 0));
+        parcel.writeByte((byte) (pool ? 1 : 0));
+        parcel.writeLong(expire);
+        parcel.writeLong(createdAt);
+        parcel.writeLong(updatedAt);
     }
 
 

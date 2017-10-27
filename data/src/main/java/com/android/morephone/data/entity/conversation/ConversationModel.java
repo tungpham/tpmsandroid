@@ -1,9 +1,10 @@
 package com.android.morephone.data.entity.conversation;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.android.morephone.data.entity.MessageItem;
-import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * Created by Ethan on 3/18/17.
  */
 
-public class ConversationModel implements Comparable<ConversationModel> {
+public class ConversationModel implements Comparable<ConversationModel>, Parcelable {
     @SerializedName("group_id")
     public String mGroupId;
 
@@ -40,6 +41,25 @@ public class ConversationModel implements Comparable<ConversationModel> {
         this.mMessageItems = messageItems;
     }
 
+    protected ConversationModel(Parcel in) {
+        mGroupId = in.readString();
+        mPhoneNumber = in.readString();
+        mDateCreated = in.readString();
+        mMessageItems = in.createTypedArrayList(MessageItem.CREATOR);
+    }
+
+    public static final Creator<ConversationModel> CREATOR = new Creator<ConversationModel>() {
+        @Override
+        public ConversationModel createFromParcel(Parcel in) {
+            return new ConversationModel(in);
+        }
+
+        @Override
+        public ConversationModel[] newArray(int size) {
+            return new ConversationModel[size];
+        }
+    };
+
     @Override
     public int compareTo(ConversationModel conversationModel) {
         if (!TextUtils.isEmpty(mDateCreated) && !TextUtils.isEmpty(conversationModel.mDateCreated)) {
@@ -57,5 +77,18 @@ public class ConversationModel implements Comparable<ConversationModel> {
 
         return 0;
 
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mGroupId);
+        parcel.writeString(mPhoneNumber);
+        parcel.writeString(mDateCreated);
+        parcel.writeTypedList(mMessageItems);
     }
 }

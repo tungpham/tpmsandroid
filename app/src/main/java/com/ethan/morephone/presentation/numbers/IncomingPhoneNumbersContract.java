@@ -2,8 +2,6 @@ package com.ethan.morephone.presentation.numbers;
 
 import android.content.Context;
 
-import com.android.morephone.data.entity.FakeData;
-import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
@@ -23,13 +21,9 @@ public interface IncomingPhoneNumbersContract {
         void showPhoneNumbers(List<PhoneNumber> incomingPhoneNumbers);
 
         void emptyPhoneNumber();
-
-        void showFakeData(FakeData fakeData);
     }
 
     interface Presenter extends BasePresenter {
-
-        void getFakeData(Context context);
 
         void deleteIncomingPhoneNumber(Context context, String phoneNumber, String incomingPhoneNumberSid, String phoneNumberId);
 

@@ -1,5 +1,8 @@
 package com.android.morephone.data.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.android.morephone.data.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,7 +14,7 @@ import static com.android.morephone.data.utils.DateUtils.getDate;
  * Created by Ethan on 2/21/17.
  */
 
-public class MessageItem implements Comparable<MessageItem> {
+public class MessageItem implements Comparable<MessageItem>, Parcelable {
 
     @SerializedName("sid")
     public String sid;
@@ -120,6 +123,42 @@ public class MessageItem implements Comparable<MessageItem> {
         this.subresourceUris = subresourceUris;
     }
 
+    protected MessageItem(Parcel in) {
+        sid = in.readString();
+        dateCreated = in.readString();
+        dateUpdated = in.readString();
+        dateSent = in.readString();
+        accountSid = in.readString();
+        to = in.readString();
+        from = in.readString();
+        messagingServiceSid = in.readString();
+        body = in.readString();
+        status = in.readString();
+        numSegments = in.readString();
+        numMedia = in.readString();
+        direction = in.readString();
+        apiVersion = in.readString();
+        price = in.readString();
+        priceUnit = in.readString();
+        errorCode = in.readString();
+        errorMessage = in.readString();
+        uri = in.readString();
+        isLoading = in.readByte() != 0;
+        isSendFail = in.readByte() != 0;
+    }
+
+    public static final Creator<MessageItem> CREATOR = new Creator<MessageItem>() {
+        @Override
+        public MessageItem createFromParcel(Parcel in) {
+            return new MessageItem(in);
+        }
+
+        @Override
+        public MessageItem[] newArray(int size) {
+            return new MessageItem[size];
+        }
+    };
+
     @Override
     public int compareTo(MessageItem messageItem) {
         Date current = DateUtils.getDate(this.dateSent);
@@ -133,6 +172,36 @@ public class MessageItem implements Comparable<MessageItem> {
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(sid);
+        parcel.writeString(dateCreated);
+        parcel.writeString(dateUpdated);
+        parcel.writeString(dateSent);
+        parcel.writeString(accountSid);
+        parcel.writeString(to);
+        parcel.writeString(from);
+        parcel.writeString(messagingServiceSid);
+        parcel.writeString(body);
+        parcel.writeString(status);
+        parcel.writeString(numSegments);
+        parcel.writeString(numMedia);
+        parcel.writeString(direction);
+        parcel.writeString(apiVersion);
+        parcel.writeString(price);
+        parcel.writeString(priceUnit);
+        parcel.writeString(errorCode);
+        parcel.writeString(errorMessage);
+        parcel.writeString(uri);
+        parcel.writeByte((byte) (isLoading ? 1 : 0));
+        parcel.writeByte((byte) (isSendFail ? 1 : 0));
     }
 
     public class SubresourceUris {

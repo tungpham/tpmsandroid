@@ -7,11 +7,8 @@ import android.widget.Toast;
 import com.android.morephone.data.database.ContactDatabaseHelper;
 import com.android.morephone.data.database.PhoneNumberDatabaseHelper;
 import com.android.morephone.data.entity.BaseResponse;
-import com.android.morephone.data.entity.FakeData;
-import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.network.HTTPStatus;
 import com.android.morephone.data.utils.TwilioManager;
@@ -50,26 +47,6 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
     @Override
     public void start() {
 
-    }
-
-    public void getFakeData(Context context) {
-        mView.showLoading(true);
-        ApiManager.fakeData(context, new Callback<FakeData>() {
-            @Override
-            public void onResponse(Call<FakeData> call, Response<FakeData> response) {
-                mView.showLoading(false);
-                if (response.isSuccessful()) {
-                    FakeData fakeData = response.body();
-                    mView.showFakeData(fakeData);
-//                    mView.showPhoneNumbers(fakeData.list_number);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FakeData> call, Throwable t) {
-                mView.showLoading(false);
-            }
-        });
     }
 
     @Override
