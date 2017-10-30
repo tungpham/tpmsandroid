@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.morephone.data.BaseUrl;
 import com.android.morephone.data.entity.token.CredentialsEntity;
@@ -219,21 +218,23 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
 
         @Override
         public void onFailure(AuthenticationException exception) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getContext(), "Log In - Error Occurred", Toast.LENGTH_SHORT).show();
-                }
-            });
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Toast.makeText(getContext(), "Log In - Error Occurred", Toast.LENGTH_SHORT).show();
+//                }
+//            });
         }
 
         @Override
         public void onSuccess(@NonNull Credentials credentials) {
             DebugTool.logD("KQ: " + credentials.getIdToken());
             DebugTool.logD("ACC: " + credentials.getAccessToken());
-            CredentialsManager.saveCredentials(getActivity(), new CredentialsEntity(credentials.getIdToken(), credentials.getAccessToken(), credentials.getType(), credentials.getRefreshToken(), credentials.getExpiresIn()));
-            startActivity(new Intent(getActivity(), SplashActivity.class));
-            getActivity().finish();
+            if (getActivity() != null) {
+                CredentialsManager.saveCredentials(getActivity(), new CredentialsEntity(credentials.getIdToken(), credentials.getAccessToken(), credentials.getType(), credentials.getRefreshToken(), credentials.getExpiresIn()));
+                startActivity(new Intent(getActivity(), SplashActivity.class));
+                getActivity().finish();
+            }
 //            checkAccessToken(credentials.getAccessToken());
 //            DebugTool.logD("SUCCESS NOW");
 //            nextActivity();
@@ -245,7 +246,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         getActivity().finish();
     }
 
-    private void checkAccessToken(String accessToken){
+    private void checkAccessToken(String accessToken) {
         if (!TextUtils.isEmpty(accessToken)) {
 //            showProgress();
             AuthenticationAPIClient aClient = new AuthenticationAPIClient(auth0);

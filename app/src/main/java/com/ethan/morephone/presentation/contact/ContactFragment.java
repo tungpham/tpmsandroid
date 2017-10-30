@@ -4,35 +4,25 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.log.DebugTool;
-import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.contact.detail.ContactDetailActivity;
-import com.ethan.morephone.presentation.contact.detail.QuickContactActivity;
 import com.ethan.morephone.presentation.contact.editor.ContactEditorActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.widget.MultiSwipeRefreshLayout;
 import com.ethan.morephone.widget.RecyclerViewFastScroller;
-import com.google.gson.Gson;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +39,11 @@ public class ContactFragment extends BaseFragment implements
     public static final String EXTRA_CONTACT = "EXTRA_CONTACT";
     private final int REQUEST_CREATE_CONTACT = 100;
     private final int REQUEST_DETAIL_CONTACT = 101;
+
+    private final String BUNDLE_SAVE_PHONE_NUMBER = "BUNDLE_SAVE_PHONE_NUMBER";
+    private final String BUNDLE_SAVE_PHONE_NUMBER_ID = "BUNDLE_SAVE_PHONE_NUMBER_ID";
+    private final String BUNDLE_SAVE_CONTACTS = "BUNDLE_SAVE_CONTACTS";
+
 
     public static ContactFragment getInstance(String phoneNumberId, String phoneNumber) {
         ContactFragment contactFragment = new ContactFragment();
@@ -134,9 +129,34 @@ public class ContactFragment extends BaseFragment implements
         mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
         mPhoneNumber = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
 
-        mPresenter.loadContact(getContext(), mPhoneNumberId);
+       restoreInstanceState(savedInstanceState);
         return view;
     }
+
+    private void restoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mPhoneNumber = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER);
+            mPhoneNumberId = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER_ID);
+            ArrayList<Contact> contacts = savedInstanceState.getParcelableArrayList(BUNDLE_SAVE_CONTACTS);
+            if (contacts != null && !contacts.isEmpty()) {
+                mContactAdapter.replaceData(contacts);
+            } else {
+                mPresenter.loadContact(getContext(), mPhoneNumberId);
+            }
+            DebugTool.logD("LOAD DATA FROM INSTANCE RECORD FRAGMENT");
+        } else {
+            mPresenter.loadContact(getContext(), mPhoneNumberId);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(BUNDLE_SAVE_PHONE_NUMBER, mPhoneNumber);
+        outState.putString(BUNDLE_SAVE_PHONE_NUMBER_ID, mPhoneNumberId);
+        outState.putParcelableArrayList(BUNDLE_SAVE_CONTACTS, new ArrayList<Parcelable>(mContactAdapter.getData()));
+        super.onSaveInstanceState(outState);
+    }
+
 
 
     @Override

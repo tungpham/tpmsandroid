@@ -1,10 +1,10 @@
 package com.ethan.morephone.presentation.record;
 
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -26,7 +26,6 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
-import com.ethan.morephone.presentation.message.list.MessageListFragment;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.presentation.record.adapter.RecordAdapter;
 import com.ethan.morephone.presentation.record.adapter.RecordsViewHolder;
@@ -52,8 +51,6 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +74,10 @@ public class RecordFragment extends BaseFragment implements
     private static final long PROGRESS_UPDATE_INTERNAL = 10;
     private static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 10;
     private static final int PROGRESS_MAX = 500;
+
+    private final String BUNDLE_SAVE_PHONE_NUMBER = "BUNDLE_SAVE_PHONE_NUMBER";
+    private final String BUNDLE_SAVE_PHONE_NUMBER_ID = "BUNDLE_SAVE_PHONE_NUMBER_ID";
+    private final String BUNDLE_SAVE_RECORDS = "BUNDLE_SAVE_RECORDS";
 
     public static RecordFragment getInstance(String phoneNumber, String phoneNumberId) {
         RecordFragment recordFragment = new RecordFragment();
@@ -172,7 +173,6 @@ public class RecordFragment extends BaseFragment implements
         });
 
 
-
         mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 
          /*-------------------Pull to request ----------------*/
@@ -197,12 +197,41 @@ public class RecordFragment extends BaseFragment implements
             });
         }
 
-        loadData();
+//        loadData();
+        restoreInstanceState(savedInstanceState);
 
 //        setHasOptionsMenu(true);
 
         return view;
     }
+
+    private void restoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mPhoneNumber = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER);
+            mPhoneNumberId = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER_ID);
+            mRecordAdapter = new RecordAdapter(getContext(), mPhoneNumber, new ArrayList<Record>(), this);
+            mRecyclerView.setAdapter(mRecordAdapter);
+            mRecordAdapter.setRecyclerView(mRecyclerView);
+            ArrayList<Record> records = savedInstanceState.getParcelableArrayList(BUNDLE_SAVE_RECORDS);
+            if (records != null && !records.isEmpty()) {
+                mRecordAdapter.replaceData(records);
+            } else {
+                loadData();
+            }
+            DebugTool.logD("LOAD DATA FROM INSTANCE RECORD FRAGMENT");
+        } else {
+            loadData();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(BUNDLE_SAVE_PHONE_NUMBER, mPhoneNumber);
+        outState.putString(BUNDLE_SAVE_PHONE_NUMBER_ID, mPhoneNumberId);
+        outState.putParcelableArrayList(BUNDLE_SAVE_RECORDS, new ArrayList<Parcelable>(mRecordAdapter.getData()));
+        super.onSaveInstanceState(outState);
+    }
+
 
     public void loadData() {
         if (Utils.isNetworkAvailable(getActivity())) {
@@ -245,7 +274,7 @@ public class RecordFragment extends BaseFragment implements
 
     @Override
     public void showRecords(List<Record> records) {
-        if(isAdded()) {
+        if (isAdded()) {
             mRecordAdapter.getData().addAll(records);
             mRecordAdapter.replaceData(mRecordAdapter.getData());
             isLoading = false;
@@ -273,7 +302,7 @@ public class RecordFragment extends BaseFragment implements
     public void onPauseRecord(RecordsViewHolder holder, Record recordItem) {
         DebugTool.logD("STATE: " + holder.getStateRecord());
 
-        if(mRecordsViewHolder != null && mRecordsViewHolder != holder){
+        if (mRecordsViewHolder != null && mRecordsViewHolder != holder) {
 
             clearVoice();
         }

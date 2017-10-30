@@ -1,5 +1,7 @@
 package com.android.morephone.data.entity.record;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.utils.DateUtils;
@@ -11,7 +13,7 @@ import java.util.Date;
  * Created by Ethan on 4/5/17.
  */
 
-public class Record implements Comparable<Record> {
+public class Record implements Comparable<Record>, Parcelable {
 
     public String sid;
 
@@ -68,6 +70,36 @@ public class Record implements Comparable<Record> {
         this.isComing = isComing;
     }
 
+    protected Record(Parcel in) {
+        sid = in.readString();
+        accountSid = in.readString();
+        callSid = in.readString();
+        phoneNumber = in.readString();
+        duration = in.readString();
+        dateCreated = in.readString();
+        apiVersion = in.readString();
+        dateUpdated = in.readString();
+        status = in.readString();
+        source = in.readString();
+        channels = in.readInt();
+        price = in.readString();
+        priceUnit = in.readString();
+        uri = in.readString();
+        isComing = in.readByte() != 0;
+    }
+
+    public static final Creator<Record> CREATOR = new Creator<Record>() {
+        @Override
+        public Record createFromParcel(Parcel in) {
+            return new Record(in);
+        }
+
+        @Override
+        public Record[] newArray(int size) {
+            return new Record[size];
+        }
+    };
+
     @Override
     public int compareTo(@NonNull Record record) {
         Date current = DateUtils.getDate(this.dateCreated);
@@ -81,5 +113,29 @@ public class Record implements Comparable<Record> {
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(sid);
+        parcel.writeString(accountSid);
+        parcel.writeString(callSid);
+        parcel.writeString(phoneNumber);
+        parcel.writeString(duration);
+        parcel.writeString(dateCreated);
+        parcel.writeString(apiVersion);
+        parcel.writeString(dateUpdated);
+        parcel.writeString(status);
+        parcel.writeString(source);
+        parcel.writeInt(channels);
+        parcel.writeString(price);
+        parcel.writeString(priceUnit);
+        parcel.writeString(uri);
+        parcel.writeByte((byte) (isComing ? 1 : 0));
     }
 }

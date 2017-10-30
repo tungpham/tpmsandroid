@@ -143,8 +143,34 @@ public class MessageListFragment extends BaseFragment implements
             }
         });
 //        mPresenter.loadMessages(mPhoneNumberTo, mPhoneNumberFrom);
+//        restoreInstanceState(savedInstanceState);
         return view;
     }
+
+//    private void restoreInstanceState(Bundle savedInstanceState) {
+//        if (savedInstanceState != null) {
+//            mPhoneNumber = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER);
+//            mPhoneNumberId = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER_ID);
+//            List<ConversationModel> conversationModels = savedInstanceState.getParcelableArrayList(BUNDLE_SAVE_CONVERSATION);
+//            if (conversationModels != null) {
+//                mConversationListAdapter.replaceData(conversationModels);
+//            } else {
+//                loadData(true);
+//            }
+//            DebugTool.logD("LOAD DATA FROM INSTANCE");
+//        } else {
+//            loadData(true);
+//        }
+//    }
+//
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        outState.putString(BUNDLE_SAVE_PHONE_NUMBER, mPhoneNumber);
+//        outState.putString(BUNDLE_SAVE_PHONE_NUMBER_ID, mPhoneNumberId);
+//        outState.putParcelableArrayList(BUNDLE_SAVE_CONVERSATION, new ArrayList<Parcelable>(mConversationListAdapter.getData()));
+//        super.onSaveInstanceState(outState);
+//    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

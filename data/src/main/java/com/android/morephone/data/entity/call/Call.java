@@ -1,5 +1,8 @@
 package com.android.morephone.data.entity.call;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.android.morephone.data.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +12,7 @@ import java.util.Date;
  * Created by Ethan on 3/7/17.
  */
 
-public class Call implements Comparable<Call>{
+public class Call implements Comparable<Call>, Parcelable {
 
     @SerializedName("sid")
     public String sid;
@@ -114,6 +117,45 @@ public class Call implements Comparable<Call>{
         this.subresourceUris = subresourceUris;
     }
 
+    protected Call(Parcel in) {
+        sid = in.readString();
+        dateCreated = in.readString();
+        dateUpdated = in.readString();
+        parentCallSid = in.readString();
+        accountSid = in.readString();
+        to = in.readString();
+        from = in.readString();
+        toFormatted = in.readString();
+        fromFormatted = in.readString();
+        phoneNumberSid = in.readString();
+        status = in.readString();
+        startTime = in.readString();
+        endTime = in.readString();
+        duration = in.readString();
+        price = in.readString();
+        price_unit = in.readString();
+        direction = in.readString();
+        answeredBy = in.readString();
+        apiVersion = in.readString();
+        annotation = in.readString();
+        forwardedFrom = in.readString();
+        groupSid = in.readString();
+        callerName = in.readString();
+        uri = in.readString();
+    }
+
+    public static final Creator<Call> CREATOR = new Creator<Call>() {
+        @Override
+        public Call createFromParcel(Parcel in) {
+            return new Call(in);
+        }
+
+        @Override
+        public Call[] newArray(int size) {
+            return new Call[size];
+        }
+    };
+
     @Override
     public int compareTo(Call voiceItem) {
         Date current = DateUtils.getDate(this.dateCreated);
@@ -129,7 +171,40 @@ public class Call implements Comparable<Call>{
         }
     }
 
-    public class SubresourceUris{
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(sid);
+        parcel.writeString(dateCreated);
+        parcel.writeString(dateUpdated);
+        parcel.writeString(parentCallSid);
+        parcel.writeString(accountSid);
+        parcel.writeString(to);
+        parcel.writeString(from);
+        parcel.writeString(toFormatted);
+        parcel.writeString(fromFormatted);
+        parcel.writeString(phoneNumberSid);
+        parcel.writeString(status);
+        parcel.writeString(startTime);
+        parcel.writeString(endTime);
+        parcel.writeString(duration);
+        parcel.writeString(price);
+        parcel.writeString(price_unit);
+        parcel.writeString(direction);
+        parcel.writeString(answeredBy);
+        parcel.writeString(apiVersion);
+        parcel.writeString(annotation);
+        parcel.writeString(forwardedFrom);
+        parcel.writeString(groupSid);
+        parcel.writeString(callerName);
+        parcel.writeString(uri);
+    }
+
+    public class SubresourceUris {
         @SerializedName("notifications")
         public String notifications;
 

@@ -112,12 +112,6 @@ public class ConversationsFragment extends BaseFragment implements
         mPhoneNumber = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
         mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
 
-//        mToolbar = (Toolbar) view.findViewById(R.id.tool_bar);
-//        BaseActivity baseActivity = (BaseActivity) getActivity();
-//        baseActivity.setTitleActionBar(mToolbar, mPhoneNumber);
-//        baseActivity.setSubTitleActionBar(mToolbar, getString(R.string.action_bar_title_conversation_label), mPhoneNumber);
-//        mToolbar.setVisibility(View.GONE);
-
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -139,19 +133,12 @@ public class ConversationsFragment extends BaseFragment implements
 
                 if (!isLoading && totalItemCount <= (lastVisibleItem + 5)) {
                     isLoading = true;
-//                    mPageIncoming++;
-//                    mPageOutgoing++;
-//                    DebugTool.logD("PAGE: " + mPageOutgoing);
                     if (mPresenter.hasNextPage())
                         loadData(true);
-//                    mPresenter.getTasks(mCurrPage);
                 }
             }
         });
 
-//
-//        layoutManager.setReverseLayout(true);
-//        layoutManager.setStackFromEnd(true);
 
         mConversationListAdapter = new ConversationListAdapter(getContext(), Injection.providerUseCaseHandler(), Injection.providerGetContactByPhoneNumber(getContext()), new ArrayList<ConversationModel>(), this);
         recyclerView.setAdapter(mConversationListAdapter);
@@ -181,10 +168,6 @@ public class ConversationsFragment extends BaseFragment implements
                 }
             });
         }
-
-//        setHasOptionsMenu(true);
-
-//        loadData(true);
 
         restoreInstanceState(savedInstanceState);
         return view;

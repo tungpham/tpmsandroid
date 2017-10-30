@@ -3,6 +3,7 @@ package com.ethan.morephone.presentation.phone.log;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +41,10 @@ public class CallLogFragment extends BaseFragment implements
         CallLogAdapter.OnItemCallLogClickListener,
         CallLogDialog.CallLogDialogListener {
 
+    private final String BUNDLE_SAVE_PHONE_NUMBER = "BUNDLE_SAVE_PHONE_NUMBER";
+    private final String BUNDLE_SAVE_PHONE_NUMBER_ID = "BUNDLE_SAVE_PHONE_NUMBER_ID";
+    private final String BUNDLE_SAVE_CALL_LOGS = "BUNDLE_SAVE_CALL_LOGS";
+
     public static CallLogFragment getInstance(String phoneNumber, String phoneNumberId) {
         CallLogFragment callLogFragment = new CallLogFragment();
         Bundle bundle = new Bundle();
@@ -53,6 +58,7 @@ public class CallLogFragment extends BaseFragment implements
     private CallLogAdapter mCallLogAdapter;
     private String mPhoneNumber;
     private String mPhoneNumberId;
+    private RecyclerView mRecyclerView;
 
     private CallLogContract.Presenter mPresenter;
 
@@ -75,13 +81,13 @@ public class CallLogFragment extends BaseFragment implements
         mPhoneNumber = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
         mPhoneNumberId = getArguments().getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
-        recyclerView.setItemAnimator(null);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addItemDecoration(new DividerSpacingItemDecoration(getContext(), R.dimen.item_number_space));
+        mRecyclerView.setItemAnimator(null);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -135,10 +141,39 @@ public class CallLogFragment extends BaseFragment implements
         }
 
         mCallLogAdapter = new CallLogAdapter(getContext(), mPhoneNumber, new ArrayList<Call>(), this);
-        recyclerView.setAdapter(mCallLogAdapter);
+        mRecyclerView.setAdapter(mCallLogAdapter);
 
-        loadData();
+        restoreInstanceState(savedInstanceState);
+
         return view;
+    }
+
+
+    private void restoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mPhoneNumber = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER);
+            mPhoneNumberId = savedInstanceState.getString(BUNDLE_SAVE_PHONE_NUMBER_ID);
+            mCallLogAdapter = new CallLogAdapter(getContext(), mPhoneNumber, new ArrayList<Call>(), this);
+            mRecyclerView.setAdapter(mCallLogAdapter);
+
+            ArrayList<Call> calls = savedInstanceState.getParcelableArrayList(BUNDLE_SAVE_CALL_LOGS);
+            if (calls != null && !calls.isEmpty()) {
+                mCallLogAdapter.replaceData(calls);
+            } else {
+                loadData();
+            }
+            DebugTool.logD("LOAD DATA FROM INSTANCE CALL LOG FRAGMENT");
+        } else {
+            loadData();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(BUNDLE_SAVE_PHONE_NUMBER, mPhoneNumber);
+        outState.putString(BUNDLE_SAVE_PHONE_NUMBER_ID, mPhoneNumberId);
+        outState.putParcelableArrayList(BUNDLE_SAVE_CALL_LOGS, new ArrayList<Parcelable>(mCallLogAdapter.getData()));
+        super.onSaveInstanceState(outState);
     }
 
     @Override
