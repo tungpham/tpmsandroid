@@ -45,12 +45,11 @@ public class CallingScreenFragment extends BaseFragment implements View.OnClickL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_in_call, container, false);
-//        mFloatingButtonMute = (FloatingActionButton) view.findViewById(R.id.mute_action_fab);
+        //        mFloatingButtonMute = (FloatingActionButton) view.findViewById(R.id.mute_action_fab);
 //        mFloatingButtonMute.setOnClickListener(this);
 
 
-        return view;
+        return inflater.inflate(R.layout.fragment_in_call, container, false);
     }
 
     @Override

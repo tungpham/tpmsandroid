@@ -17,11 +17,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
-import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
-import com.ethan.morephone.presentation.dashboard.DashboardFrag;
 import com.ethan.morephone.presentation.dashboard.model.ClientProfile;
 import com.ethan.morephone.presentation.phone.dial.DialFragment;
 import com.ethan.morephone.presentation.phone.incoming.IncomingFragment;
@@ -246,10 +244,7 @@ public class InCallActivity extends BaseActivity implements
 
     private boolean checkPermissionForMicrophone() {
         int resultMic = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
-        if (resultMic == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
+        return resultMic == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissionForMicrophone() {

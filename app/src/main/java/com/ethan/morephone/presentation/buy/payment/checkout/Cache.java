@@ -79,9 +79,8 @@ public interface Cache {
             Key that = (Key) o;
 
             if (type != that.type) return false;
-            if (!key.equals(that.key)) return false;
+            return key.equals(that.key);
 
-            return true;
         }
 
         @Override

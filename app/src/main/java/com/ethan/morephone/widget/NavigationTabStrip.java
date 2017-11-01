@@ -145,6 +145,8 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
     private Bitmap mBitmapMessage;
     private Bitmap mBitmapVoice;
 
+    private Paint mPaint = new Paint();
+
     public NavigationTabStrip(final Context context) {
         this(context, null);
     }
@@ -683,7 +685,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
                 bitmap = mBitmapVoice;
             }
             canvas.drawBitmap(bitmap, leftTitleOffset - bitmap.getWidth()/2,
-                    topTitleOffset - bitmap.getHeight()/2, new Paint());
+                    topTitleOffset - bitmap.getHeight()/2, mPaint);
 
 //            canvas.drawText(
 //                    title, leftTitleOffset,

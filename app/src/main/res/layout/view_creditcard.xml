@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
 
-        <include layout="@layout/front_card_outline" />
+        <!--<include layout="@layout/front_card_outline" />-->
 
         <View
             android:id="@+id/back_card_outline"

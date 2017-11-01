@@ -44,8 +44,6 @@ public class ApiMorePhone {
 
     private static ApiMorePhonePath mApiPath;
 
-    private static volatile Retrofit mRetrofit;
-
     private static final String TAG = ApiMorePhone.class.getSimpleName();
 
     //Singleton for Retrofit
@@ -77,7 +75,7 @@ public class ApiMorePhone {
 //                            .addNetworkInterceptor((Interceptor) new StethoInterceptor())
                 .build();
 
-        mRetrofit = new Retrofit.Builder()
+        Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl(BaseUrl.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient).build();

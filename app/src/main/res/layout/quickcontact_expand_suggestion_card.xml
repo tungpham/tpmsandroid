@@ -84,7 +84,7 @@
 
             <LinearLayout
                 android:id="@+id/suggestion_for_contact_info"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/quickcontact_expanding_item_image_padding"
                 android:layout_weight="1"
@@ -94,7 +94,7 @@
                 <TextView
                     android:id="@+id/suggestion_for_name"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/quickcontact_entry_header_text_color"

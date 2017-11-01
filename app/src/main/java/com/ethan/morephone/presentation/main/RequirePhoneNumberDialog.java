@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialog;
 
 import com.ethan.morephone.R;
 
@@ -31,7 +30,7 @@ public class RequirePhoneNumberDialog extends DialogFragment {
             FragmentTransaction ft = manager.beginTransaction();
             ft.add(this, tag);
             ft.commit();
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
         }
     }
 

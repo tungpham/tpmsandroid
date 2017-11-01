@@ -44,7 +44,6 @@ public class AddFundFragment extends BaseFragment implements
     private static final int REQUEST_CODE_PAYMENT_VISA = 2;
 
     private UiCheckout mCheckout;
-    private Spinner mAvailableSkus;
     private final List<Inventory.Callback> mInventoryCallbacks = new ArrayList<>();
 
     private double mBalanceAdd = 0;
@@ -78,7 +77,7 @@ public class AddFundFragment extends BaseFragment implements
         view.findViewById(R.id.buy).setOnClickListener(this);
         RecyclerView mPurchasedSkus = (RecyclerView) view.findViewById(R.id.purchased_skus);
         Spinner mTargetSkus = (Spinner) view.findViewById(R.id.target_skus);
-        mAvailableSkus = (Spinner) view.findViewById(R.id.available_skus);
+        Spinner mAvailableSkus = (Spinner) view.findViewById(R.id.available_skus);
 
         return view;
     }

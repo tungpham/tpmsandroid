@@ -25,7 +25,7 @@
                 android:id="@+id/collapsed_suggestion_card_title"
                 android:textSize="@dimen/expanding_entry_card_title_text_size"
                 android:layout_marginLeft="8dp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/quickcontact_entry_header_text_color"

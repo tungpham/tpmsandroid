@@ -42,10 +42,7 @@ public class MaterialColorMapUtils {
             if (mPrimaryColor != other.mPrimaryColor) {
                 return false;
             }
-            if (mSecondaryColor != other.mSecondaryColor) {
-                return false;
-            }
-            return true;
+            return mSecondaryColor == other.mSecondaryColor;
         }
 
         @Override

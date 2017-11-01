@@ -638,8 +638,6 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
         }
     }
 
-    private final Context mContext;
-
     /**
      * An LRU cache for bitmap holders. The cache contains bytes for photos just
      * as they come from the database. Each holder has a soft reference to the
@@ -651,11 +649,6 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
      * {@code true} if ALL entries in {@link #mBitmapHolderCache} are NOT fresh.
      */
     private volatile boolean mBitmapHolderCacheAllUnfresh = true;
-
-    /**
-     * Cache size threshold at which bitmaps will not be preloaded.
-     */
-    private final int mBitmapHolderCacheRedZoneBytes;
 
     /**
      * Level 2 LRU cache for bitmaps. This is a smaller cache that holds
@@ -713,7 +706,7 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
     private String mUserAgent;
 
     public ContactPhotoManagerImpl(Context context) {
-        mContext = context;
+        Context mContext = context;
 
         final ActivityManager am = ((ActivityManager) context.getSystemService(
                 Context.ACTIVITY_SERVICE));
@@ -746,7 +739,10 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
                 if (DEBUG) dumpStats();
             }
         };
-        mBitmapHolderCacheRedZoneBytes = (int) (holderCacheSize * 0.75);
+        /*
+      Cache size threshold at which bitmaps will not be preloaded.
+     */
+        int mBitmapHolderCacheRedZoneBytes = (int) (holderCacheSize * 0.75);
         Log.i(TAG, "Cache adj: " + cacheSizeAdjustment);
         if (DEBUG) {
             Log.d(TAG, "Cache size: " + btk(mBitmapHolderCache.maxSize())
@@ -903,7 +899,6 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
     public void cancelPendingRequests(View fragmentRootView) {
         if (fragmentRootView == null) {
 //            mPendingRequests.clear();
-            return;
         }
 //        final Iterator<Entry<ImageView, Request>> iterator = mPendingRequests.entrySet().iterator();
 //        while (iterator.hasNext()) {

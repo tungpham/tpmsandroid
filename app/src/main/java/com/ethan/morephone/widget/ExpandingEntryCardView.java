@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -14,7 +13,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.TextUtils;
@@ -45,6 +43,7 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.utils.CallUtil;
 import com.ethan.morephone.utils.ContactDisplayUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,17 +62,13 @@ public class ExpandingEntryCardView extends CardView {
     public static final int PRESENCE_AVAILABILITY_FETCH = 0;
 
     private static final String SHARE_FILE_NMAE = "video_callling_reminder";
-    private boolean isSupportVideoCall = false;
     private boolean isEnable = false;
-    private Switch mVideoCalling;
     private Context mContext;
     private int mDefaultEnable;
     private int mEnable;
     private VideoCallingCallback mVideoCallingCallback = null;
     private String mContactName;
-    private Handler mHandler;
     private boolean mEnablePresence = false;
-    private boolean mHaveFetched = false;
 
     private static final Property<View, Integer> VIEW_LAYOUT_HEIGHT_PROPERTY =
             new Property<View, Integer>(Integer.class, "height") {
@@ -288,17 +283,6 @@ public class ExpandingEntryCardView extends CardView {
     private List<View> mSeparators;
     private LinearLayout mContainer;
 
-    private final OnClickListener mExpandCollapseButtonListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (mIsExpanded) {
-                collapse();
-            } else {
-                expand();
-            }
-        }
-    };
-
     private final OnCheckedChangeListener mSwitchVideoCalling = new OnCheckedChangeListener() {
 
         @Override
@@ -329,7 +313,7 @@ public class ExpandingEntryCardView extends CardView {
         mEnablePresence = getResources().getBoolean(R.bool.config_presence_enabled);
         Log.d(TAG, "ExpandingEntryCardView mEnablePresence = " + mEnablePresence);
         if (mEnablePresence) {
-            mVideoCalling = (Switch) expandingEntryCardView
+            Switch mVideoCalling = (Switch) expandingEntryCardView
                     .findViewById(R.id.switch_video_call);
             mVideoCalling.setVisibility(View.GONE);
         }
@@ -338,6 +322,16 @@ public class ExpandingEntryCardView extends CardView {
                 R.layout.quickcontact_expanding_entry_card_button, this, false);
         mExpandCollapseTextView = (TextView) mExpandCollapseButton.findViewById(R.id.text);
         mExpandCollapseArrow = (ImageView) mExpandCollapseButton.findViewById(R.id.arrow);
+        OnClickListener mExpandCollapseButtonListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIsExpanded) {
+                    collapse();
+                } else {
+                    expand();
+                }
+            }
+        };
         mExpandCollapseButton.setOnClickListener(mExpandCollapseButtonListener);
         mBadgeContainer = (LinearLayout) mExpandCollapseButton.findViewById(R.id.badge_container);
         mDividerLineHeightPixels = getResources()
@@ -582,7 +576,29 @@ public class ExpandingEntryCardView extends CardView {
     }
 
     public void disPlayVideoCallSwitch(boolean isSupportVideocall) {
-        this.isSupportVideoCall = isSupportVideocall;
+        boolean isSupportVideoCall = isSupportVideocall;
+    }
+
+    static class MyHandler extends Handler {
+        private final WeakReference<ExpandingEntryCardView> mService;
+
+        MyHandler(ExpandingEntryCardView service) {
+            mService = new WeakReference<ExpandingEntryCardView>(service);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            ExpandingEntryCardView service = mService.get();
+            if (service != null) {
+                switch (msg.what) {
+                    case PRESENCE_AVAILABILITY_FETCH:
+                        if (service.mVideoCallingCallback != null )
+                            service.mVideoCallingCallback.updateContact();
+                        Log.d(TAG, "AvailabilityFetch result updateContact");
+                        break;
+                }
+            }
+        }
     }
 
     /**
@@ -591,19 +607,7 @@ public class ExpandingEntryCardView extends CardView {
     private void inflateInitialEntries(LayoutInflater layoutInflater) {
 
         if (mEnablePresence) {
-            mHandler = new Handler(){
-
-                @Override
-                public void handleMessage(Message msg) {
-                    switch (msg.what) {
-                        case PRESENCE_AVAILABILITY_FETCH:
-                            if (mVideoCallingCallback != null )
-                                mVideoCallingCallback.updateContact();
-                            Log.d(TAG, "AvailabilityFetch result updateContact");
-                            break;
-                    }
-                }
-            };
+            Handler mHandler = new MyHandler(this);
         }
         // If the number of collapsed entries equals total entries, inflate all
         if (mCollapsedEntriesCount == mNumEntries) {
@@ -850,6 +854,7 @@ public class ExpandingEntryCardView extends CardView {
         if (mEnablePresence) {
             if (mEnable == CallUtil.ENABLE_VIDEO_CALLING) {
                 showVTicon = ContactDisplayUtils.getVTCapability(entry.getHeader());
+                boolean mHaveFetched = false;
                 if(!mHaveFetched){
                     new Thread(new Runnable(){
                         public void run(){
@@ -869,7 +874,7 @@ public class ExpandingEntryCardView extends CardView {
             }
         }
         if (entry.getThirdIcon() != null && entry.getThirdAction() != Entry.ACTION_NONE
-                && (mEnablePresence ? showVTicon : true/*This true is used for the keep AOSP*/)) {
+                && (!mEnablePresence || showVTicon/*This true is used for the keep AOSP*/)) {
             thirdIcon.setImageDrawable(entry.getThirdIcon());
             if (entry.getThirdAction() == Entry.ACTION_INTENT) {
                 thirdIcon.setOnClickListener(mOnClickListener);

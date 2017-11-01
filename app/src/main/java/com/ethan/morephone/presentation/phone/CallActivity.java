@@ -445,7 +445,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
                  */
                 EditText contact = (EditText) ((AlertDialog) dialog).findViewById(R.id.contact);
                 Spinner spinner = (Spinner) ((AlertDialog) dialog).findViewById(R.id.typeSpinner);
-                boolean isPhoneNumber = spinner.getSelectedItemPosition() == 1 ? true : false;
+                boolean isPhoneNumber = spinner.getSelectedItemPosition() == 1;
 
                 // Create an outgoing connection
                 connect(contact.getText().toString(), isPhoneNumber);
@@ -651,10 +651,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
 
     private boolean checkPermissionForMicrophone() {
         int resultMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
-        if (resultMic == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
+        return resultMic == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissionForMicrophone() {

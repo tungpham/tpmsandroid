@@ -34,14 +34,13 @@ public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Call> mCalls;
     private TextDrawable.IBuilder mDrawableBuilder;
     private Context mContext;
-    private String mPhoneNumber;
     private OnItemCallLogClickListener mOnItemCallLogClickListener;
     private UseCaseHandler mUseCaseHandler;
     private GetContactByPhoneNumber mGetContactByPhoneNumber;
 
     public CallLogAdapter(Context context, String phoneNumber, List<Call> conversationEntities, OnItemCallLogClickListener onItemCallLogClickListener) {
         mContext = context;
-        mPhoneNumber = phoneNumber;
+        String mPhoneNumber = phoneNumber;
         mCalls = conversationEntities;
         mOnItemCallLogClickListener = onItemCallLogClickListener;
         mDrawableBuilder = TextDrawable.builder().round();

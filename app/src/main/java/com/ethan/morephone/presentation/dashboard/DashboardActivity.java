@@ -24,10 +24,6 @@ import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.authentication.login.LoginActivity;
-import com.ethan.morephone.presentation.authentication.login.forgot.ForgotPasswordActivity;
-import com.ethan.morephone.presentation.dashboard.expire.ExpireActivity;
-import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
 import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.phone.service.PhoneService;
 import com.ethan.morephone.presentation.setting.SettingActivity;
@@ -52,7 +48,6 @@ public class DashboardActivity extends BaseActivity {
     private UpdateDeviceReceiver mUpdateDeviceReceiver = new UpdateDeviceReceiver();
 
     private String mPhoneNumberId;
-    private String mPhoneNumber;
 
     public static void starter(Activity activity, PhoneNumber phoneNumber, int mode) {
         Intent intent = new Intent(activity, DashboardActivity.class);
@@ -80,7 +75,7 @@ public class DashboardActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateDeviceReceiver, intentFilterDevicePartner);
 
         Bundle bundle = getIntent().getExtras();
-        mPhoneNumber = bundle.getString(BUNDLE_PHONE_NUMBER);
+        String mPhoneNumber = bundle.getString(BUNDLE_PHONE_NUMBER);
         mPhoneNumberId = bundle.getString(BUNDLE_PHONE_NUMBER_ID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -166,10 +161,7 @@ public class DashboardActivity extends BaseActivity {
 
     private boolean checkPermissionForMicrophone() {
         int resultMic = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
-        if (resultMic == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
+        return resultMic == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissionForMicrophone() {

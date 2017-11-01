@@ -4,15 +4,12 @@ package com.ethan.morephone.utils;
 import android.accounts.Account;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
@@ -20,7 +17,6 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
-import android.provider.Settings;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -367,14 +363,14 @@ public class MoreContactUtils {
      * Returns the subscription's card can save anr or not.
      */
     public static boolean canSaveAnr(Context c, int subscription) {
-        return getAnrCount(c, subscription) > 0 ? true : false;
+        return getAnrCount(c, subscription) > 0;
     }
 
     /**
      * Returns the subscription's card can save email or not.
      */
     public static boolean canSaveEmail(Context c, int subscription) {
-        return getEmailCount(c, subscription) > 0 ? true : false;
+        return getEmailCount(c, subscription) > 0;
     }
 
     public static int getOneSimAnrCount(Context c, int slot) {
@@ -491,7 +487,7 @@ public class MoreContactUtils {
         try {
             SubscriptionManager sm = SubscriptionManager.from(c);
             subInfoRecord = sm.getActiveSubscriptionInfoForSimSlotIndex(slot);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         if (subInfoRecord != null)
@@ -504,7 +500,7 @@ public class MoreContactUtils {
         try {
             SubscriptionManager sm = SubscriptionManager.from(c);
             subInfoRecord = sm.getActiveSubscriptionInfo(subId);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         if (subInfoRecord != null)

@@ -356,10 +356,7 @@ public class MainActivity extends BaseActivity implements
 
     private boolean checkPermissionForMicrophone() {
         int resultMic = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
-        if (resultMic == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
+        return resultMic == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissionForMicrophone() {

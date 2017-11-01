@@ -43,10 +43,6 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
     private AutoCompleteContactView mRecipients;
     private AppCompatEditText mEditTextBody;
 
-    private ComposeContract.Presenter mPresenter;
-    private String mPhoneNumber;
-    private String mToPhoneNumber;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +54,8 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_compose, container, false);
 
-        mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
-        mToPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
+        String mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
+        String mToPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         BaseActivity baseActivity = (BaseActivity) getActivity();
@@ -129,7 +125,7 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
     }
 
     public void setPresenter(ComposeContract.Presenter presenter) {
-        mPresenter = presenter;
+        ComposeContract.Presenter mPresenter = presenter;
     }
 
     public String[] getRecipientAddresses() {

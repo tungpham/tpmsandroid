@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import com.auth0.android.provider.WebAuthProvider;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 //import com.facebook.FacebookSdk;
 
@@ -19,8 +18,6 @@ import com.ethan.morephone.utils.ActivityUtils;
  */
 
 public class AuthenticationActivity extends BaseActivity {
-
-    private final int REQUEST_LOGIN = 100;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,9 +55,10 @@ public class AuthenticationActivity extends BaseActivity {
                 finish();
                 break;
 
-            case R.id.menu_login:
-                startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
-                break;
+//            case R.id.menu_login:
+//                int REQUEST_LOGIN = 100;
+//                startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
+//                break;
 
             default:
                 break;

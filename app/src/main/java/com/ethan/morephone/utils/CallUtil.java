@@ -229,10 +229,7 @@ public class CallUtil {
             return false;
         }
         String norNumber = PhoneNumberHelper.normalizeNumber(number);
-        if (norNumber.length() < MAX_PHONE_NUM) {
-            return false;
-        }
-        return true;
+        return norNumber.length() >= MAX_PHONE_NUM;
     }
 
 

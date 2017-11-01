@@ -33,7 +33,6 @@ public class ExpandableLayout extends LinearLayout implements RecordAdapter.OnOt
     private ObjectAnimator mExpandAnimator;
     private OnExpandListener mListener;
     private int mPosition;
-    private RecordAdapter mAdater;
 
     public ExpandableLayout(Context context) {
         super(context);
@@ -141,7 +140,7 @@ public class ExpandableLayout extends LinearLayout implements RecordAdapter.OnOt
     }
 
     public void setAdapter(RecordAdapter adapter) {
-        mAdater = adapter;
+        RecordAdapter mAdater = adapter;
         mAdater.setOnOtherExpandListener(this);
     }
 
@@ -360,10 +359,7 @@ public class ExpandableLayout extends LinearLayout implements RecordAdapter.OnOt
     public boolean isRunningAnimation() {
         View child = findExpandableView();
         LayoutParams p = (LayoutParams) child.getLayoutParams();
-        if (p.isExpanding == true) {
-            return true;
-        }
-        return false;
+        return p.isExpanding == true;
     }
 
     private void dispatchOffset(View child) {

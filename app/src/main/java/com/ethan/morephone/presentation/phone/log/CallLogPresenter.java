@@ -121,10 +121,7 @@ public class CallLogPresenter implements CallLogContract.Presenter {
 
     @Override
     public boolean hasNextPage() {
-        if (mResourceCall != null && (!TextUtils.isEmpty(mResourceCall.incomingNextPageUri) || !TextUtils.isEmpty(mResourceCall.outgoingNextPageUri))) {
-            return true;
-        }
-        return false;
+        return mResourceCall != null && (!TextUtils.isEmpty(mResourceCall.incomingNextPageUri) || !TextUtils.isEmpty(mResourceCall.outgoingNextPageUri));
     }
 
     private void executeData(Calls calls) {

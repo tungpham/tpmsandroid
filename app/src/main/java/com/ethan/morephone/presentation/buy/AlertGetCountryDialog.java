@@ -32,7 +32,7 @@ public class AlertGetCountryDialog extends DialogFragment {
             FragmentTransaction ft = manager.beginTransaction();
             ft.add(this, tag);
             ft.commit();
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
         }
     }
 

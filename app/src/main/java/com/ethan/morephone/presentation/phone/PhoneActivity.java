@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
-import com.ethan.morephone.fcm.NotificationHelpper;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.phone.dial.DialFragment;
 import com.ethan.morephone.presentation.phone.incall.InCallFragment;
@@ -123,8 +122,8 @@ public class PhoneActivity extends BaseActivity implements
             intent.removeExtra(Device.EXTRA_DEVICE);
             intent.removeExtra(Device.EXTRA_CONNECTION);
 
-            mFromPhoneNumber = incomingConnection.getParameters().get(incomingConnection.IncomingParameterFromKey);
-            mToPhoneNumber = incomingConnection.getParameters().get(incomingConnection.IncomingParameterToKey);
+            mFromPhoneNumber = incomingConnection.getParameters().get(Connection.IncomingParameterFromKey);
+            mToPhoneNumber = incomingConnection.getParameters().get(Connection.IncomingParameterToKey);
 
             PhoneService.startServiceWithAction(getApplicationContext(), PhoneService.ACTION_INCOMING, mFromPhoneNumber, mToPhoneNumber, device, incomingConnection);
             showIncomingFragment(mFromPhoneNumber, mToPhoneNumber);

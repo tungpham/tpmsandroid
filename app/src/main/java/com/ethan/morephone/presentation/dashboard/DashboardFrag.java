@@ -1,7 +1,5 @@
 package com.ethan.morephone.presentation.dashboard;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -35,7 +33,6 @@ public class DashboardFrag extends BaseFragment {
 
     private String mPhoneNumber;
     private String mPhoneNumberId;
-    private ViewPager mViewPager;
 
     @Nullable
     @Override
@@ -53,7 +50,7 @@ public class DashboardFrag extends BaseFragment {
 
     private void setUpViewPager(View view, int mode) {
         PagerSlidingTabStrip navigationTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_strip);
-        mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        ViewPager mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(5);
         DashboardViewPagerAdapter myViewPagerAdapter = new DashboardViewPagerAdapter(getContext(), getChildFragmentManager(), mPhoneNumber, mPhoneNumberId);
         mViewPager.setAdapter(myViewPagerAdapter);

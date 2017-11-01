@@ -7,12 +7,9 @@ import android.text.TextUtils;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.call.Call;
-import com.android.morephone.data.entity.call.ResourceCall;
 import com.android.morephone.data.entity.record.Record;
 import com.android.morephone.data.entity.record.ResourceRecord;
-import com.android.morephone.data.entity.record.mapper.RecordDataMapper;
 import com.android.morephone.data.entity.twilio.record.RecordItem;
-import com.android.morephone.data.entity.twilio.record.RecordListResourceResponse;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.network.ApiMorePhone;
@@ -23,7 +20,6 @@ import com.android.morephone.domain.usecase.call.GetCall;
 import com.android.morephone.domain.usecase.record.DeleteRecord;
 import com.android.morephone.domain.usecase.record.GetRecords;
 import com.ethan.morephone.Constant;
-import com.ethan.morephone.presentation.phone.log.CallLogPresenter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -138,10 +134,7 @@ public class RecordPresenter implements RecordContract.Presenter {
 
     @Override
     public boolean hasNextPage() {
-        if(mResourceRecord != null && !TextUtils.isEmpty(mResourceRecord.nextPageUri)){
-            return true;
-        }
-        return false;
+        return mResourceRecord != null && !TextUtils.isEmpty(mResourceRecord.nextPageUri);
     }
 
     private void executeData(Context context, final String phoneNumber, List<RecordItem> records) {

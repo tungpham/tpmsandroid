@@ -488,7 +488,7 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
                                 mDevices.get(phoneNumber).updateCapabilityToken(capabilityToken);
                             }
 
-                        } catch (Exception e1) {
+                        } catch (Exception ignored) {
                         }
                     } else {
                         DebugTool.logD("ERROR CREATE TOKEN ONLINE ");
@@ -632,7 +632,6 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
         Connection incomingConnection = intent.getParcelableExtra(Device.EXTRA_CONNECTION);
 
         if (incomingConnection == null && device == null) {
-            return;
         } else {
             intent.removeExtra(Device.EXTRA_DEVICE);
             intent.removeExtra(Device.EXTRA_CONNECTION);

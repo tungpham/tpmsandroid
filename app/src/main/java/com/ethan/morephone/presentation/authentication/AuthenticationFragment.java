@@ -31,7 +31,6 @@ import com.auth0.android.result.UserProfile;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.authentication.login.LoginActivity;
 import com.ethan.morephone.presentation.main.MainActivity;
 import com.ethan.morephone.presentation.splash.SplashActivity;
 
@@ -58,7 +57,6 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     }
 
     private final int REQUEST_LOGIN = 100;
-    private final int REQUEST_REGISTER = REQUEST_LOGIN + 1;
 
 //    CallbackManager callbackManager;
 
@@ -150,9 +148,9 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
                 getActivity().finish();
                 break;
 
-            case R.id.menu_login:
-                startActivityForResult(new Intent(getActivity(), LoginActivity.class), REQUEST_LOGIN);
-                break;
+//            case R.id.menu_login:
+//                startActivityForResult(new Intent(getActivity(), LoginActivity.class), REQUEST_LOGIN);
+//                break;
 
             default:
                 break;
@@ -190,6 +188,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        callbackManager.onActivityResult(requestCode, resultCode, data);
+        int REQUEST_REGISTER = REQUEST_LOGIN + 1;
         if (requestCode == REQUEST_LOGIN || requestCode == REQUEST_REGISTER) {
             if (resultCode == Activity.RESULT_OK) {
                 startActivity(new Intent(getActivity(), MainActivity.class));

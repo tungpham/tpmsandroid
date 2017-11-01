@@ -1,56 +1,39 @@
 package com.ethan.morephone.presentation.contact.detail;
 
-import android.accounts.Account;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.morephone.data.entity.MessageItem;
-import com.android.morephone.data.entity.Response;
 import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
-import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.contact.DeleteContact;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.buy.AlertGetCountryDialog;
 import com.ethan.morephone.presentation.contact.ContactFragment;
 import com.ethan.morephone.presentation.contact.editor.ContactEditorActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.list.MessageListActivity;
-import com.ethan.morephone.presentation.message.list.MessageListFragment;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.SchedulingUtils;
 import com.ethan.morephone.widget.QuickContactImageView;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.Random;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 
 /**
  * Created by truongnguyen on 9/27/17.
@@ -66,14 +49,9 @@ public class ContactDetailActivity extends BaseActivity implements
 
     private View mPhotoViewContainer;
     private int mMaximumPortraitHeaderHeight;
-    private View mCoordinatorLayout;
     private QuickContactImageView mImageContact;
 
-    private TypedArray mColorArray;
-
     private Contact mContactData;
-    private ImageView mImageCall;
-    private ImageView mImageMessage;
 
     private TextView mTextDisplayName;
     private TextView mTextPhoneNumber;
@@ -85,14 +63,14 @@ public class ContactDetailActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_detail);
 
-        mImageCall = (ImageView) findViewById(R.id.image_call);
-        mImageMessage = (ImageView) findViewById(R.id.image_message);
+        ImageView mImageCall = (ImageView) findViewById(R.id.image_call);
+        ImageView mImageMessage = (ImageView) findViewById(R.id.image_message);
 
-        mCoordinatorLayout = findViewById(R.id.main_content);
+        View mCoordinatorLayout = findViewById(R.id.main_content);
         mPhotoViewContainer = findViewById(R.id.appbar);
         mImageContact = (QuickContactImageView) findViewById(R.id.backdrop);
 
-        mColorArray = getResources().obtainTypedArray(R.array.letter_tile_colors);
+        TypedArray mColorArray = getResources().obtainTypedArray(R.array.letter_tile_colors);
 
         int index = Math.abs(new Random().nextInt() % mColorArray.length());
         final int mainColor = mColorArray.getColor(index, Color.GREEN);

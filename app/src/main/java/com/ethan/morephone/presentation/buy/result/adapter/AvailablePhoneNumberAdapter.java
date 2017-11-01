@@ -18,11 +18,10 @@ import java.util.List;
 public class AvailablePhoneNumberAdapter extends RecyclerView.Adapter<AvailablePhoneNumberViewHolder> {
 
     private List<AvailablePhoneNumber> mAvailablePhoneNumbers;
-    private Context mContext;
     private AvailablePhoneNumberListener mAvailablePhoneNumberListener;
 
     public AvailablePhoneNumberAdapter(Context context, List<AvailablePhoneNumber> availablePhoneNumbers) {
-        mContext = context;
+        Context mContext = context;
         mAvailablePhoneNumbers = availablePhoneNumbers;
     }
 

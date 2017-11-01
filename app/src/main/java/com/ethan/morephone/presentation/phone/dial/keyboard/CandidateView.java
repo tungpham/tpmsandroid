@@ -16,6 +16,8 @@ import com.ethan.morephone.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.padding;
+
 public class CandidateView extends View {
 
     private static final int OUT_OF_BOUNDS = -1;
@@ -50,6 +52,8 @@ public class CandidateView extends View {
     private int mTotalWidth;
 
     private GestureDetector mGestureDetector;
+
+    private Rect mPadding = new Rect();
 
     /**
      * Construct a CandidateView for showing suggested words for completion.
@@ -126,10 +130,10 @@ public class CandidateView extends View {
 
         // Get the desired height of the icon menu view (last row of items does
         // not have a divider below)
-        Rect padding = new Rect();
-        mSelectionHighlight.getPadding(padding);
+
+        mSelectionHighlight.getPadding(mPadding);
         final int desiredHeight = ((int)mPaint.getTextSize()) + mVerticalPadding
-                + padding.top + padding.bottom;
+                + mPadding.top + mPadding.bottom;
 
         // Maximum possible width and desired height
         setMeasuredDimension(measuredWidth,

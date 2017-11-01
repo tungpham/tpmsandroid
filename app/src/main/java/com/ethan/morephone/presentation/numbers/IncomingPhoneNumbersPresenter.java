@@ -31,15 +31,13 @@ import retrofit2.Response;
 public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContract.Presenter {
 
     private final IncomingPhoneNumbersContract.View mView;
-    private final UseCaseHandler mUseCaseHandler;
-    private final DeleteIncomingPhoneNumber mDeleteIncomingPhoneNumber;
 
     public IncomingPhoneNumbersPresenter(@NonNull IncomingPhoneNumbersContract.View view,
                                          @NonNull UseCaseHandler useCaseHandler,
                                          @NonNull DeleteIncomingPhoneNumber deleteIncomingPhoneNumber) {
         mView = view;
-        mUseCaseHandler = useCaseHandler;
-        mDeleteIncomingPhoneNumber = deleteIncomingPhoneNumber;
+        UseCaseHandler mUseCaseHandler = useCaseHandler;
+        DeleteIncomingPhoneNumber mDeleteIncomingPhoneNumber = deleteIncomingPhoneNumber;
 
         mView.setPresenter(this);
     }

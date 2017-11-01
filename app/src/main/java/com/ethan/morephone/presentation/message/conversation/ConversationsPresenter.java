@@ -34,14 +34,11 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
 
     private final ConversationsContract.View mView;
     private final UseCaseHandler mUseCaseHandler;
-    private final GetAllMessages mGetAllMessages;
     private final GetMessagesIncoming mGetMessagesIncoming;
     private final GetMessagesOutgoing mGetMessagesOutgoing;
     private final CreateMessage mCreateMessage;
-    private final CreateGroup mCreateGroup;
 
-    private List<MessageItem> mMessageItems;
-//    private List<ConversationModel> mConversationModels;
+    //    private List<ConversationModel> mConversationModels;
 //    private ArrayMap<String, List<MessageItem>> mArrayMap;
 
     private ResourceMessage mResourceMessage;
@@ -55,13 +52,13 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
                                   @NonNull CreateGroup createGroup) {
         mView = view;
         mUseCaseHandler = useCaseHandler;
-        mGetAllMessages = getAllMessages;
+        GetAllMessages mGetAllMessages = getAllMessages;
         mGetMessagesIncoming = getMessagesIncoming;
         mGetMessagesOutgoing = getMessagesOutgoing;
         mCreateMessage = createMessage;
-        mCreateGroup = createGroup;
+        CreateGroup mCreateGroup = createGroup;
 
-        mMessageItems = new ArrayList<>();
+        List<MessageItem> mMessageItems = new ArrayList<>();
 //        mConversationModels = new ArrayList<>();
 //        mArrayMap = new ArrayMap<>();
 
@@ -278,10 +275,7 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
 
     @Override
     public boolean hasNextPage() {
-        if (mResourceMessage != null && (!TextUtils.isEmpty(mResourceMessage.incomingNextPageUri) || !TextUtils.isEmpty(mResourceMessage.outgoingNextPageUri))) {
-            return true;
-        }
-        return false;
+        return mResourceMessage != null && (!TextUtils.isEmpty(mResourceMessage.incomingNextPageUri) || !TextUtils.isEmpty(mResourceMessage.outgoingNextPageUri));
     }
 
     private static class DataAsync extends AsyncTask<Void, Integer, Void> {

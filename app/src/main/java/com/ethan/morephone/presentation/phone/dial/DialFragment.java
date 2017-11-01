@@ -56,7 +56,6 @@ public class DialFragment extends BaseFragment implements
 
     private EditText mEditTextDigits;
     private View mDelete;
-    private View mDialpad;
 
     // determines if we want to playback local DTMF tones.
     private boolean mDTMFToneEnabled;
@@ -68,9 +67,6 @@ public class DialFragment extends BaseFragment implements
 //    private final HapticFeedback mHaptic = new HapticFeedback();
 
     private String mPhoneNumber;
-    private String mToPhoneNumber;
-
-    private DialFragmentListener mDialFragmentListener;
 
     @Nullable
     @Override
@@ -78,7 +74,7 @@ public class DialFragment extends BaseFragment implements
         View view = inflater.inflate(R.layout.dialpad_fragment, container, false);
 
         mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
-        mToPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
+        String mToPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
 
         mEditTextDigits = (EditText) view.findViewById(R.id.digits);
         mEditTextDigits.setKeyListener(UnicodeDialerKeyListener.INSTANCE);
@@ -91,7 +87,7 @@ public class DialFragment extends BaseFragment implements
             mEditTextDigits.setText(mToPhoneNumber);
         }
 
-        mDialpad = view.findViewById(R.id.dialpad);  // This is null in landscape mode.
+        View mDialpad = view.findViewById(R.id.dialpad);
 
         // In landscape we put the keyboard in phone mode.
         if (null == mDialpad) {
@@ -181,7 +177,6 @@ public class DialFragment extends BaseFragment implements
                 return;
             }
             default: {
-                return;
             }
         }
     }
@@ -279,14 +274,10 @@ public class DialFragment extends BaseFragment implements
                 return false;
             }
             case R.id.dialButton: {
-                if (isDigitsEmpty()) {
-//                    handleDialButtonClickWithEmptyDigits();
-                    // This event should be consumed so that onClick() won't do the exactly same
-                    // thing.
-                    return true;
-                } else {
-                    return false;
-                }
+                //                    handleDialButtonClickWithEmptyDigits();
+// This event should be consumed so that onClick() won't do the exactly same
+// thing.
+                return isDigitsEmpty();
             }
         }
         return false;
@@ -462,7 +453,6 @@ public class DialFragment extends BaseFragment implements
         synchronized (mToneGeneratorLock) {
             if (mToneGenerator == null) {
                 DebugTool.logD("playTone: mToneGenerator == null, tone: " + tone);
-                return;
             }
 
             // Start the new tone (will stop any playing tone)
@@ -517,7 +507,7 @@ public class DialFragment extends BaseFragment implements
     }
 
     public void setDialFragmentListener(DialFragmentListener dialFragmentListener) {
-        mDialFragmentListener = dialFragmentListener;
+        DialFragmentListener mDialFragmentListener = dialFragmentListener;
     }
 
 

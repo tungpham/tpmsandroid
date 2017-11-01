@@ -260,8 +260,7 @@ public class MessageListFragment extends BaseFragment implements
 //            } else {
 //                DebugTool.logD("CANNOT FILED" + position);
 //            }
-            if (isActive) mMessageListAdapter.getData().get(position).isLoading = true;
-            else mMessageListAdapter.getData().get(position).isLoading = false;
+            mMessageListAdapter.getData().get(position).isLoading = isActive;
 
             mMessageListAdapter.notifyItemChanged(position);
         }
