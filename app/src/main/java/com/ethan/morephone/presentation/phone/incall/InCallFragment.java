@@ -321,7 +321,7 @@ public class InCallFragment extends BaseFragment implements View.OnClickListener
 //        }
 
 //        mHaptic.vibrate();
-        KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+//        KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
 //        mEditTextDigits.onKeyDown(keyCode, event);
 
         // If the cursor is at the end of the text we hide it.

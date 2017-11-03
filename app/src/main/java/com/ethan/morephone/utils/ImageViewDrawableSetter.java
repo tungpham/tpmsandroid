@@ -10,7 +10,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.ThumbnailUtils;
-import android.text.TextUtils;
 import android.widget.ImageView;
 
 
@@ -69,10 +68,11 @@ public class ImageViewDrawableSetter {
     }
 
     protected Bitmap setCompressedImage(byte[] compressed, Context c, Account account) {
-        if (mPreviousDrawable == null) {
-            // If we don't already have a drawable, skip the exit-early test
-            // below; otherwise we might not end up setting the default image.
-        } else if (mPreviousDrawable != null
+//        if (mPreviousDrawable == null) {
+//            // If we don't already have a drawable, skip the exit-early test
+//            // below; otherwise we might not end up setting the default image.
+//        } else
+            if (mPreviousDrawable != null
                 && mPreviousDrawable instanceof BitmapDrawable
                 && Arrays.equals(mCompressed, compressed)) {
             // TODO: the worst case is when the arrays are equal but not
@@ -129,7 +129,7 @@ public class ImageViewDrawableSetter {
         Resources resources = mTarget.getResources();
         ContactPhotoManager.DefaultImageRequest request = new ContactPhotoManager.DefaultImageRequest(null, "Truong", 1,
                 false /* isCircular */);
-        int contactType = ContactPhotoManager.TYPE_DEFAULT;
+//        int contactType = ContactPhotoManager.TYPE_DEFAULT;
         DebugTool.logD("DEFAULT DRAWABLE");
         return ContactPhotoManager.getDefaultAvatarDrawableForContact(
                 c, resources, true, request, account);

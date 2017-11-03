@@ -5,7 +5,6 @@ import android.content.Context;
 import com.android.morephone.data.entity.contact.Contact;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;
-import com.ethan.morephone.presentation.contact.editor.ContactEditorContract;
 
 import java.util.List;
 

@@ -13,7 +13,6 @@ import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.usage.UsageFragment;
 import com.ethan.morephone.utils.ActivityUtils;
-import com.google.firebase.crash.FirebaseCrash;
 
 /**
  * Created by Ethan on 4/20/17.

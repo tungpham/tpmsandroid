@@ -219,12 +219,12 @@ public class PhoneNumberDatabaseHelper {
 
     public static void deletePhoneNumber(Context context, String sid) {
         SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
-        int result = db.delete(PhoneNumberPersistenceContract.PhoneNumberEntry.TABLE_NAME, PhoneNumberPersistenceContract.PhoneNumberEntry.COL_SID + " = ?", new String[]{String.valueOf(sid)});
+        db.delete(PhoneNumberPersistenceContract.PhoneNumberEntry.TABLE_NAME, PhoneNumberPersistenceContract.PhoneNumberEntry.COL_SID + " = ?", new String[]{String.valueOf(sid)});
     }
 
     public static void deleteAllPhoneNumber(Context context) {
         SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
-        int result = db.delete(PhoneNumberPersistenceContract.PhoneNumberEntry.TABLE_NAME, null, null);
+        db.delete(PhoneNumberPersistenceContract.PhoneNumberEntry.TABLE_NAME, null, null);
     }
 
     public static String getTimeDate(long time) {

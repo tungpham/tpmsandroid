@@ -82,7 +82,7 @@ public class PaymentFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_PAYMENT) {
+//        if (requestCode == REQUEST_CODE_PAYMENT) {
 //            if (resultCode == Activity.RESULT_OK) {
 //                PaymentConfirmation confirm = data.getParcelableExtra(com.paypal.android.sdk.payments.PaymentActivity.EXTRA_RESULT_CONFIRMATION);
 //                if (confirm != null) {
@@ -106,7 +106,7 @@ public class PaymentFragment extends BaseFragment implements View.OnClickListene
 //                    } catch (JSONException e) {
 //                        DebugTool.logD("an extremely unlikely failure occurred: ");
 //                    }
-                }
+//                }
 //            } else if (resultCode == Activity.RESULT_CANCELED) {
 //                DebugTool.logD("The user canceled.");
 //            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {

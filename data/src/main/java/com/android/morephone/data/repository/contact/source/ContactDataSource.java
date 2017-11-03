@@ -3,8 +3,6 @@ package com.android.morephone.data.repository.contact.source;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.entity.usage.Usage;
-import com.android.morephone.data.repository.usage.source.UsageDataSource;
 
 import java.util.List;
 

@@ -177,9 +177,7 @@ public class Utils {
                 keyHash = Base64.encodeToString(md.digest(), Base64.DEFAULT);
                 Log.d("KeyHash:", keyHash);
             }
-        } catch (PackageManager.NameNotFoundException ignored) {
-
-        } catch (NoSuchAlgorithmException ignored) {
+        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException ignored) {
 
         }
         return keyHash;
@@ -198,8 +196,8 @@ public class Utils {
         if (manager != null) {
             NetworkInfo[] info = manager.getAllNetworkInfo();
             if (info != null) {
-                for (int i = 0; i < info.length; i++) {
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                for (NetworkInfo anInfo : info) {
+                    if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
                         return true;
                     }
                 }

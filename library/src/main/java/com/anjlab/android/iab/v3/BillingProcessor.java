@@ -1,17 +1,17 @@
-/**
- * Copyright 2014 AnjLab
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+  Copyright 2014 AnjLab
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
  */
 package com.anjlab.android.iab.v3;
 
@@ -426,13 +426,6 @@ public class BillingProcessor extends BillingBase
 		return isSubsUpdateSupported;
 	}
 
-	/**
-	 * Check API v7 support for subscriptions
-	 *
-	 * @param extraParams
-	 * @return {@code true} if the current API supports calling getBuyIntentExtraParams() for
-	 * subscriptions, {@code false} otherwise.
-	 */
 	public boolean isSubscriptionWithExtraParamsSupported(Bundle extraParams)
 	{
 		if (isSubscriptionExtraParamsSupported)
@@ -455,13 +448,6 @@ public class BillingProcessor extends BillingBase
 		return isSubscriptionExtraParamsSupported;
 	}
 
-	/**
-	 * Check API v7 support for one-time purchases
-	 *
-	 * @param extraParams
-	 * @return {@code true} if the current API supports calling getBuyIntentExtraParams() for
-	 * one-time purchases, {@code false} otherwise.
-	 */
 	public boolean isOneTimePurchaseWithExtraParamsSupported(Bundle extraParams)
 	{
 		if (isOneTimePurchaseExtraParamsSupported)
@@ -544,13 +530,8 @@ public class BillingProcessor extends BillingBase
 	 * is not supported.
 	 */
 	public boolean updateSubscription(Activity activity, List<String> oldProductIds,
-									  String productId, String developerPayload)
-	{
-		if (oldProductIds != null && !isSubscriptionUpdateSupported())
-		{
-			return false;
-		}
-		return purchase(activity, oldProductIds, productId, Constants.PRODUCT_TYPE_SUBSCRIPTION, developerPayload);
+									  String productId, String developerPayload) {
+		return !(oldProductIds != null && !isSubscriptionUpdateSupported()) && purchase(activity, oldProductIds, productId, Constants.PRODUCT_TYPE_SUBSCRIPTION, developerPayload);
 	}
 
 	/**
@@ -805,7 +786,7 @@ public class BillingProcessor extends BillingBase
 
 	private SkuDetails getSkuDetails(String productId, String purchaseType)
 	{
-		ArrayList<String> productIdList = new ArrayList<String>();
+		ArrayList<String> productIdList = new ArrayList<>();
 		productIdList.add(productId);
 		List<SkuDetails> skuDetailsList = getSkuDetails(productIdList, purchaseType);
 		if (skuDetailsList != null && skuDetailsList.size() > 0)
@@ -831,7 +812,7 @@ public class BillingProcessor extends BillingBase
 
 				if (response == Constants.BILLING_RESPONSE_RESULT_OK)
 				{
-					ArrayList<SkuDetails> productDetails = new ArrayList<SkuDetails>();
+					ArrayList<SkuDetails> productDetails = new ArrayList<>();
 					List<String> detailsList = skuDetails.getStringArrayList(Constants.DETAILS_LIST);
 					if (detailsList != null)
 					{

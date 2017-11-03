@@ -10,12 +10,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
-import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 
 /**

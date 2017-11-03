@@ -337,8 +337,8 @@ public class ExpandingEntryCardView extends CardView {
         mDividerLineHeightPixels = getResources()
                 .getDimensionPixelSize(R.dimen.divider_line_height);
 
-        mBadges = new ArrayList<ImageView>();
-        mBadgeIds = new ArrayList<Integer>();
+        mBadges = new ArrayList<>();
+        mBadgeIds = new ArrayList<>();
     }
 
     public void initialize(List<List<Entry>> entries, int numInitialVisibleEntries,
@@ -362,7 +362,7 @@ public class ExpandingEntryCardView extends CardView {
         mIsAlwaysExpanded = isAlwaysExpanded;
         // If isAlwaysExpanded is true, mIsExpanded should be true
         mIsExpanded |= mIsAlwaysExpanded;
-        mEntryViews = new ArrayList<List<View>>(entries.size());
+        mEntryViews = new ArrayList<>(entries.size());
         mEntries = entries;
         mNumEntries = 0;
         mAllEntriesInflated = false;
@@ -454,7 +454,7 @@ public class ExpandingEntryCardView extends CardView {
      * the card is expanded or collapsed.
      */
     private List<View> getViewsToDisplay(boolean isExpanded) {
-        final List<View> viewsToDisplay = new ArrayList<View>();
+        final List<View> viewsToDisplay = new ArrayList<>();
         if (isExpanded) {
             for (int i = 0; i < mEntryViews.size(); i++) {
                 List<View> viewList = mEntryViews.get(i);
@@ -575,15 +575,12 @@ public class ExpandingEntryCardView extends CardView {
         }
     }
 
-    public void disPlayVideoCallSwitch(boolean isSupportVideocall) {
-        boolean isSupportVideoCall = isSupportVideocall;
-    }
 
     static class MyHandler extends Handler {
         private final WeakReference<ExpandingEntryCardView> mService;
 
         MyHandler(ExpandingEntryCardView service) {
-            mService = new WeakReference<ExpandingEntryCardView>(service);
+            mService = new WeakReference<>(service);
         }
 
         @Override
@@ -606,9 +603,9 @@ public class ExpandingEntryCardView extends CardView {
      */
     private void inflateInitialEntries(LayoutInflater layoutInflater) {
 
-        if (mEnablePresence) {
-            Handler mHandler = new MyHandler(this);
-        }
+//        if (mEnablePresence) {
+////            Handler mHandler = new MyHandler(this);
+//        }
         // If the number of collapsed entries equals total entries, inflate all
         if (mCollapsedEntriesCount == mNumEntries) {
             inflateAllEntries(layoutInflater);
@@ -764,7 +761,7 @@ public class ExpandingEntryCardView extends CardView {
             icon.setImageDrawable(entry.getIcon());
         }
 
-        final TextView home = (TextView) view.findViewById(R.id.home);
+//        final TextView home = (TextView) view.findViewById(R.id.home);
         final TextView header = (TextView) view.findViewById(R.id.header);
         String num = entry.getHeader();
         if (!TextUtils.isEmpty(num)) {
@@ -858,16 +855,16 @@ public class ExpandingEntryCardView extends CardView {
                 if(!mHaveFetched){
                     new Thread(new Runnable(){
                         public void run(){
-                            if (null != entry.getHeader()) {
-                                boolean oldVT = ContactDisplayUtils.getVTCapability(
-                                            entry.getHeader());
-//                                boolean newVT = ContactDisplayUtils.startAvailabilityFetch(
-//                                            entry.getHeader());
-//                                if (oldVT != newVT) {
-//                                    mHaveFetched = true;
-//                                    mHandler.sendEmptyMessage(PRESENCE_AVAILABILITY_FETCH);
-//                                }
-                            }
+//                            if (null != entry.getHeader()) {
+////                                boolean oldVT = ContactDisplayUtils.getVTCapability(
+////                                            entry.getHeader());
+////                                boolean newVT = ContactDisplayUtils.startAvailabilityFetch(
+////                                            entry.getHeader());
+////                                if (oldVT != newVT) {
+////                                    mHaveFetched = true;
+////                                    mHandler.sendEmptyMessage(PRESENCE_AVAILABILITY_FETCH);
+////                                }
+//                            }
                         }
                     }).start();
                 }
@@ -888,7 +885,7 @@ public class ExpandingEntryCardView extends CardView {
                             return;
                         }
 
-                        Context context = getContext();
+//                        Context context = getContext();
 //                        if (context instanceof Activity) {
 //                            CallSubjectDialog.start((Activity) context, entry.getThirdExtras());
 //                        }
@@ -1026,7 +1023,7 @@ public class ExpandingEntryCardView extends CardView {
         // reasonable frame-rate is achieved collapsing a dozen elements on a user Svelte N4. So the
         // performance hit doesn't justify writing a less maintainable animation.
         final AnimatorSet set = new AnimatorSet();
-        final List<Animator> animators = new ArrayList<Animator>(views.size());
+        final List<Animator> animators = new ArrayList<>(views.size());
         int totalSizeChange = 0;
         for (View viewToRemove : views) {
             final ObjectAnimator animator = ObjectAnimator.ofObject(viewToRemove,

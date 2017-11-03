@@ -1,15 +1,10 @@
 package com.android.morephone.data.network;
 
-import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.log.DebugTool;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -18,6 +13,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
@@ -93,11 +91,11 @@ public class MyJsonConverter extends Converter.Factory {
         @Override
         public T convert(ResponseBody value) throws IOException {
             DebugTool.logD("VALUE JSON: " + value.string());
-            String dirty = value.string();
+//            String dirty = value.string();
 //            String clean = dirty.replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
 //                    "<string xmlns=\"http://tempuri.org/\">","").replace("</string>","");
             try {
-                BaseResponse<Object> baseResponse =  gson.fromJson(value.string(), BaseResponse.class);
+//                BaseResponse<Object> baseResponse =  gson.fromJson(value.string(), BaseResponse.class);
                 return adapter.fromJson(value.string());
             } finally {
                 value.close();

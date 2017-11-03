@@ -7,7 +7,6 @@ import com.android.morephone.data.repository.contact.ContactRepository;
 import com.android.morephone.data.repository.contact.source.ContactDataSource;
 import com.android.morephone.domain.UseCase;
 
-import java.util.List;
 
 /**
  * Created by truongnguyen on 10/4/17.

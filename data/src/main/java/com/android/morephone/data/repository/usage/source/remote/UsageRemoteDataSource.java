@@ -37,7 +37,7 @@ public class UsageRemoteDataSource implements UsageDataSource {
     public void getUsageAllTime(String category, int page, String pageToken, @NonNull final GetUsageCallback callback) {
         ApiManager.getUsageAllTime(mContext, category, page, pageToken, new Callback<Usage>() {
             @Override
-            public void onResponse(Call<Usage> call, Response<Usage> response) {
+            public void onResponse(@NonNull Call<Usage> call, @NonNull Response<Usage> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onUsageLoaded(response.body());
                 } else {
@@ -46,7 +46,7 @@ public class UsageRemoteDataSource implements UsageDataSource {
             }
 
             @Override
-            public void onFailure(Call<Usage> call, Throwable t) {
+            public void onFailure(@NonNull Call<Usage> call, @NonNull Throwable t) {
                 callback.onDataNotAvailable();
             }
         });

@@ -54,7 +54,7 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_compose, container, false);
 
-        String mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
+//        String mPhoneNumber = getArguments().getString(BUNDLE_PHONE_NUMBER);
         String mToPhoneNumber = getArguments().getString(BUNDLE_TO_PHONE_NUMBER);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -125,7 +125,7 @@ public class ComposeFragment extends BaseFragment implements View.OnClickListene
     }
 
     public void setPresenter(ComposeContract.Presenter presenter) {
-        ComposeContract.Presenter mPresenter = presenter;
+//        ComposeContract.Presenter mPresenter = presenter;
     }
 
     public String[] getRecipientAddresses() {

@@ -7,7 +7,6 @@ import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 
 import com.ethan.morephone.R;
 
@@ -15,28 +14,13 @@ public class LatinKeyboard extends Keyboard {
 
     private Key mEnterKey;
     private Key mSpaceKey;
-    /**
-     * Stores the current state of the mode change key. Its width will be dynamically updated to
-     * match the region of {@link #mModeChangeKey} when {@link #mModeChangeKey} becomes invisible.
-     */
+
     private Key mModeChangeKey;
-    /**
-     * Stores the current state of the language switch key (a.k.a. globe key). This should be
-     * visible while {@link InputMethodManager#shouldOfferSwitchingToNextInputMethod(IBinder)}
-     * returns true. When this key becomes invisible, its width will be shrunk to zero.
-     */
+
     private Key mLanguageSwitchKey;
-    /**
-     * Stores the size and other information of {@link #mModeChangeKey} when
-     * {@link #mLanguageSwitchKey} is visible. This should be immutable and will be used only as a
-     * reference size when the visibility of {@link #mLanguageSwitchKey} is changed.
-     */
+
     private Key mSavedModeChangeKey;
-    /**
-     * Stores the size and other information of {@link #mLanguageSwitchKey} when it is visible.
-     * This should be immutable and will be used only as a reference size when the visibility of
-     * {@link #mLanguageSwitchKey} is changed.
-     */
+
     private Key mSavedLanguageSwitchKey;
 
     public LatinKeyboard(Context context, int xmlLayoutResId) {

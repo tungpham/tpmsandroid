@@ -14,7 +14,6 @@ import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.android.morephone.data.repository.contact.source.GetContactCallback;
 import com.android.morephone.domain.UseCaseHandler;
-import com.android.morephone.domain.usecase.contact.GetContact;
 import com.android.morephone.domain.usecase.contact.GetContactByPhoneNumber;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.ContactUtil;

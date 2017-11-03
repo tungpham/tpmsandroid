@@ -38,7 +38,7 @@ public class AvailablePhoneNumberPresenter implements AvailablePhoneNumberContra
                 new Callback<AvailablePhoneNumbers>() {
                     @Override
                     public void onResponse(Call<AvailablePhoneNumbers> call, Response<AvailablePhoneNumbers> response) {
-                        if (response.isSuccessful() && response.body().availableAvailablePhoneNumbers != null && !response.body().availableAvailablePhoneNumbers.isEmpty()) {
+                        if (response.isSuccessful() && response.body() != null && response.body().availableAvailablePhoneNumbers != null && !response.body().availableAvailablePhoneNumbers.isEmpty()) {
                             mView.showResultSearchNumber(response.body().availableAvailablePhoneNumbers);
                         } else {
                             mView.emptyPhoneNumberAvailable();

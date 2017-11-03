@@ -215,26 +215,44 @@ public class PhoneService extends Service implements DeviceListener, ConnectionL
             mToPhoneNumber = intent.getStringExtra(EXTRA_TO_PHONE_NUMBER);
             String digit = intent.getStringExtra(EXTRA_SEND_DIGIT);
 
-            if (action.equals(ACTION_SOUND_RINGING))
-                soundPoolManager.playRinging();
-            else if (action.equals(ACTION_SOUND_STOP))
-                soundPoolManager.stopRinging();
-            else if (action.equals(ACTION_REGISTER_PHONE_NUMBER))
-                registerDevicePhoneNumber(mFromPhoneNumber);
-            else if (action.equals(ACTION_UNREGISTER_PHONE_NUMBER))
-                unRegisterDevicePhoneNumber(mFromPhoneNumber);
-            else if (action.equals(ACTION_OUTGOING))
-                processOutgoingRequest(mFromPhoneNumber, mToPhoneNumber);
-            else if (action.equals(ACTION_HANG_UP))
-                processHangUpRequest(mFromPhoneNumber, mToPhoneNumber);
-            else if (action.equals(ACTION_ACCEPT_INCOMING))
-                processAcceptIncomingRequest(mFromPhoneNumber, mToPhoneNumber);
-            else if (action.equals(ACTION_INCOMING)) processIncomingRequest(intent);
-            else if (action.equals(ACTION_DECLINE_INCOMING))
-                processDeclineIncomingRequest(mFromPhoneNumber, mToPhoneNumber);
-            else if (action.equals(ACTION_SEND_DIGITS)) processSendDigit(digit);
-            else if (action.equals(ACTION_MUTE_MICROPHONE)) processMuteMicrophone();
-            else if (action.equals(ACTION_SPEAKER_PHONE)) processSpeakerMicrophone();
+            switch (action) {
+                case ACTION_SOUND_RINGING:
+                    soundPoolManager.playRinging();
+                    break;
+                case ACTION_SOUND_STOP:
+                    soundPoolManager.stopRinging();
+                    break;
+                case ACTION_REGISTER_PHONE_NUMBER:
+                    registerDevicePhoneNumber(mFromPhoneNumber);
+                    break;
+                case ACTION_UNREGISTER_PHONE_NUMBER:
+                    unRegisterDevicePhoneNumber(mFromPhoneNumber);
+                    break;
+                case ACTION_OUTGOING:
+                    processOutgoingRequest(mFromPhoneNumber, mToPhoneNumber);
+                    break;
+                case ACTION_HANG_UP:
+                    processHangUpRequest(mFromPhoneNumber, mToPhoneNumber);
+                    break;
+                case ACTION_ACCEPT_INCOMING:
+                    processAcceptIncomingRequest(mFromPhoneNumber, mToPhoneNumber);
+                    break;
+                case ACTION_INCOMING:
+                    processIncomingRequest(intent);
+                    break;
+                case ACTION_DECLINE_INCOMING:
+                    processDeclineIncomingRequest(mFromPhoneNumber, mToPhoneNumber);
+                    break;
+                case ACTION_SEND_DIGITS:
+                    processSendDigit(digit);
+                    break;
+                case ACTION_MUTE_MICROPHONE:
+                    processMuteMicrophone();
+                    break;
+                case ACTION_SPEAKER_PHONE:
+                    processSpeakerMicrophone();
+                    break;
+            }
 
         } else {
             return START_STICKY;

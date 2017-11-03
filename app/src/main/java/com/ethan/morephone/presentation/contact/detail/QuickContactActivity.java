@@ -2,12 +2,10 @@ package com.ethan.morephone.presentation.contact.detail;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
-import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -18,22 +16,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Trace;
 import android.provider.ContactsContract;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.telecom.TelecomManager;
-import android.telephony.TelephonyManager;
 import android.text.BidiFormatter;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,7 +36,6 @@ import android.widget.Toolbar;
 import com.android.morephone.data.entity.contact.Contact;
 import com.ethan.morephone.R;
 import com.ethan.morephone.utils.CompatUtils;
-import com.ethan.morephone.utils.ContactDisplayUtils;
 import com.ethan.morephone.utils.ImageViewDrawableSetter;
 import com.ethan.morephone.utils.ImplicitIntentsUtil;
 import com.ethan.morephone.utils.MaterialColorMapUtils;
@@ -54,13 +46,7 @@ import com.ethan.morephone.widget.ExpandingEntryCardView;
 import com.ethan.morephone.widget.MultiShrinkScroller;
 import com.ethan.morephone.widget.QuickContactImageView;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by truongnguyen on 9/26/17.
@@ -154,8 +140,8 @@ public class QuickContactActivity extends ContactsActivity {
 //    private List<Suggestion> mSuggestions;
 
     private TreeSet<Long> mSelectedAggregationIds = new TreeSet<>();
-    /**
-     * The last copy of Cp2DataCardModel that was passed to {@link #populateContactAndAboutCard}.
+    /*
+      The last copy of Cp2DataCardModel that was passed to {@link #populateContactAndAboutCard}.
      */
 //    private Cp2DataCardModel mCachedCp2DataCardModel;
     /**
@@ -221,7 +207,7 @@ public class QuickContactActivity extends ContactsActivity {
     private static final int MAX_PAST_CALENDAR_RETRIEVE = 3;
     private static final int MAX_FUTURE_CALENDAR_RETRIEVE = 3;
     private static final long PAST_MILLISECOND_TO_SEARCH_LOCAL_CALENDAR =
-            1L * 24L * 60L * 60L * 1000L /* 1 day */;
+            24L * 60L * 60L * 1000L /* 1 day */;
     private static final long FUTURE_MILLISECOND_TO_SEARCH_LOCAL_CALENDAR =
             7L * 24L * 60L * 60L * 1000L /* 7 days */;
 
@@ -298,7 +284,7 @@ public class QuickContactActivity extends ContactsActivity {
             // so the exact usage type is not necessary in all cases
             String usageType = ContactsContract.DataUsageFeedback.USAGE_TYPE_CALL;
 
-            final Uri intentUri = intent.getData();
+//            final Uri intentUri = intent.getData();
 //            if ((intentUri != null && intentUri.getScheme() != null &&
 //                    intentUri.getScheme().equals(ContactsUtils.SCHEME_SMSTO)) ||
 //                    (intent.getType() != null && intent.getType().equals(MIMETYPE_SMS))) {
@@ -594,13 +580,13 @@ public class QuickContactActivity extends ContactsActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        ExpandingEntryCardView.EntryContextMenuInfo menuInfo;
-        try {
-            menuInfo = (ExpandingEntryCardView.EntryContextMenuInfo) item.getMenuInfo();
-        } catch (ClassCastException e) {
-            Log.e(TAG, "bad menuInfo", e);
-            return false;
-        }
+//        ExpandingEntryCardView.EntryContextMenuInfo menuInfo;
+//        try {
+//            menuInfo = (ExpandingEntryCardView.EntryContextMenuInfo) item.getMenuInfo();
+//        } catch (ClassCastException e) {
+//            Log.e(TAG, "bad menuInfo", e);
+//            return false;
+//        }
 
         switch (item.getItemId()) {
             case ContextMenuIds.COPY_TEXT:

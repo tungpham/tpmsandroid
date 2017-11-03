@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import com.ethan.morephone.R;
 

@@ -37,7 +37,7 @@ import com.ethan.morephone.presentation.buy.payment.fund.model.SkuItem;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -63,7 +63,7 @@ public class AddFundFrag extends BaseFragment implements
 
 //    private static final String SKUS = "add_fund";
 
-    private static final List<String> SKUS = Arrays.asList("add_fund");
+    private static final List<String> SKUS = Collections.singletonList("add_fund");
 
 
     private ActivityCheckout mCheckout;
@@ -228,7 +228,7 @@ public class AddFundFrag extends BaseFragment implements
             ApiMorePhone.purchase(getContext(), morePhonePurchase, new Callback<MorePhonePurchase>() {
                 @Override
                 public void onResponse(Call<MorePhonePurchase> call, Response<MorePhonePurchase> response) {
-                    if (response.isSuccessful() && response.body() != null) {
+                    if (response != null && response.isSuccessful() && response.body() != null) {
                         if (response.body().productId.equals("add_fund")) {
                             mBalanceAdd += Constant.PRODUCT_ADD_FUND;
                         }

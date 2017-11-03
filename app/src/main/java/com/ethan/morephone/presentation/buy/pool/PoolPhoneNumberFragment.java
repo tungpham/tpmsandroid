@@ -10,17 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
-import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.buy.SearchPhoneNumberFragment;
 import com.ethan.morephone.presentation.buy.payment.purchase.PurchaseActivity;
 import com.ethan.morephone.presentation.buy.pool.adapter.PoolPhoneNumberAdapter;
-import com.ethan.morephone.presentation.buy.result.AvailablePhoneNumberContract;
-import com.ethan.morephone.presentation.buy.result.AvailablePhoneNumberPresenter;
-import com.ethan.morephone.presentation.buy.result.adapter.AvailablePhoneNumberAdapter;
 import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 
 import java.util.ArrayList;

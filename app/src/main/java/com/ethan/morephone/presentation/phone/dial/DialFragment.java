@@ -461,7 +461,7 @@ public class DialFragment extends BaseFragment implements
     }
 
     private void removePreviousDigitIfPossible() {
-        final Editable editable = mEditTextDigits.getText();
+//        final Editable editable = mEditTextDigits.getText();
         final int currentPosition = mEditTextDigits.getSelectionStart();
         if (currentPosition > 0) {
             mEditTextDigits.setSelection(currentPosition);
@@ -507,7 +507,7 @@ public class DialFragment extends BaseFragment implements
     }
 
     public void setDialFragmentListener(DialFragmentListener dialFragmentListener) {
-        DialFragmentListener mDialFragmentListener = dialFragmentListener;
+//        DialFragmentListener mDialFragmentListener = dialFragmentListener;
     }
 
 

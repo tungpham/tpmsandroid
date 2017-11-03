@@ -4,36 +4,23 @@ package com.ethan.morephone.utils;
 import android.accounts.Account;
 import android.app.ActivityManager;
 import android.content.ComponentCallbacks2;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.media.ThumbnailUtils;
-import android.net.TrafficStats;
 import android.net.Uri;
 import android.net.Uri.Builder;
 import android.os.Handler;
 import android.os.Handler.Callback;
-import android.os.HandlerThread;
 import android.os.Message;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Contacts.Photo;
-import android.provider.ContactsContract.Data;
-import android.provider.ContactsContract.Directory;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.LruCache;
@@ -44,18 +31,8 @@ import android.widget.ImageView;
 import com.ethan.morephone.R;
 import com.ethan.morephone.widget.LetterTileDrawable;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -120,19 +97,6 @@ public abstract class ContactPhotoManager implements ComponentCallbacks2 {
                 defaultImageRequest, account);
     }
 
-    /**
-     * Given a {@link DefaultImageRequest}, returns an Uri that can be used to request a
-     * letter tile avatar when passed to the {@link ContactPhotoManager}. The internal
-     * implementation of this uri is not guaranteed to remain the same across application
-     * versions, so the actual uri should never be persisted in long-term storage and reused.
-     *
-     * @param request A {@link DefaultImageRequest} object with the fields configured
-     * to return a
-     * @return A Uri that when later passed to the {@link ContactPhotoManager} via
-     * {@link #loadPhoto(ImageView, Uri, int, boolean, DefaultImageRequest)}, can be
-     * used to request a default contact image, drawn as a letter tile using the
-     * parameters as configured in the provided {@link DefaultImageRequest}
-     */
     public static Uri getDefaultAvatarUriForContact(DefaultImageRequest request) {
         final Builder builder = DEFAULT_IMAGE_URI.buildUpon();
         if (request != null) {
@@ -616,7 +580,7 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
 
     static {
         BITMAP_UNAVAILABLE = new BitmapHolder(new byte[0], 0);
-        BITMAP_UNAVAILABLE.bitmapRef = new SoftReference<Bitmap>(null);
+        BITMAP_UNAVAILABLE.bitmapRef = new SoftReference<>(null);
     }
 
     /**
@@ -657,9 +621,9 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
      */
     private final LruCache<Object, Bitmap> mBitmapCache;
 
-    /**
-     * A map from ImageView to the corresponding photo ID or uri, encapsulated in a request.
-     * The request may swapped out before the photo loading request is started.
+    /*
+      A map from ImageView to the corresponding photo ID or uri, encapsulated in a request.
+      The request may swapped out before the photo loading request is started.
      */
 //    private final ConcurrentHashMap<ImageView, Request> mPendingRequests =
 //            new ConcurrentHashMap<ImageView, Request>();
@@ -669,9 +633,9 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
      */
     private final Handler mMainThreadHandler = new Handler(this);
 
-    /**
-     * Thread responsible for loading photos from the database. Created upon
-     * the first request.
+    /*
+      Thread responsible for loading photos from the database. Created upon
+      the first request.
      */
 //    private LoaderThread mLoaderThread;
 
@@ -706,7 +670,7 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
     private String mUserAgent;
 
     public ContactPhotoManagerImpl(Context context) {
-        Context mContext = context;
+//        Context mContext = context;
 
         final ActivityManager am = ((ActivityManager) context.getSystemService(
                 Context.ACTIVITY_SERVICE));
@@ -742,7 +706,7 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
         /*
       Cache size threshold at which bitmaps will not be preloaded.
      */
-        int mBitmapHolderCacheRedZoneBytes = (int) (holderCacheSize * 0.75);
+//        int mBitmapHolderCacheRedZoneBytes = (int) (holderCacheSize * 0.75);
         Log.i(TAG, "Cache adj: " + cacheSizeAdjustment);
         if (DEBUG) {
             Log.d(TAG, "Cache size: " + btk(mBitmapHolderCache.maxSize())
@@ -856,10 +820,11 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
             if (isDefaultImageUri(photoUri)) {
                 createAndApplyDefaultImageForUri(view, account, photoUri, requestedExtent,
                         darkTheme, isCircular, defaultProvider);
-            } else {
-//                loadPhotoByIdOrUri(view, Request.createFromUri(photoUri, requestedExtent,
-//                        darkTheme, isCircular, defaultProvider));
             }
+//            else {
+////                loadPhotoByIdOrUri(view, Request.createFromUri(photoUri, requestedExtent,
+////                        darkTheme, isCircular, defaultProvider));
+//            }
         }
     }
 
@@ -897,9 +862,9 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
      */
     @Override
     public void cancelPendingRequests(View fragmentRootView) {
-        if (fragmentRootView == null) {
-//            mPendingRequests.clear();
-        }
+//        if (fragmentRootView == null) {
+////            mPendingRequests.clear();
+//        }
 //        final Iterator<Entry<ImageView, Request>> iterator = mPendingRequests.entrySet().iterator();
 //        while (iterator.hasNext()) {
 //            final ImageView imageView = iterator.next().getKey();
@@ -932,10 +897,10 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
         }
     }
 
-    /**
-     * Checks if the photo is present in cache.  If so, sets the photo on the view.
-     *
-     * @return false if the photo needs to be (re)loaded from the provider.
+    /*
+      Checks if the photo is present in cache.  If so, sets the photo on the view.
+
+      @return false if the photo needs to be (re)loaded from the provider.
      */
 //    private boolean loadCachedPhoto(ImageView view, Request request, boolean fadeIn) {
 //        BitmapHolder holder = mBitmapHolderCache.get(request.getKey());
@@ -1073,7 +1038,7 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
 
             holder.decodedSampleSize = sampleSize;
             holder.bitmap = bitmap;
-            holder.bitmapRef = new SoftReference<Bitmap>(bitmap);
+            holder.bitmapRef = new SoftReference<>(bitmap);
             if (DEBUG) {
                 Log.d(TAG, "inflateBitmap " + btk(bytes.length) + " -> "
                         + bitmap.getWidth() + "x" + bitmap.getHeight()
@@ -1126,17 +1091,17 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
         switch (msg.what) {
             case MESSAGE_REQUEST_LOADING: {
                 mLoadingRequested = false;
-                if (!mPaused) {
-//                    ensureLoaderThread();
-//                    mLoaderThread.requestLoading();
-                }
+//                if (!mPaused) {
+////                    ensureLoaderThread();
+////                    mLoaderThread.requestLoading();
+//                }
                 return true;
             }
 
             case MESSAGE_PHOTOS_LOADED: {
-                if (!mPaused) {
-//                    processLoadedImages();
-                }
+//                if (!mPaused) {
+////                    processLoadedImages();
+//                }
                 if (DEBUG) dumpStats();
                 return true;
             }
@@ -1151,9 +1116,9 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
 //        }
 //    }
 
-    /**
-     * Goes over pending loading requests and displays loaded photos.  If some of the
-     * photos still haven't been loaded, sends another request for image loading.
+    /*
+      Goes over pending loading requests and displays loaded photos.  If some of the
+      photos still haven't been loaded, sends another request for image loading.
      */
 //    private void processLoadedImages() {
 //        final Iterator<Entry<ImageView, Request>> iterator = mPendingRequests.entrySet().iterator();
@@ -1225,7 +1190,7 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
 
     @Override
     public void cacheBitmap(Uri photoUri, Bitmap bitmap, byte[] photoBytes) {
-        final int smallerExtent = Math.min(bitmap.getWidth(), bitmap.getHeight());
+//        final int smallerExtent = Math.min(bitmap.getWidth(), bitmap.getHeight());
         // We can pretend here that the extent of the photo was the size that we originally
         // requested
 //        Request request = Request.createFromUri(photoUri, smallerExtent, false /* darkTheme */,
@@ -1237,9 +1202,9 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
 //        mBitmapCache.put(request.getKey(), bitmap);
     }
 
-    /**
-     * Populates an array of photo IDs that need to be loaded. Also decodes bitmaps that we have
-     * already loaded
+    /*
+      Populates an array of photo IDs that need to be loaded. Also decodes bitmaps that we have
+      already loaded
      */
 //    private void obtainPhotoIdsAndUrisToLoad(Set<Long> photoIds,
 //                                             Set<String> photoIdsAsStrings, Set<Request> uris) {
@@ -1284,8 +1249,8 @@ class ContactPhotoManagerImpl extends ContactPhotoManager implements Callback {
 //        if (jpegsDecoded) mMainThreadHandler.sendEmptyMessage(MESSAGE_PHOTOS_LOADED);
 //    }
 
-    /**
-     * The thread that performs loading of photos from the database.
+    /*
+      The thread that performs loading of photos from the database.
      */
 //    private class LoaderThread extends HandlerThread implements Callback {
 //        private static final int BUFFER_SIZE = 1024*16;

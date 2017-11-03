@@ -7,10 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.repository.contact.source.local.ContactPersistenceContract;
-import com.android.morephone.data.repository.phonenumbers.incoming.source.local.PhoneNumberPersistenceContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -293,17 +291,17 @@ public class ContactDatabaseHelper {
 
     public static void deleteContact(Context context, String id) {
         SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
-        int result = db.delete(ContactPersistenceContract.ContactEntry.TABLE_NAME, ContactPersistenceContract.ContactEntry.COL_ID + " = ?", new String[]{String.valueOf(id)});
+        db.delete(ContactPersistenceContract.ContactEntry.TABLE_NAME, ContactPersistenceContract.ContactEntry.COL_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
     public static void deleteAllContact(Context context, String phoneNumberId) {
         SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
-        int result = db.delete(ContactPersistenceContract.ContactEntry.TABLE_NAME, ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER_ID + " = ?", new String[]{String.valueOf(phoneNumberId)});
+        db.delete(ContactPersistenceContract.ContactEntry.TABLE_NAME, ContactPersistenceContract.ContactEntry.COL_PHONE_NUMBER_ID + " = ?", new String[]{String.valueOf(phoneNumberId)});
     }
 
     public static void deleteAllContact(Context context) {
         SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
-        int result = db.delete(ContactPersistenceContract.ContactEntry.TABLE_NAME, null, null);
+        db.delete(ContactPersistenceContract.ContactEntry.TABLE_NAME, null, null);
     }
 
 

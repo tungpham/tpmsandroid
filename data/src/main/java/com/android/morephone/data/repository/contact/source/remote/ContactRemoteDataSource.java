@@ -56,7 +56,7 @@ public class ContactRemoteDataSource implements ContactDataSource {
         ApiMorePhone.loadContacts(mContext, phoneNumberId, new Callback<BaseResponse<List<Contact>>>() {
             @Override
             public void onResponse(Call<BaseResponse<List<Contact>>> call, Response<BaseResponse<List<Contact>>> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && response.body().getResponse() != null) {
                     for (Contact contact : response.body().getResponse()) {
                         TASKS_SERVICE_DATA.put(contact.getId(), contact);
                     }

@@ -2,9 +2,7 @@ package com.android.morephone.domain.usecase.contact;
 
 import android.support.annotation.NonNull;
 
-import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.repository.contact.ContactRepository;
-import com.android.morephone.data.repository.contact.source.ContactDataSource;
 import com.android.morephone.domain.UseCase;
 
 /**

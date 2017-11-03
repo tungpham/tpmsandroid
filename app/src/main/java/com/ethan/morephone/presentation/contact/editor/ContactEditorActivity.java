@@ -6,10 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.log.DebugTool;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.buy.SearchPhoneNumberFragment;
 import com.ethan.morephone.presentation.contact.ContactFragment;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.utils.ActivityUtils;

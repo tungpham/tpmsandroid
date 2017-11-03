@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -21,15 +20,15 @@ public abstract class ContactsActivity extends TransactionSafeActivity {
 
     @Override
     public ContentResolver getContentResolver() {
-        if (mContentResolver == null) {
-//            InjectedServices services = ContactsApplication.getInjectedServices();
-//            if (services != null) {
-//                mContentResolver = services.getContentResolver();
-//            }
-//            if (mContentResolver == null) {
-//                mContentResolver = super.getContentResolver();
-//            }
-        }
+//        if (mContentResolver == null) {
+////            InjectedServices services = ContactsApplication.getInjectedServices();
+////            if (services != null) {
+////                mContentResolver = services.getContentResolver();
+////            }
+////            if (mContentResolver == null) {
+////                mContentResolver = super.getContentResolver();
+////            }
+//        }
         return mContentResolver;
     }
 

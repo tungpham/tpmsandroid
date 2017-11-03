@@ -4,12 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.BaseResponse;
-import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumbers;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
-import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.ApiManager;
 import com.android.morephone.data.network.ApiMorePhone;
-import com.ethan.morephone.presentation.buy.result.AvailablePhoneNumberContract;
 
 import java.util.List;
 

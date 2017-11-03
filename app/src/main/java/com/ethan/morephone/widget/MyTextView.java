@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.SparseArray;
-import android.widget.TextView;
 
 import com.ethan.morephone.R;
 
@@ -43,7 +42,7 @@ public class MyTextView extends AppCompatTextView {
     /**
      * List of created typefaces for later reused.
      */
-    private final static SparseArray<Typeface> mTypefaces = new SparseArray<Typeface>(16);
+    private final static SparseArray<Typeface> mTypefaces = new SparseArray<>(16);
 
     /**
      * Simple constructor to use when creating a widget from code.

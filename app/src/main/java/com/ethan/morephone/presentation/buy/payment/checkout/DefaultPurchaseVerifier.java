@@ -23,7 +23,7 @@ class DefaultPurchaseVerifier implements PurchaseVerifier {
 
     @Override
     public void verify(@Nonnull List<Purchase> purchases, @Nonnull RequestListener<List<Purchase>> listener) {
-        final List<Purchase> verifiedPurchases = new ArrayList<Purchase>(purchases.size());
+        final List<Purchase> verifiedPurchases = new ArrayList<>(purchases.size());
         for (Purchase purchase : purchases) {
             if (Security.verifyPurchase(mPublicKey, purchase.data, purchase.signature)) {
                 verifiedPurchases.add(purchase);

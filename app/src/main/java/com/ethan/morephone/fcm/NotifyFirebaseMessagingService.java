@@ -1,15 +1,11 @@
 package com.ethan.morephone.fcm;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
-import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -18,7 +14,6 @@ import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.HTTPStatus;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.main.MainActivity;
-import com.ethan.morephone.presentation.record.SoundPoolManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -91,8 +86,8 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
 
             Map<String, String> dataTest = message.getData();
             if (dataTest != null) {
-                String title = dataTest.get(NOTIFY_TITLE_DATA_KEY);
-                String body = dataTest.get(NOTIFY_BODY_DATA_KEY);
+//                String title = dataTest.get(NOTIFY_TITLE_DATA_KEY);
+//                String body = dataTest.get(NOTIFY_BODY_DATA_KEY);
                 DebugTool.logD("DATA RESULT: " + dataTest.toString());
 
             }

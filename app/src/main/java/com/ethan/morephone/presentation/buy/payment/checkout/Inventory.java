@@ -141,23 +141,13 @@ public interface Inventory {
     @Immutable
     final class Product {
 
-        /**
-         * Product ID, see {@link org.solovyev.android.checkout.ProductTypes}
-         */
         @Nonnull
         public final String id;
 
-        /**
-         * True if product is supported by {@link Inventory}. Note that Billing for this product
-         * might not be supported:
-         * this just indicates that {@link Inventory} loaded purchases/SKUs for the product.
-         */
+
         public final boolean supported;
 
-        /**
-         * This list is loaded only if {@link Request#loadPurchases(String)} was called for this
-         * product.
-         */
+
         @Nonnull
         final List<Purchase> mPurchases = new ArrayList<>();
 

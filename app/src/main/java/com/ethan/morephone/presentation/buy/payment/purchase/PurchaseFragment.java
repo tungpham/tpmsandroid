@@ -1,12 +1,9 @@
 package com.ethan.morephone.presentation.buy.payment.purchase;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,24 +13,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.DateUtils;
 import com.ethan.morephone.Constant;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.buy.AlertGetCountryDialog;
-import com.ethan.morephone.presentation.buy.payment.checkout.EmptyRequestListener;
-import com.ethan.morephone.presentation.buy.payment.checkout.IntentStarter;
-import com.ethan.morephone.presentation.buy.payment.checkout.Inventory;
-import com.ethan.morephone.presentation.buy.payment.checkout.ProductTypes;
 import com.ethan.morephone.presentation.buy.payment.checkout.Purchase;
-import com.ethan.morephone.presentation.buy.payment.checkout.UiCheckout;
 import com.ethan.morephone.utils.Injection;
 import com.ethan.morephone.utils.Utils;
 
 import java.util.Date;
-
-import javax.annotation.Nonnull;
 
 /**
  * Created by Ethan on 5/4/17.

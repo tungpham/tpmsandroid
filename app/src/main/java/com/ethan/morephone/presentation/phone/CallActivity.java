@@ -118,8 +118,8 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client);
 
-        callView = (View) findViewById(R.id.call_layout);
-        capabilityPropertiesView = (View) findViewById(R.id.capability_properties);
+        callView = findViewById(R.id.call_layout);
+        capabilityPropertiesView = findViewById(R.id.capability_properties);
 
         callActionFab = (FloatingActionButton) findViewById(R.id.call_action_fab);
         hangupActionFab = (FloatingActionButton) findViewById(R.id.hangup_action_fab);
@@ -316,7 +316,7 @@ public class CallActivity extends BaseActivity implements DeviceListener, Connec
             contact = "client:" + contact.trim();
         }
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put("To", contact);
 
         if (clientDevice != null) {

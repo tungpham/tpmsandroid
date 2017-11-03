@@ -40,7 +40,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public CallLogAdapter(Context context, String phoneNumber, List<Call> conversationEntities, OnItemCallLogClickListener onItemCallLogClickListener) {
         mContext = context;
-        String mPhoneNumber = phoneNumber;
+//        String mPhoneNumber = phoneNumber;
         mCalls = conversationEntities;
         mOnItemCallLogClickListener = onItemCallLogClickListener;
         mDrawableBuilder = TextDrawable.builder().round();

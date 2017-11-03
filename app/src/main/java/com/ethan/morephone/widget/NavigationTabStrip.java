@@ -677,7 +677,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
                 else if (i == mIndex) updateLastTitle(lastInterpolation);
             }
 
-            Bitmap bitmap = null;
+            Bitmap bitmap;
 
             if( i == 0 ){
                 bitmap = mBitmapMessage;

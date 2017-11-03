@@ -16,8 +16,6 @@ import com.ethan.morephone.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.padding;
-
 public class CandidateView extends View {
 
     private static final int OUT_OF_BOUNDS = -1;
@@ -39,7 +37,7 @@ public class CandidateView extends View {
 
     private static final int X_GAP = 10;
 
-    private static final List<String> EMPTY_LIST = new ArrayList<String>();
+    private static final List<String> EMPTY_LIST = new ArrayList<>();
 
     private int mColorNormal;
     private int mColorRecommended;
@@ -55,11 +53,6 @@ public class CandidateView extends View {
 
     private Rect mPadding = new Rect();
 
-    /**
-     * Construct a CandidateView for showing suggested words for completion.
-     * @param context
-     * @param attrs
-     */
     public CandidateView(Context context) {
         super(context);
         mSelectionHighlight = context.getResources().getDrawable(
@@ -111,10 +104,6 @@ public class CandidateView extends View {
         setVerticalScrollBarEnabled(false);
     }
 
-    /**
-     * A connection back to the service to communicate with the text field
-     * @param listener
-     */
     public void setService(SoftKeyboard listener) {
         mService = listener;
     }
@@ -231,7 +220,7 @@ public class CandidateView extends View {
             boolean typedWordValid) {
         clear();
         if (suggestions != null) {
-            mSuggestions = new ArrayList<String>(suggestions);
+            mSuggestions = new ArrayList<>(suggestions);
         }
         mTypedWordValid = typedWordValid;
         scrollTo(0, 0);
@@ -290,11 +279,6 @@ public class CandidateView extends View {
         return true;
     }
 
-    /**
-     * For flick through from keyboard, call this method with the x coordinate of the flick
-     * gesture.
-     * @param x
-     */
     public void takeSuggestionAt(float x) {
         mTouchX = (int) x;
         // To detect candidate

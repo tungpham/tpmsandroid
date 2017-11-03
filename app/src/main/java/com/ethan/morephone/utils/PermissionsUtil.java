@@ -50,32 +50,6 @@ public class PermissionsUtil {
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
-    /**
-     * Rudimentary methods wrapping the use of a LocalBroadcastManager to simplify the process
-     * of notifying other classes when a particular fragment is notified that a permission is
-     * granted.
-     *
-     * To be notified when a permission has been granted, create a new broadcast receiver
-     * and register it using {@link #registerPermissionReceiver(Context, BroadcastReceiver, String)}
-     *
-     * E.g.
-     *
-     * final BroadcastReceiver receiver = new BroadcastReceiver() {
-     *     @Override
-     *     public void onReceive(Context context, Intent intent) {
-     *         refreshContactsView();
-     *     }
-     * }
-     *
-     * PermissionsUtil.registerPermissionReceiver(getActivity(), receiver, READ_CONTACTS);
-     *
-     * If you register to listen for multiple permissions, you can identify which permission was
-     * granted by inspecting {@link Intent#getAction()}.
-     *
-     * In the fragment that requests for the permission, be sure to call
-     * {@link #notifyPermissionGranted(Context, String)} when the permission is granted so that
-     * any interested listeners are notified of the change.
-     */
     public static void registerPermissionReceiver(Context context, BroadcastReceiver receiver,
                                                   String permission) {
         final IntentFilter filter = new IntentFilter(permission);

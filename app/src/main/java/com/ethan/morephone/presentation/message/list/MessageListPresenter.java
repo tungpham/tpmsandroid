@@ -6,14 +6,12 @@ import android.support.annotation.NonNull;
 import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.group.Group;
 import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.HTTPStatus;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.group.CreateGroup;
 import com.android.morephone.domain.usecase.message.CreateMessage;
 import com.android.morephone.domain.usecase.message.DeleteMessage;
 import com.android.morephone.domain.usecase.message.GetMessages;
-import com.ethan.morephone.fcm.NotificationHelpper;
 
 /**
  * Created by Ethan on 3/4/17.

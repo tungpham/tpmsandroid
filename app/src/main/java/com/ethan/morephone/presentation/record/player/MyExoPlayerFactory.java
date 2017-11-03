@@ -3,9 +3,7 @@ package com.ethan.morephone.presentation.record.player;
 import android.content.Context;
 import android.os.Looper;
 
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
@@ -97,21 +95,21 @@ public class MyExoPlayerFactory {
                 extensionRendererMode, allowedVideoJoiningTimeMs);
     }
 
-    /**
-     * Creates an {@link ExoPlayer} instance. Must be called from a thread that has an associated
-     * {@link Looper}.
-     *
-     * @param renderers The {@link Renderer}s that will be used by the instance.
+    /*
+      Creates an {@link ExoPlayer} instance. Must be called from a thread that has an associated
+      {@link Looper}.
+
+      @param renderers The {@link Renderer}s that will be used by the instance.
      * @param trackSelector The {@link TrackSelector} that will be used by the instance.
      */
 
-    /**
-     * Creates an {@link ExoPlayer} instance. Must be called from a thread that has an associated
-     * {@link Looper}.
-     *
-     * @param renderers The {@link Renderer}s that will be used by the instance.
+    /*
+      Creates an {@link ExoPlayer} instance. Must be called from a thread that has an associated
+      {@link Looper}.
+
+      @param renderers The {@link Renderer}s that will be used by the instance.
      * @param trackSelector The {@link TrackSelector} that will be used by the instance.
      * @param loadControl The {@link LoadControl} that will be used by the instance.
 
-    **/
+    */
 }

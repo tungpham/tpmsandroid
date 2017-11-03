@@ -2,8 +2,6 @@ package com.ethan.morephone.presentation.authentication;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.ethan.morephone.R;
 
@@ -18,10 +16,10 @@ public class StormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_strompath);
 
-        final TextView welcomeTextView = (TextView) findViewById(R.id.tv_welcome);
-        final TextView profileTextView = (TextView) findViewById(R.id.tv_profile);
-        final EditText accessTokenEditText = (EditText) findViewById(R.id.input_access_token);
-        final EditText refreshTokenEditText = (EditText) findViewById(R.id.input_refresh_token);
+//        final TextView welcomeTextView = (TextView) findViewById(R.id.tv_welcome);
+//        final TextView profileTextView = (TextView) findViewById(R.id.tv_profile);
+//        final EditText accessTokenEditText = (EditText) findViewById(R.id.input_access_token);
+//        final EditText refreshTokenEditText = (EditText) findViewById(R.id.input_refresh_token);
 //
 //        Stormpath.getAccount(new StormpathCallback<Account>() {
 //            @Override

@@ -41,7 +41,7 @@ public class UsagePresenter implements UsageContract.Presenter {
 
         ApiMorePhone.usage(context, MyPreference.getUserId(context), new Callback<BaseResponse<UsageItem>>() {
             @Override
-            public void onResponse(Call<BaseResponse<UsageItem>> call, Response<BaseResponse<UsageItem>> response) {
+            public void onResponse(@NonNull Call<BaseResponse<UsageItem>> call, @NonNull Response<BaseResponse<UsageItem>> response) {
                 if(response.isSuccessful()){
                     if(response.body().getStatus() == HTTPStatus.OK.getStatusCode()){
                         mView.showUsage(response.body().getResponse());
@@ -51,7 +51,7 @@ public class UsagePresenter implements UsageContract.Presenter {
             }
 
             @Override
-            public void onFailure(Call<BaseResponse<UsageItem>> call, Throwable t) {
+            public void onFailure(@NonNull Call<BaseResponse<UsageItem>> call, @NonNull Throwable t) {
                 mView.showLoading(false);
             }
         });

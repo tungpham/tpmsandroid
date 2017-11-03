@@ -53,12 +53,6 @@ public class DigitsEditText extends EditText {
         return super.onCheckIsTextEditor();
     }
 
-    /**
-     * This methdod is called when text selection is changed, so hide keyboard to prevent it to appear
-     *
-     * @param selStart
-     * @param selEnd
-     */
     @Override
     protected void onSelectionChanged(int selStart, int selEnd) {
         super.onSelectionChanged(selStart, selEnd);

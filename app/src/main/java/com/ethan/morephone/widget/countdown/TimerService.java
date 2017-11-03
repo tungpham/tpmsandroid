@@ -1,20 +1,12 @@
 package com.ethan.morephone.widget.countdown;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.os.Vibrator;
-import android.util.Log;
-
-import java.io.IOException;
 
 /**
  * Created by truongnguyen on 8/30/17.

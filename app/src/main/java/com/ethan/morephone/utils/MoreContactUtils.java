@@ -80,12 +80,9 @@ public class MoreContactUtils {
 
         // if this is not about phone numbers, we know this is not a match (of course, some
         // mimetypes could have more sophisticated matching is the future, e.g. addresses)
-        if (!TextUtils.equals(Phone.CONTENT_ITEM_TYPE,
-                mimetype1)) {
-            return false;
-        }
+        return TextUtils.equals(Phone.CONTENT_ITEM_TYPE,
+                mimetype1) && shouldCollapsePhoneNumbers(data1.toString(), data2.toString());
 
-        return shouldCollapsePhoneNumbers(data1.toString(), data2.toString());
     }
 
     // TODO: Move this to PhoneDataItem.shouldCollapse override
@@ -281,11 +278,11 @@ public class MoreContactUtils {
     }
 
 
-    /**
-     * Returns the intent to launch for the given invitable account type and contact lookup URI.
-     * This will return null if the account type is not invitable (i.e. there is no
-     * {@link AccountType#getInviteContactActivityClassName()} or
-     * {@link AccountType#syncAdapterPackageName}).
+    /*
+      Returns the intent to launch for the given invitable account type and contact lookup URI.
+      This will return null if the account type is not invitable (i.e. there is no
+      {@link AccountType#getInviteContactActivityClassName()} or
+      {@link AccountType#syncAdapterPackageName}).
      */
 
     /**
@@ -537,7 +534,7 @@ public class MoreContactUtils {
                     + ", emails= " + emailAddresses + ", anrs= " + anrs + ", account= " + account);
         }
         final ArrayList<ContentProviderOperation> operationList =
-                new ArrayList<ContentProviderOperation>();
+                new ArrayList<>();
         ContentProviderOperation.Builder builder = ContentProviderOperation
                 .newInsert(RawContacts.CONTENT_URI);
         builder.withValue(RawContacts.AGGREGATION_MODE, RawContacts.AGGREGATION_MODE_DISABLED);
@@ -658,7 +655,7 @@ public class MoreContactUtils {
     }
 
     public static Drawable getDisplayIcon(Context context, String accountName) {
-        int slotIndex = -1;
+//        int slotIndex = -1;
 //        OperatorSimInfo operatorSimInfo = new OperatorSimInfo(context);
 //        boolean isCustomSimFeatureEnabled = operatorSimInfo.isOperatorFeatureEnabled();
 //        if (isCustomSimFeatureEnabled) {

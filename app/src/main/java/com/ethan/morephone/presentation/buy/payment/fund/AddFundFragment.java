@@ -7,11 +7,9 @@ import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 
 import com.ethan.morephone.MyApplication;
 import com.ethan.morephone.R;
@@ -46,8 +44,6 @@ public class AddFundFragment extends BaseFragment implements
     private UiCheckout mCheckout;
     private final List<Inventory.Callback> mInventoryCallbacks = new ArrayList<>();
 
-    private double mBalanceAdd = 0;
-
 
     public static AddFundFragment getInstance() {
         return new AddFundFragment();
@@ -75,9 +71,9 @@ public class AddFundFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_subscriptions, container, false);
         view.findViewById(R.id.buy).setOnClickListener(this);
-        RecyclerView mPurchasedSkus = (RecyclerView) view.findViewById(R.id.purchased_skus);
-        Spinner mTargetSkus = (Spinner) view.findViewById(R.id.target_skus);
-        Spinner mAvailableSkus = (Spinner) view.findViewById(R.id.available_skus);
+//        RecyclerView mPurchasedSkus = (RecyclerView) view.findViewById(R.id.purchased_skus);
+//        Spinner mTargetSkus = (Spinner) view.findViewById(R.id.target_skus);
+//        Spinner mAvailableSkus = (Spinner) view.findViewById(R.id.available_skus);
 
         return view;
     }
@@ -140,6 +136,7 @@ public class AddFundFragment extends BaseFragment implements
     }
 
     public double getBalance() {
+        double mBalanceAdd = 0;
         return mBalanceAdd;
     }
 

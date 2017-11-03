@@ -52,13 +52,13 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
                                   @NonNull CreateGroup createGroup) {
         mView = view;
         mUseCaseHandler = useCaseHandler;
-        GetAllMessages mGetAllMessages = getAllMessages;
+//        GetAllMessages mGetAllMessages = getAllMessages;
         mGetMessagesIncoming = getMessagesIncoming;
         mGetMessagesOutgoing = getMessagesOutgoing;
         mCreateMessage = createMessage;
-        CreateGroup mCreateGroup = createGroup;
+//        CreateGroup mCreateGroup = createGroup;
 
-        List<MessageItem> mMessageItems = new ArrayList<>();
+//        List<MessageItem> mMessageItems = new ArrayList<>();
 //        mConversationModels = new ArrayList<>();
 //        mArrayMap = new ArrayMap<>();
 
@@ -136,8 +136,8 @@ public class ConversationsPresenter implements ConversationsContract.Presenter {
     @Override
     public void parseFakeData(FakeData fakeData, String phoneNumber) {
 //        mArrayMap.clear();
-        List<MessageItem> messageItemsIncoming = parseMessageIncoming(fakeData, phoneNumber);
-        List<MessageItem> messageItemsOutgoing = parseMessageOutgoing(fakeData, phoneNumber);
+//        List<MessageItem> messageItemsIncoming = parseMessageIncoming(fakeData, phoneNumber);
+//        List<MessageItem> messageItemsOutgoing = parseMessageOutgoing(fakeData, phoneNumber);
     }
 
 //    private void executeData(List<MessageItem> messageItems, boolean isComing) {

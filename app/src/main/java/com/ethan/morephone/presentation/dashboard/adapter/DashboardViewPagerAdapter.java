@@ -1,16 +1,13 @@
 package com.ethan.morephone.presentation.dashboard.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.contact.ContactFragment;
-import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.presentation.message.conversation.ConversationsFragment;
-import com.ethan.morephone.presentation.numbers.IncomingPhoneNumbersFragment;
 import com.ethan.morephone.presentation.phone.dial.DialFragment;
 import com.ethan.morephone.presentation.phone.log.CallLogFragment;
 import com.ethan.morephone.presentation.record.RecordFragment;

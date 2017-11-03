@@ -25,7 +25,7 @@ public class ExpireActivity extends BaseActivity {
 
         Bundle bundle = getIntent().getExtras();
         String mPhoneNumber = bundle.getString(DashboardActivity.BUNDLE_PHONE_NUMBER);
-        String mPhoneNumberId = bundle.getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
+//        String mPhoneNumberId = bundle.getString(DashboardActivity.BUNDLE_PHONE_NUMBER_ID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setTitleActionBar(toolbar, mPhoneNumber);

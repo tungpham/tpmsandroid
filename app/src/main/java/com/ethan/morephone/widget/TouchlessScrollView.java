@@ -6,12 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ScrollView;
 
-/**
- * A {@link ScrollView} that doesn't respond or intercept touch events.
- *
- * This is used in combination with {@link com.ethan.morephone.presentation.contact.widget.MultiShrinkScroller} so
- * that MultiShrinkScroller can handle all scrolling & saving.
- */
+
 public class TouchlessScrollView extends ScrollView {
 
     public TouchlessScrollView(Context context) {

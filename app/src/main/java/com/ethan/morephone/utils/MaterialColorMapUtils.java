@@ -39,10 +39,7 @@ public class MaterialColorMapUtils {
                 return false;
             }
             MaterialPalette other = (MaterialPalette) obj;
-            if (mPrimaryColor != other.mPrimaryColor) {
-                return false;
-            }
-            return mSecondaryColor == other.mSecondaryColor;
+            return mPrimaryColor == other.mPrimaryColor && mSecondaryColor == other.mSecondaryColor;
         }
 
         @Override

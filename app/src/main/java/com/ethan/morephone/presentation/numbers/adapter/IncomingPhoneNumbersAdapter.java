@@ -7,11 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.entity.phonenumbers.IncomingPhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.DateUtils;
-import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 
 import java.util.List;
@@ -135,10 +133,10 @@ public class IncomingPhoneNumbersAdapter extends RecyclerView.Adapter<IncomingPh
     }
 
     public void validateCurrentPhoneNumberSelected() {
-        if (mCurrentHolder != null) {
-//            mCurrentHolder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
-//            mCurrentHolder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
-        }
+//        if (mCurrentHolder != null) {
+////            mCurrentHolder.viewChoose.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+////            mCurrentHolder.textNumber.setTextColor(ContextCompat.getColor(mContext, R.color.colorText));
+//        }
     }
 
     private String expireRemain(long date) {

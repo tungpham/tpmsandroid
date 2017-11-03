@@ -44,7 +44,7 @@ public class CountDownView extends RelativeLayout {
         private final WeakReference<CountDownView> mService;
 
         IncomingHandler(CountDownView service) {
-            mService = new WeakReference<CountDownView>(service);
+            mService = new WeakReference<>(service);
         }
 
         @Override
@@ -123,12 +123,6 @@ public class CountDownView extends RelativeLayout {
         this.listener = listener;
     }
 
-    /**
-     * Sets the initial time for this countdown. This is fixed and will
-     * not change unless a call to {@link #setInitialTime} is made.
-     *
-     * @param millisInFuture - Time in milliseconds to countdown from.
-     */
     public void setInitialTime(long millisInFuture) {
         mBeginTime = millisInFuture;
         setCurrentTime(millisInFuture);

@@ -31,13 +31,6 @@ package com.ethan.morephone.presentation.buy.payment.checkout;
  * @version 1.3
  */
 
-/**
- * Base64 converter class. This code is not a complete MIME encoder;
- * it simply converts binary data to base64 data and back.
- *
- * <p>Note {@link CharBase64} is a GWT-compatible implementation of this
- * class.
- */
 final class Base64 {
     /** Specify encoding (value is {@code true}). */
     public final static boolean ENCODE = true;
@@ -504,9 +497,9 @@ final class Base64 {
 
         byte[] b4 = new byte[4];
         int b4Posn = 0;
-        int i = 0;
-        byte sbiCrop = 0;
-        byte sbiDecode = 0;
+        int i;
+        byte sbiCrop;
+        byte sbiDecode;
         for (i = 0; i < len; i++) {
             sbiCrop = (byte) (source[i + off] & 0x7f); // Only the low seven bits
             sbiDecode = decodabet[sbiCrop];
@@ -556,7 +549,7 @@ final class Base64 {
                 throw new Base64DecoderException("single trailing character at offset "
                         + (len - 1));
             }
-            b4[b4Posn++] = EQUALS_SIGN;
+//            b4[b4Posn++] = EQUALS_SIGN;
             outBuffPosn += decode4to3(b4, 0, outBuff, outBuffPosn, decodabet);
         }
 

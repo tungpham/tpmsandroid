@@ -36,8 +36,8 @@ public class IncomingPhoneNumbersPresenter implements IncomingPhoneNumbersContra
                                          @NonNull UseCaseHandler useCaseHandler,
                                          @NonNull DeleteIncomingPhoneNumber deleteIncomingPhoneNumber) {
         mView = view;
-        UseCaseHandler mUseCaseHandler = useCaseHandler;
-        DeleteIncomingPhoneNumber mDeleteIncomingPhoneNumber = deleteIncomingPhoneNumber;
+//        UseCaseHandler mUseCaseHandler = useCaseHandler;
+//        DeleteIncomingPhoneNumber mDeleteIncomingPhoneNumber = deleteIncomingPhoneNumber;
 
         mView.setPresenter(this);
     }

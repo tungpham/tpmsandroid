@@ -256,8 +256,6 @@ public class SplashActivity extends BaseActivity {
                         if (applications != null && !applications.applications.isEmpty()) {
                             TwilioManager.setApplicationSid(activity.getApplicationContext(), applications.applications.get(0).sid);
                         }
-                    } else {
-
                     }
                 }
             }

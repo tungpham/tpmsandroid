@@ -56,9 +56,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
         return new AuthenticationFragment();
     }
 
-    private final int REQUEST_LOGIN = 100;
-
-//    CallbackManager callbackManager;
+    //    CallbackManager callbackManager;
 
     private Auth0 auth0;
 
@@ -188,6 +186,7 @@ public class AuthenticationFragment extends BaseFragment implements View.OnClick
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        callbackManager.onActivityResult(requestCode, resultCode, data);
+        int REQUEST_LOGIN = 100;
         int REQUEST_REGISTER = REQUEST_LOGIN + 1;
         if (requestCode == REQUEST_LOGIN || requestCode == REQUEST_REGISTER) {
             if (resultCode == Activity.RESULT_OK) {

@@ -465,7 +465,7 @@ public class RecordFragment extends BaseFragment implements
         private final WeakReference<RecordFragment> mWeakReference;
 
         public MyRunnable(RecordFragment recordFragment) {
-            mWeakReference = new WeakReference<RecordFragment>(recordFragment);
+            mWeakReference = new WeakReference<>(recordFragment);
         }
 
         public void setVoicesViewHolder(RecordsViewHolder recordsViewHolder) {

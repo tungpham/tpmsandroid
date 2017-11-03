@@ -1,10 +1,8 @@
 package com.ethan.morephone.common;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
 
 import com.ethan.morephone.R;
 import com.ethan.morephone.widget.ThemeManager;
@@ -29,12 +27,12 @@ public class FontManager {
     public static final int TEXT_TYPE_TOOLBAR = 0x8;
 
     private static int getFontFamily(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return 0;
     }
 
     public static int getTextSize(Context context, int type) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int fontSize = 1;
 
         switch (type) {
@@ -118,7 +116,7 @@ public class FontManager {
     }
 
     private static int getFontWeight(Context context, boolean heavy) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int fontWeight = 0;
         int fontFamily = getFontFamily(context);
 

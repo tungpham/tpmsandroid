@@ -1073,8 +1073,8 @@ public class MultiShrinkScroller extends FrameLayout {
 
         // Clamp to reasonable/finite values before passing into framework. The values
         // can be wacky before the first pre-render.
-        bezierOutput = (float) Math.min(bezierOutput, 1.0f);
-        scale = (float) Math.min(scale, 1.0f);
+        bezierOutput = Math.min(bezierOutput, 1.0f);
+        scale = Math.min(scale, 1.0f);
 
         mTitleAndPhoneticNameView.setScaleX(scale);
         mTitleAndPhoneticNameView.setScaleY(scale);

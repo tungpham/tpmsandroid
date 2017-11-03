@@ -186,8 +186,7 @@ public final class Sku {
 
             final Id that = (Id) o;
 
-            if (!product.equals(that.product)) return false;
-            return code.equals(that.code);
+            return product.equals(that.product) && code.equals(that.code);
 
         }
 

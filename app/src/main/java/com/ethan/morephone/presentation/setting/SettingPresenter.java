@@ -5,16 +5,12 @@ import android.support.annotation.NonNull;
 
 import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
-import com.android.morephone.data.entity.user.User;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.data.utils.TwilioManager;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.number.incoming.ChangeFriendlyName;
-import com.ethan.morephone.Constant;
-import com.ethan.morephone.MyPreference;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

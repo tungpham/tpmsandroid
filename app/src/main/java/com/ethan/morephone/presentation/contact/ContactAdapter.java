@@ -7,13 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-import com.android.morephone.data.entity.MessageItem;
 import com.android.morephone.data.entity.contact.Contact;
 import com.ethan.morephone.R;
 import com.ethan.morephone.widget.RecyclerViewFastScroller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements RecyclerViewFastScroller.BubbleTextGetter {

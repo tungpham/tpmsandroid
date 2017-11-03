@@ -2,7 +2,6 @@ package com.ethan.morephone.presentation.buy.pool;
 
 import android.content.Context;
 
-import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.ethan.morephone.presentation.BasePresenter;
 import com.ethan.morephone.presentation.BaseView;

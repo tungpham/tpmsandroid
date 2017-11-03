@@ -1,13 +1,10 @@
 package com.ethan.morephone.widget;
 
-import android.accounts.Account;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 

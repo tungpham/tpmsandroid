@@ -3,11 +3,9 @@ package com.ethan.morephone.presentation.message.list.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ethan.morephone.R;
-import com.ethan.morephone.widget.progress.DotProgressBar;
 import com.udevel.widgetlab.TypingIndicatorView;
 
 /**

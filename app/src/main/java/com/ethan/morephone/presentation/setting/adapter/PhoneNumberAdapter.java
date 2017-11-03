@@ -8,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.android.morephone.data.entity.phonenumbers.AvailableCountry;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.ethan.morephone.R;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

@@ -1,6 +1,7 @@
 package com.android.morephone.data.entity.twilio.voice;
 
-import com.android.morephone.data.log.DebugTool;
+import android.support.annotation.NonNull;
+
 import com.android.morephone.data.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
 
@@ -116,7 +117,7 @@ public class VoiceItem implements Comparable<VoiceItem>{
     }
 
     @Override
-    public int compareTo(VoiceItem voiceItem) {
+    public int compareTo(@NonNull VoiceItem voiceItem) {
         Date current = DateUtils.getDate(this.dateCreated);
         Date now = DateUtils.getDate(voiceItem.dateCreated);
         if (current != null && now != null) {

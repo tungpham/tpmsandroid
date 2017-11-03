@@ -149,12 +149,12 @@ public class RecordPresenter implements RecordContract.Presenter {
                 public void onResponse(retrofit2.Call<Call> callResponse, Response<Call> response) {
                     if (response.isSuccessful()) {
                         com.android.morephone.data.entity.call.Call call = response.body();
-                        if (phoneNumber.equals(call.to)) {
-//                            mRecords.add(RecordDataMapper.transform(false, call.from, recordItem));
-//                            mView.showRecords(mRecords);
-                        } else {
-
-                        }
+//                        if (phoneNumber.equals(call.to)) {
+////                            mRecords.add(RecordDataMapper.transform(false, call.from, recordItem));
+////                            mView.showRecords(mRecords);
+//                        } else {
+//
+//                        }
                     }
                 }
 

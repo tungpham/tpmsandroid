@@ -1,6 +1,5 @@
 package com.android.morephone.data.entity.contact;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 

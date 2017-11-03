@@ -419,7 +419,7 @@ public class InCallActivity extends BaseActivity implements
 
     @Override
     public void onCallNow(String toPhoneNumber) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
 //        toPhoneNumber = "client:" + toPhoneNumber.trim();
         params.put("To", toPhoneNumber);
         if (clientDevice != null) {

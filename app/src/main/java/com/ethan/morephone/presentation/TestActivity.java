@@ -1,7 +1,6 @@
 package com.ethan.morephone.presentation;
 
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 
 /**
@@ -19,8 +18,8 @@ public class TestActivity extends BaseActivity {
     }
 
     private void retrieveAccessTokenfromServer() {
-        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        String tokenURL = SERVER_TOKEN_URL + "?device=" + deviceId;
+//        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+//        String tokenURL = SERVER_TOKEN_URL + "?device=" + deviceId;
 
 //        Ion.with(this)
 //                .load(tokenURL)

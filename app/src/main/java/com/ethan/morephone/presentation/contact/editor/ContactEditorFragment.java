@@ -13,27 +13,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.ApiMorePhone;
 import com.ethan.morephone.MyPreference;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
 import com.ethan.morephone.presentation.BaseFragment;
-import com.ethan.morephone.presentation.buy.SearchPhoneNumberContract;
 import com.ethan.morephone.presentation.contact.ContactFragment;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.utils.Injection;
-
-import org.greenrobot.eventbus.EventBus;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by truongnguyen on 9/28/17.

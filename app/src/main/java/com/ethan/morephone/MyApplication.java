@@ -1,10 +1,7 @@
 package com.ethan.morephone;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.StrictMode;
-import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 

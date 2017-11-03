@@ -5,7 +5,6 @@ import android.os.Build;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import com.ethan.morephone.common.FontManager;
 
@@ -45,11 +44,11 @@ public class QKTextView extends AppCompatTextView {
         mContext = context;
 
 
-        if (attrs != null) {
-//            final TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.QKTextView);
-//            mType = array.getInt(R.styleable.QKTextView_type, FontManager.TEXT_TYPE_PRIMARY);
-//            array.recycle();
-        }
+//        if (attrs != null) {
+////            final TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.QKTextView);
+////            mType = array.getInt(R.styleable.QKTextView_type, FontManager.TEXT_TYPE_PRIMARY);
+////            array.recycle();
+//        }
 
         setTextColor(FontManager.getTextColor(mContext, mType));
         setText(getText());

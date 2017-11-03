@@ -8,7 +8,6 @@ import android.inputmethodservice.KeyboardView;
 import android.os.IBinder;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
-import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -291,9 +290,8 @@ public class SoftKeyboard extends InputMethodService
                 return;
             }
 
-            List<String> stringList = new ArrayList<String>();
-            for (int i = 0; i < completions.length; i++) {
-                CompletionInfo ci = completions[i];
+            List<String> stringList = new ArrayList<>();
+            for (CompletionInfo ci : completions) {
                 if (ci != null) stringList.add(ci.getText().toString());
             }
             setSuggestions(stringList, true, true);
@@ -315,12 +313,11 @@ public class SoftKeyboard extends InputMethodService
             return false;
         }
 
-        boolean dead = false;
+//        boolean dead = false;
 
-        if ((c & KeyCharacterMap.COMBINING_ACCENT) != 0) {
-            dead = true;
-            c = c & KeyCharacterMap.COMBINING_ACCENT_MASK;
-        }
+//        if ((c & KeyCharacterMap.COMBINING_ACCENT) != 0) {
+//            dead = true;
+//        }
 
         if (mComposing.length() > 0) {
             char accent = mComposing.charAt(mComposing.length() -1 );
@@ -503,9 +500,11 @@ public class SoftKeyboard extends InputMethodService
             handleClose();
         } else if (primaryCode == LatinKeyboardView.KEYCODE_LANGUAGE_SWITCH) {
             handleLanguageSwitch();
-        } else if (primaryCode == LatinKeyboardView.KEYCODE_OPTIONS) {
-            // Show a menu or somethin'
-        } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE
+        }
+//        else if (primaryCode == LatinKeyboardView.KEYCODE_OPTIONS) {
+//            // Show a menu or somethin'
+//        }
+        else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE
                 && mInputView != null) {
             Keyboard current = mInputView.getKeyboard();
             if (current == mSymbolsKeyboard || current == mSymbolsShiftedKeyboard) {
@@ -539,7 +538,7 @@ public class SoftKeyboard extends InputMethodService
     private void updateCandidates() {
         if (!mCompletionOn) {
             if (mComposing.length() > 0) {
-                ArrayList<String> list = new ArrayList<String>();
+                ArrayList<String> list = new ArrayList<>();
                 list.add(mComposing.toString());
                 setSuggestions(list, true, true);
             } else {

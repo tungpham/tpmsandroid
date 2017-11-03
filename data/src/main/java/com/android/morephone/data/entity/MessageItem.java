@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-import static com.android.morephone.data.utils.DateUtils.getDate;
 
 /**
  * Created by Ethan on 2/21/17.

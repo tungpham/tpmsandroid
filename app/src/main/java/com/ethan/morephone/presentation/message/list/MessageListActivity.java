@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import com.android.morephone.data.entity.conversation.ConversationModel;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.BaseActivity;
-import com.ethan.morephone.presentation.buy.payment.purchase.PurchaseActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
 import com.ethan.morephone.utils.ActivityUtils;
 

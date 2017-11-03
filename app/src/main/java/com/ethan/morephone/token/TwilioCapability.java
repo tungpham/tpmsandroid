@@ -7,7 +7,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class TwilioCapability extends CapabilityToken {
     }
 
     public void allowClientOutgoing(String appSid) {
-        this.allowClientOutgoing(appSid, (Map)null);
+        this.allowClientOutgoing(appSid, null);
     }
 
     public void allowClientOutgoing(String appSid, Map<String, String> params) {
@@ -60,14 +59,12 @@ public class TwilioCapability extends CapabilityToken {
 
     private String generateParamString(Map<String, String> params) {
         ArrayList keyValues = new ArrayList();
-        Iterator paramsJoined = params.keySet().iterator();
 
-        while(paramsJoined.hasNext()) {
-            String key = (String)paramsJoined.next();
-            String value = (String)params.get(key);
+        for (Object key : params.keySet()) {
+            String value = params.get(key);
 
             try {
-                key = URLEncoder.encode(key, "UTF-8");
+                key = URLEncoder.encode(key.toString(), "UTF-8");
                 value = URLEncoder.encode(value, "UTF-8");
             } catch (UnsupportedEncodingException var7) {
                 var7.printStackTrace();
@@ -154,7 +151,7 @@ public class TwilioCapability extends CapabilityToken {
             System.out.println("usage: java com.twilio.client.TwilioCapability accountSid authToken");
         } else {
             TwilioCapability capability = new TwilioCapability(args[0], args[1]);
-            capability.allowEventStream((Map)null);
+            capability.allowEventStream(null);
             capability.allowClientIncoming("Frank");
             HashMap params = new HashMap();
             params.put("foo", "fooval");

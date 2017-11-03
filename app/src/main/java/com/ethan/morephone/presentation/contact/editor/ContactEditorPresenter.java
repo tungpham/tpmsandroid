@@ -3,21 +3,13 @@ package com.ethan.morephone.presentation.contact.editor;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.android.morephone.data.entity.BaseResponse;
 import com.android.morephone.data.entity.contact.Contact;
 import com.android.morephone.data.log.DebugTool;
-import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.contact.CreateContact;
 import com.android.morephone.domain.usecase.contact.GetContact;
 import com.android.morephone.domain.usecase.contact.UpdateContact;
-
-import org.greenrobot.eventbus.EventBus;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by truongnguyen on 9/29/17.

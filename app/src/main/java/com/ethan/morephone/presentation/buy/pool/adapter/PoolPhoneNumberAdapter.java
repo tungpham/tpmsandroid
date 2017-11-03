@@ -6,10 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.morephone.data.entity.phonenumbers.AvailablePhoneNumber;
 import com.android.morephone.data.entity.phonenumbers.PhoneNumber;
 import com.ethan.morephone.R;
-import com.ethan.morephone.presentation.buy.result.adapter.AvailablePhoneNumberViewHolder;
 
 import java.util.List;
 

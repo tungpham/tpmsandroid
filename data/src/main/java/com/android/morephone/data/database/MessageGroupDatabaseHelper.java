@@ -245,17 +245,17 @@ public class MessageGroupDatabaseHelper {
 
     public static void deleteMessageGroup(Context context, String id) {
         SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
-        int result = db.delete(GroupPersistenceContract.MessageGroupEntry.TABLE_NAME, GroupPersistenceContract.MessageGroupEntry.COL_ID + " = ?", new String[]{String.valueOf(id)});
+        db.delete(GroupPersistenceContract.MessageGroupEntry.TABLE_NAME, GroupPersistenceContract.MessageGroupEntry.COL_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
     public static void deleteAllMessageGroup(Context context, String phoneNumberId) {
         SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
-        int result = db.delete(GroupPersistenceContract.MessageGroupEntry.TABLE_NAME, GroupPersistenceContract.MessageGroupEntry.COL_PHONE_NUMBER_ID + " = ?", new String[]{String.valueOf(phoneNumberId)});
+        db.delete(GroupPersistenceContract.MessageGroupEntry.TABLE_NAME, GroupPersistenceContract.MessageGroupEntry.COL_PHONE_NUMBER_ID + " = ?", new String[]{String.valueOf(phoneNumberId)});
     }
 
     public static void deleteAllMessageGroup(Context context) {
         SQLiteDatabase db = DatabaseDAO.getInstance(context).getWritableDatabase();
-        int result = db.delete(GroupPersistenceContract.MessageGroupEntry.TABLE_NAME, null, null);
+        db.delete(GroupPersistenceContract.MessageGroupEntry.TABLE_NAME, null, null);
     }
 
 

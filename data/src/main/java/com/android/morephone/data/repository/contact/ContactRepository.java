@@ -300,11 +300,9 @@ public class ContactRepository implements ContactDataSource {
         if (mCachedContacts == null || mCachedContacts.isEmpty()) {
             return null;
         } else {
-            Iterator<Map.Entry<String, Contact>> it = mCachedContacts.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<String, Contact> entry = it.next();
+            for (Map.Entry<String, Contact> entry : mCachedContacts.entrySet()) {
                 if (entry.getValue().getPhoneNumber().equals(phoneNumber)) {
-                   return entry.getValue();
+                    return entry.getValue();
                 }
             }
         }

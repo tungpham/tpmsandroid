@@ -267,7 +267,7 @@ public class MainActivity extends BaseActivity implements
                 break;
         }
 
-        Credentials credentials;
+//        Credentials credentials;
 
     }
 

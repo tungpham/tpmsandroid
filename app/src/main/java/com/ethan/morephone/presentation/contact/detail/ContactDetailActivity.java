@@ -132,10 +132,10 @@ public class ContactDetailActivity extends BaseActivity implements
 //                editMenuItem.setVisible(false);
 //            }
 
-        final MenuItem deleteMenuItem = menu.findItem(R.id.menu_delete);
+//        final MenuItem deleteMenuItem = menu.findItem(R.id.menu_delete);
 //            deleteMenuItem.setVisible(isContactEditable() && !mContactData.isUserProfile());
 
-        final MenuItem shareMenuItem = menu.findItem(R.id.menu_share);
+//        final MenuItem shareMenuItem = menu.findItem(R.id.menu_share);
 //            shareMenuItem.setVisible(isContactShareable());
 
 //            final MenuItem helpMenu = menu.findItem(R.id.menu_help);

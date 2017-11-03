@@ -107,9 +107,9 @@ public class GroupRemoteDataSource implements GroupDataSource {
         ApiMorePhone.updateGroup(mContext, group, new Callback<BaseResponse<Group>>() {
             @Override
             public void onResponse(Call<BaseResponse<Group>> call, Response<BaseResponse<Group>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-
-                }
+//                if (response.isSuccessful() && response.body() != null) {
+//
+//                }
             }
 
             @Override

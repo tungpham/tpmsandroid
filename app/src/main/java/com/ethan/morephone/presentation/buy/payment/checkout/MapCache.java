@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 class MapCache implements Cache {
 
     @Nonnull
-    private final Map<Key, Entry> mMap = new HashMap<Key, Entry>();
+    private final Map<Key, Entry> mMap = new HashMap<>();
 
     MapCache() {
     }

@@ -37,12 +37,10 @@ import com.ethan.morephone.presentation.BaseFragment;
 import com.ethan.morephone.presentation.contact.ContactFragment;
 import com.ethan.morephone.presentation.contact.editor.ContactEditorActivity;
 import com.ethan.morephone.presentation.dashboard.DashboardActivity;
-import com.ethan.morephone.presentation.message.conversation.adapter.DividerSpacingItemDecoration;
 import com.ethan.morephone.presentation.message.list.adapter.MessageListAdapter;
 import com.ethan.morephone.presentation.phone.PhoneActivity;
 import com.ethan.morephone.utils.ContactUtil;
 import com.ethan.morephone.utils.Injection;
-import com.ethan.morephone.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -129,7 +127,7 @@ public class MessageListFragment extends BaseFragment implements
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        DividerSpacingItemDecoration mDividerSpacingItemDecoration = new DividerSpacingItemDecoration(Utils.dipToPixels(getContext(), 8));
+//        DividerSpacingItemDecoration mDividerSpacingItemDecoration = new DividerSpacingItemDecoration(Utils.dipToPixels(getContext(), 8));
 //        recyclerView.addItemDecoration(mDividerSpacingItemDecoration);
 
         mMessageListAdapter = new MessageListAdapter(getContext(), new ArrayList<MessageItem>(), "+123", this);

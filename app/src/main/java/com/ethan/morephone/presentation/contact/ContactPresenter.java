@@ -3,19 +3,10 @@ package com.ethan.morephone.presentation.contact;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.android.morephone.data.entity.BaseResponse;
-import com.android.morephone.data.entity.contact.Contact;
-import com.android.morephone.data.network.ApiMorePhone;
 import com.android.morephone.domain.UseCase;
 import com.android.morephone.domain.UseCaseHandler;
 import com.android.morephone.domain.usecase.contact.ContactFilterType;
 import com.android.morephone.domain.usecase.contact.GetContacts;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by truongnguyen on 9/29/17.

@@ -21,7 +21,7 @@ public class AvailablePhoneNumberAdapter extends RecyclerView.Adapter<AvailableP
     private AvailablePhoneNumberListener mAvailablePhoneNumberListener;
 
     public AvailablePhoneNumberAdapter(Context context, List<AvailablePhoneNumber> availablePhoneNumbers) {
-        Context mContext = context;
+//        Context mContext = context;
         mAvailablePhoneNumbers = availablePhoneNumbers;
     }
 
