@@ -102,6 +102,8 @@ public class ContactDetailActivity extends BaseActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         enableActionBar(toolbar, false);
+
+        mColorArray.recycle();
     }
 
     @Override
@@ -114,10 +116,6 @@ public class ContactDetailActivity extends BaseActivity implements
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 //        if (mContactData != null) {
-//        final MenuItem starredMenuItem = menu.findItem(R.id.menu_star);
-//            ContactDisplayUtils.configureStarredMenuItem(starredMenuItem,
-//                    mContactData.isDirectoryEntry(), mContactData.isUserProfile(),
-//                    mContactData.getStarred());
         // Configure edit MenuItem
         final MenuItem editMenuItem = menu.findItem(R.id.menu_edit);
         editMenuItem.setVisible(true);

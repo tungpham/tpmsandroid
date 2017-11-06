@@ -19,6 +19,6 @@ public class RandomNoRepetitionSequenceGenerator extends RandomSequenceGenerator
 
         int nextValue = super.nextIndex(numberOfElements - 1);
         currentIndex = nextValue < currentIndex ? nextValue : nextValue + 1;
-        return currentIndex;
+        return Math.abs(currentIndex);
     }
 }

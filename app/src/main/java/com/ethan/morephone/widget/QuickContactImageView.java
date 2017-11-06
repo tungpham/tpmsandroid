@@ -1,7 +1,6 @@
 package com.ethan.morephone.widget;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
@@ -76,16 +75,5 @@ public class QuickContactImageView extends AppCompatImageView {
         return mOriginalDrawable;
     }
 
-    public static Drawable getDefaultImageForContact(Context context, Resources resources) {
-        final LetterTileDrawable drawable = new LetterTileDrawable(
-                resources, context, 22);
 
-        drawable.setLetterAndColorFromContactDetails();
-        drawable.setContactType(LetterTileDrawable.TYPE_PERSON);
-        drawable.setScale(1.0f);
-        drawable.setOffset(0.0f);
-        drawable.setIsCircular(false);
-
-        return drawable;
-    }
 }

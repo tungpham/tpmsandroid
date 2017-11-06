@@ -18,7 +18,7 @@ public abstract class SequenceGenerator {
         }
 
         currentIndex = nextIndex(currentIndex, numberOfElements);
-        return currentIndex;
+        return Math.abs(currentIndex);
     }
 
     protected abstract int nextIndex(int currentIndex, int numberOfElements);
