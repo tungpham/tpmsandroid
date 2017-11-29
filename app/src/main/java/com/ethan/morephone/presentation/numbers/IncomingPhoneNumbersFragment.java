@@ -233,9 +233,9 @@ public class IncomingPhoneNumbersFragment extends BaseFragment implements
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.text_home:
-                getActivity().finish();
-                break;
+//            case R.id.text_home:
+//                getActivity().finish();
+//                break;
             default:
                 break;
         }

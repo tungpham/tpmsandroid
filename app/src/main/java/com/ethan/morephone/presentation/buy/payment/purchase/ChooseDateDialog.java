@@ -58,7 +58,7 @@ public class ChooseDateDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.configure_email_dialog_title));
+        builder.setTitle(getString(R.string.purchase_expiration_date));
 
         final CalendarView calendarView = new CalendarView(getContext());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(

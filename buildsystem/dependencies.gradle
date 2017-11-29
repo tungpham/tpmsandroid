@@ -7,15 +7,15 @@ allprojects {
 ext {
     //Android
     androidApplicationId = "com.morephone.tpms"
-    androidBuildToolsVersion = "25.0.3"
+    androidBuildToolsVersion = "26.0.1"
     androidMinSdkVersion = 19
-    androidTargetSdkVersion = 25
-    androidCompileSdkVersion = 25
+    androidTargetSdkVersion = 26
+    androidCompileSdkVersion = 26
     androidVersionCode = 17
     androidVersionName = "1.0.16"
 
     //Google Libraries
-    supportVersion = '25.3.1'
+    supportVersion = '26.+'
     servicesVersion = '11.2.0'
     firebaseVersion = '11.2.0'
     mapVersion = '11.0.1'

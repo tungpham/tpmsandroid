@@ -247,6 +247,7 @@
     <string name="purchase_mms_summary">This number can send and receive multi media messages to and from mobile number</string>
     <string name="purchase_fail">Purchase fail</string>
     <string name="purchase_success">Purchase a phone number success</string>
+    <string name="purchase_expiration_date">Set expiration date</string>
     <string name="purchase_expire">Expire</string>
     <string name="purchase_expire_now">Expire now</string>
     <string name="purchase_expire_summary">Tap for choose expire date</string>
