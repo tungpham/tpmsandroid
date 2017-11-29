@@ -16,6 +16,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 
+import com.android.morephone.data.log.DebugTool;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -59,8 +61,9 @@ public class Utils {
     }
 
     public static String formatDateMessage(String date) {
-        SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
-        SimpleDateFormat out = new SimpleDateFormat("MMM d, HH:mm a");
+        DebugTool.logD("DATE SMS: " + date);
+        SimpleDateFormat in = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
+        SimpleDateFormat out = new SimpleDateFormat("MMM d, HH:mm a", Locale.ENGLISH);
 
         try {
             Date time = in.parse(date);
@@ -68,6 +71,7 @@ public class Utils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        DebugTool.logD("DATE SMS: ");
         return "";
     }
 

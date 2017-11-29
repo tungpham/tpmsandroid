@@ -8,13 +8,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.widget.CalendarView;
-import android.widget.LinearLayout;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.utils.DateUtils;
 import com.ethan.morephone.R;
+import com.ethan.morephone.utils.Utils;
+import com.squareup.timessquare.CalendarPickerView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -58,39 +59,50 @@ public class ChooseDateDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_expiration, null);
+        builder.setView(view);
+
         builder.setTitle(getString(R.string.purchase_expiration_date));
 
-        final CalendarView calendarView = new CalendarView(getContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        lp.leftMargin = 16;
-        lp.rightMargin = 16;
-        calendarView.setLayoutParams(lp);
-        builder.setView(calendarView);
+        final CalendarPickerView calendarView = view.findViewById(R.id.calendar_view);
 
         mMinDate = getArguments().getLong(BUNDLE_MIN_DATE);
-        calendarView.setMinDate(mMinDate);
-
         mCurrentDate = getArguments().getLong(BUNDLE_CURRENT_DATE);
-        calendarView.setDate(mCurrentDate);
 
         final Calendar currentCalendar = Calendar.getInstance();
         currentCalendar.setTimeInMillis(mMinDate);
+        currentCalendar.add(Calendar.YEAR, 1);
 
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        calendarView.init(new Date(mMinDate), currentCalendar.getTime()).withSelectedDate(new Date(mCurrentDate));
+
+        DebugTool.logD("MINDATE: " + Utils.formatDatePurchase(mMinDate));
+        DebugTool.logD("mCurrentDate: " + Utils.formatDatePurchase(mCurrentDate));
+
+        calendarView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(Date date) {
+                mCurrentDate = DateUtils.getStartOfDay(date) + mMinDate - DateUtils.getStartOfDay(new Date(mMinDate));
+            }
 
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month,
-                                            int dayOfMonth) {
-                // TODO Auto-generated method stub
+            public void onDateUnselected(Date date) {
 
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, dayOfMonth);
-                mCurrentDate = DateUtils.getStartOfDay(calendar.getTime()) + mMinDate - DateUtils.getStartOfDay(new Date(mMinDate));
-//                mCurrentDate = calendar.getTimeInMillis();
             }
         });
+//        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+//
+//            @Override
+//            public void onSelectedDayChange(CalendarView view, int year, int month,
+//                                            int dayOfMonth) {
+//                // TODO Auto-generated method stub
+//
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.set(year, month, dayOfMonth);
+//                mCurrentDate = DateUtils.getStartOfDay(calendar.getTime()) + mMinDate - DateUtils.getStartOfDay(new Date(mMinDate));
+////                mCurrentDate = calendar.getTimeInMillis();
+//            }
+//        });
 
         builder.setPositiveButton(getString(R.string.configure_email_dialog_ok), new DialogInterface.OnClickListener() {
             @Override

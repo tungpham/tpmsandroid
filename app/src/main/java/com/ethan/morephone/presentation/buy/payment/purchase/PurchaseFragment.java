@@ -52,7 +52,7 @@ public class PurchaseFragment extends BaseFragment implements
     private RelativeLayout mRelativeExpire;
 
     private long mCurrentDate = System.currentTimeMillis();
-    private long mMinDate = mCurrentDate;
+    private long mMinDate = System.currentTimeMillis();
 
     private boolean isPool;
     @Nullable

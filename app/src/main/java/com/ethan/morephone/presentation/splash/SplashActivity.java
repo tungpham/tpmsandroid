@@ -146,7 +146,6 @@ public class SplashActivity extends BaseActivity {
                                                     .email(payload.getEmail())
                                                     .accountSid(TwilioManager.getSid(getApplicationContext()))
                                                     .authToken(TwilioManager.getAuthCode(getApplicationContext()))
-                                                    .token(FirebaseInstanceId.getInstance().getToken())
                                                     .platform("Android")
                                                     .build();
 

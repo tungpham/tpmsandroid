@@ -1,6 +1,7 @@
 package com.android.morephone.data.entity.user;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Ethan on 7/26/17.
@@ -17,7 +18,7 @@ public class User {
     private String country;
     private String languageCode;
     private String device;
-    private String token;
+    private List<TokenFcm> tokenFcms;
     private String platform;
     private String accountSid;
     private String authToken;
@@ -35,7 +36,7 @@ public class User {
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.country = builder.country;
-        this.token = builder.token;
+        this.tokenFcms = builder.tokenFcms;
         this.languageCode = builder.languageCode;
         this.device = builder.device;
         this.platform = builder.platform;
@@ -111,12 +112,12 @@ public class User {
         return platform;
     }
 
-    public String getToken() {
-        return token;
+    public List<TokenFcm> getTokenFcms() {
+        return tokenFcms;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setTokenFcms(List<TokenFcm> token) {
+        this.tokenFcms = token;
     }
 
     public void setPlatform(String platform) {
@@ -168,8 +169,10 @@ public class User {
         this.languageCode = languageCode;
     }
 
-    public void update(String token) {
-        this.token = token;
+    public void update(List<TokenFcm> token) {
+        this.tokenFcms = token;
+        Date date = new Date();
+        updatedAt = date.getTime();
     }
 
     public void updateForward(String forwardPhoneNumber, String forwardEmail) {
@@ -198,7 +201,7 @@ public class User {
         private String lastName;
         private String country;
         private String languageCode;
-        private String token;
+        private List<TokenFcm> tokenFcms;
         private String device;
         private String accountSid;
         private String authToken;
@@ -253,8 +256,8 @@ public class User {
             return this;
         }
 
-        public Builder token(String token) {
-            this.token = token;
+        public Builder token(List<TokenFcm> tokenFcms) {
+            this.tokenFcms = tokenFcms;
             return this;
         }
 

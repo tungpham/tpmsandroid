@@ -112,6 +112,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
 
     compile 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
+    compile 'com.squareup:android-times-square:1.6.5@aar'
 
 //    compile 'com.anjlab.android.iab.v3:library:1.0.44'
 

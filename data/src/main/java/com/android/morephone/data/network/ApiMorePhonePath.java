@@ -38,7 +38,7 @@ interface ApiMorePhonePath {
     Call<BaseResponse<User>> createUser(@Body User user);
 
     @PUT("user/{id}/token")
-    Call<BaseResponse<User>> updateFcmToken(@Path("id") String id, @Query("token") String token);
+    Call<BaseResponse<User>> updateFcmToken(@Path("id") String id, @Query("platform") int platform, @Query("token") String token);
 
 
     /*-----------------------------------------PHONE NUMBER-----------------------------------------*/

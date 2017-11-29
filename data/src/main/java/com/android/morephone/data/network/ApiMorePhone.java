@@ -124,7 +124,7 @@ public class ApiMorePhone {
                                       String id,
                                       String token,
                                       Callback<BaseResponse<User>> callback) {
-        Call<BaseResponse<User>> call = getApiPath(context).updateFcmToken(id, token);
+        Call<BaseResponse<User>> call = getApiPath(context).updateFcmToken(id, 0, token);
         call.enqueue(callback);
     }
 

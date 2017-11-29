@@ -10,12 +10,14 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.android.morephone.data.entity.message.MessageReceive;
 import com.android.morephone.data.log.DebugTool;
 import com.android.morephone.data.network.HTTPStatus;
 import com.ethan.morephone.R;
 import com.ethan.morephone.presentation.main.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 
 import java.util.Map;
 
@@ -48,6 +50,8 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
 
     private NotificationManager notificationManager;
 
+    private Gson mGson = new Gson();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -75,6 +79,7 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
             String title = message.getNotification().getTitle();
             DebugTool.logD("TITLE: " + message.getNotification().getTitle());
             DebugTool.logD("BODY: " + message.getNotification().getBody());
+
             if (!TextUtils.isEmpty(title) && title.equals(HTTPStatus.MONEY.getReasonPhrase())) {
                 NotificationHelpper.moneyNotification(getApplicationContext());
             } else {
@@ -162,19 +167,19 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
 //            startActivity(popupIntent);
 //        } else {
 
+        if(!TextUtils.isEmpty(message)){
+            MessageReceive messageReceive = mGson.fromJson(message, MessageReceive.class);
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        if (!TextUtils.isEmpty(title) && title.contains("-")) {
-            String str[] = title.split("-");
-            if (str != null && str.length == 2) {
+            if (!TextUtils.isEmpty(title)) {
                 Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(str[0])
-                        .setContentText(message)
+                        .setContentTitle(title)
+                        .setContentText(messageReceive.getBody())
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
@@ -183,15 +188,10 @@ public class NotifyFirebaseMessagingService extends FirebaseMessagingService {
 
                 notificationManager.notify(NOTIFY_MESSAGE_ID, notificationBuilder.build());
 
-                updateMessage(str[0], str[1], message);
+                updateMessage(title, messageReceive.getTo(), messageReceive.getBody());
+
             }
-
         }
-
-
-//        }
-
-
     }
 
     private void updateMessage(String fromPhoneNumber, String toPhoneNumber, String body) {
